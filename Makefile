@@ -35,7 +35,7 @@ $(mvn): $(maven_archive) $(bin)
 deps: $(cli_jar) $(mvn)
 
 .PHONY: cli
-cli: $(cli_jar)
+cli:
 		@echo java -jar $(cli_jar)
 
 .PHONY: clean
