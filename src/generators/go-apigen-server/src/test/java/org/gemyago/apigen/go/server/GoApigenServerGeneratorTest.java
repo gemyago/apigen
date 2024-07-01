@@ -1,4 +1,4 @@
-package org.gemyago.go-apigen-server;
+package org.gemyago.apigen.go.server;
 
 import org.junit.jupiter.api.Test;
 import org.openapitools.codegen.ClientOptInput;

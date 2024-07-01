@@ -22,7 +22,7 @@ At this point, you've likely generated a client setup.  It will include somethin
 |-- src
 |--- main
 |---- java
-|----- org.gemyago.go-apigen-server.GoApigenServerGenerator.java // generator file
+|----- org.gemyago.apigen.go.server.GoApigenServerGenerator.java // generator file
 |---- resources
 |----- go-apigen-server // template files
 |----- META-INF
