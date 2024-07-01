@@ -11,7 +11,7 @@ maven_version=$(shell sed -n -r 's/MAVEN: (.+)/\1/p' .versions)
 maven_dir_name=apache-maven-$(maven_version)
 maven_url=https://dlcdn.apache.org/maven/maven-3/$(maven_version)/binaries/$(maven_dir_name)-bin.tar.gz
 maven_archive=$(tmp)/$(maven_dir_name)-bin.tar.gz
-mvn=$(bin)/$(maven_dir_name)/mvn
+mvn=$(bin)/apache-maven/bin/mvn
 
 $(bin):
 	mkdir -p $@
@@ -26,9 +26,9 @@ $(maven_archive): $(tmp)
 	curl -L $(maven_url) -o $@
 
 $(mvn): $(maven_archive) $(bin)
-	rm -r -f $(tmp)/$(maven_dir_name) $(bin)/$(maven_dir_name)
+	rm -r -f $(tmp)/$(maven_dir_name) $(bin)/apache-maven
 	tar -C $(tmp) -xf $(maven_archive)
-	mv $(tmp)/$(maven_dir_name) $(bin)
+	mv $(tmp)/$(maven_dir_name)/ $(bin)/apache-maven
 	touch $@
 
 .PHONY: deps
