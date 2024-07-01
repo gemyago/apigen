@@ -11,3 +11,5 @@ Please have the following tools installed:
 * [direnv](https://github.com/direnv/direnv)
 * make
 * Java 11 runtime at a minimum
+
+Follow [Customization](https://openapi-generator.tech/docs/customization) docs of openapi generator cli.
