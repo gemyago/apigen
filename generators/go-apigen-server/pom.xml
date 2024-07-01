@@ -5,7 +5,7 @@
     <artifactId>go-apigen-server-openapi-generator</artifactId>
     <packaging>jar</packaging>
     <name>go-apigen-server-openapi-generator</name>
-    <version>1.0.0</version>
+    <version>0.0.1</version>
     <build>
         <plugins>
             <plugin>
