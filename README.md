@@ -16,5 +16,5 @@ Follow [Customization](https://openapi-generator.tech/docs/customization) docs o
 
 Build particular generator:
 ```
-mvn -f generators/src/go-apigen-server/ package
+mvn -f generators/go-apigen-server/ package
 ```
