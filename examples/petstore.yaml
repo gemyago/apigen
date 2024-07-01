@@ -20,6 +20,14 @@ paths:
         - name: limit
           in: query
           description: How many items to return at one time (max 100)
+          required: true
+          schema:
+            type: integer
+            maximum: 100
+            format: int32
+        - name: offset
+          in: query
+          description: How many items to skip (max 100)
           required: false
           schema:
             type: integer
@@ -27,12 +35,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: A paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
+          description: Request succeeded
           content:
             application/json:    
               schema:
@@ -56,7 +59,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Null response
+          description: Request succeeded
         default:
           description: unexpected error
           content:
@@ -65,8 +68,8 @@ paths:
                 $ref: "#/components/schemas/Error"
   /pets/{petId}:
     get:
-      summary: Info for a specific pet
-      operationId: showPetById
+      summary: Get info for a specific pet
+      operationId: getPetById
       tags:
         - pets
       parameters:
@@ -78,7 +81,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Expected response to a valid request
+          description: Request succeeded
           content:
             application/json:
               schema:
@@ -102,21 +105,18 @@ components:
           format: int64
         name:
           type: string
-        tag:
+        comments:
           type: string
     Pets:
       type: array
-      maxItems: 100
       items:
         $ref: "#/components/schemas/Pet"
     Error:
       type: object
       required:
         - code
-        - message
       properties:
         code:
-          type: integer
-          format: int32
+          format: string
         message:
           type: string

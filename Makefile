@@ -41,3 +41,13 @@ cli:
 .PHONY: clean
 clean:
 	rm -r -f $(tmp) $(bin)
+
+generators/go-apigen-server:
+	mvn -f generators/go-apigen-server/pom.xml package
+
+examples/go-apigen-server:
+	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+		org.openapitools.codegen.OpenAPIGenerator generate \
+		-g go-apigen-server \
+		-i examples/petstore.yaml \
+		-o examples/go-apigen-server
