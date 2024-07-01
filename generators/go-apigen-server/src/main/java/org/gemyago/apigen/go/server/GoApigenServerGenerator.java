@@ -20,7 +20,7 @@ public class GoApigenServerGenerator extends DefaultCodegen implements CodegenCo
    * @see     org.openapitools.codegen.CodegenType
    */
   public CodegenType getTag() {
-    return CodegenType.OTHER;
+    return CodegenType.SERVER;
   }
 
   /**
