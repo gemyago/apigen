@@ -35,7 +35,7 @@ func NewRouter(deps RoutesDeps) http.Handler {
 	router.Route("/v1", func(r chi.Router) {
 		handlers.MountPetsRoutes(
 			handlers.PetsController{},
-			chiAdapter{Router: router},
+			chiAdapter{Router: r},
 		)
 	})
 
