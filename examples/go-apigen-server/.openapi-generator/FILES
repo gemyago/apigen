@@ -1,5 +1,4 @@
-.openapi-generator-ignore
 myFile.sample
-src/org/openapitools/api/PetsApi.sample
-src/org/openapitools/model/Error.sample
-src/org/openapitools/model/Pet.sample
+src/org/openapitools/api/api_pets.sample
+src/org/openapitools/model/model_error.sample
+src/org/openapitools/model/model_pet.sample

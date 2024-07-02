@@ -42,9 +42,11 @@ cli:
 clean:
 	rm -r -f $(tmp) $(bin)
 
+.PHONY: generators/go-apigen-server
 generators/go-apigen-server:
 	mvn -f generators/go-apigen-server/pom.xml package
 
+.PHONY: examples/go-apigen-server
 examples/go-apigen-server:
 	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
 		org.openapitools.codegen.OpenAPIGenerator generate \
