@@ -1,5 +1,4 @@
-.openapi-generator-ignore
-handlers/api_pets.go
-models/model_error.go
-models/model_pet.go
+handlers/pets.go
+models/error.go
+models/pet.go
 myFile.sample

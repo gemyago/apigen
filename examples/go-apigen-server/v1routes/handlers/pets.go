@@ -8,7 +8,7 @@
 package: handlers
 
 # operations block
-classname: PetsAPI
+classname: Pets
 
 # loop over each operation in the API:
 

@@ -47,6 +47,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen implements Codege
   public GoApigenServerGenerator() {
     super();
 
+    apiNameSuffix = "";
+    apiNamePrefix = "";
+
     // set the output folder here
     outputFolder = "generated-code/go-apigen-server";
 
@@ -100,5 +103,15 @@ public class GoApigenServerGenerator extends AbstractGoCodegen implements Codege
       "",                                                       // the destination folder, relative `outputFolder`
       "myFile.sample")                                          // the output file
     );
+  }
+
+  @Override
+  public String toApiFilename(String name) {
+      return super.toApiFilename(name).replace("api_", "");
+  }
+
+  @Override
+  public String toModelFilename(String name) {
+    return super.toModelFilename(name).replace("model_", "");
   }
 }
