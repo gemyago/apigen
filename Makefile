@@ -42,6 +42,23 @@ cli:
 clean:
 	rm -r -f $(tmp) $(bin)
 
+current_make := @make -f $(firstword $(MAKEFILE_LIST))	
+
+# Collect all files that are not in .openapi-generator/FILES (& some extras)
+define openapi_generator_removed_files
+	$(addprefix .removed-generated-files/$*/, $(filter-out \
+		$(patsubst $*/%, %, $(wildcard $*/.openapi-generator/*)) .openapi-generator-ignore $(shell cat $*/.openapi-generator/FILES), \
+		$(shell find $* -type f -name "*" | sed 's#$*/##g')\
+	))
+endef
+
+.removed-generated-files/%:
+	rm $*
+
+# Remove files that are no longer included in the .openapi-generator/FILES
+%/.openapi-generator/REMOVED_FILES:
+	$(if $(strip $(openapi_generator_removed_files)),$(current_make) $(openapi_generator_removed_files), $(NOOP))
+
 generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -type f)
 	mvn -f generators/go-apigen-server/pom.xml package
 	touch $@
@@ -53,3 +70,4 @@ examples/go-apigen-server: generators/go-apigen-server
 		-i examples/petstore.yaml \
 		-o examples/go-apigen-server
 	touch $@
+	$(current_make) examples/go-apigen-server/.openapi-generator/REMOVED_FILES
