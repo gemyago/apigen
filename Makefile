@@ -69,7 +69,7 @@ generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -
 	mvn -f $@/pom.xml package
 	touch $@
 
-examples/go-apigen-server/v1routes: generators/go-apigen-server examples/petstore.yaml
+examples/go-apigen-server/api/http/v1routes: generators/go-apigen-server examples/petstore.yaml
 	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
@@ -77,3 +77,5 @@ examples/go-apigen-server/v1routes: generators/go-apigen-server examples/petstor
 		-o $@
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
+
+examples/go-apigen-server: examples/go-apigen-server/api/http/v1routes
