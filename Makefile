@@ -68,6 +68,6 @@ examples/go-apigen-server/v1routes: generators/go-apigen-server
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		-i examples/petstore.yaml \
-		-o examples/go-apigen-server
-	$(current_make) examples/go-apigen-server/.openapi-generator/REMOVED_FILES
+		-o $@
+	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@

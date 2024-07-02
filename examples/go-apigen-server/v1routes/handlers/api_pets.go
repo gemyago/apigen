@@ -5,7 +5,7 @@
 # like such:
 
 # use the package from the `apiPackage` variable
-package: api
+package: handlers
 
 # operations block
 classname: PetsAPI

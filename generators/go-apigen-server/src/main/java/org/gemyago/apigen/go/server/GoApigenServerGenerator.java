@@ -78,12 +78,12 @@ public class GoApigenServerGenerator extends AbstractGoCodegen implements Codege
     /**
      * Api Package.  Optional, if needed, this can be used in templates
      */
-    apiPackage = "api";
+    apiPackage = "handlers";
 
     /**
      * Model Package.  Optional, if needed, this can be used in templates
      */
-    modelPackage = "model";
+    modelPackage = "models";
 
     /**
      * Additional Properties.  These values can be passed to the templates and
