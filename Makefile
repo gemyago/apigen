@@ -1,7 +1,13 @@
-tmp=./tmp
+.SECONDEXPANSION:
+.SECONDARY:
 
+# No built-in rules and variables. Makes debugging easier.
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-builtin-variables
+.SUFFIXES:
+
+tmp=./tmp
 bin=bin
-tmp=tmp
 
 cli_version=$(shell sed -n -r 's/OPENAPI_GENERATOR_CLI: (.+)/\1/p' .versions)
 cli_url=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$(cli_version)/openapi-generator-cli-$(cli_version).jar
@@ -60,7 +66,7 @@ endef
 	$(if $(strip $(openapi_generator_removed_files)),$(current_make) $(openapi_generator_removed_files), $(NOOP))
 
 generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -type f)
-	mvn -f generators/go-apigen-server/pom.xml package
+	mvn -f $@/pom.xml package
 	touch $@
 
 examples/go-apigen-server/v1routes: generators/go-apigen-server
