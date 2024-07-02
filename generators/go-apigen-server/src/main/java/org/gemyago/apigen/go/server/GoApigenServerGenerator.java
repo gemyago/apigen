@@ -89,6 +89,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      */
     additionalProperties.put("apiVersion", apiVersion);
 
+    additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
+
     /**
      * Supporting Files.  You can write single files for the generator with the
      * entire object tree available.  If the input file has a suffix of `.mustache

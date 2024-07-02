@@ -37,7 +37,7 @@ paths:
         '200':
           description: Request succeeded
           content:
-            application/json:    
+            application/json:
               schema:
                 $ref: "#/components/schemas/Pets"
         default:

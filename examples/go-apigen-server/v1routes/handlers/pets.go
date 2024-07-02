@@ -1,5 +1,10 @@
 package handlers
 
+type PetsListPetsRequest struct {
+	Limit  int32
+	Offset int32
+}
+
 /*
 # operations block
 classname: Pets
