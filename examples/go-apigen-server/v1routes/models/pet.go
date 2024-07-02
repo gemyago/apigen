@@ -1,1 +1,1 @@
-# This is a sample model mustache template.
+package models

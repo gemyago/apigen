@@ -94,10 +94,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * entire object tree available.  If the input file has a suffix of `.mustache
      * it will be processed by the template engine.  Otherwise, it will be copied
      */
-    supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
-      "",                                                       // the destination folder, relative `outputFolder`
-      "myFile.sample")                                          // the output file
-    );
+    // supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
+    //   "",                                                       // the destination folder, relative `outputFolder`
+    //   "myFile.sample")                                          // the output file
+    // );
   }
 
   @Override

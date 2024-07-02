@@ -1,4 +1,3 @@
 handlers/pets.go
 models/error.go
 models/pet.go
-myFile.sample
