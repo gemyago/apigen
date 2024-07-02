@@ -2,13 +2,8 @@ package org.gemyago.apigen.go.server;
 
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
-import org.openapitools.codegen.model.*;
-import io.swagger.models.properties.*;
 
-import java.util.*;
-import java.io.File;
-
-public class GoApigenServerGenerator extends AbstractGoCodegen implements CodegenConfig {
+public class GoApigenServerGenerator extends AbstractGoCodegen {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
