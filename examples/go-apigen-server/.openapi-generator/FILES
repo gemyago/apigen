@@ -1,4 +1,4 @@
+api/api_pets.go
+model/model_error.go
+model/model_pet.go
 myFile.sample
-src/org/openapitools/api/api_pets.sample
-src/org/openapitools/model/model_error.sample
-src/org/openapitools/model/model_pet.sample

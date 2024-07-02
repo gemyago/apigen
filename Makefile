@@ -42,14 +42,14 @@ cli:
 clean:
 	rm -r -f $(tmp) $(bin)
 
-.PHONY: generators/go-apigen-server
-generators/go-apigen-server:
+generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -type f)
 	mvn -f generators/go-apigen-server/pom.xml package
+	touch $@
 
-.PHONY: examples/go-apigen-server
-examples/go-apigen-server:
+examples/go-apigen-server: generators/go-apigen-server
 	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		-i examples/petstore.yaml \
 		-o examples/go-apigen-server
+	touch $@
