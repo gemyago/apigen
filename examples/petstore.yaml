@@ -48,7 +48,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       summary: Create a pet
-      operationId: createPets
+      operationId: createPet
       tags:
         - pets
       requestBody:
