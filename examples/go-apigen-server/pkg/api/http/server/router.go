@@ -12,6 +12,18 @@ type RoutesDeps struct {
 	PetsController *handlers.PetsController
 }
 
+type chiAdapter struct {
+	chi.Router
+}
+
+func (chiAdapter) PathValue(r *http.Request, paramName string) string {
+	return chi.URLParam(r, paramName)
+}
+
+func (a chiAdapter) HandleFunc(method, pathPattern string, h http.HandlerFunc) {
+	a.Router.MethodFunc(method, pathPattern, h)
+}
+
 func NewRouter(deps RoutesDeps) http.Handler {
 	router := chi.NewRouter()
 
@@ -21,17 +33,10 @@ func NewRouter(deps RoutesDeps) http.Handler {
 	router.Use(middleware.Recoverer)
 
 	router.Route("/v1", func(r chi.Router) {
-		r.Get("/pets", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusNotImplemented)
-		})
-
-		r.Post("/pets", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusNotImplemented)
-		})
-
-		r.Get("/pets/{petId}", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusNotImplemented)
-		})
+		handlers.MountPetsRoutes(
+			handlers.PetsController{},
+			chiAdapter{Router: router},
+		)
 	})
 
 	return router

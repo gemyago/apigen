@@ -1,11 +1,27 @@
 package handlers
 
+import "net/http"
+
 type PetsListPetsRequest struct {
 	Limit  int32
 	Offset int32
 }
 
 type PetsController struct{}
+
+func MountPetsRoutes(controller PetsController, r router) {
+	r.HandleFunc("GET", "/pets", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotImplemented)
+	})
+
+	r.HandleFunc("POST", "/pets", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotImplemented)
+	})
+
+	r.HandleFunc("GET", "/pets/{petId}", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotImplemented)
+	})
+}
 
 /*
 # operations block
