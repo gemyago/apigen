@@ -2,3 +2,4 @@ handlers/pets.go
 models/error.go
 models/pet.go
 models/pets.go
+models/pets_response.go
