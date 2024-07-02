@@ -9,6 +9,7 @@ Project status: **pre-alpha**.
 
 Please have the following tools installed:
 * [direnv](https://github.com/direnv/direnv)
+* [gobrew](https://github.com/kevincobain2000/gobrew#install-or-update)
 * make
 * Java 11 runtime at a minimum
 

@@ -5,6 +5,8 @@ type PetsListPetsRequest struct {
 	Offset int32
 }
 
+type PetsController struct{}
+
 /*
 # operations block
 classname: Pets
