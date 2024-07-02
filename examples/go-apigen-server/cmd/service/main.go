@@ -3,7 +3,7 @@ package main
 import (
 	"log/slog"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/api/http/server"
+	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/server"
 )
 
 func main() {

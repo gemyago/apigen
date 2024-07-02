@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/api/http/v1routes/handlers"
+	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
