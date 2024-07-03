@@ -20,9 +20,9 @@ type PetsGetPetById struct {
 }
 
 type PetsControllerBuilder struct {
-	HandleListPets   actionBuilder[*PetsListPetsRequest]
-	HandleCreatePet  actionBuilder[*PetsCreatePetRequest]
-	HandleGetPetById actionBuilder[*PetsGetPetById]
+	HandleListPets   actionBuilder[*PetsListPetsRequest, *models.PetsResponse]
+	HandleCreatePet  actionBuilderVoidResult[*PetsCreatePetRequest]
+	HandleGetPetById actionBuilder[*PetsGetPetById, *models.PetResponse]
 }
 
 func (c *PetsControllerBuilder) Finalize() PetsController {

@@ -111,6 +111,13 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Pet"
+    PetResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/Pet"
     PetsResponse:
       type: object
       required:
