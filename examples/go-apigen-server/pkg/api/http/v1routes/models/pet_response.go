@@ -1,8 +1,7 @@
 // Code generated DO NOT EDIT
 
-package {{package}}
+package models
 
-{{#models}}
 import (
 	"encoding/json"
 	"errors"
@@ -17,4 +16,8 @@ var _ = errors.New
 var _ = fmt.Errorf
 var _ = reflect.TypeOf
 var _ = time.Time{}
-{{#model}}{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#isEnum}}{{>enums/model}}{{/isEnum}}{{^isEnum}}{{>model_simple}}{{/isEnum}}{{/oneOf}}{{/model}}{{/models}}
+
+type PetResponse struct { 
+	Data Pet `json:"data"`
+}
+

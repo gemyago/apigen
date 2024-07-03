@@ -1,0 +1,8 @@
+{{#vars}}
+{{#isEnum}}{{>enums/var_type}}{{/isEnum}}{{/vars}}{{#description}}
+// {{classname}} - {{{description}}}{{/description}}
+type {{classname}} struct { {{#vars}}{{#description}}
+	// {{{.}}}{{/description}}{{#deprecated}}
+	// Deprecated{{/deprecated}}
+	{{name}} {{#isNullable}}*{{/isNullable}}{{#isEnum}}{{>enums/var_type_name}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`{{/vars}}
+}
