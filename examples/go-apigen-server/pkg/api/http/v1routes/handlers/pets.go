@@ -1,14 +1,16 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
 type PetsListPetsRequest struct {
-	Limit  int32
-	Offset int32
+	Limit  int64
+	Offset int64
 }
 
 type PetsCreatePetRequest struct {
@@ -38,6 +40,28 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder := &PetsControllerBuilder{}
 	controllerBuilder.HandleListPets = actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]{
 		controllerBuilder: controllerBuilder,
+		paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
+			query := req.URL.Query()
+			var err error
+			var limit int64
+			limit, err = strconv.ParseInt(query.Get("limit"), 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("TODO: handle parsing errors (field=limit): %w", err)
+			}
+
+			var offset int64
+			if query.Has("offset") {
+				offset, err = strconv.ParseInt(query.Get("offset"), 10, 64)
+				if err != nil {
+					return nil, fmt.Errorf("TODO: handle parsing errors (field=offset): %w", err)
+				}
+			}
+
+			return &PetsListPetsRequest{
+				Limit:  limit,
+				Offset: offset,
+			}, nil
+		},
 	}
 	controllerBuilder.HandleCreatePet = actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]{
 		actionBuilder: actionBuilder[*PetsControllerBuilder, *PetsCreatePetRequest, voidResult]{

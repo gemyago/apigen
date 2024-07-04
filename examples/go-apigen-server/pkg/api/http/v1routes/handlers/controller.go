@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -11,6 +12,7 @@ type voidResult *int
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
 	defaultStatusCode int
 	httpHandler       http.Handler
+	paramsParser      func(w http.ResponseWriter, req *http.Request) (TReqParams, error)
 	controllerBuilder TControllerBuilder
 }
 
@@ -18,8 +20,13 @@ func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
 	handler func(context.Context, TReqParams) (TResData, error),
 ) TControllerBuilder {
 	defaultStatus := ab.defaultStatusCode
+	parseParams := ab.paramsParser
 	ab.httpHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var params TReqParams
+		params, err := parseParams(w, r)
+		if err != nil {
+			panic(fmt.Errorf("TODO: handle params parsing errors: %w", err))
+		}
+
 		resData, err := handler(r.Context(), params)
 		if err != nil {
 			// TODO: We need a error handler

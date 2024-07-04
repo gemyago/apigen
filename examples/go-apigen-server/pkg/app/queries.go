@@ -22,7 +22,16 @@ type queriesImpl struct {
 }
 
 func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRequest) (*models.PetsResponse, error) {
-	result := q.Storage.allPets[req.Offset:req.Limit]
+	allPetsLen := int64(len(q.Storage.allPets))
+	limit := req.Limit
+	offset := req.Offset
+	if offset >= allPetsLen {
+		return &models.PetsResponse{}, nil
+	}
+	if offset+limit > allPetsLen {
+		limit = allPetsLen - offset
+	}
+	result := q.Storage.allPets[offset:limit]
 	return &models.PetsResponse{Data: result}, nil
 }
 
