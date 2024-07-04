@@ -23,7 +23,7 @@ func (httpRouter) PathValue(r *http.Request, paramName string) string {
 	return chi.URLParam(r, paramName)
 }
 
-func (a httpRouter) Handle(method, pathPattern string, h http.Handler) {
+func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 	a.Router.Method(method, pathPattern, h)
 }
 

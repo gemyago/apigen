@@ -104,7 +104,7 @@ type PetsController struct {
 }
 
 func MountPetsRoutes(controller *PetsController, r httpRouter) {
-	r.Handle("GET", "/pets", controller.ListPets(r))
-	r.Handle("POST", "/pets", controller.CreatePet(r))
-	r.Handle("GET", "/pets/{petId}", controller.GetPetById(r))
+	r.HandleRoute("GET", "/pets", controller.ListPets(r))
+	r.HandleRoute("POST", "/pets", controller.CreatePet(r))
+	r.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(r))
 }
