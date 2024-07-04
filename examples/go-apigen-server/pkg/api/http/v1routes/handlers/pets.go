@@ -16,7 +16,7 @@ type PetsCreatePetRequest struct {
 }
 
 type PetsGetPetById struct {
-	PetId string
+	PetId int64
 }
 
 type PetsControllerBuilder struct {

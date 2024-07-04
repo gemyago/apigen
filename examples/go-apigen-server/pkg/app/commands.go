@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
 )
@@ -19,7 +20,14 @@ type commandsImpl struct {
 }
 
 func (c *commandsImpl) CreatePet(ctx context.Context, req *handlers.PetsCreatePetRequest) error {
-	panic("not implemented")
+	if _, ok := c.Storage.petsById[req.Payload.Id]; ok {
+		return fmt.Errorf("pet %d already exists: %w", req.Payload.Id, ErrConflict)
+	}
+
+	c.Storage.allPets = append(c.Storage.allPets, req.Payload)
+	c.Storage.petsById[req.Payload.Id] = req.Payload
+
+	return nil
 }
 
 func NewCommands(deps CommandsDeps) Commands {

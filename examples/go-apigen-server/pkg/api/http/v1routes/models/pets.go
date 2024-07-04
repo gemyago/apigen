@@ -17,6 +17,5 @@ var _ = fmt.Errorf
 var _ = reflect.TypeOf
 var _ = time.Time{}
 
-type Pets struct { 
-}
+type Pets []*Pet
 
