@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -66,10 +67,30 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder.HandleCreatePet = actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]{
 		actionBuilder: actionBuilder[*PetsControllerBuilder, *PetsCreatePetRequest, voidResult]{
 			controllerBuilder: controllerBuilder,
+			paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
+				var payload models.Pet
+				if err := json.NewDecoder(req.Body).Decode(&payload); err != nil {
+					return nil, fmt.Errorf("TODO: handle parsing errors (field=payload): %w", err)
+				}
+				return &PetsCreatePetRequest{Payload: &payload}, nil
+			},
 		},
 	}
 	controllerBuilder.HandleGetPetById = actionBuilder[*PetsControllerBuilder, *PetsGetPetById, *models.PetResponse]{
 		controllerBuilder: controllerBuilder,
+		paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsGetPetById, error) {
+			query := req.URL.Query()
+			var err error
+			var petId int64
+			petId, err = strconv.ParseInt(query.Get("petId"), 10, 64)
+			if err != nil {
+				return nil, fmt.Errorf("TODO: handle parsing errors (field=petId): %w", err)
+			}
+
+			return &PetsGetPetById{
+				PetId: petId,
+			}, nil
+		},
 	}
 	return controllerBuilder
 }
