@@ -4,5 +4,4 @@ handlers/router.go
 models/error.go
 models/pet.go
 models/pet_response.go
-models/pets.go
 models/pets_response.go

@@ -6,13 +6,13 @@ import "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1route
 // should write things to some DB like Postgres or Mongo. But keeping it simple for
 // this example and storing just in memory.
 type storage struct {
-	allPets  []*models.Pet
-	petsById map[int64]*models.Pet
+	allPets  []models.Pet
+	petsById map[int64]models.Pet
 }
 
 func NewStorage() *storage {
 	return &storage{
-		allPets:  []*models.Pet{},
-		petsById: map[int64]*models.Pet{},
+		allPets:  []models.Pet{},
+		petsById: map[int64]models.Pet{},
 	}
 }

@@ -15,7 +15,7 @@ type PetsListPetsRequest struct {
 }
 
 type PetsCreatePetRequest struct {
-	Payload *models.Pet
+	Payload models.Pet
 }
 
 type PetsGetPetById struct {
@@ -74,7 +74,7 @@ func BuildPetsController() *PetsControllerBuilder {
 				if err := json.NewDecoder(req.Body).Decode(&payload); err != nil {
 					return nil, fmt.Errorf("TODO: handle parsing errors (field=payload): %w", err)
 				}
-				return &PetsCreatePetRequest{Payload: &payload}, nil
+				return &PetsCreatePetRequest{Payload: payload}, nil
 			},
 		},
 	}

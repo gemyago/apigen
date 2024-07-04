@@ -1,5 +1,12 @@
 package {{apiPackage}}
 
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 type voidResult *int
 
 type httpHandlerFactory func(r httpRouter) http.Handler
