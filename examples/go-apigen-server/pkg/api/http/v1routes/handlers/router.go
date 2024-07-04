@@ -2,7 +2,7 @@ package handlers
 
 import "net/http"
 
-type router interface {
+type httpRouter interface {
 	// PathValue returns a named path parameter of a given name
 	PathValue(r *http.Request, paramName string) string
 
