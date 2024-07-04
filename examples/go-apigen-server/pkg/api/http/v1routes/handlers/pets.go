@@ -26,11 +26,28 @@ type PetsControllerBuilder struct {
 }
 
 func (c *PetsControllerBuilder) Finalize() *PetsController {
-	return nil
+	// TODO: panic if any handler is null
+	return &PetsController{
+		ListPets:   c.HandleListPets.httpHandler,
+		CreatePet:  c.HandleCreatePet.httpHandler,
+		GetPetById: c.HandleGetPetById.httpHandler,
+	}
 }
 
 func BuildPetsController() *PetsControllerBuilder {
-	return nil
+	controllerBuilder := &PetsControllerBuilder{}
+	controllerBuilder.HandleListPets = actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]{
+		controllerBuilder: controllerBuilder,
+	}
+	controllerBuilder.HandleCreatePet = actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]{
+		actionBuilder: actionBuilder[*PetsControllerBuilder, *PetsCreatePetRequest, voidResult]{
+			controllerBuilder: controllerBuilder,
+		},
+	}
+	controllerBuilder.HandleGetPetById = actionBuilder[*PetsControllerBuilder, *PetsGetPetById, *models.PetResponse]{
+		controllerBuilder: controllerBuilder,
+	}
+	return controllerBuilder
 }
 
 type PetsController struct {
