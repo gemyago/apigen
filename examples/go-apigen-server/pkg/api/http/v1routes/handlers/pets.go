@@ -22,6 +22,12 @@ type PetsGetPetById struct {
 	PetId int64
 }
 
+type PetsController struct {
+	ListPets   httpHandlerFactory
+	CreatePet  httpHandlerFactory
+	GetPetById httpHandlerFactory
+}
+
 type PetsControllerBuilder struct {
 	HandleListPets   actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]
 	HandleCreatePet  actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]
@@ -95,12 +101,6 @@ func BuildPetsController() *PetsControllerBuilder {
 		},
 	}
 	return controllerBuilder
-}
-
-type PetsController struct {
-	ListPets   httpHandlerFactory
-	CreatePet  httpHandlerFactory
-	GetPetById httpHandlerFactory
 }
 
 func MountPetsRoutes(controller *PetsController, r httpRouter) {
