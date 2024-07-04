@@ -9,7 +9,7 @@ import (
 )
 
 type RoutesDeps struct {
-	PetsController handlers.PetsController
+	PetsController *handlers.PetsController
 }
 
 type chiAdapter struct {
@@ -20,8 +20,8 @@ func (chiAdapter) PathValue(r *http.Request, paramName string) string {
 	return chi.URLParam(r, paramName)
 }
 
-func (a chiAdapter) HandleFunc(method, pathPattern string, h http.HandlerFunc) {
-	a.Router.MethodFunc(method, pathPattern, h)
+func (a chiAdapter) Handle(method, pathPattern string, h http.Handler) {
+	a.Router.Method(method, pathPattern, h)
 }
 
 func NewRouter(deps RoutesDeps) http.Handler {

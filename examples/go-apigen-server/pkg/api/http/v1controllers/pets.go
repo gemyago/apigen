@@ -10,7 +10,7 @@ type PetsControllerDeps struct {
 	app.Commands
 }
 
-func NewPetsController(deps PetsControllerDeps) handlers.PetsController {
+func NewPetsController(deps PetsControllerDeps) *handlers.PetsController {
 	return handlers.BuildPetsController().
 		HandleListPets.With(deps.Queries.ListPets).
 		HandleCreatePet.With(deps.Commands.CreatePet).

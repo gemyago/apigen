@@ -20,12 +20,12 @@ type PetsGetPetById struct {
 }
 
 type PetsControllerBuilder struct {
-	HandleListPets   actionBuilder[*PetsListPetsRequest, *models.PetsResponse]
-	HandleCreatePet  actionBuilderVoidResult[*PetsCreatePetRequest]
-	HandleGetPetById actionBuilder[*PetsGetPetById, *models.PetResponse]
+	HandleListPets   actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]
+	HandleCreatePet  actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]
+	HandleGetPetById actionBuilder[*PetsControllerBuilder, *PetsGetPetById, *models.PetResponse]
 }
 
-func (c *PetsControllerBuilder) Finalize() PetsController {
+func (c *PetsControllerBuilder) Finalize() *PetsController {
 	return nil
 }
 
@@ -33,45 +33,14 @@ func BuildPetsController() *PetsControllerBuilder {
 	return nil
 }
 
-type PetsController interface {
-	ListPets(w http.ResponseWriter, r *http.Request)
-	CreatePet(w http.ResponseWriter, r *http.Request)
-	GetPetById(w http.ResponseWriter, r *http.Request)
+type PetsController struct {
+	ListPets   http.Handler
+	CreatePet  http.Handler
+	GetPetById http.Handler
 }
 
-func MountPetsRoutes(controller PetsController, r router) {
-	r.HandleFunc("GET", "/pets", controller.ListPets)
-	r.HandleFunc("POST", "/pets", controller.CreatePet)
-	r.HandleFunc("GET", "/pets/{petId}", controller.GetPetById)
+func MountPetsRoutes(controller *PetsController, r router) {
+	r.Handle("GET", "/pets", controller.ListPets)
+	r.Handle("POST", "/pets", controller.CreatePet)
+	r.Handle("GET", "/pets/{petId}", controller.GetPetById)
 }
-
-/*
-# operations block
-classname: Pets
-
-# loop over each operation in the API:
-
-# each operation has an `operationId`:
-operationId: CreatePets
-
-# and parameters:
-pet: Pet
-
-
-# each operation has an `operationId`:
-operationId: GetPetById
-
-# and parameters:
-petId: string
-
-
-# each operation has an `operationId`:
-operationId: ListPets
-
-# and parameters:
-limit: int32
-offset: int32
-
-
-# end of operations block
-*/
