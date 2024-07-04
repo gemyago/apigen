@@ -41,6 +41,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder := &PetsControllerBuilder{}
 	controllerBuilder.HandleListPets = actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]{
 		controllerBuilder: controllerBuilder,
+		defaultStatusCode: 200,
 		paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
 			query := req.URL.Query()
 			var err error
@@ -67,6 +68,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder.HandleCreatePet = actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]{
 		actionBuilder: actionBuilder[*PetsControllerBuilder, *PetsCreatePetRequest, voidResult]{
 			controllerBuilder: controllerBuilder,
+			defaultStatusCode: 201,
 			paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
 				var payload models.Pet
 				if err := json.NewDecoder(req.Body).Decode(&payload); err != nil {
@@ -78,6 +80,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	}
 	controllerBuilder.HandleGetPetById = actionBuilder[*PetsControllerBuilder, *PetsGetPetById, *models.PetResponse]{
 		controllerBuilder: controllerBuilder,
+		defaultStatusCode: 200,
 		paramsParser: func(w http.ResponseWriter, req *http.Request) (*PetsGetPetById, error) {
 			query := req.URL.Query()
 			var err error

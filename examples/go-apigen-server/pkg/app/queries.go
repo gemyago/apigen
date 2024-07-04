@@ -26,7 +26,7 @@ func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRe
 	limit := req.Limit
 	offset := req.Offset
 	if offset >= allPetsLen {
-		return &models.PetsResponse{}, nil
+		return &models.PetsResponse{Data: []*models.Pet{}}, nil
 	}
 	if offset+limit > allPetsLen {
 		limit = allPetsLen - offset
