@@ -1,23 +1,29 @@
 package {{package}}
 
-/*
-# operations block
+import (
+  "{{invokerPackage}}/models"
+)
+
+type {{baseName}}Controller[
+	TAuthRules authRules,
+] struct {
+	Auth auth[TAuthRules]
 {{#operations}}
-classname: {{classname}}
-
-# loop over each operation in the API:
 {{#operation}}
-
-# each operation has an `operationId`:
-operationId: {{operationId}}
-
-# and parameters:
-{{#allParams}}
-{{paramName}}: {{dataType}}
-{{/allParams}}
-
+	{{>operation-doc}}
+	{{operationId}} {{baseName}}{{operationIdCamelCase}}Action
 {{/operation}}
-
-# end of operations block
 {{/operations}}
-*/
+}
+
+{{#operations}}
+{{#operation}}
+{{#allParams.0}}{{#allParams}}{{#isEnum}}
+{{>enums/api-param-type}}
+{{/isEnum}}{{/allParams}}type {{>request-type}} struct {
+	{{#allParams}}
+	{{>api-param-name}} {{>api-param-type}}
+	{{/allParams}}
+}{{/allParams.0}}
+{{/operation}}
+{{/operations}}

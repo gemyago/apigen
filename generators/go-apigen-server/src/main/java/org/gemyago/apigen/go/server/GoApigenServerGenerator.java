@@ -1,5 +1,13 @@
 package org.gemyago.apigen.go.server;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
 
@@ -88,6 +96,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * are available in models, apis, and supporting files
      */
     additionalProperties.put("apiVersion", apiVersion);
+    additionalProperties.put("invokerPackage", "Hello World");
 
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
@@ -120,5 +129,57 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public String toModelFilename(String name) {
     return super.toModelFilename(name).replace("model_", "");
+  }
+
+  private File resolveGoMod(File folder) {
+    if(folder == null) {
+      return null;
+    }
+
+    File[] files = folder.listFiles(new FileFilter() {
+      @Override
+      public boolean accept(File pathname) {
+        return pathname.getName().equals("go.mod");
+      }
+    });
+
+    if(files.length == 1) {
+      return files[0];
+    }
+
+    return resolveGoMod(folder.getParentFile());
+  }
+
+  private String extractModule(Path filePath) {
+    Pattern pattern = Pattern.compile("module (?<module>.*)", Pattern.MULTILINE);
+    String contents;
+    try {
+      contents = Files.readString(filePath);
+    } catch(IOException e) {
+      throw new RuntimeException(e);
+    }
+    Matcher matcher = pattern.matcher(contents);
+    if(matcher.find()) {
+      return matcher.group("module");
+    }
+    throw new RuntimeException("Could not find module in go.mod file");
+  }
+
+  @Override
+  public void processOpts() {
+    super.processOpts();
+
+    File outputFolderFile = new File(outputFolder);
+    Path outputFolderFilePath = outputFolderFile.toPath();
+    File goModFile = resolveGoMod(outputFolderFile);
+    if(goModFile == null) {
+      throw new RuntimeException("Can not find go.mod in a project hierarchy");
+    }
+    Path goModFilePath = goModFile.toPath();
+    String moduleName = extractModule(goModFilePath);
+    additionalProperties.put(
+      CodegenConstants.INVOKER_PACKAGE, 
+      moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString()
+    );
   }
 }

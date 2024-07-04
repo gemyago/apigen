@@ -124,5 +124,6 @@
         <openapi-generator-version>7.6.0</openapi-generator-version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
         <junit-version>5.10.2</junit-version>
+        <java.version>11</java.version>
     </properties>
 </project>
