@@ -28,8 +28,8 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 
 			resData, err := factoryParams.handler(r.Context(), params)
 			if err != nil {
-				// TODO: We need a error handler
-				panic(err)
+				router.HandleError(r, w, err)
+				return
 			}
 
 			// TODO: Do it only if result is not void (same as sending the response)

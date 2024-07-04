@@ -8,4 +8,7 @@ type httpRouter interface {
 
 	// Handle register a given handler function to handle given request
 	Handle(method, pathPattern string, h http.Handler)
+
+	// HandleError will be called for any error produced by handlers
+	HandleError(r *http.Request, w http.ResponseWriter, err error)
 }
