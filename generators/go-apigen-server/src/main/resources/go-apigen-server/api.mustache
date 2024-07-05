@@ -52,7 +52,7 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	{{#operations}}
 	{{#operation}}
 	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
-	controllerBuilder.Handle{{operationId}}.defaultStatusCode = 200
+	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}
 	controllerBuilder.Handle{{operationId}}.paramsParser = func(router httpRouter, w http.ResponseWriter, req *http.Request) (*{{baseName}}{{operationId}}Request, error) {
 		panic("Not implemented")
 	}

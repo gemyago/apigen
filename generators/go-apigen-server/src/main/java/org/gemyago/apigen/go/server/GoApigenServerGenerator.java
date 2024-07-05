@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,9 @@ import org.openapitools.codegen.templating.mustache.IndentedLambda;
 
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
+
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.servers.Server;
 
 public class GoApigenServerGenerator extends AbstractGoCodegen {
 
@@ -195,5 +199,12 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     ImmutableMap.Builder<String, Mustache.Lambda> lambdas = super.addMustacheLambdas();
     lambdas.put("tab_indented_2", new IndentedLambda(1, "\t", "", false, false));
     return lambdas;
+  }
+
+  @Override
+  public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
+    // TODO: Make sure this is customizable, just default is set
+    operation.addExtension("x-codegen-request-body-name", "payload");
+    return super.fromOperation(path, httpMethod, operation, servers);
   }
 }
