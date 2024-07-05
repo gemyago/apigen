@@ -10,7 +10,7 @@ import (
 
 type Queries interface {
 	ListPets(context.Context, *handlers.PetsListPetsRequest) (*models.PetsResponse, error)
-	GetPetById(context.Context, *handlers.PetsGetPetById) (*models.PetResponse, error)
+	GetPetById(context.Context, *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error)
 }
 
 type QueriesDeps struct {
@@ -26,7 +26,7 @@ func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRe
 	limit := req.Limit
 	offset := req.Offset
 	if offset >= allPetsLen {
-		return &models.PetsResponse{Data: []*models.Pet{}}, nil
+		return &models.PetsResponse{Data: []models.Pet{}}, nil
 	}
 	if offset+limit > allPetsLen {
 		limit = allPetsLen - offset
@@ -35,7 +35,7 @@ func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRe
 	return &models.PetsResponse{Data: result}, nil
 }
 
-func (q *queriesImpl) GetPetById(ctx context.Context, req *handlers.PetsGetPetById) (*models.PetResponse, error) {
+func (q *queriesImpl) GetPetById(ctx context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
 	pet, ok := q.Storage.petsById[req.PetId]
 	if !ok {
 		return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)

@@ -1,7 +1,9 @@
 package {{package}}
 
 import (
-  "{{invokerPackage}}/models"
+	"net/http"
+
+	"{{invokerPackage}}/models"
 )
 
 {{#operations}}
@@ -29,7 +31,32 @@ type {{baseName}}ControllerBuilder struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	Handle{{operationId}} actionBuilder{{^returnType}}VoidResult{{/returnType}}[*{{baseName}}ControllerBuilder, *{{baseName}}{{operationId}}Request{{#returnType}}, {{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{>response-type}}{{/returnType}}]
+	Handle{{operationId}} {{>action-builder-type}}
 {{/operation}}
 {{/operations}}
+}
+
+func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
+	// TODO: panic if any handler is null
+	return &{{baseName}}Controller{
+		{{#operations}}
+		{{#operation}}
+		{{operationId}}: c.Handle{{operationId}}.httpHandlerFactory,
+		{{/operation}}
+		{{/operations}}
+	}
+}
+
+func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
+	controllerBuilder := &{{baseName}}ControllerBuilder{}
+	{{#operations}}
+	{{#operation}}
+	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
+	controllerBuilder.Handle{{operationId}}.defaultStatusCode = 200
+	controllerBuilder.Handle{{operationId}}.paramsParser = func(router httpRouter, w http.ResponseWriter, req *http.Request) (*{{baseName}}{{operationId}}Request, error) {
+		panic("Not implemented")
+	}
+	{{/operation}}
+	{{/operations}}
+	return controllerBuilder
 }

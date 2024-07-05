@@ -24,7 +24,7 @@ paths:
           schema:
             type: integer
             maximum: 100
-            format: int32
+            format: int64
         - name: offset
           in: query
           description: How many items to skip (max 100)
@@ -32,7 +32,7 @@ paths:
           schema:
             type: integer
             maximum: 100
-            format: int32
+            format: int64
       responses:
         '200':
           description: Request succeeded
@@ -78,7 +78,8 @@ paths:
           required: true
           description: The id of the pet to retrieve
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: Request succeeded
