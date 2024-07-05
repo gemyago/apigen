@@ -4,18 +4,6 @@ import (
   "{{invokerPackage}}/models"
 )
 
-type {{baseName}}Controller[
-	TAuthRules authRules,
-] struct {
-	Auth auth[TAuthRules]
-{{#operations}}
-{{#operation}}
-	{{>operation-doc}}
-	{{operationId}} {{baseName}}{{operationIdCamelCase}}Action
-{{/operation}}
-{{/operations}}
-}
-
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
@@ -27,3 +15,21 @@ type {{baseName}}Controller[
 }{{/allParams.0}}
 {{/operation}}
 {{/operations}}
+
+type {{baseName}}Controller struct {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	{{operationId}} httpHandlerFactory
+{{/operation}}
+{{/operations}}
+}
+
+type {{baseName}}ControllerBuilder struct {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	Handle{{operationId}} actionBuilder{{^returnType}}VoidResult{{/returnType}}[*{{baseName}}ControllerBuilder, *{{baseName}}{{operationId}}Request{{#returnType}}, {{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{>response-type}}{{/returnType}}]
+{{/operation}}
+{{/operations}}
+}

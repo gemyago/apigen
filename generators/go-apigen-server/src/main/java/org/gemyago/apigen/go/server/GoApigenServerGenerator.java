@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
+import org.openapitools.codegen.templating.mustache.IndentedLambda;
+
+import com.google.common.collect.ImmutableMap;
+import com.samskivert.mustache.Mustache;
 
 public class GoApigenServerGenerator extends AbstractGoCodegen {
 
@@ -20,15 +24,16 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   /**
    * Configures the type of generator.
    *
-   * @return  the CodegenType for this generator
-   * @see     org.openapitools.codegen.CodegenType
+   * @return the CodegenType for this generator
+   * @see org.openapitools.codegen.CodegenType
    */
   public CodegenType getTag() {
     return CodegenType.SERVER;
   }
 
   /**
-   * Configures a friendly name for the generator.  This will be used by the generator
+   * Configures a friendly name for the generator. This will be used by the
+   * generator
    * to select the library with the -g flag.
    *
    * @return the friendly name for the generator
@@ -38,7 +43,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   }
 
   /**
-   * Returns human-friendly help for the generator.  Provide the consumer with help
+   * Returns human-friendly help for the generator. Provide the consumer with help
    * tips, parameters here
    *
    * @return A string value for the help message
@@ -57,42 +62,46 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     outputFolder = "generated-code/go-apigen-server";
 
     /**
-     * Models.  You can write model files using the modelTemplateFiles map.
+     * Models. You can write model files using the modelTemplateFiles map.
      * if you want to create one template for file, you can do so here.
-     * for multiple files for model, just put another entry in the `modelTemplateFiles` with
+     * for multiple files for model, just put another entry in the
+     * `modelTemplateFiles` with
      * a different extension
      */
     modelTemplateFiles.put(
-      "model.mustache", // the template to use
-      ".go");       // the extension for each file to write
+        "model.mustache", // the template to use
+        ".go"); // the extension for each file to write
 
     /**
-     * Api classes.  You can write classes for each Api file with the apiTemplateFiles map.
-     * as with models, add multiple entries with different extensions for multiple files per
+     * Api classes. You can write classes for each Api file with the
+     * apiTemplateFiles map.
+     * as with models, add multiple entries with different extensions for multiple
+     * files per
      * class
      */
     apiTemplateFiles.put(
-      "api.mustache",   // the template to use
-      ".go");       // the extension for each file to write
+        "api.mustache", // the template to use
+        ".go"); // the extension for each file to write
 
     /**
-     * Template Location.  This is the location which templates will be read from.  The generator
+     * Template Location. This is the location which templates will be read from.
+     * The generator
      * will use the resource stream to attempt to read the templates.
      */
     templateDir = "go-apigen-server";
 
     /**
-     * Api Package.  Optional, if needed, this can be used in templates
+     * Api Package. Optional, if needed, this can be used in templates
      */
     apiPackage = "handlers";
 
     /**
-     * Model Package.  Optional, if needed, this can be used in templates
+     * Model Package. Optional, if needed, this can be used in templates
      */
     modelPackage = "models";
 
     /**
-     * Additional Properties.  These values can be passed to the templates and
+     * Additional Properties. These values can be passed to the templates and
      * are available in models, apis, and supporting files
      */
     additionalProperties.put("apiVersion", apiVersion);
@@ -101,29 +110,28 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
     /**
-     * Supporting Files.  You can write single files for the generator with the
-     * entire object tree available.  If the input file has a suffix of `.mustache
-     * it will be processed by the template engine.  Otherwise, it will be copied
+     * Supporting Files. You can write single files for the generator with the
+     * entire object tree available. If the input file has a suffix of `.mustache
+     * it will be processed by the template engine. Otherwise, it will be copied
      */
     supportingFiles.add(new SupportingFile(
-      "controller.mustache", 
-      apiPackage, 
-      "controller.go"
-    ));
+        "controller.mustache",
+        apiPackage,
+        "controller.go"));
     supportingFiles.add(new SupportingFile(
-      "router.mustache", 
-      apiPackage, 
-      "router.go"
-    ));
-    // supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
-    //   "",                                                       // the destination folder, relative `outputFolder`
-    //   "myFile.sample")                                          // the output file
+        "router.mustache",
+        apiPackage,
+        "router.go"));
+    // supportingFiles.add(new SupportingFile("myFile.mustache", // the input
+    // template or file
+    // "", // the destination folder, relative `outputFolder`
+    // "myFile.sample") // the output file
     // );
   }
 
   @Override
   public String toApiFilename(String name) {
-      return super.toApiFilename(name).replace("api_", "");
+    return super.toApiFilename(name).replace("api_", "");
   }
 
   @Override
@@ -132,7 +140,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   }
 
   private File resolveGoMod(File folder) {
-    if(folder == null) {
+    if (folder == null) {
       return null;
     }
 
@@ -143,7 +151,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       }
     });
 
-    if(files.length == 1) {
+    if (files.length == 1) {
       return files[0];
     }
 
@@ -155,11 +163,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     String contents;
     try {
       contents = Files.readString(filePath);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
     Matcher matcher = pattern.matcher(contents);
-    if(matcher.find()) {
+    if (matcher.find()) {
       return matcher.group("module");
     }
     throw new RuntimeException("Could not find module in go.mod file");
@@ -172,14 +180,20 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     File outputFolderFile = new File(outputFolder);
     Path outputFolderFilePath = outputFolderFile.toPath();
     File goModFile = resolveGoMod(outputFolderFile);
-    if(goModFile == null) {
+    if (goModFile == null) {
       throw new RuntimeException("Can not find go.mod in a project hierarchy");
     }
     Path goModFilePath = goModFile.toPath();
     String moduleName = extractModule(goModFilePath);
     additionalProperties.put(
-      CodegenConstants.INVOKER_PACKAGE, 
-      moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString()
-    );
+        CodegenConstants.INVOKER_PACKAGE,
+        moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString());
+  }
+
+  @Override
+  protected ImmutableMap.Builder<String, Mustache.Lambda> addMustacheLambdas() {
+    ImmutableMap.Builder<String, Mustache.Lambda> lambdas = super.addMustacheLambdas();
+    lambdas.put("tab_indented_2", new IndentedLambda(1, "\t", "", false, false));
+    return lambdas;
   }
 }

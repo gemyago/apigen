@@ -39,7 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pets"
+                $ref: "#/components/schemas/PetsResponse"
         default:
           description: unexpected error
           content:
@@ -85,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pet"
+                $ref: "#/components/schemas/PetResponse"
         default:
           description: unexpected error
           content:
@@ -107,10 +107,6 @@ components:
           type: string
         comments:
           type: string
-    Pets:
-      type: array
-      items:
-        $ref: "#/components/schemas/Pet"
     PetResponse:
       type: object
       required:
@@ -124,7 +120,9 @@ components:
         - data
       properties:
         data:
-          $ref: "#/components/schemas/Pets"
+          type: array
+          items:
+            $ref: "#/components/schemas/Pet"
     Error:
       type: object
       required:
