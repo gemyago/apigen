@@ -10,18 +10,20 @@ import (
 type voidResult *int
 
 type httpHandlerFactory func(r httpRouter) http.Handler
-type paramsParserFunc[TReqParams any] func(router httpRouter, w http.ResponseWriter, req *http.Request) (TReqParams, error)
+type paramsParser[TReqParams any] interface {
+	parse(router httpRouter, w http.ResponseWriter, req *http.Request) (TReqParams, error)
+}
 
 type handlerFactoryParams[TReqParams any, TResData any] struct {
 	defaultStatus int
-	paramsParser  paramsParserFunc[TReqParams]
+	paramsParser  paramsParser[TReqParams]
 	handler       func(context.Context, TReqParams) (TResData, error)
 }
 
 func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFactoryParams[TReqParams, TResData]) httpHandlerFactory {
 	return func(router httpRouter) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			params, err := factoryParams.paramsParser(router, w, r)
+			params, err := factoryParams.paramsParser.parse(router, w, r)
 			if err != nil {
 				panic(fmt.Errorf("TODO: handle params parsing errors: %w", err))
 			}
@@ -48,7 +50,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
 	defaultStatusCode  int
 	httpHandlerFactory func(r httpRouter) http.Handler
-	paramsParser       paramsParserFunc[TReqParams]
+	paramsParser       paramsParser[TReqParams]
 	controllerBuilder  TControllerBuilder
 }
 
