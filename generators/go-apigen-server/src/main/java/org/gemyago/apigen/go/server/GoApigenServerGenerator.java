@@ -119,13 +119,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * it will be processed by the template engine. Otherwise, it will be copied
      */
     supportingFiles.add(new SupportingFile(
-        "controller.mustache",
+        "handlers.mustache",
         apiPackage,
-        "controller.go"));
-    supportingFiles.add(new SupportingFile(
-        "router.mustache",
-        apiPackage,
-        "router.go"));
+        "handlers.go"));
     // supportingFiles.add(new SupportingFile("myFile.mustache", // the input
     // template or file
     // "", // the destination folder, relative `outputFolder`

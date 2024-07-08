@@ -1,6 +1,5 @@
-handlers/controller.go
+handlers/handlers.go
 handlers/pets.go
-handlers/router.go
 models/error.go
 models/pet.go
 models/pet_response.go
