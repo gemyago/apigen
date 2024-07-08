@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -41,7 +42,12 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			params, err := factoryParams.paramsParser.parse(router, w, r)
 			if err != nil {
-				panic(fmt.Errorf("TODO: handle params parsing errors: %w", err))
+				// TODO: This needs a different error handling
+				w.WriteHeader(400)
+				if _, err := w.Write([]byte(err.Error())); err != nil {
+					panic(err)
+				}
+				return
 			}
 
 			resData, err := factoryParams.handler(r.Context(), params)
@@ -96,19 +102,23 @@ func (ab *actionBuilderVoidResult[TControllerBuilder, TReqParams]) With(
 }
 
 type optionalVal[TVal any] struct {
-	value TVal
-	empty bool
+	value    TVal
+	assigned bool
+}
+
+func makeOptionalVal[TVal any](val TVal) optionalVal[TVal] {
+	return optionalVal[TVal]{value: val, assigned: true}
 }
 
 func readPathValue(key string, router httpRouter, req *http.Request) optionalVal[string] {
-	return optionalVal[string]{value: router.PathValue(req, key)}
+	return optionalVal[string]{value: router.PathValue(req, key), assigned: true}
 }
 
 func readQueryValue(key string, values url.Values) optionalVal[[]string] {
 	if values.Has(key) {
-		return optionalVal[[]string]{value: values[key], empty: false}
+		return optionalVal[[]string]{value: values[key], assigned: true}
 	}
-	return optionalVal[[]string]{empty: true}
+	return optionalVal[[]string]{}
 }
 
 type rawValueParser[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], *TTargetVal) error
@@ -117,11 +127,11 @@ func parseJsonPayload[TTargetVal any](req optionalVal[*http.Request], target *TT
 	return json.NewDecoder(req.value.Body).Decode(target)
 }
 
-var _ rawValueParser[*http.Request, string] = parseJsonPayload[string]
+var _ rawValueParser[*http.Request, string] = parseJsonPayload
 
 func newStringToSignedIntParser[TTargetVal constraints.Signed](bitSize int) rawValueParser[string, TTargetVal] {
 	return func(ov optionalVal[string], target *TTargetVal) error {
-		if ov.empty {
+		if !ov.assigned {
 			return nil
 		}
 		val, err := strconv.ParseInt(ov.value, 10, bitSize)
@@ -135,7 +145,7 @@ func newStringToSignedIntParser[TTargetVal constraints.Signed](bitSize int) rawV
 
 func newStringSliceToSignedIntParser[TTargetVal constraints.Signed](bitSize int) rawValueParser[[]string, TTargetVal] {
 	return func(ov optionalVal[[]string], target *TTargetVal) error {
-		if ov.empty {
+		if !ov.assigned {
 			return nil
 		}
 		val, err := strconv.ParseInt(ov.value[0], 10, bitSize)
@@ -153,8 +163,19 @@ type bindingError struct {
 	err      error
 }
 
+func (be bindingError) Error() string {
+	return fmt.Sprintf("field %s (in %s) error: %v", be.field, be.location, be.err)
+}
+
 type bindingContext struct {
-	errors []bindingError
+	errors []error
+}
+
+func (c bindingContext) Error() error {
+	if len(c.errors) == 0 {
+		return nil
+	}
+	return errors.Join(c.errors...)
 }
 
 type requestParamBinder[TRawVal any, TTargetVal any] func(
@@ -163,10 +184,60 @@ type requestParamBinder[TRawVal any, TTargetVal any] func(
 	receiver *TTargetVal,
 )
 
+type valueValidator[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], TTargetVal) error
+
+var errValueRequired = errors.New("value is required")
+
+func validateNonEmpty[TRawVal any, TTargetVal any](rawVal optionalVal[TRawVal], _ TTargetVal) error {
+	if !rawVal.assigned {
+		return errValueRequired
+	}
+	return nil
+}
+
+var _ valueValidator[string, string] = validateNonEmpty
+
+type orderedValuesValidatorParams[TTargetVal constraints.Ordered] struct {
+	minimum optionalVal[TTargetVal]
+	maximum optionalVal[TTargetVal]
+}
+
+func newOrderedValuesValidator[TRawVal any, TTargetVal constraints.Ordered](
+	params orderedValuesValidatorParams[TTargetVal],
+) valueValidator[TRawVal, TTargetVal] {
+	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
+		if !ov.assigned {
+			return nil
+		}
+
+		if params.minimum.assigned && tv < params.minimum.value {
+			return fmt.Errorf("value %v is less than minimum %v", tv, params.minimum.value)
+		}
+
+		if params.maximum.assigned && tv > params.maximum.value {
+			return fmt.Errorf("value %v is greater than maximum %v", tv, params.maximum.value)
+		}
+
+		return nil
+	}
+}
+
+func newCompositeValidator[TRawVal any, TTargetVal any](validators ...valueValidator[TRawVal, TTargetVal]) valueValidator[TRawVal, TTargetVal] {
+	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
+		for _, v := range validators {
+			if err := v(ov, tv); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+}
+
 type binderParams[TRawVal any, TTargetVal any] struct {
-	field      string
-	location   string
-	parseValue rawValueParser[TRawVal, TTargetVal]
+	field         string
+	location      string
+	parseValue    rawValueParser[TRawVal, TTargetVal]
+	validateValue valueValidator[TRawVal, TTargetVal]
 }
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
@@ -184,6 +255,13 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 				err:      err,
 			})
 			return
+		}
+		if err := params.validateValue(rawVal, *receiver); err != nil {
+			bindingCtx.errors = append(bindingCtx.errors, bindingError{
+				field:    params.field,
+				location: params.location,
+				err:      err,
+			})
 		}
 	}
 }

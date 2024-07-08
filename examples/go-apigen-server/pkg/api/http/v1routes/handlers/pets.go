@@ -77,8 +77,8 @@ type petsCreatePetParamsParser struct {
 func (p *petsCreatePetParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsCreatePetRequest{}
-	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req}, &reqParams.Payload)
-	return reqParams, nil
+	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
+	return reqParams, bindingCtx.Error()
 }
 
 type petsGetPetByIdParamsParser struct {
@@ -89,7 +89,7 @@ func (p *petsGetPetByIdParamsParser) parse(router httpRouter, w http.ResponseWri
 	bindingCtx := bindingContext{}
 	reqParams := &PetsGetPetByIdRequest{}
 	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
-	return reqParams, nil
+	return reqParams, bindingCtx.Error()
 }
 
 type petsListPetsParamsParser struct {
@@ -102,8 +102,8 @@ func (p *petsListPetsParamsParser) parse(router httpRouter, w http.ResponseWrite
 	bindingCtx := bindingContext{}
 	reqParams := &PetsListPetsRequest{}
 	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
-	p.bindLimit(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
-	return reqParams, nil
+	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
+	return reqParams, bindingCtx.Error()
 }
 
 func BuildPetsController() *PetsControllerBuilder {
@@ -117,6 +117,9 @@ func BuildPetsController() *PetsControllerBuilder {
 			field:      "payload",
 			location:   "body",
 			parseValue: parseJsonPayload[models.Pet],
+			validateValue: newCompositeValidator[*http.Request, models.Pet](
+				validateNonEmpty,
+			),
 		}),
 	}
 
@@ -127,6 +130,9 @@ func BuildPetsController() *PetsControllerBuilder {
 			field:      "petId",
 			location:   "path",
 			parseValue: newStringToSignedIntParser[int64](64),
+			validateValue: newCompositeValidator[string, int64](
+				validateNonEmpty,
+			),
 		}),
 	}
 
@@ -137,11 +143,23 @@ func BuildPetsController() *PetsControllerBuilder {
 			field:      "limit",
 			location:   "query",
 			parseValue: newStringSliceToSignedIntParser[int64](64),
+			validateValue: newCompositeValidator[[]string, int64](
+				validateNonEmpty,
+				newOrderedValuesValidator[[]string, int64](orderedValuesValidatorParams[int64]{
+					minimum: makeOptionalVal[int64](1),
+					maximum: makeOptionalVal[int64](100),
+				}),
+			),
 		}),
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
 			field:      "offset",
 			location:   "query",
 			parseValue: newStringSliceToSignedIntParser[int64](64),
+			validateValue: newCompositeValidator(
+				newOrderedValuesValidator[[]string](orderedValuesValidatorParams[int64]{
+					minimum: makeOptionalVal[int64](1),
+				}),
+			),
 		}),
 	}
 

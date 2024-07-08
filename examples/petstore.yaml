@@ -23,6 +23,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
             maximum: 100
             format: int64
         - name: offset
@@ -31,7 +32,7 @@ paths:
           required: false
           schema:
             type: integer
-            maximum: 100
+            minimum: 1
             format: int64
       responses:
         '200':
