@@ -108,6 +108,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder := &PetsControllerBuilder{}
 
 	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleCreatePet.voidResult = true
 	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
 	controllerBuilder.HandleCreatePet.paramsParser = &petsCreatePetParamsParser{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{

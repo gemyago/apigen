@@ -16,6 +16,7 @@ type paramsParser[TReqParams any] interface {
 
 type handlerFactoryParams[TReqParams any, TResData any] struct {
 	defaultStatus int
+	voidResult    bool
 	paramsParser  paramsParser[TReqParams]
 	handler       func(context.Context, TReqParams) (TResData, error)
 }
@@ -33,12 +34,12 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 				router.HandleError(r, w, err)
 				return
 			}
+			if factoryParams.voidResult {
+				return
+			}
 
-			// TODO: Do it only if result is not void (same as sending the response)
 			w.Header().Add("Content-Type", "application/json; utf-8")
-
 			w.WriteHeader(factoryParams.defaultStatus)
-
 			if err := json.NewEncoder(w).Encode(resData); err != nil {
 				// TODO: We need to better handle those
 				panic(err)
@@ -49,6 +50,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
 	defaultStatusCode  int
+	voidResult         bool
 	httpHandlerFactory func(r httpRouter) http.Handler
 	paramsParser       paramsParser[TReqParams]
 	controllerBuilder  TControllerBuilder
@@ -59,6 +61,7 @@ func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
 ) TControllerBuilder {
 	ab.httpHandlerFactory = createHandlerFactory(handlerFactoryParams[TReqParams, TResData]{
 		defaultStatus: ab.defaultStatusCode,
+		voidResult:    ab.voidResult,
 		paramsParser:  ab.paramsParser,
 		handler:       handler,
 	})
