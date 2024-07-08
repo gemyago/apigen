@@ -9,9 +9,11 @@ import (
 type PetsCreatePetRequest struct {
 	Payload models.Pet
 }
+
 type PetsGetPetByIdRequest struct {
 	PetId int64
 }
+
 type PetsListPetsRequest struct {
 	Limit  int64
 	Offset int64
