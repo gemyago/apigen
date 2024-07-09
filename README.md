@@ -5,6 +5,13 @@ This project is using the [OpenAPI Generator](https://github.com/openapitools/op
 
 Project status: **pre-alpha**.
 
+## Supported OpenAPI features
+
+Numeric data types
+|type|format|in|minimum|maximum|
+|----|----|----|----|----|
+|number|-|query,path|&check;|&check;|
+
 ## Contributing
 
 Please have the following tools installed:
