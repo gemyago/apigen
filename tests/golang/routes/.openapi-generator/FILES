@@ -1,3 +1,3 @@
 handlers/handlers.go
-handlers/numeric_types_number_controller.go
-handlers/numeric_types_number_params.go
+handlers/numeric_types_controller.go
+handlers/numeric_types_params.go

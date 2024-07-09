@@ -1,6 +1,6 @@
 package handlers
 
-type NumericTypesNumberNumberAnySimpleRequest struct {
+type NumericTypesNumberAnySimpleRequest struct {
 	PathParam1 float32
 	PathParam2 float32
 	RequiredQuery1 float32
@@ -9,43 +9,43 @@ type NumericTypesNumberNumberAnySimpleRequest struct {
 	OptionalQuery2 float32
 }
 
-type NumericTypesNumberController struct {
+type NumericTypesController struct {
 	// GET /numeric-types/number/any/{pathParam1}/{pathParam2}
 	//
-	// Request type: NumericTypesNumberNumberAnySimpleRequest,
+	// Request type: NumericTypesNumberAnySimpleRequest,
 	//
 	// Response type: none
 	NumberAnySimple httpHandlerFactory
 }
 
-type NumericTypesNumberControllerBuilder struct {
+type NumericTypesControllerBuilder struct {
 	// GET /numeric-types/number/any/{pathParam1}/{pathParam2}
 	//
-	// Request type: NumericTypesNumberNumberAnySimpleRequest,
+	// Request type: NumericTypesNumberAnySimpleRequest,
 	//
 	// Response type: none
-	HandleNumberAnySimple actionBuilderVoidResult[*NumericTypesNumberControllerBuilder, *NumericTypesNumberNumberAnySimpleRequest]
+	HandleNumberAnySimple actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumberAnySimpleRequest]
 }
 
-func (c *NumericTypesNumberControllerBuilder) Finalize() *NumericTypesNumberController {
+func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 	// TODO: panic if any handler is null
-	return &NumericTypesNumberController{
+	return &NumericTypesController{
 		NumberAnySimple: c.HandleNumberAnySimple.httpHandlerFactory,
 	}
 }
 
-func BuildNumericTypesNumberController() *NumericTypesNumberControllerBuilder {
-	controllerBuilder := &NumericTypesNumberControllerBuilder{}
+func BuildNumericTypesController() *NumericTypesControllerBuilder {
+	controllerBuilder := &NumericTypesControllerBuilder{}
 
 	// GET /numeric-types/number/any/{pathParam1}/{pathParam2}
 	controllerBuilder.HandleNumberAnySimple.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumberAnySimple.defaultStatusCode = 204
 	controllerBuilder.HandleNumberAnySimple.voidResult = true
-	controllerBuilder.HandleNumberAnySimple.paramsParser = newNumericTypesNumberNumberAnySimpleParamsParser()
+	controllerBuilder.HandleNumberAnySimple.paramsParser = newNumericTypesNumberAnySimpleParamsParser()
 
 	return controllerBuilder
 }
 
-func MountNumericTypesNumberRoutes(controller *NumericTypesNumberController, r httpRouter) {
+func MountNumericTypesRoutes(controller *NumericTypesController, r httpRouter) {
 	r.HandleRoute("GET", "/numeric-types/number/any/{pathParam1}/{pathParam2}", controller.NumberAnySimple(r))
 }

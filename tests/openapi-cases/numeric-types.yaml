@@ -17,7 +17,7 @@ paths:
       summary: API with simple numeric params
       operationId: numberAnySimple
       tags:
-        - numeric-types-number
+        - numeric-types
       parameters:
         - name: pathParam1
           in: path

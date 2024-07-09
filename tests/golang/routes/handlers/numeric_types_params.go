@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-type NumericTypesNumberNumberAnySimpleParamsParser struct {
+type NumericTypesNumberAnySimpleParamsParser struct {
 	bindPathParam1 requestParamBinder[string, float32]
 	bindPathParam2 requestParamBinder[string, float32]
 	bindRequiredQuery1 requestParamBinder[[]string, float32]
@@ -13,9 +13,9 @@ type NumericTypesNumberNumberAnySimpleParamsParser struct {
 	bindOptionalQuery2 requestParamBinder[[]string, float32]
 }
 
-func (p *NumericTypesNumberNumberAnySimpleParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumberNumberAnySimpleRequest, error) {
+func (p *NumericTypesNumberAnySimpleParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumberAnySimpleRequest, error) {
 	bindingCtx := bindingContext{}
-	reqParams := &NumericTypesNumberNumberAnySimpleRequest{}
+	reqParams := &NumericTypesNumberAnySimpleRequest{}
 	query := req.URL.Query()
 	
 	p.bindPathParam1(&bindingCtx, readPathValue("pathParam1", router, req), &reqParams.PathParam1)
@@ -28,8 +28,8 @@ func (p *NumericTypesNumberNumberAnySimpleParamsParser) parse(router httpRouter,
 	return reqParams, bindingCtx.Error()
 }
 
-func newNumericTypesNumberNumberAnySimpleParamsParser() *NumericTypesNumberNumberAnySimpleParamsParser {
-	return &NumericTypesNumberNumberAnySimpleParamsParser{
+func newNumericTypesNumberAnySimpleParamsParser() *NumericTypesNumberAnySimpleParamsParser {
+	return &NumericTypesNumberAnySimpleParamsParser{
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
