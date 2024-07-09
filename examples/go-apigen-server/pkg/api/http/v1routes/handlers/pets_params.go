@@ -30,6 +30,7 @@ func newPetsCreatePetParamsParser() *PetsCreatePetParamsParser {
 		}),
 	}
 }
+
 type PetsGetPetByIdParamsParser struct {
 	bindPetId requestParamBinder[string, int64]
 }
@@ -54,6 +55,7 @@ func newPetsGetPetByIdParamsParser() *PetsGetPetByIdParamsParser {
 		}),
 	}
 }
+
 type PetsListPetsParamsParser struct {
 	bindLimit requestParamBinder[[]string, int64]
 	bindOffset requestParamBinder[[]string, int64]

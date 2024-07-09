@@ -41,6 +41,7 @@ func new{{baseName}}{{operationId}}ParamsParser() *{{baseName}}{{operationId}}Pa
 		}),
 		{{/allParams}}
 	}
-}
-{{/operation}}
+}{{^-last}}
+
+{{/-last}}{{/operation}}
 {{/operations}}

@@ -106,10 +106,6 @@ type optionalVal[TVal any] struct {
 	assigned bool
 }
 
-func makeOptionalVal[TVal any](val TVal) optionalVal[TVal] {
-	return optionalVal[TVal]{value: val, assigned: true}
-}
-
 func readPathValue(key string, router httpRouter, req *http.Request) optionalVal[string] {
 	return optionalVal[string]{value: router.PathValue(req, key), assigned: true}
 }
