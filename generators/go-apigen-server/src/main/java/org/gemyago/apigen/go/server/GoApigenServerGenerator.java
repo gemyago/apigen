@@ -86,8 +86,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * class
      */
     apiTemplateFiles.put(
-        "controller.mustache", // the template to use
-        "_controller.go"); // the extension for each file to write
+        "controller.mustache",
+        "_controller.go");
+    apiTemplateFiles.put(
+        "controller_params.mustache",
+        "_params.go");
 
     /**
      * Template Location. This is the location which templates will be read from.
