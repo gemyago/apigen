@@ -2,8 +2,10 @@ package {{package}}
 
 import (
 	"net/http"
+	{{#hasModel}}
 
 	"{{invokerPackage}}/models"
+{{/hasModel}}
 )
 
 {{#operations}}

@@ -1,9 +1,10 @@
 package {{package}}
 
-import (
+{{#hasModel}}import (
 	"{{invokerPackage}}/models"
 )
 
+{{/hasModel}}
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
