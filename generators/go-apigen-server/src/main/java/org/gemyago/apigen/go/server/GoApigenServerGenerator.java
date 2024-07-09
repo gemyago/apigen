@@ -86,8 +86,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * class
      */
     apiTemplateFiles.put(
-        "api.mustache", // the template to use
-        ".go"); // the extension for each file to write
+        "controller.mustache", // the template to use
+        "_controller.go"); // the extension for each file to write
 
     /**
      * Template Location. This is the location which templates will be read from.
@@ -124,11 +124,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "handlers.mustache",
         apiPackage,
         "handlers.go"));
-    // supportingFiles.add(new SupportingFile("myFile.mustache", // the input
-    // template or file
-    // "", // the destination folder, relative `outputFolder`
-    // "myFile.sample") // the output file
-    // );
   }
 
   @Override
