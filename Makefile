@@ -39,6 +39,7 @@ $(mvn): $(maven_archive) $(bin)
 
 .PHONY: deps
 deps: $(cli_jar) $(mvn)
+	go install github.com/mitranim/gow@latest
 
 .PHONY: cli
 cli:

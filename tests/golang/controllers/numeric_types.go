@@ -23,7 +23,7 @@ func (c *numericTypesControllerTestActions) GetNumberAnySimple(
 	return nil
 }
 
-func NewNumericTypesController(
+func newNumericTypesController(
 	testActions *numericTypesControllerTestActions,
 ) *handlers.NumericTypesController {
 	return handlers.BuildNumericTypesController().
