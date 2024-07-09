@@ -1,0 +1,47 @@
+package {{package}}
+
+import (
+	"net/http"
+
+	"{{invokerPackage}}/models"
+)
+
+{{#operations}}
+{{#operation}}
+type {{baseName}}{{operationId}}ParamsParser struct {
+	{{#allParams}}
+	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
+	{{/allParams}}
+}
+
+func (p *{{baseName}}{{operationId}}ParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*{{>request-type}}, error) {
+	bindingCtx := bindingContext{}
+	reqParams := &{{>request-type}}{}{{#hasQueryParams}}
+	query := req.URL.Query(){{/hasQueryParams}}
+	{{#allParams}}
+	{{#isQueryParam}}p.bind{{>params/name}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{>params/name}}){{/isQueryParam}}{{#isPathParam}}
+	p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}}){{/isPathParam}}{{#isBodyParam}}
+	p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload){{/isBodyParam}}
+	{{/allParams}}
+	return reqParams, bindingCtx.Error()
+}
+
+func new{{baseName}}{{operationId}}ParamsParser() *{{baseName}}{{operationId}}ParamsParser {
+	return &{{baseName}}{{operationId}}ParamsParser{
+		{{#allParams}}
+		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
+			field: "{{baseName}}",
+			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
+			parseValue: {{#isBodyParam}}parseJsonPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}knownParsers.{{dataType}}_in_{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}{{/isBodyParam}},
+			validateValue: newCompositeValidator[{{>params/binder-types}}]({{#required}}
+				validateNonEmpty,{{/required}}{{#minimum}}
+				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
+				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}
+			),
+		}),
+		{{/allParams}}
+	}
+}{{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}

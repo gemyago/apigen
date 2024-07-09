@@ -1,0 +1,69 @@
+
+// {{classname}} - {{{description}}}{{^description}}struct for {{{classname}}}{{/description}}
+type {{classname}} struct {
+	{{#oneOf}}
+	*{{{.}}}
+	{{/oneOf}}
+}
+
+// UnmarshalJSON into one of the pointers in the struct
+func (dst *{{classname}}) UnmarshalJSON(data []byte) error {
+	match := 0
+	var matchError error
+
+  {{#oneOf}}
+	var val{{{.}}} {{{.}}}
+	if err := newStrictDecoder(data).Decode(&val{{{.}}}); err == nil {
+		// It's best to generate isEmpty instead of reflect.DeepEqual
+		if !reflect.DeepEqual(val{{{.}}}, {{{.}}}{}) {
+			dst.{{{.}}} = &val{{{.}}}
+			match++
+		}
+	} else {
+		matchError = errors.Join(matchError, fmt.Errorf("{{{.}}}: %w", err))
+	}
+
+	{{/oneOf}}
+	if match > 1 {
+    {{#oneOf}}
+		dst.{{{.}}} = nil
+    {{/oneOf}}
+
+		return errors.Join(
+			errors.New("data matches more than one schema in oneOf(Project)"),
+			matchError,
+		)
+	} else if match == 1 {
+		return nil
+	} else {
+		return errors.Join(
+			errors.New("data failed to match schemas in oneOf(Project)"),
+			matchError,
+		)
+	}
+}
+
+func (src {{classname}}) MarshalJSON() ([]byte, error) {
+{{#oneOf}}
+	if src.{{{.}}} != nil {
+		return json.Marshal(src.{{{.}}})
+	}
+
+{{/oneOf}}
+	return nil, fmt.Errorf("empty {{classname}} object")
+}
+
+type {{>model-validator-type}} struct {	{{#oneOf}}
+	validate{{{.}}} FieldValidator[{{#isNullable}}*{{/isNullable}}{{{.}}}]{{/oneOf}}
+}
+
+func New{{classname}}Validator(opts *ModelValidatorOpts) FieldValidator[{{classname}}] {
+	validator := {{>model-validator-type}}{ {{#oneOf}}
+		validate{{{.}}}: New{{{.}}}Validator(opts),{{/oneOf}}
+	}
+	return func(vc *ValidationContext, m {{classname}}) { {{#oneOf}}
+		if m.{{{.}}} != nil {
+			validator.validate{{{.}}}(vc, *m.{{{.}}})
+		}{{/oneOf}}
+	}
+}

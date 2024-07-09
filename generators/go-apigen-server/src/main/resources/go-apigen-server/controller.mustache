@@ -1,0 +1,75 @@
+package {{package}}
+
+import (
+	"{{invokerPackage}}/models"
+)
+
+{{#operations}}
+{{#operation}}
+{{#allParams.0}}{{#allParams}}{{#isEnum}}
+{{>enums/params/type}}
+{{/isEnum}}{{/allParams}}type {{>request-type}} struct {
+	{{#allParams}}
+	{{>params/name}} {{>params/type}}
+	{{/allParams}}
+}{{/allParams.0}}{{^-last}}
+
+{{/-last}}
+{{/operation}}
+
+{{/operations}}
+
+type {{baseName}}Controller struct {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	{{operationId}} httpHandlerFactory{{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}
+}
+
+type {{baseName}}ControllerBuilder struct {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	Handle{{operationId}} {{>action-builder-type}}{{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}
+}
+
+func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
+	// TODO: panic if any handler is null
+	return &{{baseName}}Controller{
+		{{#operations}}
+		{{#operation}}
+		{{operationId}}: c.Handle{{operationId}}.httpHandlerFactory,
+		{{/operation}}
+		{{/operations}}
+	}
+}
+
+func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
+	controllerBuilder := &{{baseName}}ControllerBuilder{}
+
+	{{#operations}}
+	{{#operation}}
+	// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
+	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
+	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}{{^returnType}}
+	controllerBuilder.Handle{{operationId}}.voidResult = true{{/returnType}}
+	controllerBuilder.Handle{{operationId}}.paramsParser = new{{baseName}}{{operationId}}ParamsParser()
+
+	{{/operation}}
+	{{/operations}}
+	return controllerBuilder
+}
+
+func Mount{{baseName}}Routes(controller *{{baseName}}Controller, r httpRouter) {
+	{{#operations}}
+	{{#operation}}
+	r.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(r))
+	{{/operation}}
+	{{/operations}}
+}
