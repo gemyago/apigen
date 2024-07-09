@@ -94,7 +94,8 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	{{#operations}}
 	{{#operation}}
 	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
-	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}
+	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}{{^returnType}}
+	controllerBuilder.Handle{{operationId}}.voidResult = true{{/returnType}}
 	controllerBuilder.Handle{{operationId}}.paramsParser = new{{baseName}}{{operationId}}ParamsParser()
 	{{/operation}}
 	{{/operations}}

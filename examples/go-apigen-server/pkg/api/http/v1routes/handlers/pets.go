@@ -159,6 +159,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder := &PetsControllerBuilder{}
 	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
+	controllerBuilder.HandleCreatePet.voidResult = true
 	controllerBuilder.HandleCreatePet.paramsParser = newPetsCreatePetParamsParser()
 	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
