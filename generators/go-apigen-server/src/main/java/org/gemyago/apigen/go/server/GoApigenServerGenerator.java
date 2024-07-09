@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.servers.Server;
 
 public class GoApigenServerGenerator extends AbstractGoCodegen {
@@ -202,5 +204,12 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // TODO: Make sure this is customizable, just default is set
     operation.addExtension("x-codegen-request-body-name", "payload");
     return super.fromOperation(path, httpMethod, operation, servers);
+  }
+
+  @Override
+  public CodegenParameter fromParameter(Parameter parameter, Set<String> imports) {
+    CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
+    codegenParameter.vendorExtensions.put("x-codegen-param-in", parameter.getIn());
+    return codegenParameter;
   }
 }

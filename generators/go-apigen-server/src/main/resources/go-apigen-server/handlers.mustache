@@ -157,6 +157,16 @@ func newStringSliceToSignedIntParser[TTargetVal constraints.Signed](bitSize int)
 	}
 }
 
+type knownParsersDef struct {
+	int64_in_path  rawValueParser[string, int64]
+	int64_in_query rawValueParser[[]string, int64]
+}
+
+var knownParsers = knownParsersDef{
+	int64_in_path:  newStringToSignedIntParser[int64](64),
+	int64_in_query: newStringSliceToSignedIntParser[int64](64),
+}
+
 type bindingError struct {
 	field    string
 	location string
@@ -197,25 +207,21 @@ func validateNonEmpty[TRawVal any, TTargetVal any](rawVal optionalVal[TRawVal], 
 
 var _ valueValidator[string, string] = validateNonEmpty
 
-type orderedValuesValidatorParams[TTargetVal constraints.Ordered] struct {
-	minimum optionalVal[TTargetVal]
-	maximum optionalVal[TTargetVal]
-}
-
-func newOrderedValuesValidator[TRawVal any, TTargetVal constraints.Ordered](
-	params orderedValuesValidatorParams[TTargetVal],
+func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
+	threshold TTargetVal,
+	inclusive bool,
+	isMin bool,
 ) valueValidator[TRawVal, TTargetVal] {
 	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
 		if !ov.assigned {
 			return nil
 		}
 
-		if params.minimum.assigned && tv < params.minimum.value {
-			return fmt.Errorf("value %v is less than minimum %v", tv, params.minimum.value)
+		if isMin && ((inclusive && tv <= threshold) || (!inclusive && tv < threshold)) {
+			return fmt.Errorf("value %v is less than minimum %v", tv, threshold)
 		}
-
-		if params.maximum.assigned && tv > params.maximum.value {
-			return fmt.Errorf("value %v is greater than maximum %v", tv, params.maximum.value)
+		if !isMin && ((inclusive && tv >= threshold) || (!inclusive && tv > threshold)) {
+			return fmt.Errorf("value %v is greater than maximum %v", tv, threshold)
 		}
 
 		return nil

@@ -15,7 +15,7 @@ type PetsGetPetByIdRequest struct {
 }
 
 type PetsListPetsRequest struct {
-	Limit  int64
+	Limit int64
 	Offset int64
 }
 
@@ -64,105 +64,108 @@ type PetsControllerBuilder struct {
 func (c *PetsControllerBuilder) Finalize() *PetsController {
 	// TODO: panic if any handler is null
 	return &PetsController{
-		CreatePet:  c.HandleCreatePet.httpHandlerFactory,
+		CreatePet: c.HandleCreatePet.httpHandlerFactory,
 		GetPetById: c.HandleGetPetById.httpHandlerFactory,
-		ListPets:   c.HandleListPets.httpHandlerFactory,
+		ListPets: c.HandleListPets.httpHandlerFactory,
 	}
 }
 
-type petsCreatePetParamsParser struct {
+type PetsCreatePetParamsParser struct {
 	bindPayload requestParamBinder[*http.Request, models.Pet]
 }
 
-func (p *petsCreatePetParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
+func (p *PetsCreatePetParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsCreatePetRequest{}
+	
 	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
 	return reqParams, bindingCtx.Error()
 }
 
-type petsGetPetByIdParamsParser struct {
-	bindPetId requestParamBinder[string, int64]
-}
-
-func (p *petsGetPetByIdParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsGetPetByIdRequest, error) {
-	bindingCtx := bindingContext{}
-	reqParams := &PetsGetPetByIdRequest{}
-	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
-	return reqParams, bindingCtx.Error()
-}
-
-type petsListPetsParamsParser struct {
-	bindLimit  requestParamBinder[[]string, int64]
-	bindOffset requestParamBinder[[]string, int64]
-}
-
-func (p *petsListPetsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
-	query := req.URL.Query()
-	bindingCtx := bindingContext{}
-	reqParams := &PetsListPetsRequest{}
-	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
-	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
-	return reqParams, bindingCtx.Error()
-}
-
-func BuildPetsController() *PetsControllerBuilder {
-	controllerBuilder := &PetsControllerBuilder{}
-
-	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleCreatePet.voidResult = true
-	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
-	controllerBuilder.HandleCreatePet.paramsParser = &petsCreatePetParamsParser{
+func newPetsCreatePetParamsParser() *PetsCreatePetParamsParser {
+	return &PetsCreatePetParamsParser{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{
-			field:      "payload",
-			location:   "body",
+			field: "payload",
+			location: "body",
 			parseValue: parseJsonPayload[models.Pet],
 			validateValue: newCompositeValidator[*http.Request, models.Pet](
 				validateNonEmpty,
 			),
 		}),
 	}
+}
+type PetsGetPetByIdParamsParser struct {
+	bindPetId requestParamBinder[string, int64]
+}
 
-	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
-	controllerBuilder.HandleGetPetById.paramsParser = &petsGetPetByIdParamsParser{
+func (p *PetsGetPetByIdParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsGetPetByIdRequest, error) {
+	bindingCtx := bindingContext{}
+	reqParams := &PetsGetPetByIdRequest{}
+	
+	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
+	return reqParams, bindingCtx.Error()
+}
+
+func newPetsGetPetByIdParamsParser() *PetsGetPetByIdParamsParser {
+	return &PetsGetPetByIdParamsParser{
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
-			field:      "petId",
-			location:   "path",
-			parseValue: newStringToSignedIntParser[int64](64),
+			field: "petId",
+			location: "path",
+			parseValue: knownParsers.int64_in_path,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
 			),
 		}),
 	}
+}
+type PetsListPetsParamsParser struct {
+	bindLimit requestParamBinder[[]string, int64]
+	bindOffset requestParamBinder[[]string, int64]
+}
 
-	controllerBuilder.HandleListPets.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleListPets.defaultStatusCode = 200
-	controllerBuilder.HandleListPets.paramsParser = &petsListPetsParamsParser{
+func (p *PetsListPetsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
+	bindingCtx := bindingContext{}
+	reqParams := &PetsListPetsRequest{}
+	query := req.URL.Query()
+	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
+	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
+	return reqParams, bindingCtx.Error()
+}
+
+func newPetsListPetsParamsParser() *PetsListPetsParamsParser {
+	return &PetsListPetsParamsParser{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
-			field:      "limit",
-			location:   "query",
-			parseValue: newStringSliceToSignedIntParser[int64](64),
+			field: "limit",
+			location: "query",
+			parseValue: knownParsers.int64_in_query,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
-				newOrderedValuesValidator[[]string, int64](orderedValuesValidatorParams[int64]{
-					minimum: makeOptionalVal[int64](1),
-					maximum: makeOptionalVal[int64](100),
-				}),
+				newMinMaxValueValidator[[]string, int64](1, false, true),
+				newMinMaxValueValidator[[]string, int64](100, false, false),
 			),
 		}),
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
-			field:      "offset",
-			location:   "query",
-			parseValue: newStringSliceToSignedIntParser[int64](64),
-			validateValue: newCompositeValidator(
-				newOrderedValuesValidator[[]string](orderedValuesValidatorParams[int64]{
-					minimum: makeOptionalVal[int64](1),
-				}),
+			field: "offset",
+			location: "query",
+			parseValue: knownParsers.int64_in_query,
+			validateValue: newCompositeValidator[[]string, int64](
+				newMinMaxValueValidator[[]string, int64](1, false, true),
 			),
 		}),
 	}
+}
 
+func BuildPetsController() *PetsControllerBuilder {
+	controllerBuilder := &PetsControllerBuilder{}
+	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
+	controllerBuilder.HandleCreatePet.paramsParser = newPetsCreatePetParamsParser()
+	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
+	controllerBuilder.HandleGetPetById.paramsParser = newPetsGetPetByIdParamsParser()
+	controllerBuilder.HandleListPets.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleListPets.defaultStatusCode = 200
+	controllerBuilder.HandleListPets.paramsParser = newPetsListPetsParamsParser()
 	return controllerBuilder
 }
 
