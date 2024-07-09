@@ -1,0 +1,54 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: |
+    Set of APIs with numeric parameters
+  description: |
+    This definition includes all supported numeric data types
+    including request bodies and validation
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/v1
+paths:
+  /numeric-types/number/any/{pathParam1}/{pathParam2}:
+    get:
+      summary: API with simple numeric params
+      operationId: numberAnySimple
+      tags:
+        - numeric-types-number
+      parameters:
+        - name: pathParam1
+          in: path
+          required: true
+          schema:
+            type: number
+        - name: pathParam2
+          in: path
+          # required: true # must be required by default
+          schema:
+            type: number
+        - name: requiredQuery1
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: requiredQuery2
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: optionalQuery1
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: optionalQuery2
+          in: query
+          # required: false # must be optional by default
+          schema:
+            type: number
+      responses:
+        '204':
+          description: Request succeeded
