@@ -55,12 +55,16 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 				router.HandleError(r, w, err)
 				return
 			}
+
+			if !factoryParams.voidResult {
+				w.Header().Add("Content-Type", "application/json; utf-8")
+			}
+			w.WriteHeader(factoryParams.defaultStatus)
+
 			if factoryParams.voidResult {
 				return
 			}
 
-			w.Header().Add("Content-Type", "application/json; utf-8")
-			w.WriteHeader(factoryParams.defaultStatus)
 			if err := json.NewEncoder(w).Encode(resData); err != nil {
 				// TODO: We need to better handle those
 				panic(err)
