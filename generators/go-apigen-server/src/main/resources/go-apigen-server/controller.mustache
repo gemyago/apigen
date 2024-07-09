@@ -7,10 +7,10 @@ import (
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
-{{>enums/api-param-type}}
+{{>enums/params/type}}
 {{/isEnum}}{{/allParams}}type {{>request-type}} struct {
 	{{#allParams}}
-	{{>api-param-name}} {{>api-param-type}}
+	{{>params/name}} {{>params/type}}
 	{{/allParams}}
 }{{/allParams.0}}{{^-last}}
 
