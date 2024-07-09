@@ -88,3 +88,5 @@ tests/golang/routes: generators/go-apigen-server tests/openapi-cases/numeric-typ
 		-o $@
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
+
+generate/golang: examples/go-apigen-server tests/golang/routes

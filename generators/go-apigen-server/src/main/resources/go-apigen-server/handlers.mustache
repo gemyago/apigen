@@ -1,4 +1,4 @@
-package handlers
+package {{apiPackage}}
 
 import (
 	"context"
@@ -125,42 +125,68 @@ func parseJsonPayload[TTargetVal any](req optionalVal[*http.Request], target *TT
 
 var _ rawValueParser[*http.Request, string] = parseJsonPayload
 
-func newStringToSignedIntParser[TTargetVal constraints.Signed](bitSize int) rawValueParser[string, TTargetVal] {
+func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
+	bitSize int, parseFn func(string, int) (TTargetVal, error),
+) rawValueParser[string, TTargetVal] {
 	return func(ov optionalVal[string], target *TTargetVal) error {
 		if !ov.assigned {
 			return nil
 		}
-		val, err := strconv.ParseInt(ov.value, 10, bitSize)
+		val, err := parseFn(ov.value, bitSize)
 		if err != nil {
 			return err
 		}
-		*target = (TTargetVal)(val)
+		*target = val
 		return nil
 	}
 }
 
-func newStringSliceToSignedIntParser[TTargetVal constraints.Signed](bitSize int) rawValueParser[[]string, TTargetVal] {
+func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.Float](
+	bitSize int, parseFn func(string, int) (TTargetVal, error),
+) rawValueParser[[]string, TTargetVal] {
 	return func(ov optionalVal[[]string], target *TTargetVal) error {
 		if !ov.assigned {
 			return nil
 		}
-		val, err := strconv.ParseInt(ov.value[0], 10, bitSize)
+		val, err := parseFn(ov.value[0], bitSize)
 		if err != nil {
 			return err
 		}
-		*target = (TTargetVal)(val)
+		*target = val
 		return nil
 	}
 }
 
 type knownParsersDef struct {
-	int64_in_path  rawValueParser[string, int64]
-	int64_in_query rawValueParser[[]string, int64]
+	int32_in_path    rawValueParser[string, int32]
+	int64_in_path    rawValueParser[string, int64]
+	float32_in_path  rawValueParser[string, float32]
+	float64_in_path  rawValueParser[string, float64]
+	int32_in_query   rawValueParser[[]string, int32]
+	int64_in_query   rawValueParser[[]string, int64]
+	float32_in_query rawValueParser[[]string, float32]
+	float64_in_query rawValueParser[[]string, float64]
+}
+
+func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error) {
+	res, err := strconv.ParseInt(str, 10, bitSize)
+	return (TInt)(res), err
+}
+
+func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) {
+	res, err := strconv.ParseFloat(str, bitSize)
+	return (TFloat)(res), err
 }
 
 var knownParsers = knownParsersDef{
-	int64_in_path:  newStringToSignedIntParser[int64](64),
-	int64_in_query: newStringSliceToSignedIntParser[int64](64),
+	int32_in_path:    newStringToNumberParser[int32](32, parseDecInt),
+	int64_in_path:    newStringToNumberParser[int64](64, parseDecInt),
+	float32_in_path:  newStringToNumberParser[float32](32, parseFloat),
+	float64_in_path:  newStringToNumberParser[float64](64, strconv.ParseFloat),
+	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
+	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
+	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
+	float64_in_query: newStringSliceToNumberParser[float64](64, strconv.ParseFloat),
 }
 
 type bindingError struct {
