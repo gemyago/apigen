@@ -81,13 +81,15 @@ examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server exa
 
 examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
 
-tests/golang/routes: generators/go-apigen-server tests/openapi-docs/numeric-types.yaml
+tests/golang/routes/%: tests/openapi-docs/$$(subst _,-,%).yaml generators/go-apigen-server
 	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
-		-i tests/openapi-docs/numeric-types.yaml \
+		-i $< \
 		-o $@
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
+
+tests/golang/routes: tests/golang/routes/numeric_types
 
 generate/golang: examples/go-apigen-server tests/golang/routes

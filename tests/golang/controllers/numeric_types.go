@@ -3,7 +3,7 @@ package controllers
 import (
 	"context"
 
-	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/numeric_types/handlers"
 )
 
 type testCall[TParams any] struct {
