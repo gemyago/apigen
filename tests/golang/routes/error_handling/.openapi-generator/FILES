@@ -1,0 +1,4 @@
+.openapi-generator-ignore
+handlers/error_handling_controller.go
+handlers/error_handling_params.go
+handlers/handlers.go

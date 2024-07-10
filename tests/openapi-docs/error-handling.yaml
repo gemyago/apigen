@@ -14,7 +14,7 @@ paths:
       summary: API to simulate and test parsing errors
       operationId: parsingErrors
       tags:
-        - numeric-types
+        - error-handling
       parameters:
         - name: requiredQuery1
           in: query
