@@ -92,3 +92,7 @@ tests/golang/routes: tests/openapi/openapi.yaml generators/go-apigen-server
 	touch $@
 
 generate/golang: examples/go-apigen-server tests/golang/routes
+
+.PHONY: tests/golang
+tests/golang:
+	go test ./tests/golang/...
