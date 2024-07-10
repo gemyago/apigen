@@ -75,6 +75,6 @@ func assertFieldError(
 			return true
 		}
 	}
-	assert.Failf(t, "no error found for field %s, code %s", field, code)
+	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
 	return false
 }

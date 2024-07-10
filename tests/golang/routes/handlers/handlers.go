@@ -268,7 +268,11 @@ const (
 	// BadValueFormat error means data provided can not be parsed to a target type
 	BadValueFormat BindingErrorCode = "BAD_FORMAT"
 
-	// InvalidValue error code indicates that the value did not pass one of the validation rules
+	// InvalidValueOutOfRange error code indicates that the value is out of range of allowable values
+	// this is usually when number is out of min/max range, or string is outside of limits
+	InvalidValueOutOfRange BindingErrorCode = "INVALID_OUT_OF_RANGE"
+
+	// InvalidValue error code a generic validation error
 	InvalidValue BindingErrorCode = "INVALID"
 )
 
