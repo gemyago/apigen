@@ -34,6 +34,7 @@ func TestErrorHandling(t *testing.T) {
 			router.mux.ServeHTTP(recorder, testReq)
 
 			assert.Equal(t, 400, recorder.Code)
+			assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
 			assert.JSONEq(t, `{
 				"errors": [
 					{

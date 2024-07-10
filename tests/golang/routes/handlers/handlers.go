@@ -84,6 +84,7 @@ func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
 	}
 	app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) {
+		w.Header().Add("content-type", "application/json; charset=utf-8")
 		w.WriteHeader(400)
 		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
 		if httpErr, ok := err.(AggregatedBindingError); ok {
@@ -132,7 +133,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 				return
 			}
 
-			w.Header().Add("Content-Type", "application/json; utf-8")
+			w.Header().Add("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(factoryParams.defaultStatus)
 			if err := json.NewEncoder(w).Encode(resData); err != nil {
 				app.handleResponseErrors(r, err)
