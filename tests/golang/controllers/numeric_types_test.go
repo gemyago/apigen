@@ -44,29 +44,37 @@ func TestNumericTypesController(t *testing.T) {
 		}
 	}
 
-	testActions := &numericTypesControllerTestActions{}
-	controller := newNumericTypesController(testActions)
-	router := &routerAdapter{
-		mux: http.NewServeMux(),
+	setupRouter := func(testActions *numericTypesControllerTestActions) *routerAdapter {
+		controller := newNumericTypesController(testActions)
+		router := &routerAdapter{
+			mux: http.NewServeMux(),
+		}
+		handlers.MountNumericTypesRoutes(controller, router)
+		return router
 	}
-	handlers.MountNumericTypesRoutes(controller, router)
 
-	wantReq := randomReq()
-	testReq := httptest.NewRequest(
-		"GET",
-		fmt.Sprintf("/numeric-types/number/any/%v/%v", wantReq.PathParam1, wantReq.PathParam2),
-		http.NoBody,
-	)
-	query := url.Values{}
-	query.Add("requiredQuery1", fmt.Sprint(wantReq.RequiredQuery1))
-	query.Add("requiredQuery2", fmt.Sprint(wantReq.RequiredQuery2))
-	query.Add("optionalQuery1", fmt.Sprint(wantReq.OptionalQuery1))
-	query.Add("optionalQuery2", fmt.Sprint(wantReq.OptionalQuery2))
-	testReq.URL.RawQuery = query.Encode()
-	recorder := httptest.NewRecorder()
-	router.mux.ServeHTTP(recorder, testReq)
+	t.Run("number", func(t *testing.T) {
+		t.Run("params parsing and binding", func(t *testing.T) {
+			testActions := &numericTypesControllerTestActions{}
+			router := setupRouter(testActions)
+			wantReq := randomReq()
+			testReq := httptest.NewRequest(
+				"GET",
+				fmt.Sprintf("/numeric-types/number/any/%v/%v", wantReq.PathParam1, wantReq.PathParam2),
+				http.NoBody,
+			)
+			query := url.Values{}
+			query.Add("requiredQuery1", fmt.Sprint(wantReq.RequiredQuery1))
+			query.Add("requiredQuery2", fmt.Sprint(wantReq.RequiredQuery2))
+			query.Add("optionalQuery1", fmt.Sprint(wantReq.OptionalQuery1))
+			query.Add("optionalQuery2", fmt.Sprint(wantReq.OptionalQuery2))
+			testReq.URL.RawQuery = query.Encode()
+			recorder := httptest.NewRecorder()
+			router.mux.ServeHTTP(recorder, testReq)
 
-	assert.Equal(t, 204, recorder.Code)
-	assert.Len(t, testActions.getNumberAnySimpleCalls, 1)
-	assert.Equal(t, wantReq, testActions.getNumberAnySimpleCalls[0].params)
+			assert.Equal(t, 204, recorder.Code)
+			assert.Len(t, testActions.getNumberAnySimpleCalls, 1)
+			assert.Equal(t, wantReq, testActions.getNumberAnySimpleCalls[0].params)
+		})
+	})
 }
