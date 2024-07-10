@@ -25,7 +25,7 @@ func (p *NumericTypesNumberAnySimpleParamsParser) parse(router httpRouter, w htt
 	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
 	p.bindOptionalQuery1(&bindingCtx, readQueryValue("optionalQuery1", query), &reqParams.OptionalQuery1)
 	p.bindOptionalQuery2(&bindingCtx, readQueryValue("optionalQuery2", query), &reqParams.OptionalQuery2)
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newNumericTypesNumberAnySimpleParamsParser() *NumericTypesNumberAnySimpleParamsParser {

@@ -25,7 +25,7 @@ func (p *{{baseName}}{{operationId}}ParamsParser) parse(router httpRouter, w htt
 	p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}}){{/isPathParam}}{{#isBodyParam}}
 	p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload){{/isBodyParam}}
 	{{/allParams}}
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func new{{baseName}}{{operationId}}ParamsParser() *{{baseName}}{{operationId}}ParamsParser {

@@ -15,7 +15,7 @@ func (p *PetsCreatePetParamsParser) parse(router httpRouter, w http.ResponseWrit
 	reqParams := &PetsCreatePetRequest{}
 	
 	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newPetsCreatePetParamsParser() *PetsCreatePetParamsParser {
@@ -40,7 +40,7 @@ func (p *PetsGetPetByIdParamsParser) parse(router httpRouter, w http.ResponseWri
 	reqParams := &PetsGetPetByIdRequest{}
 	
 	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newPetsGetPetByIdParamsParser() *PetsGetPetByIdParamsParser {
@@ -67,7 +67,7 @@ func (p *PetsListPetsParamsParser) parse(router httpRouter, w http.ResponseWrite
 	query := req.URL.Query()
 	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
 	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newPetsListPetsParamsParser() *PetsListPetsParamsParser {

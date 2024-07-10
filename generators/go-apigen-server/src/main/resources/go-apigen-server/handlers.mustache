@@ -1,10 +1,11 @@
-package {{apiPackage}}
+package handlers
 
 import (
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -61,8 +62,21 @@ func WithResponseErrorHandler(handler ResponseErrorHandler) HttpAppOpt {
 }
 
 func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
-	app := &httpApp{
-		router: router,
+
+	app := &httpApp{router: router}
+	app.handleResponseErrors = func(r *http.Request, err error) {
+		// TODO: Instead of slog make it injectable
+		slog.ErrorContext(r.Context(), "Failed to write response", slog.Any("err", err))
+	}
+	app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) {
+		w.WriteHeader(400)
+		slog.WarnContext(r.Context(), "Failed to parse request", slog.Any("err", err))
+		if httpErr, ok := err.(AggregatedBindingError); ok {
+			if writeErr := json.NewEncoder(w).Encode(httpErr); writeErr != nil {
+				app.handleResponseErrors(r, writeErr)
+			}
+			return
+		}
 	}
 	for _, opt := range opts {
 		opt(app)
@@ -89,10 +103,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			params, err := factoryParams.paramsParser.parse(app.router, w, r)
 			if err != nil {
-				w.WriteHeader(400)
-				if _, err := w.Write([]byte(err.Error())); err != nil {
-					app.handleResponseErrors(r, err)
-				}
+				app.handleParsingErrors(r, w, err)
 				return
 			}
 
@@ -235,25 +246,50 @@ var knownParsers = knownParsersDef{
 	float64_in_query: newStringSliceToNumberParser[float64](64, strconv.ParseFloat),
 }
 
-type bindingError struct {
-	field    string
-	location string
-	err      error
+type BindingErrorCode string
+
+const (
+	// BadValueFormat error means data provided can not be parsed to a target type
+	BadValueFormat BindingErrorCode = "BAD_FORMAT"
+
+	// InvalidValue error code indicates that the value did not pass one of the validation rules
+	InvalidValue BindingErrorCode = "INVALID"
+)
+
+// BindingError occurs at parsing/validation stage and holds
+// context on field that the error is related to
+type BindingError struct {
+	Field    string           `json:"field"`
+	Location string           `json:"location"`
+	Err      error            `json:"-"`
+	Code     BindingErrorCode `json:"code"`
 }
 
-func (be bindingError) Error() string {
-	return fmt.Sprintf("field %s (in %s) error: %v", be.field, be.location, be.err)
+func (be BindingError) Error() string {
+	return fmt.Sprintf("field %s (in %s) error: %v", be.Field, be.Location, be.Err)
+}
+
+type AggregatedBindingError struct {
+	Errors []BindingError `json:"errors"`
+}
+
+func (c AggregatedBindingError) Error() string {
+	errs := make([]error, len(c.Errors))
+	for i, err := range c.Errors {
+		errs[i] = err
+	}
+	return errors.Join(errs...).Error()
 }
 
 type bindingContext struct {
-	errors []error
+	errors []BindingError
 }
 
-func (c bindingContext) Error() error {
+func (c bindingContext) AggregatedError() error {
 	if len(c.errors) == 0 {
 		return nil
 	}
-	return errors.Join(c.errors...)
+	return AggregatedBindingError{Errors: c.errors}
 }
 
 type requestParamBinder[TRawVal any, TTargetVal any] func(
@@ -323,18 +359,20 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 		receiver *TTargetVal,
 	) {
 		if err := params.parseValue(rawVal, receiver); err != nil {
-			bindingCtx.errors = append(bindingCtx.errors, bindingError{
-				field:    params.field,
-				location: params.location,
-				err:      err,
+			bindingCtx.errors = append(bindingCtx.errors, BindingError{
+				Field:    params.field,
+				Location: params.location,
+				Code:     BadValueFormat,
+				Err:      err,
 			})
 			return
 		}
 		if err := params.validateValue(rawVal, *receiver); err != nil {
-			bindingCtx.errors = append(bindingCtx.errors, bindingError{
-				field:    params.field,
-				location: params.location,
-				err:      err,
+			bindingCtx.errors = append(bindingCtx.errors, BindingError{
+				Field:    params.field,
+				Location: params.location,
+				Code:     InvalidValue,
+				Err:      err,
 			})
 		}
 	}

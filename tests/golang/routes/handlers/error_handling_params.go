@@ -15,7 +15,7 @@ func (p *ErrorHandlingParsingErrorsParamsParser) parse(router httpRouter, w http
 	query := req.URL.Query()
 	p.bindRequiredQuery1(&bindingCtx, readQueryValue("requiredQuery1", query), &reqParams.RequiredQuery1)
 	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
-	return reqParams, bindingCtx.Error()
+	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newErrorHandlingParsingErrorsParamsParser() *ErrorHandlingParsingErrorsParamsParser {
