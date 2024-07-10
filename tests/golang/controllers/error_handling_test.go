@@ -31,6 +31,20 @@ func TestErrorHandling(t *testing.T) {
 			router.mux.ServeHTTP(recorder, testReq)
 
 			assert.Equal(t, 400, recorder.Code)
+			assert.JSONEq(t, `{
+				"errors": [
+					{
+						"field": "requiredQuery1",
+						"location": "query",
+						"code": "INVALID"
+					},
+					{
+						"field": "requiredQuery2",
+						"location": "query",
+						"code": "INVALID"
+					}
+				]
+			}`, recorder.Body.String())
 		})
 	})
 }
