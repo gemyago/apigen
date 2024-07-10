@@ -102,6 +102,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 				return
 			}
 			if factoryParams.voidResult {
+				w.WriteHeader(factoryParams.defaultStatus)
 				return
 			}
 
