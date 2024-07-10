@@ -15,7 +15,10 @@ func TestErrorHandling(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.MountErrorHandlingRoutes(controller, handlers.NewHttpApp(router))
+		handlers.MountErrorHandlingRoutes(
+			controller,
+			handlers.NewHttpApp(router, handlers.WithLogger(newLogger())),
+		)
 		return router
 	}
 

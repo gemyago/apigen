@@ -1,4 +1,4 @@
-package handlers
+package {{ apiPackage }}
 
 import (
 	"context"
@@ -34,11 +34,18 @@ type ActionErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
 // At this stage either logging or panic is possible.
 type ResponseErrorHandler func(r *http.Request, err error)
 
+// SlogLogger is a fully compatible with slog and used to allow injecting the instance
+type SlogLogger interface {
+	Log(ctx context.Context, level slog.Level, msg string, args ...any)
+	LogAttrs(ctx context.Context, level slog.Level, msg string, attrs ...slog.Attr)
+}
+
 type httpApp struct {
 	router               httpRouter
 	handleParsingErrors  ParsingErrorHandler
 	handleActionErrors   ActionErrorHandler
 	handleResponseErrors ResponseErrorHandler
+	logger               SlogLogger
 }
 
 type HttpAppOpt func(app *httpApp)
@@ -61,16 +68,24 @@ func WithResponseErrorHandler(handler ResponseErrorHandler) HttpAppOpt {
 	}
 }
 
+func WithLogger(logger SlogLogger) HttpAppOpt {
+	return func(app *httpApp) {
+		app.logger = logger
+	}
+}
+
 func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
 
-	app := &httpApp{router: router}
+	app := &httpApp{
+		router: router,
+		logger: slog.Default(),
+	}
 	app.handleResponseErrors = func(r *http.Request, err error) {
-		// TODO: Instead of slog make it injectable
-		slog.ErrorContext(r.Context(), "Failed to write response", slog.Any("err", err))
+		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
 	}
 	app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) {
 		w.WriteHeader(400)
-		slog.WarnContext(r.Context(), "Failed to parse request", slog.Any("err", err))
+		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
 		if httpErr, ok := err.(AggregatedBindingError); ok {
 			if writeErr := json.NewEncoder(w).Encode(httpErr); writeErr != nil {
 				app.handleResponseErrors(r, writeErr)
