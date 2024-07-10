@@ -7,10 +7,17 @@ Project status: **pre-alpha**.
 
 ## TODOs
 
+### Golang
 * authentication
 * per route middleware
 * allow handling as plain http handler
 * nullable types
+* polymorphic models
+* enums
+
+### Typescript
+
+Set of features compatible with golang
 
 ## Supported OpenAPI features
 
