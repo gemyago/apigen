@@ -2,10 +2,9 @@ openapi: "3.0.0"
 info:
   version: 0.0.1
   title: |
-    Set of APIs with numeric parameters
+    Set of APIs to test generated routes
   description: |
-    This definition includes all supported numeric data types
-    including request bodies and validation
+    This definition includes all supported generator features
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -47,6 +46,26 @@ paths:
         - name: optionalQuery2
           in: query
           # required: false # must be optional by default
+          schema:
+            type: number
+      responses:
+        '204':
+          description: Request succeeded
+  /error-handling/parsing-errors:
+    get:
+      summary: API to simulate and test parsing errors
+      operationId: parsingErrors
+      tags:
+        - error-handling
+      parameters:
+        - name: requiredQuery1
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: requiredQuery2
+          in: query
+          required: true
           schema:
             type: number
       responses:

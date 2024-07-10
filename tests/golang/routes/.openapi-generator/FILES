@@ -2,3 +2,5 @@
 handlers/error_handling_controller.go
 handlers/error_handling_params.go
 handlers/handlers.go
+handlers/numeric_types_controller.go
+handlers/numeric_types_params.go

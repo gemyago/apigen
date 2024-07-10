@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gemyago/apigen/tests/golang/routes/error_handling/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/stretchr/testify/assert"
 )
 

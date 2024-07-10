@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gemyago/apigen/tests/golang/routes/error_handling/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
 func newErrorHandlingController() *handlers.ErrorHandlingController {

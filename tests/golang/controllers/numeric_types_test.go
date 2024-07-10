@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/gemyago/apigen/tests/golang/routes/numeric_types/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
