@@ -46,6 +46,6 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	return controllerBuilder
 }
 
-func MountNumericTypesRoutes(controller *NumericTypesController, r httpRouter) {
-	r.HandleRoute("GET", "/numeric-types/number/any/{pathParam1}/{pathParam2}", controller.NumberAnySimple(r))
+func MountNumericTypesRoutes(controller *NumericTypesController, app *httpApp) {
+	app.router.HandleRoute("GET", "/numeric-types/number/any/{pathParam1}/{pathParam2}", controller.NumberAnySimple(app))
 }

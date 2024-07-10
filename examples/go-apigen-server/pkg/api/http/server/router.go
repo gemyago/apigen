@@ -27,7 +27,7 @@ func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 	a.Router.Method(method, pathPattern, h)
 }
 
-func (a httpRouter) HandleError(r *http.Request, w http.ResponseWriter, err error) {
+func handleActionError(r *http.Request, w http.ResponseWriter, err error) {
 	level := slog.LevelWarn
 	code := 500
 	if errors.Is(err, app.ErrNotFound) {
@@ -50,10 +50,11 @@ func NewRouter(deps RoutesDeps) http.Handler {
 	router.Use(middleware.Recoverer)
 
 	router.Route("/v1", func(r chi.Router) {
-		handlers.MountPetsRoutes(
-			deps.PetsController,
+		httpApp := handlers.NewHttpApp(
 			httpRouter{Router: r},
+			handlers.WithActionErrorHandler(handleActionError),
 		)
+		handlers.MountPetsRoutes(deps.PetsController, httpApp)
 	})
 
 	return router

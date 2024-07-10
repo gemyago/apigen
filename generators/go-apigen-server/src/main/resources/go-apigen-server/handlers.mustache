@@ -18,14 +18,61 @@ type httpRouter interface {
 
 	// HandleRoute register a given handler function to handle given route
 	HandleRoute(method, pathPattern string, h http.Handler)
+}
 
-	// HandleError will be called for any error produced by handlers
-	HandleError(r *http.Request, w http.ResponseWriter, err error)
+// ParsingErrorHandler will process errors during parsing and validation stages
+// The default implementation will respond with 400 status code and standard
+// serialization of ParsingError type.
+type ParsingErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
+
+// ActionErrorHandler will process errors produced by controller actions
+// The default implementation will respond with 500 and no output.
+type ActionErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
+
+// ResponseErrorHandler will process errors that may occur while writing response
+// At this stage either logging or panic is possible.
+type ResponseErrorHandler func(r *http.Request, err error)
+
+type httpApp struct {
+	router               httpRouter
+	handleParsingErrors  ParsingErrorHandler
+	handleActionErrors   ActionErrorHandler
+	handleResponseErrors ResponseErrorHandler
+}
+
+type HttpAppOpt func(app *httpApp)
+
+func WithParsingErrorHandler(handler ParsingErrorHandler) HttpAppOpt {
+	return func(app *httpApp) {
+		app.handleParsingErrors = handler
+	}
+}
+
+func WithActionErrorHandler(handler ActionErrorHandler) HttpAppOpt {
+	return func(app *httpApp) {
+		app.handleActionErrors = handler
+	}
+}
+
+func WithResponseErrorHandler(handler ResponseErrorHandler) HttpAppOpt {
+	return func(app *httpApp) {
+		app.handleResponseErrors = handler
+	}
+}
+
+func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
+	app := &httpApp{
+		router: router,
+	}
+	for _, opt := range opts {
+		opt(app)
+	}
+	return app
 }
 
 type voidResult *int
 
-type httpHandlerFactory func(r httpRouter) http.Handler
+type httpHandlerFactory func(app *httpApp) http.Handler
 type paramsParser[TReqParams any] interface {
 	parse(router httpRouter, w http.ResponseWriter, req *http.Request) (TReqParams, error)
 }
@@ -38,21 +85,20 @@ type handlerFactoryParams[TReqParams any, TResData any] struct {
 }
 
 func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFactoryParams[TReqParams, TResData]) httpHandlerFactory {
-	return func(router httpRouter) http.Handler {
+	return func(app *httpApp) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			params, err := factoryParams.paramsParser.parse(router, w, r)
+			params, err := factoryParams.paramsParser.parse(app.router, w, r)
 			if err != nil {
-				// TODO: This needs a different error handling
 				w.WriteHeader(400)
 				if _, err := w.Write([]byte(err.Error())); err != nil {
-					panic(err)
+					app.handleResponseErrors(r, err)
 				}
 				return
 			}
 
 			resData, err := factoryParams.handler(r.Context(), params)
 			if err != nil {
-				router.HandleError(r, w, err)
+				app.handleActionErrors(r, w, err)
 				return
 			}
 			if factoryParams.voidResult {
@@ -62,8 +108,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 			w.Header().Add("Content-Type", "application/json; utf-8")
 			w.WriteHeader(factoryParams.defaultStatus)
 			if err := json.NewEncoder(w).Encode(resData); err != nil {
-				// TODO: We need to better handle those
-				panic(err)
+				app.handleResponseErrors(r, err)
 			}
 		})
 	}
@@ -72,7 +117,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
 	defaultStatusCode  int
 	voidResult         bool
-	httpHandlerFactory func(r httpRouter) http.Handler
+	httpHandlerFactory func(app *httpApp) http.Handler
 	paramsParser       paramsParser[TReqParams]
 	controllerBuilder  TControllerBuilder
 }

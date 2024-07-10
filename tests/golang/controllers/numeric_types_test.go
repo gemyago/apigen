@@ -49,7 +49,7 @@ func TestNumericTypesController(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.MountNumericTypesRoutes(controller, router)
+		handlers.MountNumericTypesRoutes(controller, handlers.NewHttpApp(router))
 		return router
 	}
 
