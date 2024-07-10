@@ -5,6 +5,13 @@ This project is using the [OpenAPI Generator](https://github.com/openapitools/op
 
 Project status: **pre-alpha**.
 
+## TODOs
+
+* authentication
+* per route middleware
+* allow handling as plain http handler
+* nullable types
+
 ## Supported OpenAPI features
 
 Numeric data types
