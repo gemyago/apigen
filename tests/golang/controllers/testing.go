@@ -1,12 +1,18 @@
 package controllers
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
+	"testing"
+
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/stretchr/testify/assert"
 )
 
 type routerAdapter struct {
@@ -43,4 +49,32 @@ var testOutput = openTestLogFile()
 
 func newLogger() *slog.Logger {
 	return slog.New(slog.NewJSONHandler(testOutput, nil))
+}
+
+func unmarshalBindingErrors(
+	t *testing.T,
+	body *bytes.Buffer,
+) *handlers.AggregatedBindingError {
+	var gotErrors handlers.AggregatedBindingError
+	if err := json.Unmarshal(body.Bytes(), &gotErrors); !assert.NoError(t, err) {
+		t.FailNow()
+		return nil
+	}
+	return &gotErrors
+}
+
+func assertFieldError(
+	t *testing.T,
+	err *handlers.AggregatedBindingError,
+	location string,
+	field string,
+	code handlers.BindingErrorCode,
+) bool {
+	for _, fieldErr := range err.Errors {
+		if fieldErr.Location == location && fieldErr.Field == field && fieldErr.Code == code {
+			return true
+		}
+	}
+	assert.Failf(t, "no error found for field %s, code %s", field, code)
+	return false
 }

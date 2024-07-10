@@ -36,7 +36,7 @@ func TestNumericTypes(t *testing.T) {
 	}
 
 	t.Run("number", func(t *testing.T) {
-		t.Run("params parsing and binding", func(t *testing.T) {
+		t.Run("should parse and bind valid values", func(t *testing.T) {
 			testActions := &numericTypesControllerTestActions{}
 			router := setupRouter(testActions)
 			wantReq := randomReq()
@@ -57,6 +57,26 @@ func TestNumericTypes(t *testing.T) {
 			assert.Equal(t, 204, recorder.Code)
 			assert.Len(t, testActions.getNumberAnySimpleCalls, 1)
 			assert.Equal(t, wantReq, testActions.getNumberAnySimpleCalls[0].params)
+		})
+		t.Run("should fail if required values are missing", func(t *testing.T) {
+			testActions := &numericTypesControllerTestActions{}
+			router := setupRouter(testActions)
+			wantReq := randomReq()
+			testReq := httptest.NewRequest(
+				"GET",
+				fmt.Sprintf("/numeric-types/number/any/%v/%v", wantReq.PathParam1, wantReq.PathParam2),
+				http.NoBody,
+			)
+			recorder := httptest.NewRecorder()
+			router.mux.ServeHTTP(recorder, testReq)
+
+			assert.Equal(t, 400, recorder.Code)
+			assert.Len(t, testActions.getNumberAnySimpleCalls, 0)
+
+			gotErrors := unmarshalBindingErrors(t, recorder.Body)
+
+			assertFieldError(t, gotErrors, "query", "requiredQuery1", "INVALID")
+			assertFieldError(t, gotErrors, "query", "requiredQuery2", "INVALID")
 		})
 	})
 }
