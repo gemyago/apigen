@@ -71,8 +71,8 @@ func assertFieldError(
 	code handlers.BindingErrorCode,
 ) bool {
 	for _, fieldErr := range err.Errors {
-		if fieldErr.Location == location && fieldErr.Field == field && fieldErr.Code == code {
-			return true
+		if fieldErr.Location == location && fieldErr.Field == field {
+			return assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code", field)
 		}
 	}
 	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
