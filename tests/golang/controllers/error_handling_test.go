@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -25,60 +26,41 @@ func TestErrorHandling(t *testing.T) {
 		return router
 	}
 
+	type testCase struct {
+		name       string
+		path       string
+		query      url.Values
+		wantErrors []handlers.BindingError
+	}
+
+	runTestCase := func(t *testing.T, tc testCase) {
+		router := setupRouter()
+		testReq := httptest.NewRequest(
+			"GET",
+			tc.path,
+			http.NoBody,
+		)
+		testReq.URL.RawQuery = tc.query.Encode()
+		recorder := httptest.NewRecorder()
+		router.mux.ServeHTTP(recorder, testReq)
+
+		assert.Equal(t, 400, recorder.Code)
+		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
+		gotErrors := unmarshalBindingErrors(t, recorder.Body)
+		assert.Len(t, gotErrors.Errors, len(tc.wantErrors))
+		for _, fe := range tc.wantErrors {
+			assertFieldError(t, gotErrors, fe.Location, fe.Field, fe.Code)
+		}
+	}
+
 	t.Run("parsing-errors", func(t *testing.T) {
-		t.Run("respond with 400 if parsing fails", func(t *testing.T) {
-			router := setupRouter()
-			testReq := httptest.NewRequest(
-				"GET",
-				fmt.Sprintf("/error-handling/parsing-errors?requiredQuery1=%s&requiredQuery2=%[1]s", fake.Lorem().Word()),
-				http.NoBody,
-			)
-			recorder := httptest.NewRecorder()
-			router.mux.ServeHTTP(recorder, testReq)
-
-			assert.Equal(t, 400, recorder.Code)
-			assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
-			assert.JSONEq(t, `{
-				"errors": [
-					{
-						"field": "requiredQuery1",
-						"location": "query",
-						"code": "BAD_FORMAT"
-					},
-					{
-						"field": "requiredQuery2",
-						"location": "query",
-						"code": "BAD_FORMAT"
-					}
-				]
-			}`, recorder.Body.String())
-		})
-		t.Run("respond with 400 if validation fails", func(t *testing.T) {
-			router := setupRouter()
-			testReq := httptest.NewRequest(
-				"GET",
-				"/error-handling/parsing-errors",
-				http.NoBody,
-			)
-			recorder := httptest.NewRecorder()
-			router.mux.ServeHTTP(recorder, testReq)
-
-			assert.Equal(t, 400, recorder.Code)
-			assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
-			assert.JSONEq(t, `{
-				"errors": [
-					{
-						"field": "requiredQuery1",
-						"location": "query",
-						"code": "INVALID"
-					},
-					{
-						"field": "requiredQuery2",
-						"location": "query",
-						"code": "INVALID"
-					}
-				]
-			}`, recorder.Body.String())
+		runTestCase(t, testCase{
+			name: "respond with 400 if parsing fails",
+			path: fmt.Sprintf("/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s", fake.Lorem().Word()),
+			wantErrors: []handlers.BindingError{
+				{Field: "requiredQuery1", Location: "query", Code: "BAD_FORMAT"},
+				{Field: "requiredQuery2", Location: "query", Code: "BAD_FORMAT"},
+			},
 		})
 	})
 }

@@ -255,11 +255,11 @@ var knownParsers = knownParsersDef{
 	int32_in_path:    newStringToNumberParser[int32](32, parseDecInt),
 	int64_in_path:    newStringToNumberParser[int64](64, parseDecInt),
 	float32_in_path:  newStringToNumberParser[float32](32, parseFloat),
-	float64_in_path:  newStringToNumberParser[float64](64, strconv.ParseFloat),
+	float64_in_path:  newStringToNumberParser(64, strconv.ParseFloat),
 	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
 	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
 	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
-	float64_in_query: newStringSliceToNumberParser[float64](64, strconv.ParseFloat),
+	float64_in_query: newStringSliceToNumberParser(64, strconv.ParseFloat),
 }
 
 type BindingErrorCode string
