@@ -40,14 +40,18 @@ func TestErrorHandling(t *testing.T) {
 			tc.path,
 			http.NoBody,
 		)
-		testReq.URL.RawQuery = tc.query.Encode()
+		if len(tc.query) != 0 {
+			testReq.URL.RawQuery = tc.query.Encode()
+		}
 		recorder := httptest.NewRecorder()
 		router.mux.ServeHTTP(recorder, testReq)
 
 		assert.Equal(t, 400, recorder.Code)
 		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
 		gotErrors := unmarshalBindingErrors(t, recorder.Body)
-		assert.Len(t, gotErrors.Errors, len(tc.wantErrors))
+		if !assert.Len(t, gotErrors.Errors, len(tc.wantErrors)) {
+			return
+		}
 		for _, fe := range tc.wantErrors {
 			assertFieldError(t, gotErrors, fe.Location, fe.Field, fe.Code)
 		}
@@ -58,6 +62,8 @@ func TestErrorHandling(t *testing.T) {
 			name: "respond with 400 if parsing fails",
 			path: fmt.Sprintf("/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s", fake.Lorem().Word()),
 			wantErrors: []handlers.BindingError{
+				{Field: "pathParam1", Location: "path", Code: "BAD_FORMAT"},
+				{Field: "pathParam2", Location: "path", Code: "BAD_FORMAT"},
 				{Field: "requiredQuery1", Location: "query", Code: "BAD_FORMAT"},
 				{Field: "requiredQuery2", Location: "query", Code: "BAD_FORMAT"},
 			},
