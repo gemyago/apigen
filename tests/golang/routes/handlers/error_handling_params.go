@@ -37,6 +37,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float32_in_path,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
+				newMinMaxValueValidator[string, float32](1, false, true),
+				newMinMaxValueValidator[string, float32](100, false, false),
 			),
 		}),
 		bindLimitedFloat: newRequestParamBinder(binderParams[string, float32]{
@@ -45,6 +47,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float32_in_path,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
+				newMinMaxValueValidator[string, float32](100, false, true),
+				newMinMaxValueValidator[string, float32](200, false, false),
 			),
 		}),
 		bindLimitedDouble: newRequestParamBinder(binderParams[string, float64]{
@@ -53,6 +57,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float64_in_path,
 			validateValue: newCompositeValidator[string, float64](
 				validateNonEmpty,
+				newMinMaxValueValidator[string, float64](200, false, true),
+				newMinMaxValueValidator[string, float64](300, false, false),
 			),
 		}),
 		bindLimitedQueryNum: newRequestParamBinder(binderParams[[]string, float32]{
@@ -61,6 +67,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
+				newMinMaxValueValidator[[]string, float32](300, false, true),
+				newMinMaxValueValidator[[]string, float32](400, false, false),
 			),
 		}),
 		bindLimitedQueryFloat: newRequestParamBinder(binderParams[[]string, float32]{
@@ -69,6 +77,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
+				newMinMaxValueValidator[[]string, float32](400, false, true),
+				newMinMaxValueValidator[[]string, float32](500, false, false),
 			),
 		}),
 		bindLimitedQueryDouble: newRequestParamBinder(binderParams[[]string, float64]{
@@ -77,6 +87,8 @@ func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeEr
 			parseValue: knownParsers.float64_in_query,
 			validateValue: newCompositeValidator[[]string, float64](
 				validateNonEmpty,
+				newMinMaxValueValidator[[]string, float64](500, false, true),
+				newMinMaxValueValidator[[]string, float64](600, false, false),
 			),
 		}),
 	}
