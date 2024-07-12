@@ -1,0 +1,29 @@
+get:
+  summary: API to simulate and test parsing errors
+  operationId: parsingErrors
+  tags:
+    - error-handling
+  parameters:
+    - name: pathParam1
+      in: path
+      required: true
+      schema:
+        type: number
+    - name: pathParam2
+      in: path
+      required: true
+      schema:
+        type: number
+    - name: requiredQuery1
+      in: query
+      required: true
+      schema:
+        type: number
+    - name: requiredQuery2
+      in: query
+      required: true
+      schema:
+        type: number
+  responses:
+    '204':
+      description: Request succeeded
