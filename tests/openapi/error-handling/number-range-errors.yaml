@@ -1,0 +1,43 @@
+get:
+  summary: API to simulate and test parsing errors
+  operationId: numberRangeErrors
+  tags:
+    - error-handling
+  parameters:
+    - name: limitedNum
+      in: path
+      required: true
+      schema:
+        type: number
+    - name: limitedFloat
+      in: path
+      required: true
+      schema:
+        type: number
+        format: float
+    - name: limitedDouble
+      in: path
+      required: true
+      schema:
+        type: number
+        format: double
+    - name: limitedQueryNum
+      in: query
+      required: true
+      schema:
+        type: number
+    - name: limitedQueryFloat
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+    - name: limitedQueryDouble
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+  responses:
+    '204':
+      description: Request succeeded

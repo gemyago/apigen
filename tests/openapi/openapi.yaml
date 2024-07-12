@@ -15,3 +15,5 @@ paths:
     $ref: "./numeric-types/number-any-simple.yaml"
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
     $ref: "./error-handling/parsing-errors.yaml"
+  /error-handling/number-range-errors/{limitedNum}/{limitedFloat}/{limitedDouble}:
+    $ref: "./error-handling/number-range-errors.yaml"
