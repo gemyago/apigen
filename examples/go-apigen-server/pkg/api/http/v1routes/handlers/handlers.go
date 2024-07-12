@@ -255,22 +255,33 @@ var knownParsers = knownParsersDef{
 	int32_in_path:    newStringToNumberParser[int32](32, parseDecInt),
 	int64_in_path:    newStringToNumberParser[int64](64, parseDecInt),
 	float32_in_path:  newStringToNumberParser[float32](32, parseFloat),
-	float64_in_path:  newStringToNumberParser[float64](64, strconv.ParseFloat),
+	float64_in_path:  newStringToNumberParser(64, strconv.ParseFloat),
 	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
 	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
 	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
-	float64_in_query: newStringSliceToNumberParser[float64](64, strconv.ParseFloat),
+	float64_in_query: newStringSliceToNumberParser(64, strconv.ParseFloat),
 }
 
 type BindingErrorCode string
 
 const (
-	// BadValueFormat error means data provided can not be parsed to a target type
-	BadValueFormat BindingErrorCode = "BAD_FORMAT"
+	// ErrBadValueFormat error means data provided can not be parsed to a target type
+	ErrBadValueFormat BindingErrorCode = "BAD_FORMAT"
 
-	// InvalidValue error code indicates that the value did not pass one of the validation rules
-	InvalidValue BindingErrorCode = "INVALID"
+	// ErrValueRequired error code indicates that the required value has not been provided
+	ErrValueRequired BindingErrorCode = "INVALID_REQUIRED"
+
+	// ErrInvalidValueOutOfRange error code indicates that the value is out of range of allowable values
+	// this is usually when number is out of min/max range, or string is outside of limits
+	ErrInvalidValueOutOfRange BindingErrorCode = "INVALID_OUT_OF_RANGE"
+
+	// ErrInvalidValue error code a generic validation error
+	ErrInvalidValue BindingErrorCode = "INVALID"
 )
+
+func (c BindingErrorCode) Error() string {
+	return string(c)
+}
 
 // BindingError occurs at parsing/validation stage and holds
 // context on field that the error is related to
@@ -318,7 +329,7 @@ type valueValidator[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], TTar
 
 func validateNonEmpty[TRawVal any, TTargetVal any](rawVal optionalVal[TRawVal], _ TTargetVal) error {
 	if !rawVal.assigned {
-		return InvalidValue
+		return ErrValueRequired
 	}
 	return nil
 }
@@ -336,10 +347,10 @@ func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 		}
 
 		if isMin && ((inclusive && tv <= threshold) || (!inclusive && tv < threshold)) {
-			return fmt.Errorf("value %v is less than minimum %v", tv, threshold)
+			return fmt.Errorf("value %v is less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
 		}
 		if !isMin && ((inclusive && tv >= threshold) || (!inclusive && tv > threshold)) {
-			return fmt.Errorf("value %v is greater than maximum %v", tv, threshold)
+			return fmt.Errorf("value %v is greater than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
 		}
 
 		return nil
@@ -376,16 +387,18 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			bindingCtx.errors = append(bindingCtx.errors, BindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     BadValueFormat,
+				Code:     ErrBadValueFormat,
 				Err:      err,
 			})
 			return
 		}
 		if err := params.validateValue(rawVal, *receiver); err != nil {
+			errCode := ErrInvalidValue
+			errors.As(err, &errCode)
 			bindingCtx.errors = append(bindingCtx.errors, BindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     InvalidValue,
+				Code:     errCode,
 				Err:      err,
 			})
 		}

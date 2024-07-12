@@ -1,12 +1,14 @@
 package handlers
 
 type ErrorHandlingParsingErrorsRequest struct {
+	PathParam1 float32
+	PathParam2 float32
 	RequiredQuery1 float32
 	RequiredQuery2 float32
 }
 
 type ErrorHandlingController struct {
-	// GET /error-handling/parsing-errors
+	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingParsingErrorsRequest,
 	//
@@ -15,7 +17,7 @@ type ErrorHandlingController struct {
 }
 
 type ErrorHandlingControllerBuilder struct {
-	// GET /error-handling/parsing-errors
+	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingParsingErrorsRequest,
 	//
@@ -33,7 +35,7 @@ func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
 func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	controllerBuilder := &ErrorHandlingControllerBuilder{}
 
-	// GET /error-handling/parsing-errors
+	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	controllerBuilder.HandleParsingErrors.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleParsingErrors.defaultStatusCode = 204
 	controllerBuilder.HandleParsingErrors.voidResult = true
@@ -43,5 +45,5 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 }
 
 func MountErrorHandlingRoutes(controller *ErrorHandlingController, app *httpApp) {
-	app.router.HandleRoute("GET", "/error-handling/parsing-errors", controller.ParsingErrors(app))
+	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ParsingErrors(app))
 }
