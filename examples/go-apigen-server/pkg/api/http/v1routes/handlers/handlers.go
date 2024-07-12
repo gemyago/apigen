@@ -316,11 +316,9 @@ type requestParamBinder[TRawVal any, TTargetVal any] func(
 
 type valueValidator[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], TTargetVal) error
 
-var errValueRequired = errors.New("value is required")
-
 func validateNonEmpty[TRawVal any, TTargetVal any](rawVal optionalVal[TRawVal], _ TTargetVal) error {
 	if !rawVal.assigned {
-		return errValueRequired
+		return InvalidValue
 	}
 	return nil
 }

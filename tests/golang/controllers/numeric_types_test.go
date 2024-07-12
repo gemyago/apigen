@@ -75,8 +75,8 @@ func TestNumericTypes(t *testing.T) {
 
 			gotErrors := unmarshalBindingErrors(t, recorder.Body)
 
-			assertFieldError(t, gotErrors, "query", "requiredQuery1", handlers.InvalidValueOutOfRange)
-			assertFieldError(t, gotErrors, "query", "requiredQuery2", handlers.InvalidValueOutOfRange)
+			assertFieldError(t, gotErrors, "query", "requiredQuery1", handlers.ErrValueRequired)
+			assertFieldError(t, gotErrors, "query", "requiredQuery2", handlers.ErrValueRequired)
 		})
 	})
 }
