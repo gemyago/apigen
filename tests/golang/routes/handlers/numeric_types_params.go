@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-type NumericTypesErrorHandlingParsingErrorsParamsParser struct {
+type NumericTypesNumericTypesParsingParamsParser struct {
 	bindNumberAny requestParamBinder[string, float32]
 	bindNumberFloat requestParamBinder[string, float32]
 	bindNumberDouble requestParamBinder[string, float64]
@@ -19,9 +19,9 @@ type NumericTypesErrorHandlingParsingErrorsParamsParser struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesErrorHandlingParsingErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesErrorHandlingParsingErrorsRequest, error) {
+func (p *NumericTypesNumericTypesParsingParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
 	bindingCtx := bindingContext{}
-	reqParams := &NumericTypesErrorHandlingParsingErrorsRequest{}
+	reqParams := &NumericTypesNumericTypesParsingRequest{}
 	query := req.URL.Query()
 	
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -44,8 +44,8 @@ func (p *NumericTypesErrorHandlingParsingErrorsParamsParser) parse(router httpRo
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesErrorHandlingParsingErrorsParamsParser() *NumericTypesErrorHandlingParsingErrorsParamsParser {
-	return &NumericTypesErrorHandlingParsingErrorsParamsParser{
+func newNumericTypesNumericTypesParsingParamsParser() *NumericTypesNumericTypesParsingParamsParser {
+	return &NumericTypesNumericTypesParsingParamsParser{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",

@@ -15,14 +15,23 @@ import (
 func TestNumericTypes(t *testing.T) {
 	fake := faker.New()
 
-	randomReq := func() *handlers.NumericTypesNumberAnySimpleRequest {
-		return &handlers.NumericTypesNumberAnySimpleRequest{
-			PathParam1:     fake.Float32(2, 10, 1000),
-			PathParam2:     fake.Float32(2, 10, 1000),
-			RequiredQuery1: fake.Float32(2, 10, 1000),
-			RequiredQuery2: fake.Float32(2, 10, 1000),
-			OptionalQuery1: fake.Float32(2, 10, 1000),
-			OptionalQuery2: fake.Float32(2, 10, 1000),
+	randomReq := func() *handlers.NumericTypesNumericTypesParsingRequest {
+		return &handlers.NumericTypesNumericTypesParsingRequest{
+			// path
+			NumberAny:    fake.Float32(10, 1, 100),
+			NumberFloat:  fake.Float32(10, 1, 100),
+			NumberDouble: fake.Float64(10, 1, 100),
+			NumberInt:    fake.Int32(),
+			NumberInt32:  fake.Int32(),
+			NumberInt64:  fake.Int64(),
+
+			// query
+			NumberAnyInQuery:    fake.Float32(10, 1, 100),
+			NumberFloatInQuery:  fake.Float32(10, 1, 100),
+			NumberDoubleInQuery: fake.Float64(10, 1, 100),
+			NumberIntInQuery:    fake.Int32(),
+			NumberInt32InQuery:  fake.Int32(),
+			NumberInt64InQuery:  fake.Int64(),
 		}
 	}
 
@@ -42,41 +51,23 @@ func TestNumericTypes(t *testing.T) {
 			wantReq := randomReq()
 			testReq := httptest.NewRequest(
 				"GET",
-				fmt.Sprintf("/numeric-types/number/any/%v/%v", wantReq.PathParam1, wantReq.PathParam2),
+				fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				http.NoBody,
 			)
 			query := url.Values{}
-			query.Add("requiredQuery1", fmt.Sprint(wantReq.RequiredQuery1))
-			query.Add("requiredQuery2", fmt.Sprint(wantReq.RequiredQuery2))
-			query.Add("optionalQuery1", fmt.Sprint(wantReq.OptionalQuery1))
-			query.Add("optionalQuery2", fmt.Sprint(wantReq.OptionalQuery2))
+			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
+			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
+			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
 			testReq.URL.RawQuery = query.Encode()
 			recorder := httptest.NewRecorder()
 			router.mux.ServeHTTP(recorder, testReq)
 
 			assert.Equal(t, 204, recorder.Code)
-			assert.Len(t, testActions.getNumberAnySimpleCalls, 1)
-			assert.Equal(t, wantReq, testActions.getNumberAnySimpleCalls[0].params)
-		})
-		t.Run("should fail if required values are missing", func(t *testing.T) {
-			testActions := &numericTypesControllerTestActions{}
-			router := setupRouter(testActions)
-			wantReq := randomReq()
-			testReq := httptest.NewRequest(
-				"GET",
-				fmt.Sprintf("/numeric-types/number/any/%v/%v", wantReq.PathParam1, wantReq.PathParam2),
-				http.NoBody,
-			)
-			recorder := httptest.NewRecorder()
-			router.mux.ServeHTTP(recorder, testReq)
-
-			assert.Equal(t, 400, recorder.Code)
-			assert.Len(t, testActions.getNumberAnySimpleCalls, 0)
-
-			gotErrors := unmarshalBindingErrors(t, recorder.Body)
-
-			assertFieldError(t, gotErrors, "query", "requiredQuery1", handlers.ErrValueRequired)
-			assertFieldError(t, gotErrors, "query", "requiredQuery2", handlers.ErrValueRequired)
+			assert.Len(t, testActions.numericTypesParsing, 1)
+			assert.Equal(t, wantReq, testActions.numericTypesParsing[0].params)
 		})
 	})
 }

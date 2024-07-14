@@ -1,6 +1,6 @@
 get:
   summary: API to simulate and test parsing errors
-  operationId: errorHandlingParsingErrors
+  operationId: numericTypesParsing
   tags:
     - numeric-types
   parameters:

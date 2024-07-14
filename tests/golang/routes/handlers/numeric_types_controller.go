@@ -1,6 +1,6 @@
 package handlers
 
-type NumericTypesErrorHandlingParsingErrorsRequest struct {
+type NumericTypesNumericTypesParsingRequest struct {
 	NumberAny float32
 	NumberFloat float32
 	NumberDouble float64
@@ -18,25 +18,25 @@ type NumericTypesErrorHandlingParsingErrorsRequest struct {
 type NumericTypesController struct {
 	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesErrorHandlingParsingErrorsRequest,
+	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
 	// Response type: none
-	ErrorHandlingParsingErrors httpHandlerFactory
+	NumericTypesParsing httpHandlerFactory
 }
 
 type NumericTypesControllerBuilder struct {
 	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesErrorHandlingParsingErrorsRequest,
+	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
 	// Response type: none
-	HandleErrorHandlingParsingErrors actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesErrorHandlingParsingErrorsRequest]
+	HandleNumericTypesParsing actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesParsingRequest]
 }
 
 func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 	// TODO: panic if any handler is null
 	return &NumericTypesController{
-		ErrorHandlingParsingErrors: c.HandleErrorHandlingParsingErrors.httpHandlerFactory,
+		NumericTypesParsing: c.HandleNumericTypesParsing.httpHandlerFactory,
 	}
 }
 
@@ -44,14 +44,14 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder := &NumericTypesControllerBuilder{}
 
 	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	controllerBuilder.HandleErrorHandlingParsingErrors.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleErrorHandlingParsingErrors.defaultStatusCode = 204
-	controllerBuilder.HandleErrorHandlingParsingErrors.voidResult = true
-	controllerBuilder.HandleErrorHandlingParsingErrors.paramsParser = newNumericTypesErrorHandlingParsingErrorsParamsParser()
+	controllerBuilder.HandleNumericTypesParsing.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleNumericTypesParsing.defaultStatusCode = 204
+	controllerBuilder.HandleNumericTypesParsing.voidResult = true
+	controllerBuilder.HandleNumericTypesParsing.paramsParser = newNumericTypesNumericTypesParsingParamsParser()
 
 	return controllerBuilder
 }
 
 func MountNumericTypesRoutes(controller *NumericTypesController, app *httpApp) {
-	app.router.HandleRoute("GET", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.ErrorHandlingParsingErrors(app))
+	app.router.HandleRoute("GET", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
 }

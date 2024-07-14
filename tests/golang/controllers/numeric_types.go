@@ -11,13 +11,13 @@ type testCall[TParams any] struct {
 }
 
 type numericTypesControllerTestActions struct {
-	getNumberAnySimpleCalls []testCall[*handlers.NumericTypesNumberAnySimpleRequest]
+	numericTypesParsing []testCall[*handlers.NumericTypesNumericTypesParsingRequest]
 }
 
-func (c *numericTypesControllerTestActions) GetNumberAnySimple(
-	ctx context.Context, params *handlers.NumericTypesNumberAnySimpleRequest,
+func (c *numericTypesControllerTestActions) NumericTypesParsing(
+	ctx context.Context, params *handlers.NumericTypesNumericTypesParsingRequest,
 ) error {
-	c.getNumberAnySimpleCalls = append(c.getNumberAnySimpleCalls, testCall[*handlers.NumericTypesNumberAnySimpleRequest]{
+	c.numericTypesParsing = append(c.numericTypesParsing, testCall[*handlers.NumericTypesNumericTypesParsingRequest]{
 		params: params,
 	})
 	return nil
@@ -27,6 +27,6 @@ func newNumericTypesController(
 	testActions *numericTypesControllerTestActions,
 ) *handlers.NumericTypesController {
 	return handlers.BuildNumericTypesController().
-		HandleNumberAnySimple.With(testActions.GetNumberAnySimple).
+		HandleNumericTypesParsing.With(testActions.NumericTypesParsing).
 		Finalize()
 }
