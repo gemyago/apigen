@@ -24,8 +24,9 @@ func (c *testAction[TParams]) action(
 }
 
 type numericTypesControllerTestActions struct {
-	numericTypesParsing         testAction[*handlers.NumericTypesNumericTypesParsingRequest]
-	numericTypesRangeValidation testAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
+	numericTypesParsing                  testAction[*handlers.NumericTypesNumericTypesParsingRequest]
+	numericTypesRangeValidation          testAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
+	numericTypesRangeValidationExclusive testAction[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest]
 }
 
 func newNumericTypesController(
@@ -34,5 +35,6 @@ func newNumericTypesController(
 	return handlers.BuildNumericTypesController().
 		HandleNumericTypesParsing.With(testActions.numericTypesParsing.action).
 		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
+		HandleNumericTypesRangeValidationExclusive.With(testActions.numericTypesRangeValidationExclusive.action).
 		Finalize()
 }
