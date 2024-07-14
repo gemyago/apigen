@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
@@ -23,10 +24,17 @@ func (c *numericTypesControllerTestActions) NumericTypesParsing(
 	return nil
 }
 
+func (c *numericTypesControllerTestActions) NumericTypesRangeValidation(
+	ctx context.Context, params *handlers.NumericTypesNumericTypesRangeValidationRequest,
+) error {
+	return fmt.Errorf("not implemented")
+}
+
 func newNumericTypesController(
 	testActions *numericTypesControllerTestActions,
 ) *handlers.NumericTypesController {
 	return handlers.BuildNumericTypesController().
 		HandleNumericTypesParsing.With(testActions.NumericTypesParsing).
+		HandleNumericTypesRangeValidation.With(testActions.NumericTypesRangeValidation).
 		Finalize()
 }
