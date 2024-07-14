@@ -185,7 +185,11 @@ func readPathValue(key string, router httpRouter, req *http.Request) optionalVal
 
 func readQueryValue(key string, values url.Values) optionalVal[[]string] {
 	if values.Has(key) {
-		return optionalVal[[]string]{value: values[key], assigned: true}
+		value := values[key]
+		if len(value) == 1 && value[0] == "" {
+			return optionalVal[[]string]{}
+		}
+		return optionalVal[[]string]{value: value, assigned: true}
 	}
 	return optionalVal[[]string]{}
 }
