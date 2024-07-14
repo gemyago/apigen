@@ -1,14 +1,5 @@
 package handlers
 
-type ErrorHandlingNumberRangeErrorsRequest struct {
-	LimitedNum float32
-	LimitedFloat float32
-	LimitedDouble float64
-	LimitedQueryNum float32
-	LimitedQueryFloat float32
-	LimitedQueryDouble float64
-}
-
 type ErrorHandlingParsingErrorsRequest struct {
 	PathParam1 float32
 	PathParam2 float32
@@ -16,54 +7,53 @@ type ErrorHandlingParsingErrorsRequest struct {
 	RequiredQuery2 float32
 }
 
-type ErrorHandlingController struct {
-	// GET /error-handling/number-range-errors/{limitedNum}/{limitedFloat}/{limitedDouble}
-	//
-	// Request type: ErrorHandlingNumberRangeErrorsRequest,
-	//
-	// Response type: none
-	NumberRangeErrors httpHandlerFactory
+type ErrorHandlingValidationErrorsRequest struct {
+	RequiredQuery1 float32
+	RequiredQuery2 float32
+}
 
+type ErrorHandlingController struct {
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingParsingErrorsRequest,
 	//
 	// Response type: none
 	ParsingErrors httpHandlerFactory
+
+	// GET /error-handling/validation-errors
+	//
+	// Request type: ErrorHandlingValidationErrorsRequest,
+	//
+	// Response type: none
+	ValidationErrors httpHandlerFactory
 }
 
 type ErrorHandlingControllerBuilder struct {
-	// GET /error-handling/number-range-errors/{limitedNum}/{limitedFloat}/{limitedDouble}
-	//
-	// Request type: ErrorHandlingNumberRangeErrorsRequest,
-	//
-	// Response type: none
-	HandleNumberRangeErrors actionBuilderVoidResult[*ErrorHandlingControllerBuilder, *ErrorHandlingNumberRangeErrorsRequest]
-
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingParsingErrorsRequest,
 	//
 	// Response type: none
 	HandleParsingErrors actionBuilderVoidResult[*ErrorHandlingControllerBuilder, *ErrorHandlingParsingErrorsRequest]
+
+	// GET /error-handling/validation-errors
+	//
+	// Request type: ErrorHandlingValidationErrorsRequest,
+	//
+	// Response type: none
+	HandleValidationErrors actionBuilderVoidResult[*ErrorHandlingControllerBuilder, *ErrorHandlingValidationErrorsRequest]
 }
 
 func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
 	// TODO: panic if any handler is null
 	return &ErrorHandlingController{
-		NumberRangeErrors: c.HandleNumberRangeErrors.httpHandlerFactory,
 		ParsingErrors: c.HandleParsingErrors.httpHandlerFactory,
+		ValidationErrors: c.HandleValidationErrors.httpHandlerFactory,
 	}
 }
 
 func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	controllerBuilder := &ErrorHandlingControllerBuilder{}
-
-	// GET /error-handling/number-range-errors/{limitedNum}/{limitedFloat}/{limitedDouble}
-	controllerBuilder.HandleNumberRangeErrors.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleNumberRangeErrors.defaultStatusCode = 204
-	controllerBuilder.HandleNumberRangeErrors.voidResult = true
-	controllerBuilder.HandleNumberRangeErrors.paramsParser = newErrorHandlingNumberRangeErrorsParamsParser()
 
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	controllerBuilder.HandleParsingErrors.controllerBuilder = controllerBuilder
@@ -71,10 +61,16 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	controllerBuilder.HandleParsingErrors.voidResult = true
 	controllerBuilder.HandleParsingErrors.paramsParser = newErrorHandlingParsingErrorsParamsParser()
 
+	// GET /error-handling/validation-errors
+	controllerBuilder.HandleValidationErrors.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleValidationErrors.defaultStatusCode = 204
+	controllerBuilder.HandleValidationErrors.voidResult = true
+	controllerBuilder.HandleValidationErrors.paramsParser = newErrorHandlingValidationErrorsParamsParser()
+
 	return controllerBuilder
 }
 
 func MountErrorHandlingRoutes(controller *ErrorHandlingController, app *httpApp) {
-	app.router.HandleRoute("GET", "/error-handling/number-range-errors/{limitedNum}/{limitedFloat}/{limitedDouble}", controller.NumberRangeErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ParsingErrors(app))
+	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ValidationErrors(app))
 }

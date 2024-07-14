@@ -15,12 +15,11 @@ import (
 func TestErrorHandling(t *testing.T) {
 	fake := faker.New()
 	setupRouter := func() *routerAdapter {
-		controller := newErrorHandlingController()
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
 		handlers.MountErrorHandlingRoutes(
-			controller,
+			newErrorHandlingController(),
 			handlers.NewHttpApp(router, handlers.WithLogger(newLogger())),
 		)
 		return router
@@ -66,6 +65,17 @@ func TestErrorHandling(t *testing.T) {
 				{Field: "pathParam2", Location: "path", Code: "BAD_FORMAT"},
 				{Field: "requiredQuery1", Location: "query", Code: "BAD_FORMAT"},
 				{Field: "requiredQuery2", Location: "query", Code: "BAD_FORMAT"},
+			},
+		})
+	})
+
+	t.Run("validation-errors", func(t *testing.T) {
+		runTestCase(t, testCase{
+			name: "respond with 400 if validation fails",
+			path: "/error-handling/validation-errors?requiredQuery1=1&requiredQuery2=2",
+			wantErrors: []handlers.BindingError{
+				{Field: "requiredQuery1", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+				{Field: "requiredQuery2", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 			},
 		})
 	})

@@ -4,96 +4,6 @@ import (
 	"net/http"
 )
 
-type ErrorHandlingNumberRangeErrorsParamsParser struct {
-	bindLimitedNum requestParamBinder[string, float32]
-	bindLimitedFloat requestParamBinder[string, float32]
-	bindLimitedDouble requestParamBinder[string, float64]
-	bindLimitedQueryNum requestParamBinder[[]string, float32]
-	bindLimitedQueryFloat requestParamBinder[[]string, float32]
-	bindLimitedQueryDouble requestParamBinder[[]string, float64]
-}
-
-func (p *ErrorHandlingNumberRangeErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingNumberRangeErrorsRequest, error) {
-	bindingCtx := bindingContext{}
-	reqParams := &ErrorHandlingNumberRangeErrorsRequest{}
-	query := req.URL.Query()
-	
-	p.bindLimitedNum(&bindingCtx, readPathValue("limitedNum", router, req), &reqParams.LimitedNum)
-	
-	p.bindLimitedFloat(&bindingCtx, readPathValue("limitedFloat", router, req), &reqParams.LimitedFloat)
-	
-	p.bindLimitedDouble(&bindingCtx, readPathValue("limitedDouble", router, req), &reqParams.LimitedDouble)
-	p.bindLimitedQueryNum(&bindingCtx, readQueryValue("limitedQueryNum", query), &reqParams.LimitedQueryNum)
-	p.bindLimitedQueryFloat(&bindingCtx, readQueryValue("limitedQueryFloat", query), &reqParams.LimitedQueryFloat)
-	p.bindLimitedQueryDouble(&bindingCtx, readQueryValue("limitedQueryDouble", query), &reqParams.LimitedQueryDouble)
-	return reqParams, bindingCtx.AggregatedError()
-}
-
-func newErrorHandlingNumberRangeErrorsParamsParser() *ErrorHandlingNumberRangeErrorsParamsParser {
-	return &ErrorHandlingNumberRangeErrorsParamsParser{
-		bindLimitedNum: newRequestParamBinder(binderParams[string, float32]{
-			field: "limitedNum",
-			location: "path",
-			parseValue: knownParsers.float32_in_path,
-			validateValue: newCompositeValidator[string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[string, float32](1, false, true),
-				newMinMaxValueValidator[string, float32](100, false, false),
-			),
-		}),
-		bindLimitedFloat: newRequestParamBinder(binderParams[string, float32]{
-			field: "limitedFloat",
-			location: "path",
-			parseValue: knownParsers.float32_in_path,
-			validateValue: newCompositeValidator[string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[string, float32](100, false, true),
-				newMinMaxValueValidator[string, float32](200, false, false),
-			),
-		}),
-		bindLimitedDouble: newRequestParamBinder(binderParams[string, float64]{
-			field: "limitedDouble",
-			location: "path",
-			parseValue: knownParsers.float64_in_path,
-			validateValue: newCompositeValidator[string, float64](
-				validateNonEmpty,
-				newMinMaxValueValidator[string, float64](200, false, true),
-				newMinMaxValueValidator[string, float64](300, false, false),
-			),
-		}),
-		bindLimitedQueryNum: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "limitedQueryNum",
-			location: "query",
-			parseValue: knownParsers.float32_in_query,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, float32](300, false, true),
-				newMinMaxValueValidator[[]string, float32](400, false, false),
-			),
-		}),
-		bindLimitedQueryFloat: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "limitedQueryFloat",
-			location: "query",
-			parseValue: knownParsers.float32_in_query,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, float32](400, false, true),
-				newMinMaxValueValidator[[]string, float32](500, false, false),
-			),
-		}),
-		bindLimitedQueryDouble: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "limitedQueryDouble",
-			location: "query",
-			parseValue: knownParsers.float64_in_query,
-			validateValue: newCompositeValidator[[]string, float64](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, float64](500, false, true),
-				newMinMaxValueValidator[[]string, float64](600, false, false),
-			),
-		}),
-	}
-}
-
 type ErrorHandlingParsingErrorsParamsParser struct {
 	bindPathParam1 requestParamBinder[string, float32]
 	bindPathParam2 requestParamBinder[string, float32]
@@ -146,6 +56,43 @@ func newErrorHandlingParsingErrorsParamsParser() *ErrorHandlingParsingErrorsPara
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
+			),
+		}),
+	}
+}
+
+type ErrorHandlingValidationErrorsParamsParser struct {
+	bindRequiredQuery1 requestParamBinder[[]string, float32]
+	bindRequiredQuery2 requestParamBinder[[]string, float32]
+}
+
+func (p *ErrorHandlingValidationErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingValidationErrorsRequest, error) {
+	bindingCtx := bindingContext{}
+	reqParams := &ErrorHandlingValidationErrorsRequest{}
+	query := req.URL.Query()
+	p.bindRequiredQuery1(&bindingCtx, readQueryValue("requiredQuery1", query), &reqParams.RequiredQuery1)
+	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newErrorHandlingValidationErrorsParamsParser() *ErrorHandlingValidationErrorsParamsParser {
+	return &ErrorHandlingValidationErrorsParamsParser{
+		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
+			field: "requiredQuery1",
+			location: "query",
+			parseValue: knownParsers.float32_in_query,
+			validateValue: newCompositeValidator[[]string, float32](
+				validateNonEmpty,
+				newMinMaxValueValidator[[]string, float32](10, false, true),
+			),
+		}),
+		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
+			field: "requiredQuery2",
+			location: "query",
+			parseValue: knownParsers.float32_in_query,
+			validateValue: newCompositeValidator[[]string, float32](
+				validateNonEmpty,
+				newMinMaxValueValidator[[]string, float32](10, false, true),
 			),
 		}),
 	}

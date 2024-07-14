@@ -1,0 +1,21 @@
+get:
+  summary: API to simulate and test validation errors
+  operationId: validationErrors
+  tags:
+    - error-handling
+  parameters:
+    - name: requiredQuery1
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: 10
+    - name: requiredQuery2
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: 10
+  responses:
+    '204':
+      description: Request succeeded
