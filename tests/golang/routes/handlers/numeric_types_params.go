@@ -223,8 +223,8 @@ func newNumericTypesNumericTypesRangeValidationParamsParser() *NumericTypesNumer
 			parseValue: knownParsers.int32_in_path,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
-				newMinMaxValueValidator[string, int32](500, false, true),
-				newMinMaxValueValidator[string, int32](600, false, false),
+				newMinMaxValueValidator[string, int32](400, false, true),
+				newMinMaxValueValidator[string, int32](500, false, false),
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
@@ -233,8 +233,8 @@ func newNumericTypesNumericTypesRangeValidationParamsParser() *NumericTypesNumer
 			parseValue: knownParsers.int32_in_path,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
-				newMinMaxValueValidator[string, int32](600, false, true),
-				newMinMaxValueValidator[string, int32](700, false, false),
+				newMinMaxValueValidator[string, int32](500, false, true),
+				newMinMaxValueValidator[string, int32](600, false, false),
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
@@ -243,8 +243,8 @@ func newNumericTypesNumericTypesRangeValidationParamsParser() *NumericTypesNumer
 			parseValue: knownParsers.int64_in_path,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
-				newMinMaxValueValidator[string, int64](700, false, true),
-				newMinMaxValueValidator[string, int64](800, false, false),
+				newMinMaxValueValidator[string, int64](600, false, true),
+				newMinMaxValueValidator[string, int64](700, false, false),
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{

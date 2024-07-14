@@ -33,24 +33,24 @@ get:
       required: true
       schema:
         type: integer
-        minimum: 500
-        maximum: 600
+        minimum: 400
+        maximum: 500
     - name: numberInt32
       in: path
       required: true
       schema:
         type: integer
         format: int32
-        minimum: 600
-        maximum: 700
+        minimum: 500
+        maximum: 600
     - name: numberInt64
       in: path
       required: true
       schema:
         type: integer
         format: int64
-        minimum: 700
-        maximum: 800
+        minimum: 600
+        maximum: 700
 
     # params in query
     - name: numberAnyInQuery
