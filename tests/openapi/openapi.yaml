@@ -14,6 +14,8 @@ paths:
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/parsing.yaml"
+  /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/range-validation.yaml"
 
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
