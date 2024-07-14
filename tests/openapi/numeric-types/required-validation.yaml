@@ -1,0 +1,80 @@
+get:
+  summary: API to simulate and test required validation of numeric types
+  operationId: numericTypesRequiredValidation
+  tags:
+    - numeric-types
+  parameters:
+    # path params are always required
+
+    # params in query
+    - name: numberAnyInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+    - name: numberFloatInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+    - name: numberDoubleInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+    - name: numberIntInQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+    - name: numberInt32InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: numberInt64InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+    - name: optionalNumberAnyInQuery
+      in: query
+      required: false
+      schema:
+        type: number
+    - name: optionalNumberFloatInQuery
+      in: query
+      required: false
+      schema:
+        type: number
+        format: float
+    - name: optionalNumberDoubleInQuery
+      in: query
+      required: false
+      schema:
+        type: number
+        format: double
+    - name: optionalNumberIntInQuery
+      in: query
+      required: false
+      schema:
+        type: integer
+    - name: optionalNumberInt32InQuery
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+    - name: optionalNumberInt64InQuery
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+  responses:
+    '204':
+      description: Request succeeded

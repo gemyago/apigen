@@ -18,6 +18,8 @@ paths:
     $ref: "./numeric-types/range-validation.yaml"
   /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/range-validation-exclusive.yaml"
+  /numeric-types/required-validation:
+    $ref: "./numeric-types/required-validation.yaml"
 
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:

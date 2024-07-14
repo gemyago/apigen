@@ -45,6 +45,21 @@ type NumericTypesNumericTypesRangeValidationExclusiveRequest struct {
 	NumberInt64InQuery int64
 }
 
+type NumericTypesNumericTypesRequiredValidationRequest struct {
+	NumberAnyInQuery float32
+	NumberFloatInQuery float32
+	NumberDoubleInQuery float64
+	NumberIntInQuery int32
+	NumberInt32InQuery int32
+	NumberInt64InQuery int64
+	OptionalNumberAnyInQuery float32
+	OptionalNumberFloatInQuery float32
+	OptionalNumberDoubleInQuery float64
+	OptionalNumberIntInQuery int32
+	OptionalNumberInt32InQuery int32
+	OptionalNumberInt64InQuery int64
+}
+
 type NumericTypesController struct {
 	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
@@ -66,6 +81,13 @@ type NumericTypesController struct {
 	//
 	// Response type: none
 	NumericTypesRangeValidationExclusive httpHandlerFactory
+
+	// GET /numeric-types/required-validation
+	//
+	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
+	//
+	// Response type: none
+	NumericTypesRequiredValidation httpHandlerFactory
 }
 
 type NumericTypesControllerBuilder struct {
@@ -89,6 +111,13 @@ type NumericTypesControllerBuilder struct {
 	//
 	// Response type: none
 	HandleNumericTypesRangeValidationExclusive actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesRangeValidationExclusiveRequest]
+
+	// GET /numeric-types/required-validation
+	//
+	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
+	//
+	// Response type: none
+	HandleNumericTypesRequiredValidation actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesRequiredValidationRequest]
 }
 
 func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
@@ -97,6 +126,7 @@ func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 		NumericTypesParsing: c.HandleNumericTypesParsing.httpHandlerFactory,
 		NumericTypesRangeValidation: c.HandleNumericTypesRangeValidation.httpHandlerFactory,
 		NumericTypesRangeValidationExclusive: c.HandleNumericTypesRangeValidationExclusive.httpHandlerFactory,
+		NumericTypesRequiredValidation: c.HandleNumericTypesRequiredValidation.httpHandlerFactory,
 	}
 }
 
@@ -121,6 +151,12 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.voidResult = true
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.paramsParser = newNumericTypesNumericTypesRangeValidationExclusiveParamsParser()
 
+	// GET /numeric-types/required-validation
+	controllerBuilder.HandleNumericTypesRequiredValidation.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleNumericTypesRequiredValidation.defaultStatusCode = 204
+	controllerBuilder.HandleNumericTypesRequiredValidation.voidResult = true
+	controllerBuilder.HandleNumericTypesRequiredValidation.paramsParser = newNumericTypesNumericTypesRequiredValidationParamsParser()
+
 	return controllerBuilder
 }
 
@@ -128,4 +164,5 @@ func MountNumericTypesRoutes(controller *NumericTypesController, app *httpApp) {
 	app.router.HandleRoute("GET", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
+	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(app))
 }
