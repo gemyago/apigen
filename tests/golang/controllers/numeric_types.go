@@ -10,34 +10,29 @@ type testCall[TParams any] struct {
 	params TParams
 }
 
+type testAction[TParams any] struct {
+	calls []testCall[TParams]
+}
+
+func (c *testAction[TParams]) action(
+	_ context.Context, params TParams,
+) error {
+	c.calls = append(c.calls, testCall[TParams]{
+		params: params,
+	})
+	return nil
+}
+
 type numericTypesControllerTestActions struct {
-	numericTypesParsing         []testCall[*handlers.NumericTypesNumericTypesParsingRequest]
-	numericTypesRangeValidation []testCall[*handlers.NumericTypesNumericTypesRangeValidationRequest]
-}
-
-func (c *numericTypesControllerTestActions) NumericTypesParsing(
-	ctx context.Context, params *handlers.NumericTypesNumericTypesParsingRequest,
-) error {
-	c.numericTypesParsing = append(c.numericTypesParsing, testCall[*handlers.NumericTypesNumericTypesParsingRequest]{
-		params: params,
-	})
-	return nil
-}
-
-func (c *numericTypesControllerTestActions) NumericTypesRangeValidation(
-	ctx context.Context, params *handlers.NumericTypesNumericTypesRangeValidationRequest,
-) error {
-	c.numericTypesRangeValidation = append(c.numericTypesRangeValidation, testCall[*handlers.NumericTypesNumericTypesRangeValidationRequest]{
-		params: params,
-	})
-	return nil
+	numericTypesParsing         testAction[*handlers.NumericTypesNumericTypesParsingRequest]
+	numericTypesRangeValidation testAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
 }
 
 func newNumericTypesController(
 	testActions *numericTypesControllerTestActions,
 ) *handlers.NumericTypesController {
 	return handlers.BuildNumericTypesController().
-		HandleNumericTypesParsing.With(testActions.NumericTypesParsing).
-		HandleNumericTypesRangeValidation.With(testActions.NumericTypesRangeValidation).
+		HandleNumericTypesParsing.With(testActions.numericTypesParsing.action).
+		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
 		Finalize()
 }

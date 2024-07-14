@@ -105,7 +105,7 @@ func TestNumericTypes(t *testing.T) {
 				query: query,
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code)
-					assert.Equal(t, wantReq, testActions.numericTypesParsing[0].params)
+					assert.Equal(t, wantReq, testActions.numericTypesParsing.calls[0].params)
 				},
 			}
 		})
@@ -193,7 +193,7 @@ func TestNumericTypes(t *testing.T) {
 				query: query,
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
-					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation[0].params)
+					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation.calls[0].params)
 				},
 			}
 		})
