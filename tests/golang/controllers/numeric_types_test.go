@@ -15,26 +15,6 @@ import (
 func TestNumericTypes(t *testing.T) {
 	fake := faker.New()
 
-	randomReq := func() *handlers.NumericTypesNumericTypesParsingRequest {
-		return &handlers.NumericTypesNumericTypesParsingRequest{
-			// path
-			NumberAny:    fake.Float32(10, 1, 100),
-			NumberFloat:  fake.Float32(10, 1, 100),
-			NumberDouble: fake.Float64(10, 1, 100),
-			NumberInt:    fake.Int32(),
-			NumberInt32:  fake.Int32(),
-			NumberInt64:  fake.Int64(),
-
-			// query
-			NumberAnyInQuery:    fake.Float32(10, 1, 100),
-			NumberFloatInQuery:  fake.Float32(10, 1, 100),
-			NumberDoubleInQuery: fake.Float64(10, 1, 100),
-			NumberIntInQuery:    fake.Int32(),
-			NumberInt32InQuery:  fake.Int32(),
-			NumberInt64InQuery:  fake.Int64(),
-		}
-	}
-
 	setupRouter := func(testActions *numericTypesControllerTestActions) *routerAdapter {
 		controller := newNumericTypesController(testActions)
 		router := &routerAdapter{
@@ -44,7 +24,27 @@ func TestNumericTypes(t *testing.T) {
 		return router
 	}
 
-	t.Run("number", func(t *testing.T) {
+	t.Run("parsing", func(t *testing.T) {
+		randomReq := func() *handlers.NumericTypesNumericTypesParsingRequest {
+			return &handlers.NumericTypesNumericTypesParsingRequest{
+				// path
+				NumberAny:    fake.Float32(10, 1, 100),
+				NumberFloat:  fake.Float32(10, 1, 100),
+				NumberDouble: fake.Float64(10, 1, 100),
+				NumberInt:    fake.Int32(),
+				NumberInt32:  fake.Int32(),
+				NumberInt64:  fake.Int64(),
+
+				// query
+				NumberAnyInQuery:    fake.Float32(10, 1, 100),
+				NumberFloatInQuery:  fake.Float32(10, 1, 100),
+				NumberDoubleInQuery: fake.Float64(10, 1, 100),
+				NumberIntInQuery:    fake.Int32(),
+				NumberInt32InQuery:  fake.Int32(),
+				NumberInt64InQuery:  fake.Int64(),
+			}
+		}
+
 		t.Run("should parse and bind valid values", func(t *testing.T) {
 			testActions := &numericTypesControllerTestActions{}
 			router := setupRouter(testActions)
