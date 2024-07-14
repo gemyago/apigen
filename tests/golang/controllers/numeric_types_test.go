@@ -112,8 +112,19 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("range-validation", func(t *testing.T) {
+		buildQuery := func(wantReq *handlers.NumericTypesNumericTypesRangeValidationRequest) url.Values {
+			query := url.Values{}
+			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
+			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
+			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+			return query
+		}
+
 		runTestCase(t, "should validate min range", func() testCase {
-			wantReq := handlers.NumericTypesNumericTypesRangeValidationRequest{
+			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
 				// path
 				NumberAny:    fake.Float32(5, 10, 100),
 				NumberFloat:  fake.Float32(5, 20, 200),
@@ -130,17 +141,9 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt32InQuery:  fake.Int32Between(50, 500),
 				NumberInt64InQuery:  fake.Int64Between(60, 600),
 			}
-			query := url.Values{}
-			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
-			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
-			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
-
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
-				query: query,
+				query: buildQuery(wantReq),
 				expect: expectErrors(
 					[]handlers.BindingError{
 						// path
@@ -180,17 +183,10 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt32InQuery:  500,
 				NumberInt64InQuery:  600,
 			}
-			query := url.Values{}
-			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
-			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
-			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
 
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
-				query: query,
+				query: buildQuery(wantReq),
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
 					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation.calls[0].params)
