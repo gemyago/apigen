@@ -27,6 +27,7 @@ type numericTypesControllerTestActions struct {
 	numericTypesParsing                  testAction[*handlers.NumericTypesNumericTypesParsingRequest]
 	numericTypesRangeValidation          testAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
 	numericTypesRangeValidationExclusive testAction[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest]
+	numericTypesRequiredValidation       testAction[*handlers.NumericTypesNumericTypesRequiredValidationRequest]
 }
 
 func newNumericTypesController(
@@ -36,5 +37,6 @@ func newNumericTypesController(
 		HandleNumericTypesParsing.With(testActions.numericTypesParsing.action).
 		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
 		HandleNumericTypesRangeValidationExclusive.With(testActions.numericTypesRangeValidationExclusive.action).
+		HandleNumericTypesRequiredValidation.With(testActions.numericTypesRequiredValidation.action).
 		Finalize()
 }

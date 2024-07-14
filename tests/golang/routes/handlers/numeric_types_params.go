@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-type NumericTypesNumericTypesParsingParamsParser struct {
+type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberAny requestParamBinder[string, float32]
 	bindNumberFloat requestParamBinder[string, float32]
 	bindNumberDouble requestParamBinder[string, float64]
@@ -19,22 +19,18 @@ type NumericTypesNumericTypesParsingParamsParser struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesNumericTypesParsingParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesParsingRequest{}
-	query := req.URL.Query()
-	
+	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
-	
 	p.bindNumberFloat(&bindingCtx, readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
-	
 	p.bindNumberDouble(&bindingCtx, readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
-	
 	p.bindNumberInt(&bindingCtx, readPathValue("numberInt", router, req), &reqParams.NumberInt)
-	
 	p.bindNumberInt32(&bindingCtx, readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
-	
 	p.bindNumberInt64(&bindingCtx, readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	// query params
+	query := req.URL.Query()
 	p.bindNumberAnyInQuery(&bindingCtx, readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
 	p.bindNumberFloatInQuery(&bindingCtx, readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
 	p.bindNumberDoubleInQuery(&bindingCtx, readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
@@ -44,8 +40,8 @@ func (p *NumericTypesNumericTypesParsingParamsParser) parse(router httpRouter, w
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesNumericTypesParsingParamsParser() *NumericTypesNumericTypesParsingParamsParser {
-	return &NumericTypesNumericTypesParsingParamsParser{
+func newParamsParserNumericTypesNumericTypesParsing() *paramsParserNumericTypesNumericTypesParsing {
+	return &paramsParserNumericTypesNumericTypesParsing{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -145,7 +141,7 @@ func newNumericTypesNumericTypesParsingParamsParser() *NumericTypesNumericTypesP
 	}
 }
 
-type NumericTypesNumericTypesRangeValidationParamsParser struct {
+type paramsParserNumericTypesNumericTypesRangeValidation struct {
 	bindNumberAny requestParamBinder[string, float32]
 	bindNumberFloat requestParamBinder[string, float32]
 	bindNumberDouble requestParamBinder[string, float64]
@@ -160,22 +156,18 @@ type NumericTypesNumericTypesRangeValidationParamsParser struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesNumericTypesRangeValidationParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationRequest{}
-	query := req.URL.Query()
-	
+	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
-	
 	p.bindNumberFloat(&bindingCtx, readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
-	
 	p.bindNumberDouble(&bindingCtx, readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
-	
 	p.bindNumberInt(&bindingCtx, readPathValue("numberInt", router, req), &reqParams.NumberInt)
-	
 	p.bindNumberInt32(&bindingCtx, readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
-	
 	p.bindNumberInt64(&bindingCtx, readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	// query params
+	query := req.URL.Query()
 	p.bindNumberAnyInQuery(&bindingCtx, readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
 	p.bindNumberFloatInQuery(&bindingCtx, readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
 	p.bindNumberDoubleInQuery(&bindingCtx, readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
@@ -185,8 +177,8 @@ func (p *NumericTypesNumericTypesRangeValidationParamsParser) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesNumericTypesRangeValidationParamsParser() *NumericTypesNumericTypesRangeValidationParamsParser {
-	return &NumericTypesNumericTypesRangeValidationParamsParser{
+func newParamsParserNumericTypesNumericTypesRangeValidation() *paramsParserNumericTypesNumericTypesRangeValidation {
+	return &paramsParserNumericTypesNumericTypesRangeValidation{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -310,7 +302,7 @@ func newNumericTypesNumericTypesRangeValidationParamsParser() *NumericTypesNumer
 	}
 }
 
-type NumericTypesNumericTypesRangeValidationExclusiveParamsParser struct {
+type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 	bindNumberAny requestParamBinder[string, float32]
 	bindNumberFloat requestParamBinder[string, float32]
 	bindNumberDouble requestParamBinder[string, float64]
@@ -325,22 +317,18 @@ type NumericTypesNumericTypesRangeValidationExclusiveParamsParser struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesNumericTypesRangeValidationExclusiveParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationExclusiveRequest{}
-	query := req.URL.Query()
-	
+	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
-	
 	p.bindNumberFloat(&bindingCtx, readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
-	
 	p.bindNumberDouble(&bindingCtx, readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
-	
 	p.bindNumberInt(&bindingCtx, readPathValue("numberInt", router, req), &reqParams.NumberInt)
-	
 	p.bindNumberInt32(&bindingCtx, readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
-	
 	p.bindNumberInt64(&bindingCtx, readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	// query params
+	query := req.URL.Query()
 	p.bindNumberAnyInQuery(&bindingCtx, readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
 	p.bindNumberFloatInQuery(&bindingCtx, readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
 	p.bindNumberDoubleInQuery(&bindingCtx, readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
@@ -350,8 +338,8 @@ func (p *NumericTypesNumericTypesRangeValidationExclusiveParamsParser) parse(rou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesNumericTypesRangeValidationExclusiveParamsParser() *NumericTypesNumericTypesRangeValidationExclusiveParamsParser {
-	return &NumericTypesNumericTypesRangeValidationExclusiveParamsParser{
+func newParamsParserNumericTypesNumericTypesRangeValidationExclusive() *paramsParserNumericTypesNumericTypesRangeValidationExclusive {
+	return &paramsParserNumericTypesNumericTypesRangeValidationExclusive{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -475,7 +463,7 @@ func newNumericTypesNumericTypesRangeValidationExclusiveParamsParser() *NumericT
 	}
 }
 
-type NumericTypesNumericTypesRequiredValidationParamsParser struct {
+type paramsParserNumericTypesNumericTypesRequiredValidation struct {
 	bindNumberAnyInQuery requestParamBinder[[]string, float32]
 	bindNumberFloatInQuery requestParamBinder[[]string, float32]
 	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
@@ -490,9 +478,10 @@ type NumericTypesNumericTypesRequiredValidationParamsParser struct {
 	bindOptionalNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesNumericTypesRequiredValidationParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRequiredValidationRequest{}
+	// query params
 	query := req.URL.Query()
 	p.bindNumberAnyInQuery(&bindingCtx, readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
 	p.bindNumberFloatInQuery(&bindingCtx, readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
@@ -509,8 +498,8 @@ func (p *NumericTypesNumericTypesRequiredValidationParamsParser) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesNumericTypesRequiredValidationParamsParser() *NumericTypesNumericTypesRequiredValidationParamsParser {
-	return &NumericTypesNumericTypesRequiredValidationParamsParser{
+func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNumericTypesNumericTypesRequiredValidation {
+	return &paramsParserNumericTypesNumericTypesRequiredValidation{
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",

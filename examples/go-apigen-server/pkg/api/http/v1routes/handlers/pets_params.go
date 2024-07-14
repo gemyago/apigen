@@ -6,20 +6,20 @@ import (
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
-type PetsCreatePetParamsParser struct {
+type paramsParserPetsCreatePet struct {
 	bindPayload requestParamBinder[*http.Request, models.Pet]
 }
 
-func (p *PetsCreatePetParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
+func (p *paramsParserPetsCreatePet) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsCreatePetRequest{}
-	
+	// body params
 	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newPetsCreatePetParamsParser() *PetsCreatePetParamsParser {
-	return &PetsCreatePetParamsParser{
+func newParamsParserPetsCreatePet() *paramsParserPetsCreatePet {
+	return &paramsParserPetsCreatePet{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{
 			field: "payload",
 			location: "body",
@@ -31,20 +31,20 @@ func newPetsCreatePetParamsParser() *PetsCreatePetParamsParser {
 	}
 }
 
-type PetsGetPetByIdParamsParser struct {
+type paramsParserPetsGetPetById struct {
 	bindPetId requestParamBinder[string, int64]
 }
 
-func (p *PetsGetPetByIdParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsGetPetByIdRequest, error) {
+func (p *paramsParserPetsGetPetById) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsGetPetByIdRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsGetPetByIdRequest{}
-	
+	// path params
 	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newPetsGetPetByIdParamsParser() *PetsGetPetByIdParamsParser {
-	return &PetsGetPetByIdParamsParser{
+func newParamsParserPetsGetPetById() *paramsParserPetsGetPetById {
+	return &paramsParserPetsGetPetById{
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
 			field: "petId",
 			location: "path",
@@ -56,22 +56,23 @@ func newPetsGetPetByIdParamsParser() *PetsGetPetByIdParamsParser {
 	}
 }
 
-type PetsListPetsParamsParser struct {
+type paramsParserPetsListPets struct {
 	bindLimit requestParamBinder[[]string, int64]
 	bindOffset requestParamBinder[[]string, int64]
 }
 
-func (p *PetsListPetsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
+func (p *paramsParserPetsListPets) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsListPetsRequest{}
+	// query params
 	query := req.URL.Query()
 	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
 	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newPetsListPetsParamsParser() *PetsListPetsParamsParser {
-	return &PetsListPetsParamsParser{
+func newParamsParserPetsListPets() *paramsParserPetsListPets {
+	return &paramsParserPetsListPets{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "limit",
 			location: "query",

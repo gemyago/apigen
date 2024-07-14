@@ -137,25 +137,25 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder.HandleNumericTypesParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesParsing.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesParsing.voidResult = true
-	controllerBuilder.HandleNumericTypesParsing.paramsParser = newNumericTypesNumericTypesParsingParamsParser()
+	controllerBuilder.HandleNumericTypesParsing.paramsParser = newParamsParserNumericTypesNumericTypesParsing()
 
 	// GET /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesRangeValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesRangeValidation.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesRangeValidation.voidResult = true
-	controllerBuilder.HandleNumericTypesRangeValidation.paramsParser = newNumericTypesNumericTypesRangeValidationParamsParser()
+	controllerBuilder.HandleNumericTypesRangeValidation.paramsParser = newParamsParserNumericTypesNumericTypesRangeValidation()
 
 	// GET /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.voidResult = true
-	controllerBuilder.HandleNumericTypesRangeValidationExclusive.paramsParser = newNumericTypesNumericTypesRangeValidationExclusiveParamsParser()
+	controllerBuilder.HandleNumericTypesRangeValidationExclusive.paramsParser = newParamsParserNumericTypesNumericTypesRangeValidationExclusive()
 
 	// GET /numeric-types/required-validation
 	controllerBuilder.HandleNumericTypesRequiredValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesRequiredValidation.voidResult = true
-	controllerBuilder.HandleNumericTypesRequiredValidation.paramsParser = newNumericTypesNumericTypesRequiredValidationParamsParser()
+	controllerBuilder.HandleNumericTypesRequiredValidation.paramsParser = newParamsParserNumericTypesNumericTypesRequiredValidation()
 
 	return controllerBuilder
 }

@@ -4,28 +4,28 @@ import (
 	"net/http"
 )
 
-type ErrorHandlingErrorHandlingParsingErrorsParamsParser struct {
+type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
 	bindPathParam1 requestParamBinder[string, float32]
 	bindPathParam2 requestParamBinder[string, float32]
 	bindRequiredQuery1 requestParamBinder[[]string, float32]
 	bindRequiredQuery2 requestParamBinder[[]string, float32]
 }
 
-func (p *ErrorHandlingErrorHandlingParsingErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
+func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingParsingErrorsRequest{}
-	query := req.URL.Query()
-	
+	// path params
 	p.bindPathParam1(&bindingCtx, readPathValue("pathParam1", router, req), &reqParams.PathParam1)
-	
 	p.bindPathParam2(&bindingCtx, readPathValue("pathParam2", router, req), &reqParams.PathParam2)
+	// query params
+	query := req.URL.Query()
 	p.bindRequiredQuery1(&bindingCtx, readQueryValue("requiredQuery1", query), &reqParams.RequiredQuery1)
 	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newErrorHandlingErrorHandlingParsingErrorsParamsParser() *ErrorHandlingErrorHandlingParsingErrorsParamsParser {
-	return &ErrorHandlingErrorHandlingParsingErrorsParamsParser{
+func newParamsParserErrorHandlingErrorHandlingParsingErrors() *paramsParserErrorHandlingErrorHandlingParsingErrors {
+	return &paramsParserErrorHandlingErrorHandlingParsingErrors{
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
@@ -61,22 +61,23 @@ func newErrorHandlingErrorHandlingParsingErrorsParamsParser() *ErrorHandlingErro
 	}
 }
 
-type ErrorHandlingErrorHandlingValidationErrorsParamsParser struct {
+type paramsParserErrorHandlingErrorHandlingValidationErrors struct {
 	bindRequiredQuery1 requestParamBinder[[]string, float32]
 	bindRequiredQuery2 requestParamBinder[[]string, float32]
 }
 
-func (p *ErrorHandlingErrorHandlingValidationErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
+func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingValidationErrorsRequest{}
+	// query params
 	query := req.URL.Query()
 	p.bindRequiredQuery1(&bindingCtx, readQueryValue("requiredQuery1", query), &reqParams.RequiredQuery1)
 	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newErrorHandlingErrorHandlingValidationErrorsParamsParser() *ErrorHandlingErrorHandlingValidationErrorsParamsParser {
-	return &ErrorHandlingErrorHandlingValidationErrorsParamsParser{
+func newParamsParserErrorHandlingErrorHandlingValidationErrors() *paramsParserErrorHandlingErrorHandlingValidationErrors {
+	return &paramsParserErrorHandlingErrorHandlingValidationErrors{
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
