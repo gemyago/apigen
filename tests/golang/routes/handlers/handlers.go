@@ -338,7 +338,7 @@ var _ valueValidator[string, string] = validateNonEmpty
 
 func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 	threshold TTargetVal,
-	inclusive bool,
+	exclusive bool,
 	isMin bool,
 ) valueValidator[TRawVal, TTargetVal] {
 	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
@@ -346,10 +346,16 @@ func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 			return nil
 		}
 
-		if isMin && ((inclusive && tv <= threshold) || (!inclusive && tv < threshold)) {
+		// From OpenAPI spec:
+		// exclusiveMinimum: false or not included	value ≥ minimum
+		// exclusiveMinimum: true	value > minimum
+		// exclusiveMaximum: false or not included	value ≤ maximum
+		// exclusiveMaximum: true	value < maximum
+
+		if isMin && ((exclusive && tv <= threshold) || (!exclusive && tv < threshold)) {
 			return fmt.Errorf("value %v is less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
 		}
-		if !isMin && ((inclusive && tv >= threshold) || (!inclusive && tv > threshold)) {
+		if !isMin && ((exclusive && tv >= threshold) || (!exclusive && tv > threshold)) {
 			return fmt.Errorf("value %v is greater than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
 		}
 
