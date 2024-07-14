@@ -1,0 +1,128 @@
+get:
+  summary: API to simulate and test range validation of numeric types exclusive range
+  operationId: numericTypesRangeValidationExclusive
+  tags:
+    - numeric-types
+  parameters:
+    # params in path
+    - name: numberAny
+      in: path
+      required: true
+      schema:
+        type: number
+        minimum: 100.01
+        maximum: 200.02
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberFloat
+      in: path
+      required: true
+      schema:
+        type: number
+        format: float
+        minimum: 200.02
+        maximum: 300.03
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberDouble
+      in: path
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: 300.03
+        maximum: 400.04
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberInt
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 400
+        maximum: 500
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberInt32
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 500
+        maximum: 600
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberInt64
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 600
+        maximum: 700
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+
+    # params in query
+    - name: numberAnyInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: 100.01
+        maximum: 200.02
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberFloatInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+        minimum: 200.02
+        maximum: 300.03
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberDoubleInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: 300.03
+        maximum: 400.04
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberIntInQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        minimum: 400
+        maximum: 500
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberInt32InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 500
+        maximum: 600
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+    - name: numberInt64InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 600
+        maximum: 700
+        exclusiveMinimum: true
+        exclusiveMaximum: true
+  responses:
+    '204':
+      description: Request succeeded
