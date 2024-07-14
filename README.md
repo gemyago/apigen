@@ -25,6 +25,11 @@ Numeric data types
 |type|format|in|minimum|maximum|
 |----|----|----|----|----|
 |number|-|query,path|&check;|&check;|
+|number|float|query,path|&check;|&check;|
+|number|double|query,path|&check;|&check;|
+|integer|-|query,path|&check;|&check;|
+|integer|int32|query,path|&check;|&check;|
+|integer|int64|query,path|&check;|&check;|
 
 ## Contributing
 
@@ -34,9 +39,19 @@ Please have the following tools installed:
 * make
 * Java 11 runtime at a minimum
 
-Follow [Customization](https://openapi-generator.tech/docs/customization) docs of openapi generator cli.
+Review [Customization](https://openapi-generator.tech/docs/customization) docs of openapi generator cli.
 
 Build particular generator:
 ```
 mvn -f generators/go-apigen-server/ package
+```
+
+Generate particular generator (will build if needed):
+```
+make generate/golang
+```
+
+Run tests
+```
+make tests
 ```

@@ -96,3 +96,6 @@ generate/golang: examples/go-apigen-server tests/golang/routes
 .PHONY: tests/golang
 tests/golang:
 	go test ./tests/golang/...
+
+.PHONY: tests
+tests: tests/golang
