@@ -79,23 +79,23 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
 	controllerBuilder.HandleCreatePet.voidResult = true
-	controllerBuilder.HandleCreatePet.paramsParser = newPetsCreatePetParamsParser()
+	controllerBuilder.HandleCreatePet.paramsParser = newParamsParserPetsCreatePet()
 
 	// GET /pets/{petId}
 	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
-	controllerBuilder.HandleGetPetById.paramsParser = newPetsGetPetByIdParamsParser()
+	controllerBuilder.HandleGetPetById.paramsParser = newParamsParserPetsGetPetById()
 
 	// GET /pets
 	controllerBuilder.HandleListPets.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleListPets.defaultStatusCode = 200
-	controllerBuilder.HandleListPets.paramsParser = newPetsListPetsParamsParser()
+	controllerBuilder.HandleListPets.paramsParser = newParamsParserPetsListPets()
 
 	return controllerBuilder
 }
 
-func MountPetsRoutes(controller *PetsController, r httpRouter) {
-	r.HandleRoute("POST", "/pets", controller.CreatePet(r))
-	r.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(r))
-	r.HandleRoute("GET", "/pets", controller.ListPets(r))
+func MountPetsRoutes(controller *PetsController, app *httpApp) {
+	app.router.HandleRoute("POST", "/pets", controller.CreatePet(app))
+	app.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(app))
+	app.router.HandleRoute("GET", "/pets", controller.ListPets(app))
 }

@@ -2,32 +2,41 @@ package {{package}}
 
 import (
 	"net/http"
+	{{#hasModel}}
 
 	"{{invokerPackage}}/models"
+{{/hasModel}}
 )
 
 {{#operations}}
 {{#operation}}
-type {{baseName}}{{operationId}}ParamsParser struct {
+type paramsParser{{baseName}}{{operationId}} struct {
 	{{#allParams}}
 	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
 	{{/allParams}}
 }
 
-func (p *{{baseName}}{{operationId}}ParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*{{>request-type}}, error) {
+func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*{{>request-type}}, error) {
 	bindingCtx := bindingContext{}
-	reqParams := &{{>request-type}}{}{{#hasQueryParams}}
-	query := req.URL.Query(){{/hasQueryParams}}
-	{{#allParams}}
-	{{#isQueryParam}}p.bind{{>params/name}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{>params/name}}){{/isQueryParam}}{{#isPathParam}}
-	p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}}){{/isPathParam}}{{#isBodyParam}}
-	p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload){{/isBodyParam}}
-	{{/allParams}}
-	return reqParams, bindingCtx.Error()
+	reqParams := &{{>request-type}}{}
+	{{#pathParams}}
+	{{#-first}}// path params
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}})
+	{{/pathParams}}
+	{{#queryParams}}
+	{{#-first}}// query params
+	query := req.URL.Query()
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{>params/name}})
+	{{/queryParams}}
+	{{#bodyParams}}
+	{{#-first}}// body params
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
+	{{/bodyParams}}
+	return reqParams, bindingCtx.AggregatedError()
 }
 
-func new{{baseName}}{{operationId}}ParamsParser() *{{baseName}}{{operationId}}ParamsParser {
-	return &{{baseName}}{{operationId}}ParamsParser{
+func newParamsParser{{baseName}}{{operationId}}() *paramsParser{{baseName}}{{operationId}} {
+	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",

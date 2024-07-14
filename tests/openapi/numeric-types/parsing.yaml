@@ -1,0 +1,80 @@
+get:
+  summary: API to simulate and test parsing errors
+  operationId: numericTypesParsing
+  tags:
+    - numeric-types
+  parameters:
+    # params in path
+    - name: numberAny
+      in: path
+      required: true
+      schema:
+        type: number
+    - name: numberFloat
+      in: path
+      required: true
+      schema:
+        type: number
+        format: float
+    - name: numberDouble
+      in: path
+      required: true
+      schema:
+        type: number
+        format: double
+    - name: numberInt
+      in: path
+      required: true
+      schema:
+        type: integer
+    - name: numberInt32
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: numberInt64
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    # params in query
+    - name: numberAnyInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+    - name: numberFloatInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+    - name: numberDoubleInQuery
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+    - name: numberIntInQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+    - name: numberInt32InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: numberInt64InQuery
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int64
+  responses:
+    '204':
+      description: Request succeeded

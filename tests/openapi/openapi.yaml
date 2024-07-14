@@ -1,0 +1,28 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: |
+    Set of APIs to test generated routes
+  description: |
+    This definition includes all supported generator features
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/v1
+paths:
+  # numeric-types routes
+  /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/parsing.yaml"
+  /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/range-validation.yaml"
+  /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/range-validation-exclusive.yaml"
+  /numeric-types/required-validation:
+    $ref: "./numeric-types/required-validation.yaml"
+
+  # error-handling routes
+  /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
+    $ref: "./error-handling/parsing-errors.yaml"
+  /error-handling/validation-errors:
+    $ref: "./error-handling/validation-errors.yaml"

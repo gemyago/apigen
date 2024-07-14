@@ -1,4 +1,6 @@
+.go
 bin
 tmp
 .DS_Store
 generators/*/target
+*-test.log

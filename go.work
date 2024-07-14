@@ -1,3 +1,5 @@
 go 1.22
 
 use ./examples/go-apigen-server
+
+use ./tests/golang

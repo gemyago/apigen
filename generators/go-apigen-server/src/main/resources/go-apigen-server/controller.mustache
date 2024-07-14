@@ -1,9 +1,10 @@
 package {{package}}
 
-import (
+{{#hasModel}}import (
 	"{{invokerPackage}}/models"
 )
 
+{{/hasModel}}
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
@@ -59,17 +60,17 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
 	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}{{^returnType}}
 	controllerBuilder.Handle{{operationId}}.voidResult = true{{/returnType}}
-	controllerBuilder.Handle{{operationId}}.paramsParser = new{{baseName}}{{operationId}}ParamsParser()
+	controllerBuilder.Handle{{operationId}}.paramsParser = newParamsParser{{baseName}}{{operationId}}()
 
 	{{/operation}}
 	{{/operations}}
 	return controllerBuilder
 }
 
-func Mount{{baseName}}Routes(controller *{{baseName}}Controller, r httpRouter) {
+func Mount{{baseName}}Routes(controller *{{baseName}}Controller, app *httpApp) {
 	{{#operations}}
 	{{#operation}}
-	r.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(r))
+	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(app))
 	{{/operation}}
 	{{/operations}}
 }

@@ -39,6 +39,7 @@ $(mvn): $(maven_archive) $(bin)
 
 .PHONY: deps
 deps: $(cli_jar) $(mvn)
+	go install github.com/mitranim/gow@latest
 
 .PHONY: cli
 cli:
@@ -79,3 +80,22 @@ examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server exa
 	touch $@
 
 examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
+
+tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml generators/go-apigen-server
+	mkdir -p $@
+	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+		org.openapitools.codegen.OpenAPIGenerator generate \
+		-g go-apigen-server \
+		-i $< \
+		-o $@
+	$(current_make) $@/.openapi-generator/REMOVED_FILES
+	touch $@
+
+generate/golang: examples/go-apigen-server tests/golang/routes
+
+.PHONY: tests/golang
+tests/golang:
+	go test ./tests/golang/...
+
+.PHONY: tests
+tests: tests/golang
