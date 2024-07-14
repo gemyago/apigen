@@ -1,6 +1,6 @@
 get:
   summary: API to simulate and test validation errors
-  operationId: validationErrors
+  operationId: errorHandlingValidationErrors
   tags:
     - error-handling
   parameters:

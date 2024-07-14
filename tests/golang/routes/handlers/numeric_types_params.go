@@ -4,76 +4,142 @@ import (
 	"net/http"
 )
 
-type NumericTypesNumberAnySimpleParamsParser struct {
-	bindPathParam1 requestParamBinder[string, float32]
-	bindPathParam2 requestParamBinder[string, float32]
-	bindRequiredQuery1 requestParamBinder[[]string, float32]
-	bindRequiredQuery2 requestParamBinder[[]string, float32]
-	bindOptionalQuery1 requestParamBinder[[]string, float32]
-	bindOptionalQuery2 requestParamBinder[[]string, float32]
+type NumericTypesErrorHandlingParsingErrorsParamsParser struct {
+	bindNumberAny requestParamBinder[string, float32]
+	bindNumberFloat requestParamBinder[string, float32]
+	bindNumberDouble requestParamBinder[string, float64]
+	bindNumberInt requestParamBinder[string, int32]
+	bindNumberInt32 requestParamBinder[string, int32]
+	bindNumberInt64 requestParamBinder[string, int64]
+	bindNumberAnyInQuery requestParamBinder[[]string, float32]
+	bindNumberFloatInQuery requestParamBinder[[]string, float32]
+	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
+	bindNumberIntInQuery requestParamBinder[[]string, int32]
+	bindNumberInt32InQuery requestParamBinder[[]string, int32]
+	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *NumericTypesNumberAnySimpleParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumberAnySimpleRequest, error) {
+func (p *NumericTypesErrorHandlingParsingErrorsParamsParser) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesErrorHandlingParsingErrorsRequest, error) {
 	bindingCtx := bindingContext{}
-	reqParams := &NumericTypesNumberAnySimpleRequest{}
+	reqParams := &NumericTypesErrorHandlingParsingErrorsRequest{}
 	query := req.URL.Query()
 	
-	p.bindPathParam1(&bindingCtx, readPathValue("pathParam1", router, req), &reqParams.PathParam1)
+	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
 	
-	p.bindPathParam2(&bindingCtx, readPathValue("pathParam2", router, req), &reqParams.PathParam2)
-	p.bindRequiredQuery1(&bindingCtx, readQueryValue("requiredQuery1", query), &reqParams.RequiredQuery1)
-	p.bindRequiredQuery2(&bindingCtx, readQueryValue("requiredQuery2", query), &reqParams.RequiredQuery2)
-	p.bindOptionalQuery1(&bindingCtx, readQueryValue("optionalQuery1", query), &reqParams.OptionalQuery1)
-	p.bindOptionalQuery2(&bindingCtx, readQueryValue("optionalQuery2", query), &reqParams.OptionalQuery2)
+	p.bindNumberFloat(&bindingCtx, readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
+	
+	p.bindNumberDouble(&bindingCtx, readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
+	
+	p.bindNumberInt(&bindingCtx, readPathValue("numberInt", router, req), &reqParams.NumberInt)
+	
+	p.bindNumberInt32(&bindingCtx, readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
+	
+	p.bindNumberInt64(&bindingCtx, readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	p.bindNumberAnyInQuery(&bindingCtx, readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
+	p.bindNumberFloatInQuery(&bindingCtx, readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
+	p.bindNumberDoubleInQuery(&bindingCtx, readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
+	p.bindNumberIntInQuery(&bindingCtx, readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
+	p.bindNumberInt32InQuery(&bindingCtx, readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
+	p.bindNumberInt64InQuery(&bindingCtx, readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newNumericTypesNumberAnySimpleParamsParser() *NumericTypesNumberAnySimpleParamsParser {
-	return &NumericTypesNumberAnySimpleParamsParser{
-		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
-			field: "pathParam1",
+func newNumericTypesErrorHandlingParsingErrorsParamsParser() *NumericTypesErrorHandlingParsingErrorsParamsParser {
+	return &NumericTypesErrorHandlingParsingErrorsParamsParser{
+		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
+			field: "numberAny",
 			location: "path",
 			parseValue: knownParsers.float32_in_path,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
 		}),
-		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
-			field: "pathParam2",
+		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
+			field: "numberFloat",
 			location: "path",
 			parseValue: knownParsers.float32_in_path,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
 		}),
-		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "requiredQuery1",
+		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
+			field: "numberDouble",
+			location: "path",
+			parseValue: knownParsers.float64_in_path,
+			validateValue: newCompositeValidator[string, float64](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
+			field: "numberInt",
+			location: "path",
+			parseValue: knownParsers.int32_in_path,
+			validateValue: newCompositeValidator[string, int32](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
+			field: "numberInt32",
+			location: "path",
+			parseValue: knownParsers.int32_in_path,
+			validateValue: newCompositeValidator[string, int32](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
+			field: "numberInt64",
+			location: "path",
+			parseValue: knownParsers.int64_in_path,
+			validateValue: newCompositeValidator[string, int64](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
+			field: "numberAnyInQuery",
 			location: "query",
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
-		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "requiredQuery2",
+		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
+			field: "numberFloatInQuery",
 			location: "query",
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
-		bindOptionalQuery1: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "optionalQuery1",
+		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
+			field: "numberDoubleInQuery",
 			location: "query",
-			parseValue: knownParsers.float32_in_query,
-			validateValue: newCompositeValidator[[]string, float32](
+			parseValue: knownParsers.float64_in_query,
+			validateValue: newCompositeValidator[[]string, float64](
+				validateNonEmpty,
 			),
 		}),
-		bindOptionalQuery2: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "optionalQuery2",
+		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
+			field: "numberIntInQuery",
 			location: "query",
-			parseValue: knownParsers.float32_in_query,
-			validateValue: newCompositeValidator[[]string, float32](
+			parseValue: knownParsers.int32_in_query,
+			validateValue: newCompositeValidator[[]string, int32](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
+			field: "numberInt32InQuery",
+			location: "query",
+			parseValue: knownParsers.int32_in_query,
+			validateValue: newCompositeValidator[[]string, int32](
+				validateNonEmpty,
+			),
+		}),
+		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
+			field: "numberInt64InQuery",
+			location: "query",
+			parseValue: knownParsers.int64_in_query,
+			validateValue: newCompositeValidator[[]string, int64](
+				validateNonEmpty,
 			),
 		}),
 	}

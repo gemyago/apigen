@@ -9,12 +9,12 @@ import (
 
 func newErrorHandlingController() *handlers.ErrorHandlingController {
 	return handlers.BuildErrorHandlingController().
-		HandleParsingErrors.With(
-		func(_ context.Context, _ *handlers.ErrorHandlingParsingErrorsRequest) error {
+		HandleErrorHandlingParsingErrors.With(
+		func(_ context.Context, _ *handlers.ErrorHandlingErrorHandlingParsingErrorsRequest) error {
 			return errors.New("not implemented")
 		}).
-		HandleValidationErrors.With(
-		func(ctx context.Context, ehver *handlers.ErrorHandlingValidationErrorsRequest) error {
+		HandleErrorHandlingValidationErrors.With(
+		func(ctx context.Context, ehver *handlers.ErrorHandlingErrorHandlingValidationErrorsRequest) error {
 			return errors.New("not implemented")
 		}).
 		Finalize()

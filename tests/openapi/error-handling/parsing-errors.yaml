@@ -1,6 +1,6 @@
 get:
   summary: API to simulate and test parsing errors
-  operationId: parsingErrors
+  operationId: errorHandlingParsingErrors
   tags:
     - error-handling
   parameters:
