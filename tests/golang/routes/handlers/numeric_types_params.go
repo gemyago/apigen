@@ -553,6 +553,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
+				newMinMaxValueValidator[[]string, float32](100.01, false, true),
 			),
 		}),
 		bindOptionalNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
@@ -560,6 +561,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.float32_in_query,
 			validateValue: newCompositeValidator[[]string, float32](
+				newMinMaxValueValidator[[]string, float32](200.02, false, true),
 			),
 		}),
 		bindOptionalNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
@@ -567,6 +569,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.float64_in_query,
 			validateValue: newCompositeValidator[[]string, float64](
+				newMinMaxValueValidator[[]string, float64](300.03, false, true),
 			),
 		}),
 		bindOptionalNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
@@ -574,6 +577,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.int32_in_query,
 			validateValue: newCompositeValidator[[]string, int32](
+				newMinMaxValueValidator[[]string, int32](400, false, true),
 			),
 		}),
 		bindOptionalNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
@@ -581,6 +585,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.int32_in_query,
 			validateValue: newCompositeValidator[[]string, int32](
+				newMinMaxValueValidator[[]string, int32](500, false, true),
 			),
 		}),
 		bindOptionalNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
@@ -588,6 +593,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation() *paramsParserNu
 			location: "query",
 			parseValue: knownParsers.int64_in_query,
 			validateValue: newCompositeValidator[[]string, int64](
+				newMinMaxValueValidator[[]string, int64](600, false, true),
 			),
 		}),
 	}

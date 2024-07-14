@@ -46,35 +46,41 @@ get:
       required: false
       schema:
         type: number
+        minimum: 100.01
     - name: optionalNumberFloatInQuery
       in: query
       required: false
       schema:
         type: number
         format: float
+        minimum: 200.02
     - name: optionalNumberDoubleInQuery
       in: query
       required: false
       schema:
         type: number
         format: double
+        minimum: 300.03
     - name: optionalNumberIntInQuery
       in: query
       required: false
       schema:
         type: integer
+        minimum: 400
     - name: optionalNumberInt32InQuery
       in: query
       required: false
       schema:
         type: integer
         format: int32
+        minimum: 500
     - name: optionalNumberInt64InQuery
       in: query
       required: false
       schema:
         type: integer
         format: int64
+        minimum: 600
   responses:
     '204':
       description: Request succeeded

@@ -365,4 +365,132 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("required-validation", func(t *testing.T) {
+		runTestCase(t, "should ignore missing optional params", func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
+				// query
+				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
+				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
+				NumberDoubleInQuery: fake.Float64(5, 403, 1000),
+				NumberIntInQuery:    fake.Int32Between(500, 1000),
+				NumberInt32InQuery:  fake.Int32Between(600, 1000),
+				NumberInt64InQuery:  fake.Int64Between(700, 1000),
+			}
+
+			buildQuery := func(wantReq *handlers.NumericTypesNumericTypesRequiredValidationRequest) url.Values {
+				query := url.Values{}
+				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
+				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
+				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				return query
+			}
+
+			return testCase{
+				path:  "/numeric-types/required-validation",
+				query: buildQuery(wantReq),
+				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
+					assert.Equal(t, wantReq, testActions.numericTypesRequiredValidation.calls[0].params)
+				},
+			}
+		})
+		runTestCase(t, "should parse optional params", func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
+				// query
+				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
+				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
+				NumberDoubleInQuery: fake.Float64(5, 403, 1000),
+				NumberIntInQuery:    fake.Int32Between(500, 1000),
+				NumberInt32InQuery:  fake.Int32Between(600, 1000),
+				NumberInt64InQuery:  fake.Int64Between(700, 1000),
+
+				OptionalNumberAnyInQuery:    fake.Float32(5, 101, 1000),
+				OptionalNumberFloatInQuery:  fake.Float32(5, 202, 1000),
+				OptionalNumberDoubleInQuery: fake.Float64(5, 303, 1000),
+				OptionalNumberIntInQuery:    fake.Int32Between(400, 1000),
+				OptionalNumberInt32InQuery:  fake.Int32Between(500, 1000),
+				OptionalNumberInt64InQuery:  fake.Int64Between(600, 1000),
+			}
+
+			buildQuery := func(wantReq *handlers.NumericTypesNumericTypesRequiredValidationRequest) url.Values {
+				query := url.Values{}
+				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
+				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
+				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				query.Add("optionalNumberAnyInQuery", fmt.Sprint(wantReq.OptionalNumberAnyInQuery))
+				query.Add("optionalNumberFloatInQuery", fmt.Sprint(wantReq.OptionalNumberFloatInQuery))
+				query.Add("optionalNumberDoubleInQuery", fmt.Sprint(wantReq.OptionalNumberDoubleInQuery))
+				query.Add("optionalNumberIntInQuery", fmt.Sprint(wantReq.OptionalNumberIntInQuery))
+				query.Add("optionalNumberInt32InQuery", fmt.Sprint(wantReq.OptionalNumberInt32InQuery))
+				query.Add("optionalNumberInt64InQuery", fmt.Sprint(wantReq.OptionalNumberInt64InQuery))
+				return query
+			}
+
+			return testCase{
+				path:  "/numeric-types/required-validation",
+				query: buildQuery(wantReq),
+				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
+					assert.Equal(t, wantReq, testActions.numericTypesRequiredValidation.calls[0].params)
+				},
+			}
+		})
+		runTestCase(t, "should validate optional params", func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
+				// query
+				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
+				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
+				NumberDoubleInQuery: fake.Float64(5, 403, 1000),
+				NumberIntInQuery:    fake.Int32Between(500, 1000),
+				NumberInt32InQuery:  fake.Int32Between(600, 1000),
+				NumberInt64InQuery:  fake.Int64Between(700, 1000),
+
+				OptionalNumberAnyInQuery:    fake.Float32(5, 1, 100),
+				OptionalNumberFloatInQuery:  fake.Float32(5, 1, 200),
+				OptionalNumberDoubleInQuery: fake.Float64(5, 1, 300),
+				OptionalNumberIntInQuery:    fake.Int32Between(1, 399),
+				OptionalNumberInt32InQuery:  fake.Int32Between(1, 499),
+				OptionalNumberInt64InQuery:  fake.Int64Between(1, 599),
+			}
+
+			buildQuery := func(wantReq *handlers.NumericTypesNumericTypesRequiredValidationRequest) url.Values {
+				query := url.Values{}
+				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
+				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
+				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				query.Add("optionalNumberAnyInQuery", fmt.Sprint(wantReq.OptionalNumberAnyInQuery))
+				query.Add("optionalNumberFloatInQuery", fmt.Sprint(wantReq.OptionalNumberFloatInQuery))
+				query.Add("optionalNumberDoubleInQuery", fmt.Sprint(wantReq.OptionalNumberDoubleInQuery))
+				query.Add("optionalNumberIntInQuery", fmt.Sprint(wantReq.OptionalNumberIntInQuery))
+				query.Add("optionalNumberInt32InQuery", fmt.Sprint(wantReq.OptionalNumberInt32InQuery))
+				query.Add("optionalNumberInt64InQuery", fmt.Sprint(wantReq.OptionalNumberInt64InQuery))
+				return query
+			}
+
+			return testCase{
+				path:  "/numeric-types/required-validation",
+				query: buildQuery(wantReq),
+				expect: expectErrors(
+					[]handlers.BindingError{
+						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+					},
+				),
+			}
+		})
+	})
 }
