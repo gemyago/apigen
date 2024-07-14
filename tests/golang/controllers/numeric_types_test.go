@@ -193,5 +193,76 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
+
+		runTestCase(t, "should validate max range", func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
+				// path
+				NumberAny:    fake.Float32(5, 201, 1000),
+				NumberFloat:  fake.Float32(5, 302, 1000),
+				NumberDouble: fake.Float64(5, 403, 1000),
+				NumberInt:    fake.Int32Between(500, 1000),
+				NumberInt32:  fake.Int32Between(600, 1000),
+				NumberInt64:  fake.Int64Between(700, 1000),
+
+				// query
+				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
+				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
+				NumberDoubleInQuery: fake.Float64(5, 403, 1000),
+				NumberIntInQuery:    fake.Int32Between(500, 1000),
+				NumberInt32InQuery:  fake.Int32Between(600, 1000),
+				NumberInt64InQuery:  fake.Int64Between(700, 1000),
+			}
+			return testCase{
+				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				query: buildQuery(wantReq),
+				expect: expectErrors(
+					[]handlers.BindingError{
+						// path
+						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberDouble", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberInt", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberInt32", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberInt64", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+
+						// query
+						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+					},
+				),
+			}
+		})
+		runTestCase(t, "should allow min inclusive values by default", func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
+				// path
+				NumberAny:    200.02,
+				NumberFloat:  300.03,
+				NumberDouble: 400.04,
+				NumberInt:    500,
+				NumberInt32:  600,
+				NumberInt64:  700,
+
+				// query
+				NumberAnyInQuery:    200.02,
+				NumberFloatInQuery:  300.03,
+				NumberDoubleInQuery: 400.04,
+				NumberIntInQuery:    500,
+				NumberInt32InQuery:  600,
+				NumberInt64InQuery:  700,
+			}
+
+			return testCase{
+				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				query: buildQuery(wantReq),
+				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
+					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation.calls[0].params)
+				},
+			}
+		})
 	})
 }
