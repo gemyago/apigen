@@ -1,0 +1,38 @@
+get:
+  summary: API to test string types pattern validation
+  operationId: stringTypesPatternValidation
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^\d{10}$'
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        pattern: '^\d{20}$'
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        pattern: '^\d{10}$'
+    - name: customFormatStrInQuery
+      in: path
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        pattern: '^\d{20}$'
+  responses:
+    '204':
+      description: Request succeeded

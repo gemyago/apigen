@@ -185,11 +185,7 @@ func readPathValue(key string, router httpRouter, req *http.Request) optionalVal
 
 func readQueryValue(key string, values url.Values) optionalVal[[]string] {
 	if values.Has(key) {
-		value := values[key]
-		if len(value) == 1 && value[0] == "" {
-			return optionalVal[[]string]{}
-		}
-		return optionalVal[[]string]{value: value, assigned: true}
+		return optionalVal[[]string]{value: values[key], assigned: true}
 	}
 	return optionalVal[[]string]{}
 }
@@ -235,10 +231,15 @@ func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.F
 }
 
 type knownParsersDef struct {
-	int32_in_path    rawValueParser[string, int32]
-	int64_in_path    rawValueParser[string, int64]
-	float32_in_path  rawValueParser[string, float32]
-	float64_in_path  rawValueParser[string, float64]
+	// path
+	string_in_path  rawValueParser[string, string]
+	int32_in_path   rawValueParser[string, int32]
+	int64_in_path   rawValueParser[string, int64]
+	float32_in_path rawValueParser[string, float32]
+	float64_in_path rawValueParser[string, float64]
+
+	// query
+	string_in_query  rawValueParser[[]string, string]
 	int32_in_query   rawValueParser[[]string, int32]
 	int64_in_query   rawValueParser[[]string, int64]
 	float32_in_query rawValueParser[[]string, float32]

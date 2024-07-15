@@ -16,6 +16,10 @@ paths:
     $ref: "./string-types/parsing.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
+  /string-types/pattern-validation/{unformattedStr}/{customFormatStr}:
+    $ref: "./string-types/pattern-validation.yaml"
+  /string-types/required-validation:
+    $ref: "./string-types/required-validation.yaml"
 
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
