@@ -257,10 +257,27 @@ func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, erro
 }
 
 var knownParsers = knownParsersDef{
-	int32_in_path:    newStringToNumberParser[int32](32, parseDecInt),
-	int64_in_path:    newStringToNumberParser[int64](64, parseDecInt),
-	float32_in_path:  newStringToNumberParser[float32](32, parseFloat),
-	float64_in_path:  newStringToNumberParser(64, strconv.ParseFloat),
+	// path
+	string_in_path: func(ov optionalVal[string], s *string) error {
+		if !ov.assigned {
+			return nil
+		}
+		*s = ov.value
+		return nil
+	},
+	int32_in_path:   newStringToNumberParser[int32](32, parseDecInt),
+	int64_in_path:   newStringToNumberParser[int64](64, parseDecInt),
+	float32_in_path: newStringToNumberParser[float32](32, parseFloat),
+	float64_in_path: newStringToNumberParser(64, strconv.ParseFloat),
+
+	// query
+	string_in_query: func(ov optionalVal[[]string], s *string) error {
+		if !ov.assigned {
+			return nil
+		}
+		*s = ov.value[0]
+		return nil
+	},
 	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
 	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
 	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
