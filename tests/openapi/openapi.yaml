@@ -11,6 +11,10 @@ info:
 servers:
   - url: http://localhost:8080/v1
 paths:
+  # string-types routes
+  /string-types/parsing/{unformattedStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/parsing.yaml"
+
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/parsing.yaml"

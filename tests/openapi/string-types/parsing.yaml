@@ -1,0 +1,53 @@
+get:
+  summary: API to test string types parsing
+  operationId: stringTypesParsing
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: byteStr
+      in: path
+      required: true
+      schema:
+        type: string
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+    
+  responses:
+    '204':
+      description: Request succeeded
