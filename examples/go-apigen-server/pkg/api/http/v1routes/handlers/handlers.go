@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"golang.org/x/exp/constraints"
 )
@@ -233,6 +234,8 @@ func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.F
 type knownParsersDef struct {
 	// path
 	string_in_path  rawValueParser[string, string]
+	date_in_path    rawValueParser[string, time.Time]
+	time_in_path    rawValueParser[string, time.Time]
 	int32_in_path   rawValueParser[string, int32]
 	int64_in_path   rawValueParser[string, int64]
 	float32_in_path rawValueParser[string, float32]
@@ -240,6 +243,8 @@ type knownParsersDef struct {
 
 	// query
 	string_in_query  rawValueParser[[]string, string]
+	date_in_query    rawValueParser[[]string, time.Time]
+	time_in_query    rawValueParser[[]string, time.Time]
 	int32_in_query   rawValueParser[[]string, int32]
 	int64_in_query   rawValueParser[[]string, int64]
 	float32_in_query rawValueParser[[]string, float32]

@@ -21,16 +21,19 @@ get:
       required: true
       schema:
         type: string
+        format: date
     - name: dateTimeStr
       in: path
       required: true
       schema:
         type: string
+        format: date-time
     - name: byteStr
       in: path
       required: true
       schema:
         type: string
+        format: byte
 
     # params in query
     - name: unformattedStrInQuery
@@ -49,16 +52,19 @@ get:
       required: true
       schema:
         type: string
+        format: date
     - name: dateTimeStrInQuery
       in: query
       required: true
       schema:
         type: string
+        format: date-time
     - name: byteStrInQuery
       in: query
       required: true
       schema:
         type: string
+        format: byte
     
   responses:
     '204':

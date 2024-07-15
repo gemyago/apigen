@@ -2,7 +2,11 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 )
+
+// Below is to workaround unused imports
+var _ = time.Time{}
 
 type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
 	bindPathParam1 requestParamBinder[string, float32]

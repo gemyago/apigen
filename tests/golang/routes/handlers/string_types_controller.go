@@ -1,15 +1,22 @@
 package handlers
 
+import (
+  "time"
+)
+
+// Below is to workaround unused imports
+var _ = time.Time{}
+
 type StringTypesStringTypesParsingRequest struct {
 	UnformattedStr string
 	CustomFormatStr string
-	DateStr string
-	DateTimeStr string
+	DateStr time.Time
+	DateTimeStr time.Time
 	ByteStr string
 	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
-	DateStrInQuery string
-	DateTimeStrInQuery string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
 }
 

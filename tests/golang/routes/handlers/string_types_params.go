@@ -2,18 +2,22 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 )
+
+// Below is to workaround unused imports
+var _ = time.Time{}
 
 type paramsParserStringTypesStringTypesParsing struct {
 	bindUnformattedStr requestParamBinder[string, string]
 	bindCustomFormatStr requestParamBinder[string, string]
-	bindDateStr requestParamBinder[string, string]
-	bindDateTimeStr requestParamBinder[string, string]
+	bindDateStr requestParamBinder[string, time.Time]
+	bindDateTimeStr requestParamBinder[string, time.Time]
 	bindByteStr requestParamBinder[string, string]
 	bindUnformattedStrInQuery requestParamBinder[[]string, string]
 	bindCustomFormatStrInQuery requestParamBinder[[]string, string]
-	bindDateStrInQuery requestParamBinder[[]string, string]
-	bindDateTimeStrInQuery requestParamBinder[[]string, string]
+	bindDateStrInQuery requestParamBinder[[]string, time.Time]
+	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
 }
 
@@ -54,19 +58,19 @@ func newParamsParserStringTypesStringTypesParsing() *paramsParserStringTypesStri
 				validateNonEmpty,
 			),
 		}),
-		bindDateStr: newRequestParamBinder(binderParams[string, string]{
+		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
 			field: "dateStr",
 			location: "path",
-			parseValue: knownParsers.string_in_path,
-			validateValue: newCompositeValidator[string, string](
+			parseValue: knownParsers.date_in_path,
+			validateValue: newCompositeValidator[string, time.Time](
 				validateNonEmpty,
 			),
 		}),
-		bindDateTimeStr: newRequestParamBinder(binderParams[string, string]{
+		bindDateTimeStr: newRequestParamBinder(binderParams[string, time.Time]{
 			field: "dateTimeStr",
 			location: "path",
-			parseValue: knownParsers.string_in_path,
-			validateValue: newCompositeValidator[string, string](
+			parseValue: knownParsers.time_in_path,
+			validateValue: newCompositeValidator[string, time.Time](
 				validateNonEmpty,
 			),
 		}),
@@ -94,19 +98,19 @@ func newParamsParserStringTypesStringTypesParsing() *paramsParserStringTypesStri
 				validateNonEmpty,
 			),
 		}),
-		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "dateStrInQuery",
 			location: "query",
-			parseValue: knownParsers.string_in_query,
-			validateValue: newCompositeValidator[[]string, string](
+			parseValue: knownParsers.date_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 				validateNonEmpty,
 			),
 		}),
-		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "dateTimeStrInQuery",
 			location: "query",
-			parseValue: knownParsers.string_in_query,
-			validateValue: newCompositeValidator[[]string, string](
+			parseValue: knownParsers.time_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 				validateNonEmpty,
 			),
 		}),

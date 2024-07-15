@@ -2,11 +2,15 @@ package {{package}}
 
 import (
 	"net/http"
+	"time"
 	{{#hasModel}}
 
 	"{{invokerPackage}}/models"
 {{/hasModel}}
 )
+
+// Below is to workaround unused imports
+var _ = time.Time{}
 
 {{#operations}}
 {{#operation}}
@@ -41,7 +45,7 @@ func newParamsParser{{baseName}}{{operationId}}() *paramsParser{{baseName}}{{ope
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
-			parseValue: {{#isBodyParam}}parseJsonPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}knownParsers.{{dataType}}_in_{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}{{/isBodyParam}},
+			parseValue: {{#isBodyParam}}parseJsonPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}_in_{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}{{/isBodyParam}},
 			validateValue: newCompositeValidator[{{>params/binder-types}}]({{#required}}
 				validateNonEmpty,{{/required}}{{#minimum}}
 				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}

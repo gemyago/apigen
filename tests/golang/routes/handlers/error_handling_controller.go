@@ -1,5 +1,12 @@
 package handlers
 
+import (
+  "time"
+)
+
+// Below is to workaround unused imports
+var _ = time.Time{}
+
 type ErrorHandlingErrorHandlingParsingErrorsRequest struct {
 	PathParam1 float32
 	PathParam2 float32

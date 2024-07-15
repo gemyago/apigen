@@ -1,10 +1,16 @@
 package {{package}}
 
-{{#hasModel}}import (
+import (
+  "time"
+	{{#hasModel}}
+
 	"{{invokerPackage}}/models"
+{{/hasModel}}
 )
 
-{{/hasModel}}
+// Below is to workaround unused imports
+var _ = time.Time{}
+
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}

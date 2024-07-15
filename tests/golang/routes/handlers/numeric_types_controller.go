@@ -1,5 +1,12 @@
 package handlers
 
+import (
+  "time"
+)
+
+// Below is to workaround unused imports
+var _ = time.Time{}
+
 type NumericTypesNumericTypesParsingRequest struct {
 	NumberAny float32
 	NumberFloat float32

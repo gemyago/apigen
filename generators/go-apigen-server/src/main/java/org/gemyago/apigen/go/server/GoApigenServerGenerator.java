@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
+import org.openapitools.codegen.templating.mustache.CamelCaseAndSanitizeLambda;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
 
 import com.google.common.collect.ImmutableMap;
@@ -127,6 +128,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "handlers.mustache",
         apiPackage,
         "handlers.go"));
+
+    typeMapping.put("date", "time.Time");
   }
 
   @Override

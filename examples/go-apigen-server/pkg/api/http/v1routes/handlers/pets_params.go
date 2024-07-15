@@ -2,9 +2,13 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
+
+// Below is to workaround unused imports
+var _ = time.Time{}
 
 type paramsParserPetsCreatePet struct {
 	bindPayload requestParamBinder[*http.Request, models.Pet]
