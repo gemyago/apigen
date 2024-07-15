@@ -15,59 +15,17 @@ import (
 func TestNumericTypes(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func(testActions *numericTypesControllerTestActions) *routerAdapter {
+	setupRouter := func() (*numericTypesControllerTestActions, http.Handler) {
+		testActions := &numericTypesControllerTestActions{}
 		controller := newNumericTypesController(testActions)
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
 		handlers.MountNumericTypesRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
-		return router
+		return testActions, router.mux
 	}
 
-	type expectFn func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder)
-
-	type testCase struct {
-		path   string
-		query  url.Values
-		expect expectFn
-	}
-
-	expectErrors := func(wantErrors []handlers.BindingError) expectFn {
-		return func(
-			t *testing.T,
-			testActions *numericTypesControllerTestActions,
-			recorder *httptest.ResponseRecorder,
-		) {
-			assert.Equal(t, 400, recorder.Code)
-			assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
-			gotErrors := unmarshalBindingErrors(t, recorder.Body)
-			if !assert.Len(t, gotErrors.Errors, len(wantErrors)) {
-				return
-			}
-			for _, fe := range wantErrors {
-				assertFieldError(t, gotErrors, fe.Location, fe.Field, fe.Code)
-			}
-		}
-	}
-
-	runTestCase := func(t *testing.T, name string, tc func() testCase) {
-		t.Run(name, func(t *testing.T) {
-			tc := tc()
-			testActions := &numericTypesControllerTestActions{}
-			router := setupRouter(testActions)
-			testReq := httptest.NewRequest(
-				"GET",
-				tc.path,
-				http.NoBody,
-			)
-			if len(tc.query) != 0 {
-				testReq.URL.RawQuery = tc.query.Encode()
-			}
-			recorder := httptest.NewRecorder()
-			router.mux.ServeHTTP(recorder, testReq)
-			tc.expect(t, testActions, recorder)
-		})
-	}
+	type testCase = routeTestCase[*numericTypesControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
 		randomReq := func() *handlers.NumericTypesNumericTypesParsingRequest {
@@ -89,8 +47,7 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  fake.Int64(),
 			}
 		}
-
-		runTestCase(t, "should parse and bind valid values", func() testCase {
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() routeTestCase[*numericTypesControllerTestActions] {
 			wantReq := randomReq()
 			query := url.Values{}
 			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
@@ -100,7 +57,7 @@ func TestNumericTypes(t *testing.T) {
 			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
 			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
 
-			return testCase{
+			return routeTestCase[*numericTypesControllerTestActions]{
 				path:  fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				query: query,
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
@@ -123,7 +80,7 @@ func TestNumericTypes(t *testing.T) {
 			return query
 		}
 
-		runTestCase(t, "should validate min range", func() testCase {
+		runRouteTestCase(t, "should validate min range", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
 				// path
 				NumberAny:    fake.Float32(5, 10, 100),
@@ -144,7 +101,7 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -165,7 +122,7 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
-		runTestCase(t, "should allow min inclusive values by default", func() testCase {
+		runRouteTestCase(t, "should allow min inclusive values by default", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
 				// path
 				NumberAny:    100.01,
@@ -194,7 +151,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 
-		runTestCase(t, "should validate max range", func() testCase {
+		runRouteTestCase(t, "should validate max range", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
 				// path
 				NumberAny:    fake.Float32(5, 201, 1000),
@@ -215,7 +172,7 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -236,7 +193,7 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
-		runTestCase(t, "should allow max inclusive values by default", func() testCase {
+		runRouteTestCase(t, "should allow max inclusive values by default", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationRequest{
 				// path
 				NumberAny:    200.02,
@@ -278,7 +235,7 @@ func TestNumericTypes(t *testing.T) {
 			return query
 		}
 
-		runTestCase(t, "should not allow min inclusive values", func() testCase {
+		runRouteTestCase(t, "should not allow min inclusive values", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest{
 				// path
 				NumberAny:    100.01,
@@ -300,7 +257,7 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -321,7 +278,7 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
-		runTestCase(t, "should not allow max inclusive values", func() testCase {
+		runRouteTestCase(t, "should not allow max inclusive values", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest{
 				// path
 				NumberAny:    200.02,
@@ -343,7 +300,7 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -367,7 +324,7 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("required-validation", func(t *testing.T) {
-		runTestCase(t, "should ignore missing optional params", func() testCase {
+		runRouteTestCase(t, "should ignore missing optional params", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
@@ -398,7 +355,7 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
-		runTestCase(t, "should ignore empty optional params", func() testCase {
+		runRouteTestCase(t, "should ignore empty optional params", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
@@ -436,7 +393,7 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
-		runTestCase(t, "should parse optional params", func() testCase {
+		runRouteTestCase(t, "should parse optional params", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
@@ -480,7 +437,7 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
-		runTestCase(t, "should validate optional params", func() testCase {
+		runRouteTestCase(t, "should validate optional params", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
@@ -518,7 +475,7 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(wantReq),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
 						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
@@ -530,7 +487,7 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
-		runTestCase(t, "should validate required empty params", func() testCase {
+		runRouteTestCase(t, "should validate required empty params", setupRouter, func() testCase {
 			buildQuery := func() url.Values {
 				query := url.Values{}
 				query.Add("numberAnyInQuery", "")
@@ -545,14 +502,14 @@ func TestNumericTypes(t *testing.T) {
 			return testCase{
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(),
-				expect: expectErrors(
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 					},
 				),
 			}
