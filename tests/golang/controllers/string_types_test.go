@@ -162,7 +162,7 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(), fake.Lorem().Word(), originalReq.ByteStr),
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.BindingError{

@@ -362,7 +362,7 @@ type BindingError struct {
 }
 
 func (be BindingError) Error() string {
-	return fmt.Sprintf("field %s (in %s) error: %v", be.Field, be.Location, be.Err)
+	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
 }
 
 type AggregatedBindingError struct {
@@ -426,6 +426,26 @@ func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 		}
 		if !isMin && ((exclusive && tv >= threshold) || (!exclusive && tv > threshold)) {
 			return fmt.Errorf("value %v is greater than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
+		}
+
+		return nil
+	}
+}
+
+func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
+	threshold int,
+	isMin bool,
+) valueValidator[TRawVal, TTargetVal] {
+	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
+		if !ov.assigned {
+			return nil
+		}
+
+		if isMin && len(tv) < threshold {
+			return fmt.Errorf("value %v has length less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
+		}
+		if !isMin && len(tv) > threshold {
+			return fmt.Errorf("value %v has length more than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
 		}
 
 		return nil
