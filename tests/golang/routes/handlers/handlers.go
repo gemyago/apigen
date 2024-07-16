@@ -441,11 +441,12 @@ func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
 			return nil
 		}
 
-		if isMin && len(tv) < threshold {
-			return fmt.Errorf("value %v has length less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
+		targetLen := len(tv)
+		if isMin && targetLen < threshold {
+			return fmt.Errorf("value %v has length (%d) less than minimum %v: %w", tv, targetLen, threshold, ErrInvalidValueOutOfRange)
 		}
-		if !isMin && len(tv) > threshold {
-			return fmt.Errorf("value %v has length more than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
+		if !isMin && targetLen > threshold {
+			return fmt.Errorf("value %v has length (%d) more than maximum %v: %w", tv, targetLen, threshold, ErrInvalidValueOutOfRange)
 		}
 
 		return nil

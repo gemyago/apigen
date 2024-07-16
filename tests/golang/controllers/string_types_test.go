@@ -101,15 +101,15 @@ func TestStringTypes(t *testing.T) {
 		) *handlers.StringTypesStringTypesRangeValidationRequest {
 			req := &handlers.StringTypesStringTypesRangeValidationRequest{
 				// path
-				UnformattedStr:  fake.Lorem().Text(fake.IntBetween(10, 20)),
-				CustomFormatStr: fake.Lorem().Text(fake.IntBetween(20, 30)),
+				UnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+				CustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
 				DateStr:         fake.Time().Time(time.Now()),
 				DateTimeStr:     fake.Time().Time(time.Now()),
 				ByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
 
 				// query
-				UnformattedStrInQuery:  fake.Lorem().Text(fake.IntBetween(10, 20)),
-				CustomFormatStrInQuery: fake.Lorem().Text(fake.IntBetween(20, 30)),
+				UnformattedStrInQuery:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+				CustomFormatStrInQuery: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
 				DateStrInQuery:         fake.Time().Time(time.Now()),
 				DateTimeStrInQuery:     fake.Time().Time(time.Now()),
 				ByteStrInQuery:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
@@ -158,6 +158,36 @@ func TestStringTypes(t *testing.T) {
 				req.UnformattedStrInQuery = fake.Lorem().Text(9)
 				req.CustomFormatStrInQuery = fake.Lorem().Text(19)
 				req.ByteStrInQuery = fake.Lorem().Text(29)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]handlers.BindingError{
+						// path
+						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "byteStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+
+						// query
+						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+					},
+				),
+			}
+		})
+		runRouteTestCase(t, "should validate max length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+				req.UnformattedStr = fake.Lorem().Text(21)
+				req.CustomFormatStr = fake.Lorem().Text(31)
+				req.ByteStr = fake.Lorem().Text(41)
+
+				req.UnformattedStrInQuery = fake.Lorem().Text(21)
+				req.CustomFormatStrInQuery = fake.Lorem().Text(31)
+				req.ByteStrInQuery = fake.Lorem().Text(41)
 			})
 			query := buildQuery(originalReq)
 

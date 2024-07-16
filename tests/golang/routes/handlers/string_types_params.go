@@ -223,6 +223,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[string, string](10, true),
+				newMinMaxLengthValidator[string, string](20, false),
 			),
 		}),
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, string]{
@@ -232,6 +233,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[string, string](20, true),
+				newMinMaxLengthValidator[string, string](30, false),
 			),
 		}),
 		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
@@ -257,6 +259,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[string, string](30, true),
+				newMinMaxLengthValidator[string, string](40, false),
 			),
 		}),
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -266,6 +269,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[[]string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[[]string, string](10, true),
+				newMinMaxLengthValidator[[]string, string](20, false),
 			),
 		}),
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -275,6 +279,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[[]string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[[]string, string](20, true),
+				newMinMaxLengthValidator[[]string, string](30, false),
 			),
 		}),
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
@@ -300,6 +305,7 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 			validateValue: newCompositeValidator[[]string, string](
 				validateNonEmpty,
 				newMinMaxLengthValidator[[]string, string](30, true),
+				newMinMaxLengthValidator[[]string, string](40, false),
 			),
 		}),
 	}
