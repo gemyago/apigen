@@ -43,8 +43,8 @@ type StringTypesStringTypesRangeValidationRequest struct {
 type StringTypesStringTypesRequiredValidationRequest struct {
 	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
-	DateStrInQuery string
-	DateTimeStrInQuery string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
 	OptionalUnformattedStrInQuery string
 	OptionalCustomFormatStrInQuery string

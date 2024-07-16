@@ -12,38 +12,45 @@ get:
       required: true
       schema:
         type: string
+        minLength: 10
     - name: customFormatStrInQuery
       in: query
       required: true
       schema:
         type: string
         format: vendor-specific
+        minLength: 20
     - name: dateStrInQuery
       in: query
       required: true
       schema:
         type: string
+        format: date
     - name: dateTimeStrInQuery
       in: query
       required: true
       schema:
         type: string
+        format: date-time
     - name: byteStrInQuery
       in: query
       required: true
       schema:
         type: string
+        minLength: 30
     - name: optionalUnformattedStrInQuery
       in: query
       required: false
       schema:
         type: string
+        minLength: 10
     - name: optionalCustomFormatStrInQuery
       in: query
       required: false
       schema:
         type: string
         format: vendor-specific
+        minLength: 20
     - name: optionalDateStrInQuery
       in: query
       required: false
@@ -59,6 +66,7 @@ get:
       required: false
       schema:
         type: string
+        minLength: 30
   responses:
     '204':
       description: Request succeeded
