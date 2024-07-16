@@ -355,44 +355,6 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
-		runRouteTestCase(t, "should ignore empty optional params", setupRouter, func() testCase {
-			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
-				// query
-				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
-				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
-				NumberDoubleInQuery: fake.Float64(5, 403, 1000),
-				NumberIntInQuery:    fake.Int32Between(500, 1000),
-				NumberInt32InQuery:  fake.Int32Between(600, 1000),
-				NumberInt64InQuery:  fake.Int64Between(700, 1000),
-			}
-
-			buildQuery := func(wantReq *handlers.NumericTypesNumericTypesRequiredValidationRequest) url.Values {
-				query := url.Values{}
-				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
-				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
-				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
-				query.Add("numberAnyInQuery", "")
-				query.Add("numberFloatInQuery", "")
-				query.Add("numberDoubleInQuery", "")
-				query.Add("numberIntInQuery", "")
-				query.Add("numberInt32InQuery", "")
-				query.Add("numberInt64InQuery", "")
-
-				return query
-			}
-
-			return testCase{
-				path:  "/numeric-types/required-validation",
-				query: buildQuery(wantReq),
-				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
-					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
-					assert.Equal(t, wantReq, testActions.numericTypesRequiredValidation.calls[0].params)
-				},
-			}
-		})
 		runRouteTestCase(t, "should parse optional params", setupRouter, func() testCase {
 			wantReq := &handlers.NumericTypesNumericTypesRequiredValidationRequest{
 				// query
@@ -487,7 +449,7 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
-		runRouteTestCase(t, "should validate required empty params", setupRouter, func() testCase {
+		runRouteTestCase(t, "should validate empty params", setupRouter, func() testCase {
 			buildQuery := func() url.Values {
 				query := url.Values{}
 				query.Add("numberAnyInQuery", "")
@@ -496,6 +458,12 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberIntInQuery", "")
 				query.Add("numberInt32InQuery", "")
 				query.Add("numberInt64InQuery", "")
+				query.Add("optionalNumberAnyInQuery", "")
+				query.Add("optionalNumberFloatInQuery", "")
+				query.Add("optionalNumberDoubleInQuery", "")
+				query.Add("optionalNumberIntInQuery", "")
+				query.Add("optionalNumberInt32InQuery", "")
+				query.Add("optionalNumberInt64InQuery", "")
 				return query
 			}
 
@@ -510,6 +478,12 @@ func TestNumericTypes(t *testing.T) {
 						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "optionalNumberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 					},
 				),
 			}
