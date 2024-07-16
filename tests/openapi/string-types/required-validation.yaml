@@ -56,11 +56,13 @@ get:
       required: false
       schema:
         type: string
+        format: date
     - name: optionalDateTimeStrInQuery
       in: query
       required: false
       schema:
         type: string
+        format: date-time
     - name: optionalByteStrInQuery
       in: query
       required: false

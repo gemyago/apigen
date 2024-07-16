@@ -48,8 +48,8 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 	ByteStrInQuery string
 	OptionalUnformattedStrInQuery string
 	OptionalCustomFormatStrInQuery string
-	OptionalDateStrInQuery string
-	OptionalDateTimeStrInQuery string
+	OptionalDateStrInQuery time.Time
+	OptionalDateTimeStrInQuery time.Time
 	OptionalByteStrInQuery string
 }
 

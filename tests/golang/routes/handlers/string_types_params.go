@@ -319,8 +319,8 @@ type paramsParserStringTypesStringTypesRequiredValidation struct {
 	bindByteStrInQuery requestParamBinder[[]string, string]
 	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, string]
 	bindOptionalCustomFormatStrInQuery requestParamBinder[[]string, string]
-	bindOptionalDateStrInQuery requestParamBinder[[]string, string]
-	bindOptionalDateTimeStrInQuery requestParamBinder[[]string, string]
+	bindOptionalDateStrInQuery requestParamBinder[[]string, time.Time]
+	bindOptionalDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindOptionalByteStrInQuery requestParamBinder[[]string, string]
 }
 
@@ -403,18 +403,18 @@ func newParamsParserStringTypesStringTypesRequiredValidation() *paramsParserStri
 				newMinMaxLengthValidator[[]string, string](20, true),
 			),
 		}),
-		bindOptionalDateStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+		bindOptionalDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "optionalDateStrInQuery",
 			location: "query",
-			parseValue: knownParsers.string_in_query,
-			validateValue: newCompositeValidator[[]string, string](
+			parseValue: knownParsers.date_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 			),
 		}),
-		bindOptionalDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+		bindOptionalDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "optionalDateTimeStrInQuery",
 			location: "query",
-			parseValue: knownParsers.string_in_query,
-			validateValue: newCompositeValidator[[]string, string](
+			parseValue: knownParsers.time_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 			),
 		}),
 		bindOptionalByteStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
