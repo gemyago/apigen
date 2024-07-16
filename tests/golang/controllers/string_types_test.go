@@ -445,7 +445,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 
-		runRouteTestCase(t, "should validate invalid pattern", setupRouter, func() testCase {
+		runRouteTestCase(t, "should validate pattern", setupRouter, func() testCase {
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesPatternValidationRequest) {
 				// path
 				req.UnformattedStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 11)

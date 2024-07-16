@@ -454,7 +454,7 @@ func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
 	}
 }
 
-func newPatternValidator[TRawVal any](patternStr string) valueValidator[TRawVal, string] {
+func newPatternValidator[TRawVal any, TTargetValue string](patternStr string) valueValidator[TRawVal, string] {
 	pattern := regexp.MustCompile(patternStr)
 	return func(ov optionalVal[TRawVal], tv string) error {
 		if !ov.assigned {

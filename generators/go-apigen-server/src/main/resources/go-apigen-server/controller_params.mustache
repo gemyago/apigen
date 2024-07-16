@@ -51,7 +51,8 @@ func newParamsParser{{baseName}}{{operationId}}() *paramsParser{{baseName}}{{ope
 				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
 				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{/isDateTime}}{{/isDate}}
+				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{#pattern}}
+				newPatternValidator[{{>params/binder-types}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
 			),
 		}),
 		{{/allParams}}
