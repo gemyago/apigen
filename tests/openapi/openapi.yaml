@@ -16,7 +16,7 @@ paths:
     $ref: "./string-types/parsing.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
-  /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+  /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}:
     $ref: "./string-types/pattern-validation.yaml"
   /string-types/required-validation:
     $ref: "./string-types/required-validation.yaml"

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -388,6 +390,58 @@ func TestStringTypes(t *testing.T) {
 						{Field: "optionalByteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 					},
 				),
+			}
+		})
+	})
+
+	t.Run("pattern-validation", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesPatternValidationRequest),
+		) *handlers.StringTypesStringTypesPatternValidationRequest {
+			req := &handlers.StringTypesStringTypesPatternValidationRequest{
+				// path
+				UnformattedStr:  strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10),
+				CustomFormatStr: strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20),
+				DateStr:         fake.Time().Time(time.Now()),
+				DateTimeStr:     fake.Time().Time(time.Now()),
+
+				// query
+				UnformattedStrInQuery:  strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10),
+				CustomFormatStrInQuery: strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20),
+				DateStrInQuery:         fake.Time().Time(time.Now()),
+				DateTimeStrInQuery:     fake.Time().Time(time.Now()),
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(wantReq *handlers.StringTypesStringTypesPatternValidationRequest) url.Values {
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", wantReq.UnformattedStrInQuery)
+			query.Add("customFormatStrInQuery", wantReq.CustomFormatStrInQuery)
+			query.Add("dateStrInQuery", wantReq.DateStrInQuery.Format(time.RFC3339Nano))
+			query.Add("dateTimeStrInQuery", wantReq.DateTimeStrInQuery.Format(time.RFC3339Nano))
+			return query
+		}
+
+		runRouteTestCase(t, "should parse valid params", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+			return testCase{
+				path:  fmt.Sprintf("/string-types/pattern-validation/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano)),
+				query: query,
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code) {
+						t.Fatalf("unexpected response: %v", recorder.Body)
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = originalReq.DateStr.Truncate(24 * time.Hour)
+					wantReq.DateStrInQuery = originalReq.DateStrInQuery.Truncate(24 * time.Hour)
+					assert.Equal(t, &wantReq, testActions.StringTypesPatternValidation.calls[0].params)
+				},
 			}
 		})
 	})
