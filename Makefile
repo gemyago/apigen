@@ -93,6 +93,13 @@ tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml generator
 
 generate/golang: examples/go-apigen-server tests/golang/routes
 
+bin/golangci-lint: ./.golangci-version
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s $(shell cat $^)
+
+.PHONY: lint/golang
+lint/golang: bin/golangci-lint
+	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml ./...
+
 .PHONY: tests/golang
 tests/golang:
 	go test ./tests/golang/...
