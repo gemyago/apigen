@@ -20,6 +20,22 @@ get:
         format: vendor-specific
         minLength: 20
         maxLength: 30
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date-time
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
     - name: byteStr
       in: path
       required: true
@@ -44,6 +60,22 @@ get:
         format: vendor-specific
         minLength: 20
         maxLength: 30
+    - name: dateStrInQuery
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: dateTimeStrInQuery
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date-time
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
     - name: byteStrInQuery
       in: query
       required: true

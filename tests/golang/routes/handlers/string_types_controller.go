@@ -30,9 +30,13 @@ type StringTypesStringTypesPatternValidationRequest struct {
 type StringTypesStringTypesRangeValidationRequest struct {
 	UnformattedStr string
 	CustomFormatStr string
+	DateStr time.Time
+	DateTimeStr time.Time
 	ByteStr string
 	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
 }
 
@@ -57,14 +61,14 @@ type StringTypesController struct {
 	// Response type: none
 	StringTypesParsing httpHandlerFactory
 
-	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}
+	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesPatternValidationRequest,
 	//
 	// Response type: none
 	StringTypesPatternValidation httpHandlerFactory
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{byteStr}
+	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
@@ -87,14 +91,14 @@ type StringTypesControllerBuilder struct {
 	// Response type: none
 	HandleStringTypesParsing actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesParsingRequest]
 
-	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}
+	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesPatternValidationRequest,
 	//
 	// Response type: none
 	HandleStringTypesPatternValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesPatternValidationRequest]
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{byteStr}
+	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
@@ -128,13 +132,13 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleStringTypesParsing.voidResult = true
 	controllerBuilder.HandleStringTypesParsing.paramsParser = newParamsParserStringTypesStringTypesParsing()
 
-	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}
+	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesPatternValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesPatternValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesPatternValidation.voidResult = true
 	controllerBuilder.HandleStringTypesPatternValidation.paramsParser = newParamsParserStringTypesStringTypesPatternValidation()
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{byteStr}
+	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesRangeValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesRangeValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesRangeValidation.voidResult = true
@@ -151,7 +155,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 
 func MountStringTypesRoutes(controller *StringTypesController, app *httpApp) {
 	app.router.HandleRoute("GET", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
-	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}", controller.StringTypesPatternValidation(app))
-	app.router.HandleRoute("GET", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{byteStr}", controller.StringTypesRangeValidation(app))
+	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesPatternValidation(app))
+	app.router.HandleRoute("GET", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/string-types/required-validation", controller.StringTypesRequiredValidation(app))
 }

@@ -94,4 +94,90 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("range-validation", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesRangeValidationRequest),
+		) *handlers.StringTypesStringTypesRangeValidationRequest {
+			req := &handlers.StringTypesStringTypesRangeValidationRequest{
+				// path
+				UnformattedStr:  fake.Lorem().Text(fake.IntBetween(10, 20)),
+				CustomFormatStr: fake.Lorem().Text(fake.IntBetween(20, 30)),
+				DateStr:         fake.Time().Time(time.Now()),
+				DateTimeStr:     fake.Time().Time(time.Now()),
+				ByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+
+				// query
+				UnformattedStrInQuery:  fake.Lorem().Text(fake.IntBetween(10, 20)),
+				CustomFormatStrInQuery: fake.Lorem().Text(fake.IntBetween(20, 30)),
+				DateStrInQuery:         fake.Time().Time(time.Now()),
+				DateTimeStrInQuery:     fake.Time().Time(time.Now()),
+				ByteStrInQuery:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(wantReq *handlers.StringTypesStringTypesRangeValidationRequest) url.Values {
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", wantReq.UnformattedStrInQuery)
+			query.Add("customFormatStrInQuery", wantReq.CustomFormatStrInQuery)
+			query.Add("dateStrInQuery", wantReq.DateStrInQuery.Format(time.RFC3339Nano))
+			query.Add("dateTimeStrInQuery", wantReq.DateTimeStrInQuery.Format(time.RFC3339Nano))
+			query.Add("byteStrInQuery", wantReq.ByteStrInQuery)
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code) {
+						t.Fatalf("unexpected response: %v", recorder.Body)
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = originalReq.DateStr.Truncate(24 * time.Hour)
+					wantReq.DateStrInQuery = originalReq.DateStrInQuery.Truncate(24 * time.Hour)
+					assert.Equal(t, &wantReq, testActions.stringTypesParsing.calls[0].params)
+				},
+			}
+		})
+		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+				req.UnformattedStr = fake.Lorem().Text(9)
+				req.CustomFormatStr = fake.Lorem().Text(19)
+				req.ByteStr = fake.Lorem().Text(29)
+
+				req.UnformattedStrInQuery = fake.Lorem().Text(9)
+				req.CustomFormatStrInQuery = fake.Lorem().Text(19)
+				req.ByteStrInQuery = fake.Lorem().Text(29)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(), fake.Lorem().Word(), originalReq.ByteStr),
+				query: query,
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]handlers.BindingError{
+						// path
+						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "byteStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+
+						// query
+						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+					},
+				),
+			}
+		})
+	})
 }
