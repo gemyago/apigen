@@ -27,7 +27,7 @@ get:
         type: string
         pattern: '^\d{10}$'
     - name: customFormatStrInQuery
-      in: path
+      in: query
       required: true
       schema:
         type: string

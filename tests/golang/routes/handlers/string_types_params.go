@@ -129,7 +129,7 @@ type paramsParserStringTypesStringTypesPatternValidation struct {
 	bindUnformattedStr requestParamBinder[string, string]
 	bindCustomFormatStr requestParamBinder[string, string]
 	bindUnformattedStrInQuery requestParamBinder[[]string, string]
-	bindCustomFormatStrInQuery requestParamBinder[string, string]
+	bindCustomFormatStrInQuery requestParamBinder[[]string, string]
 }
 
 func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*StringTypesStringTypesPatternValidationRequest, error) {
@@ -138,10 +138,10 @@ func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpR
 	// path params
 	p.bindUnformattedStr(&bindingCtx, readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
 	p.bindCustomFormatStr(&bindingCtx, readPathValue("customFormatStr", router, req), &reqParams.CustomFormatStr)
-	p.bindCustomFormatStrInQuery(&bindingCtx, readPathValue("customFormatStrInQuery", router, req), &reqParams.CustomFormatStrInQuery)
 	// query params
 	query := req.URL.Query()
 	p.bindUnformattedStrInQuery(&bindingCtx, readQueryValue("unformattedStrInQuery", query), &reqParams.UnformattedStrInQuery)
+	p.bindCustomFormatStrInQuery(&bindingCtx, readQueryValue("customFormatStrInQuery", query), &reqParams.CustomFormatStrInQuery)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -171,11 +171,11 @@ func newParamsParserStringTypesStringTypesPatternValidation() *paramsParserStrin
 				validateNonEmpty,
 			),
 		}),
-		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[string, string]{
+		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			field: "customFormatStrInQuery",
-			location: "path",
-			parseValue: knownParsers.string_in_path,
-			validateValue: newCompositeValidator[string, string](
+			location: "query",
+			parseValue: knownParsers.string_in_query,
+			validateValue: newCompositeValidator[[]string, string](
 				validateNonEmpty,
 			),
 		}),
@@ -189,9 +189,9 @@ type paramsParserStringTypesStringTypesRangeValidation struct {
 	bindDateTimeStr requestParamBinder[string, time.Time]
 	bindByteStr requestParamBinder[string, string]
 	bindUnformattedStrInQuery requestParamBinder[[]string, string]
-	bindCustomFormatStrInQuery requestParamBinder[string, string]
-	bindDateStrInQuery requestParamBinder[string, time.Time]
-	bindDateTimeStrInQuery requestParamBinder[string, time.Time]
+	bindCustomFormatStrInQuery requestParamBinder[[]string, string]
+	bindDateStrInQuery requestParamBinder[[]string, time.Time]
+	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
 }
 
@@ -204,12 +204,12 @@ func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRou
 	p.bindDateStr(&bindingCtx, readPathValue("dateStr", router, req), &reqParams.DateStr)
 	p.bindDateTimeStr(&bindingCtx, readPathValue("dateTimeStr", router, req), &reqParams.DateTimeStr)
 	p.bindByteStr(&bindingCtx, readPathValue("byteStr", router, req), &reqParams.ByteStr)
-	p.bindCustomFormatStrInQuery(&bindingCtx, readPathValue("customFormatStrInQuery", router, req), &reqParams.CustomFormatStrInQuery)
-	p.bindDateStrInQuery(&bindingCtx, readPathValue("dateStrInQuery", router, req), &reqParams.DateStrInQuery)
-	p.bindDateTimeStrInQuery(&bindingCtx, readPathValue("dateTimeStrInQuery", router, req), &reqParams.DateTimeStrInQuery)
 	// query params
 	query := req.URL.Query()
 	p.bindUnformattedStrInQuery(&bindingCtx, readQueryValue("unformattedStrInQuery", query), &reqParams.UnformattedStrInQuery)
+	p.bindCustomFormatStrInQuery(&bindingCtx, readQueryValue("customFormatStrInQuery", query), &reqParams.CustomFormatStrInQuery)
+	p.bindDateStrInQuery(&bindingCtx, readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
+	p.bindDateTimeStrInQuery(&bindingCtx, readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
 	p.bindByteStrInQuery(&bindingCtx, readQueryValue("byteStrInQuery", query), &reqParams.ByteStrInQuery)
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -264,27 +264,27 @@ func newParamsParserStringTypesStringTypesRangeValidation() *paramsParserStringT
 				validateNonEmpty,
 			),
 		}),
-		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[string, string]{
+		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			field: "customFormatStrInQuery",
-			location: "path",
-			parseValue: knownParsers.string_in_path,
-			validateValue: newCompositeValidator[string, string](
+			location: "query",
+			parseValue: knownParsers.string_in_query,
+			validateValue: newCompositeValidator[[]string, string](
 				validateNonEmpty,
 			),
 		}),
-		bindDateStrInQuery: newRequestParamBinder(binderParams[string, time.Time]{
+		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "dateStrInQuery",
-			location: "path",
-			parseValue: knownParsers.date_in_path,
-			validateValue: newCompositeValidator[string, time.Time](
+			location: "query",
+			parseValue: knownParsers.date_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 				validateNonEmpty,
 			),
 		}),
-		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[string, time.Time]{
+		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			field: "dateTimeStrInQuery",
-			location: "path",
-			parseValue: knownParsers.time_in_path,
-			validateValue: newCompositeValidator[string, time.Time](
+			location: "query",
+			parseValue: knownParsers.time_in_query,
+			validateValue: newCompositeValidator[[]string, time.Time](
 				validateNonEmpty,
 			),
 		}),

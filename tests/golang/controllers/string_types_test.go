@@ -145,7 +145,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq := *originalReq
 					wantReq.DateStr = originalReq.DateStr.Truncate(24 * time.Hour)
 					wantReq.DateStrInQuery = originalReq.DateStrInQuery.Truncate(24 * time.Hour)
-					assert.Equal(t, &wantReq, testActions.stringTypesParsing.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
 				},
 			}
 		})
