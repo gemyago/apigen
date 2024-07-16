@@ -1,0 +1,66 @@
+get:
+  summary: API to test string types pattern validation
+  operationId: stringTypesPatternValidation
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^\d{10}$'
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        pattern: '^\d{20}$'
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{1000}$' # should not be used
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date-time
+        pattern: '^\d{1000}$' # should not be used
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        pattern: '^\d{10}$'
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        pattern: '^\d{20}$'
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{1000}$' # should not be used
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+        pattern: '^\d{1000}$' # should not be used
+  responses:
+    '204':
+      description: Request succeeded

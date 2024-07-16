@@ -1,0 +1,74 @@
+get:
+  summary: API to test string types required validation
+  operationId: stringTypesRequiredValidation
+  tags:
+    - string-types
+  parameters:
+    # path params are always required
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 10
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        minLength: 20
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 30
+    - name: optionalUnformattedStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 10
+    - name: optionalCustomFormatStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        format: vendor-specific
+        minLength: 20
+    - name: optionalDateStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+    - name: optionalDateTimeStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    - name: optionalByteStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 30
+  responses:
+    '204':
+      description: Request succeeded

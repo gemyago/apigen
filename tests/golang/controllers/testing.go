@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -51,6 +54,59 @@ func newLogger() *slog.Logger {
 	return slog.New(slog.NewJSONHandler(testOutput, nil))
 }
 
+type routeTestCase[TActions any] struct {
+	path   string
+	query  url.Values
+	expect routeTestCaseExpectFn[TActions]
+}
+
+type routeTestCaseSetupFn[TActions any] func() (TActions, http.Handler)
+
+func runRouteTestCase[TActions any](
+	t *testing.T,
+	name string,
+	setupFn routeTestCaseSetupFn[TActions],
+	tc func() routeTestCase[TActions],
+) {
+	t.Run(name, func(t *testing.T) {
+		tc := tc()
+		testActions, router := setupFn()
+		testReq := httptest.NewRequest(
+			"GET",
+			tc.path,
+			http.NoBody,
+		)
+		if len(tc.query) != 0 {
+			testReq.URL.RawQuery = tc.query.Encode()
+		}
+		recorder := httptest.NewRecorder()
+		router.ServeHTTP(recorder, testReq)
+		tc.expect(t, testActions, recorder)
+	})
+}
+
+type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
+
+func expectBindingErrors[TActions any](wantErrors []handlers.BindingError) routeTestCaseExpectFn[TActions] {
+	return func(
+		t *testing.T,
+		testActions TActions,
+		recorder *httptest.ResponseRecorder,
+	) {
+		if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+			return
+		}
+		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
+		gotErrors := unmarshalBindingErrors(t, recorder.Body)
+		if !assert.Len(t, gotErrors.Errors, len(wantErrors)) {
+			return
+		}
+		for _, fe := range wantErrors {
+			assertFieldError(t, gotErrors, fe.Location, fe.Field, fe.Code)
+		}
+	}
+}
+
 func unmarshalBindingErrors(
 	t *testing.T,
 	body *bytes.Buffer,
@@ -72,9 +128,26 @@ func assertFieldError(
 ) bool {
 	for _, fieldErr := range err.Errors {
 		if fieldErr.Location == location && fieldErr.Field == field {
-			return assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code", field)
+			return assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", field)
 		}
 	}
 	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
 	return false
+}
+
+type mockActionCall[TParams any] struct {
+	params TParams
+}
+
+type mockAction[TParams any] struct {
+	calls []mockActionCall[TParams]
+}
+
+func (c *mockAction[TParams]) action(
+	_ context.Context, params TParams,
+) error {
+	c.calls = append(c.calls, mockActionCall[TParams]{
+		params: params,
+	})
+	return nil
 }

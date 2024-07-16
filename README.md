@@ -21,6 +21,14 @@ Set of features compatible with golang
 
 ## Supported OpenAPI features
 
+Strings
+|format|in|minLength|maxLength|pattern|
+|----|----|----|----|----|
+|none or custom|query,path|&check;|&check;|&check;|
+|date|query,path|-|-|-|
+|date-time|query,path|-|-|-|
+|byte|query,path|&check;|&check;|-|
+
 Numeric data types
 |type|format|in|minimum|maximum|
 |----|----|----|----|----|

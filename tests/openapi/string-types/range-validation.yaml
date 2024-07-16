@@ -1,0 +1,88 @@
+get:
+  summary: API to test string types range validation
+  operationId: stringTypesRangeValidation
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 10
+        maxLength: 20
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        minLength: 20
+        maxLength: 30
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date-time
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: byteStr
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 30
+        maxLength: 40
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 10
+        maxLength: 20
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: vendor-specific
+        minLength: 20
+        maxLength: 30
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+        minLength: 1000 # should not be used
+        maxLength: 10000 # should not be used
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 30
+        maxLength: 40
+  responses:
+    '204':
+      description: Request succeeded

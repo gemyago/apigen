@@ -11,6 +11,16 @@ info:
 servers:
   - url: http://localhost:8080/v1
 paths:
+  # string-types routes
+  /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/parsing.yaml"
+  /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/range-validation.yaml"
+  /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}:
+    $ref: "./string-types/pattern-validation.yaml"
+  /string-types/required-validation:
+    $ref: "./string-types/required-validation.yaml"
+
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/parsing.yaml"

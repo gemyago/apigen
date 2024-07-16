@@ -3,3 +3,5 @@ handlers/error_handling_params.go
 handlers/handlers.go
 handlers/numeric_types_controller.go
 handlers/numeric_types_params.go
+handlers/string_types_controller.go
+handlers/string_types_params.go

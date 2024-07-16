@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
@@ -127,6 +128,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "handlers.mustache",
         apiPackage,
         "handlers.go"));
+
+    typeMapping.put("date", "time.Time");
   }
 
   @Override
@@ -209,5 +212,14 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
     codegenParameter.vendorExtensions.put("x-codegen-param-in", parameter.getIn());
     return codegenParameter;
+  }
+
+  @Override
+  public String toRegularExpression(String pattern) {
+    if (StringUtils.isEmpty(pattern)) {
+      return pattern;
+    }
+    // Pattern is considered platform specific, so we're using as it (escaping only)
+    return pattern.replace("\\", "\\\\");
   }
 }
