@@ -93,7 +93,9 @@ func expectBindingErrors[TActions any](wantErrors []handlers.BindingError) route
 		testActions TActions,
 		recorder *httptest.ResponseRecorder,
 	) {
-		assert.Equal(t, 400, recorder.Code)
+		if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+			return
+		}
 		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
 		gotErrors := unmarshalBindingErrors(t, recorder.Body)
 		if !assert.Len(t, gotErrors.Errors, len(wantErrors)) {

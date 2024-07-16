@@ -444,5 +444,31 @@ func TestStringTypes(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should validate invalid pattern", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesPatternValidationRequest) {
+				// path
+				req.UnformattedStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10)
+				req.CustomFormatStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20)
+
+				// query
+				req.UnformattedStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10)
+				req.CustomFormatStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20)
+			})
+			query := buildQuery(originalReq)
+			return testCase{
+				path:  fmt.Sprintf("/string-types/pattern-validation/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano)),
+				query: query,
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]handlers.BindingError{
+						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValue},
+						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValue},
+
+						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValue},
+						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValue},
+					},
+				),
+			}
+		})
 	})
 }
