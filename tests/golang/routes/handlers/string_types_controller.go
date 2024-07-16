@@ -23,8 +23,12 @@ type StringTypesStringTypesParsingRequest struct {
 type StringTypesStringTypesPatternValidationRequest struct {
 	UnformattedStr string
 	CustomFormatStr string
+	DateStr time.Time
+	DateTimeStr time.Time
 	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
 }
 
 type StringTypesStringTypesRangeValidationRequest struct {

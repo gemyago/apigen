@@ -18,6 +18,20 @@ get:
         type: string
         format: vendor-specific
         pattern: '^\d{20}$'
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{1000}$' # should not be used
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date-time
+        pattern: '^\d{1000}$' # should not be used
 
     # params in query
     - name: unformattedStrInQuery
@@ -33,6 +47,20 @@ get:
         type: string
         format: vendor-specific
         pattern: '^\d{20}$'
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{1000}$' # should not be used
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+        pattern: '^\d{1000}$' # should not be used
   responses:
     '204':
       description: Request succeeded
