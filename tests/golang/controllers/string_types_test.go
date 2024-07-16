@@ -448,12 +448,12 @@ func TestStringTypes(t *testing.T) {
 		runRouteTestCase(t, "should validate invalid pattern", setupRouter, func() testCase {
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesPatternValidationRequest) {
 				// path
-				req.UnformattedStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10)
-				req.CustomFormatStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20)
+				req.UnformattedStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 11)
+				req.CustomFormatStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 21)
 
 				// query
-				req.UnformattedStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10)
-				req.CustomFormatStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20)
+				req.UnformattedStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 11)
+				req.CustomFormatStrInQuery = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 21)
 			})
 			query := buildQuery(originalReq)
 			return testCase{

@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -449,6 +450,19 @@ func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
 			return fmt.Errorf("value %v has length (%d) more than maximum %v: %w", tv, targetLen, threshold, ErrInvalidValueOutOfRange)
 		}
 
+		return nil
+	}
+}
+
+func newPatternValidator[TRawVal any](patternStr string) valueValidator[TRawVal, string] {
+	pattern := regexp.MustCompile(patternStr)
+	return func(ov optionalVal[TRawVal], tv string) error {
+		if !ov.assigned {
+			return nil
+		}
+		if !pattern.MatchString(tv) {
+			return fmt.Errorf("value %v does not match pattern %v: %w", tv, patternStr, ErrInvalidValue)
+		}
 		return nil
 	}
 }
