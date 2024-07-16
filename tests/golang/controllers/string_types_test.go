@@ -151,13 +151,13 @@ func TestStringTypes(t *testing.T) {
 		})
 		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
-				req.UnformattedStr = fake.Lorem().Text(9)
-				req.CustomFormatStr = fake.Lorem().Text(19)
-				req.ByteStr = fake.Lorem().Text(29)
+				req.UnformattedStr = fake.BinaryString().BinaryString(9)
+				req.CustomFormatStr = fake.BinaryString().BinaryString(19)
+				req.ByteStr = fake.BinaryString().BinaryString(29)
 
-				req.UnformattedStrInQuery = fake.Lorem().Text(9)
-				req.CustomFormatStrInQuery = fake.Lorem().Text(19)
-				req.ByteStrInQuery = fake.Lorem().Text(29)
+				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(9)
+				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(19)
+				req.ByteStrInQuery = fake.BinaryString().BinaryString(29)
 			})
 			query := buildQuery(originalReq)
 
@@ -177,6 +177,33 @@ func TestStringTypes(t *testing.T) {
 						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 					},
 				),
+			}
+		})
+		runRouteTestCase(t, "should allow inclusive min length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+				req.UnformattedStr = fake.BinaryString().BinaryString(10)
+				req.CustomFormatStr = fake.BinaryString().BinaryString(20)
+				req.ByteStr = fake.BinaryString().BinaryString(30)
+
+				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(10)
+				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(20)
+				req.ByteStrInQuery = fake.BinaryString().BinaryString(30)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code) {
+						t.Fatalf("unexpected response: %v", recorder.Body)
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = originalReq.DateStr.Truncate(24 * time.Hour)
+					wantReq.DateStrInQuery = originalReq.DateStrInQuery.Truncate(24 * time.Hour)
+					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
+				},
 			}
 		})
 		runRouteTestCase(t, "should validate max length", setupRouter, func() testCase {
@@ -207,6 +234,33 @@ func TestStringTypes(t *testing.T) {
 						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 					},
 				),
+			}
+		})
+		runRouteTestCase(t, "should allow inclusive max length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+				req.UnformattedStr = fake.BinaryString().BinaryString(20)
+				req.CustomFormatStr = fake.BinaryString().BinaryString(30)
+				req.ByteStr = fake.BinaryString().BinaryString(40)
+
+				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(20)
+				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(30)
+				req.ByteStrInQuery = fake.BinaryString().BinaryString(40)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code) {
+						t.Fatalf("unexpected response: %v", recorder.Body)
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = originalReq.DateStr.Truncate(24 * time.Hour)
+					wantReq.DateStrInQuery = originalReq.DateStrInQuery.Truncate(24 * time.Hour)
+					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
+				},
 			}
 		})
 	})
