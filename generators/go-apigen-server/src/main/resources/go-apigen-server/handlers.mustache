@@ -231,6 +231,66 @@ func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.F
 	}
 }
 
+func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] {
+	return func(ov optionalVal[string], t *time.Time) error {
+		if !ov.assigned {
+			return nil
+		}
+		val, err := time.Parse(time.RFC3339Nano, ov.value)
+		if err != nil {
+			return err
+		}
+		if isDateOnly {
+			val = val.Truncate(24 * time.Hour)
+		}
+		*t = val
+		return nil
+	}
+}
+
+func newStringSliceToDateTimeParser(isDateOnly bool) rawValueParser[[]string, time.Time] {
+	return func(ov optionalVal[[]string], t *time.Time) error {
+		if !ov.assigned {
+			return nil
+		}
+		val, err := time.Parse(time.RFC3339Nano, ov.value[0])
+		if err != nil {
+			return err
+		}
+		if isDateOnly {
+			val = val.Truncate(24 * time.Hour)
+		}
+		*t = val
+		return nil
+	}
+}
+
+func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error) {
+	res, err := strconv.ParseInt(str, 10, bitSize)
+	return (TInt)(res), err
+}
+
+func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) {
+	res, err := strconv.ParseFloat(str, bitSize)
+	return (TFloat)(res), err
+}
+
+func parseStringInPath(ov optionalVal[string], s *string) error {
+	if !ov.assigned {
+		return nil
+	}
+	*s = ov.value
+	return nil
+}
+
+func parseStringInQuery(ov optionalVal[[]string], s *string) error {
+	if !ov.assigned {
+		return nil
+	}
+	*s = ov.value[0]
+	return nil
+}
+
 type knownParsersDef struct {
 	// path
 	string_in_path  rawValueParser[string, string]
@@ -251,38 +311,20 @@ type knownParsersDef struct {
 	float64_in_query rawValueParser[[]string, float64]
 }
 
-func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error) {
-	res, err := strconv.ParseInt(str, 10, bitSize)
-	return (TInt)(res), err
-}
-
-func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) {
-	res, err := strconv.ParseFloat(str, bitSize)
-	return (TFloat)(res), err
-}
-
 var knownParsers = knownParsersDef{
 	// path
-	string_in_path: func(ov optionalVal[string], s *string) error {
-		if !ov.assigned {
-			return nil
-		}
-		*s = ov.value
-		return nil
-	},
+	string_in_path:  parseStringInPath,
+	date_in_path:    newStringToDateTimeParser(true),
+	time_in_path:    newStringToDateTimeParser(false),
 	int32_in_path:   newStringToNumberParser[int32](32, parseDecInt),
 	int64_in_path:   newStringToNumberParser[int64](64, parseDecInt),
 	float32_in_path: newStringToNumberParser[float32](32, parseFloat),
 	float64_in_path: newStringToNumberParser(64, strconv.ParseFloat),
 
 	// query
-	string_in_query: func(ov optionalVal[[]string], s *string) error {
-		if !ov.assigned {
-			return nil
-		}
-		*s = ov.value[0]
-		return nil
-	},
+	string_in_query:  parseStringInQuery,
+	date_in_query:    newStringSliceToDateTimeParser(true),
+	time_in_query:    newStringSliceToDateTimeParser(false),
 	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
 	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
 	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
