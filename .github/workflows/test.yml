@@ -1,0 +1,24 @@
+name: Test
+
+on: 
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+    branches:
+      - 'main'
+
+jobs:
+  build-and-test:
+    name: Lint And Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.work'
+        cache-dependency-path: 'go.work.sum'
+
+    - run: make lint
+    - run: make tests
