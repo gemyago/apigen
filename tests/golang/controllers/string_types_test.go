@@ -24,7 +24,7 @@ func TestStringTypes(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.MountStringTypesRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterStringTypesRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
