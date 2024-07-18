@@ -57,7 +57,7 @@ func NewHandler(deps HandlerDeps) http.Handler {
 	// Real world instance of the router handler will likely to have a more advanced setup
 	// below is just some simple access logs on requests processing
 	muxHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("GET %v %v\n", r.URL.String(), r.Proto)
+		log.Printf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent())
 		defer func() {
 			if r := recover(); r != nil {
 				log.Println("Request panic", r)
@@ -65,7 +65,7 @@ func NewHandler(deps HandlerDeps) http.Handler {
 		}()
 		wrapper := &responseWriterWrapper{ResponseWriter: w, statusCode: http.StatusOK}
 		mux.ServeHTTP(wrapper, r)
-		log.Printf("%d %v\n", wrapper.statusCode, r.URL.String())
+		log.Printf("%d %v %v\n", wrapper.statusCode, r.Method, r.URL.String())
 	})
 
 	// The httpApp provides a configuration layer of the generated routes
