@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type ServerCfg struct {
+type Cfg struct {
 	Port              int
 	IdleTimeout       time.Duration
 	ReadHeaderTimeout time.Duration
@@ -15,11 +15,11 @@ type ServerCfg struct {
 }
 
 type HTTPServerParams struct {
-	ServerCfg
+	Cfg
 	Handler http.Handler
 }
 
-// NewHTTPServer constructor factory for general use *http.Server
+// NewHTTPServer constructor factory for general use *http.Server.
 func NewHTTPServer(params HTTPServerParams) *http.Server {
 	address := fmt.Sprintf("[::]:%d", params.Port)
 	return &http.Server{

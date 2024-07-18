@@ -14,6 +14,6 @@ func NewPetsController(deps PetsControllerDeps) *handlers.PetsController {
 	return handlers.BuildPetsController().
 		HandleListPets.With(deps.Queries.ListPets).
 		HandleCreatePet.With(deps.Commands.CreatePet).
-		HandleGetPetById.With(deps.Queries.GetPetById).
+		HandleGetPetById.With(deps.Queries.GetPetByID).
 		Finalize()
 }

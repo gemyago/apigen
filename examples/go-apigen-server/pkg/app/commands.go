@@ -12,20 +12,20 @@ type Commands interface {
 }
 
 type CommandsDeps struct {
-	Storage *storage
+	Storage *Storage
 }
 
 type commandsImpl struct {
 	CommandsDeps
 }
 
-func (c *commandsImpl) CreatePet(ctx context.Context, req *handlers.PetsCreatePetRequest) error {
-	if _, ok := c.Storage.petsById[req.Payload.Id]; ok {
+func (c *commandsImpl) CreatePet(_ context.Context, req *handlers.PetsCreatePetRequest) error {
+	if _, ok := c.Storage.petsByID[req.Payload.Id]; ok {
 		return fmt.Errorf("pet %d already exists: %w", req.Payload.Id, ErrConflict)
 	}
 
 	c.Storage.allPets = append(c.Storage.allPets, req.Payload)
-	c.Storage.petsById[req.Payload.Id] = req.Payload
+	c.Storage.petsByID[req.Payload.Id] = req.Payload
 
 	return nil
 }

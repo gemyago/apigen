@@ -99,6 +99,7 @@ bin/golangci-lint: ./.golangci-version
 .PHONY: lint/golang
 lint/golang: bin/golangci-lint
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml ./...
+	cd ./examples/go-apigen-server && ../../bin/golangci-lint run --config ../../.golangci.yml ./...
 
 .PHONY: lint
 lint: lint/golang
