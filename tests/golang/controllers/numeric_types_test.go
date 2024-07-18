@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -47,25 +48,28 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  fake.Int64(),
 			}
 		}
-		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() routeTestCase[*numericTypesControllerTestActions] {
-			wantReq := randomReq()
-			query := url.Values{}
-			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
-			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
-			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				wantReq := randomReq()
+				query := url.Values{}
+				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
+				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
+				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
+				query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+				query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+				query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 
-			return routeTestCase[*numericTypesControllerTestActions]{
-				path:  fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
-				query: query,
-				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
-					assert.Equal(t, 204, recorder.Code)
-					assert.Equal(t, wantReq, testActions.numericTypesParsing.calls[0].params)
-				},
-			}
-		})
+				return routeTestCase[*numericTypesControllerTestActions]{
+					path: fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v",
+						wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
+						wantReq.NumberInt32, wantReq.NumberInt64),
+					query: query,
+					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+						assert.Equal(t, 204, recorder.Code)
+						assert.Equal(t, wantReq, testActions.numericTypesParsing.calls[0].params)
+					},
+				}
+			})
 	})
 
 	t.Run("range-validation", func(t *testing.T) {
@@ -74,9 +78,9 @@ func TestNumericTypes(t *testing.T) {
 			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
 			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+			query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+			query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+			query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 			return query
 		}
 
@@ -99,7 +103,10 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  fake.Int64Between(60, 600),
 			}
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf(
+					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
+					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -142,7 +149,10 @@ func TestNumericTypes(t *testing.T) {
 			}
 
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf(
+					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
+					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
@@ -170,7 +180,10 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  fake.Int64Between(700, 1000),
 			}
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf(
+					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
+					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -213,7 +226,10 @@ func TestNumericTypes(t *testing.T) {
 			}
 
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf(
+					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
+					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
@@ -229,9 +245,9 @@ func TestNumericTypes(t *testing.T) {
 			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
 			query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-			query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-			query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-			query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+			query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+			query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+			query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 			return query
 		}
 
@@ -255,7 +271,9 @@ func TestNumericTypes(t *testing.T) {
 			}
 
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
+					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -298,7 +316,9 @@ func TestNumericTypes(t *testing.T) {
 			}
 
 			return testCase{
-				path:  fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v", wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32, wantReq.NumberInt64),
+				path: fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v",
+					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
+					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -340,9 +360,9 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
 				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+				query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+				query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 				return query
 			}
 
@@ -378,15 +398,15 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
 				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+				query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+				query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 				query.Add("optionalNumberAnyInQuery", fmt.Sprint(wantReq.OptionalNumberAnyInQuery))
 				query.Add("optionalNumberFloatInQuery", fmt.Sprint(wantReq.OptionalNumberFloatInQuery))
 				query.Add("optionalNumberDoubleInQuery", fmt.Sprint(wantReq.OptionalNumberDoubleInQuery))
-				query.Add("optionalNumberIntInQuery", fmt.Sprint(wantReq.OptionalNumberIntInQuery))
-				query.Add("optionalNumberInt32InQuery", fmt.Sprint(wantReq.OptionalNumberInt32InQuery))
-				query.Add("optionalNumberInt64InQuery", fmt.Sprint(wantReq.OptionalNumberInt64InQuery))
+				query.Add("optionalNumberIntInQuery", strconv.FormatInt(int64(wantReq.OptionalNumberIntInQuery), 10))
+				query.Add("optionalNumberInt32InQuery", strconv.FormatInt(int64(wantReq.OptionalNumberInt32InQuery), 10))
+				query.Add("optionalNumberInt64InQuery", strconv.FormatInt(wantReq.OptionalNumberInt64InQuery, 10))
 				return query
 			}
 
@@ -422,15 +442,15 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
 				query.Add("numberDoubleInQuery", fmt.Sprint(wantReq.NumberDoubleInQuery))
-				query.Add("numberIntInQuery", fmt.Sprint(wantReq.NumberIntInQuery))
-				query.Add("numberInt32InQuery", fmt.Sprint(wantReq.NumberInt32InQuery))
-				query.Add("numberInt64InQuery", fmt.Sprint(wantReq.NumberInt64InQuery))
+				query.Add("numberIntInQuery", strconv.FormatInt(int64(wantReq.NumberIntInQuery), 10))
+				query.Add("numberInt32InQuery", strconv.FormatInt(int64(wantReq.NumberInt32InQuery), 10))
+				query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 				query.Add("optionalNumberAnyInQuery", fmt.Sprint(wantReq.OptionalNumberAnyInQuery))
 				query.Add("optionalNumberFloatInQuery", fmt.Sprint(wantReq.OptionalNumberFloatInQuery))
 				query.Add("optionalNumberDoubleInQuery", fmt.Sprint(wantReq.OptionalNumberDoubleInQuery))
-				query.Add("optionalNumberIntInQuery", fmt.Sprint(wantReq.OptionalNumberIntInQuery))
-				query.Add("optionalNumberInt32InQuery", fmt.Sprint(wantReq.OptionalNumberInt32InQuery))
-				query.Add("optionalNumberInt64InQuery", fmt.Sprint(wantReq.OptionalNumberInt64InQuery))
+				query.Add("optionalNumberIntInQuery", strconv.FormatInt(int64(wantReq.OptionalNumberIntInQuery), 10))
+				query.Add("optionalNumberInt32InQuery", strconv.FormatInt(int64(wantReq.OptionalNumberInt32InQuery), 10))
+				query.Add("optionalNumberInt64InQuery", strconv.FormatInt(wantReq.OptionalNumberInt64InQuery, 10))
 				return query
 			}
 

@@ -14,7 +14,7 @@ func newErrorHandlingController() *handlers.ErrorHandlingController {
 			return errors.New("not implemented")
 		}).
 		HandleErrorHandlingValidationErrors.With(
-		func(ctx context.Context, ehver *handlers.ErrorHandlingErrorHandlingValidationErrorsRequest) error {
+		func(_ context.Context, _ *handlers.ErrorHandlingErrorHandlingValidationErrorsRequest) error {
 			return errors.New("not implemented")
 		}).
 		Finalize()

@@ -100,6 +100,9 @@ bin/golangci-lint: ./.golangci-version
 lint/golang: bin/golangci-lint
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml ./...
 
+.PHONY: lint
+lint: lint/golang
+
 .PHONY: tests/golang
 tests/golang:
 	go test ./tests/golang/...

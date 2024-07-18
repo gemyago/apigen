@@ -58,7 +58,11 @@ func TestStringTypes(t *testing.T) {
 			query.Add("byteStrInQuery", originalReq.ByteStrInQuery)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/parsing/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
+				),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code)
@@ -80,7 +84,10 @@ func TestStringTypes(t *testing.T) {
 			query.Add("byteStrInQuery", originalReq.ByteStrInQuery)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/parsing/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(), fake.Lorem().Word(), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
+					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -137,7 +144,10 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr,
+					originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano),
+					originalReq.ByteStr),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
@@ -164,7 +174,10 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/range-validation/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -194,7 +207,10 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/range-validation/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
@@ -221,7 +237,10 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/range-validation/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.BindingError{
@@ -251,7 +270,10 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
-				path:  fmt.Sprintf("/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
+				path: fmt.Sprintf(
+					"/string-types/range-validation/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
@@ -430,7 +452,10 @@ func TestStringTypes(t *testing.T) {
 			originalReq := randomReq()
 			query := buildQuery(originalReq)
 			return testCase{
-				path:  fmt.Sprintf("/string-types/pattern-validation/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano)),
+				path: fmt.Sprintf(
+					"/string-types/pattern-validation/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano)),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
@@ -457,7 +482,10 @@ func TestStringTypes(t *testing.T) {
 			})
 			query := buildQuery(originalReq)
 			return testCase{
-				path:  fmt.Sprintf("/string-types/pattern-validation/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano), originalReq.DateTimeStr.Format(time.RFC3339Nano)),
+				path: fmt.Sprintf(
+					"/string-types/pattern-validation/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.RFC3339Nano),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano)),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.BindingError{
