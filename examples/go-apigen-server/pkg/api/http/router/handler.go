@@ -70,7 +70,7 @@ func NewHandler(deps HandlerDeps) http.Handler {
 
 	// The httpApp provides a configuration layer of the generated routes
 	// and also serves as an adapter that allows using different router implementations
-	httpApp := handlers.NewHttpApp(
+	httpApp := handlers.NewHTTPApp(
 		httpRouter{ServeMux: mux},
 		handlers.WithActionErrorHandler(handleActionError),
 	)

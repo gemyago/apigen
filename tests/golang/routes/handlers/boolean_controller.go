@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type BooleanBooleanParsingRequest struct {

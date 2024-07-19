@@ -8,7 +8,7 @@ import (
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type PetsCreatePetRequest struct {

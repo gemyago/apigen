@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserStringTypesStringTypesParsing struct {
@@ -21,7 +21,7 @@ type paramsParserStringTypesStringTypesParsing struct {
 	bindByteStrInQuery requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*StringTypesStringTypesParsingRequest, error) {
+func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesParsingRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &StringTypesStringTypesParsingRequest{}
 	// path params
@@ -136,7 +136,7 @@ type paramsParserStringTypesStringTypesPatternValidation struct {
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 }
 
-func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*StringTypesStringTypesPatternValidationRequest, error) {
+func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesPatternValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &StringTypesStringTypesPatternValidationRequest{}
 	// path params
@@ -239,7 +239,7 @@ type paramsParserStringTypesStringTypesRangeValidation struct {
 	bindByteStrInQuery requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*StringTypesStringTypesRangeValidationRequest, error) {
+func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRangeValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &StringTypesStringTypesRangeValidationRequest{}
 	// path params
@@ -368,7 +368,7 @@ type paramsParserStringTypesStringTypesRequiredValidation struct {
 	bindOptionalByteStrInQuery requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*StringTypesStringTypesRequiredValidationRequest, error) {
+func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRequiredValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &StringTypesStringTypesRequiredValidationRequest{}
 	// query params

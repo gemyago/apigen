@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserBooleanBooleanParsing struct {
@@ -15,7 +15,7 @@ type paramsParserBooleanBooleanParsing struct {
 	bindBoolParam2InQuery requestParamBinder[[]string, bool]
 }
 
-func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*BooleanBooleanParsingRequest, error) {
+func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.Request) (*BooleanBooleanParsingRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &BooleanBooleanParsingRequest{}
 	// path params
@@ -72,7 +72,7 @@ type paramsParserBooleanBooleanRequiredValidation struct {
 	bindOptionalBoolParam2InQuery requestParamBinder[[]string, bool]
 }
 
-func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*BooleanBooleanRequiredValidationRequest, error) {
+func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, req *http.Request) (*BooleanBooleanRequiredValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &BooleanBooleanRequiredValidationRequest{}
 	// query params

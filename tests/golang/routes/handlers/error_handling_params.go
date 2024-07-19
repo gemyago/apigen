@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
@@ -15,7 +15,7 @@ type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
 	bindRequiredQuery2 requestParamBinder[[]string, float32]
 }
 
-func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
+func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingParsingErrorsRequest{}
 	// path params
@@ -70,7 +70,7 @@ type paramsParserErrorHandlingErrorHandlingValidationErrors struct {
 	bindRequiredQuery2 requestParamBinder[[]string, float32]
 }
 
-func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
+func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingValidationErrorsRequest{}
 	// query params

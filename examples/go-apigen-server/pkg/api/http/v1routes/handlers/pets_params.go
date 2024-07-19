@@ -9,14 +9,14 @@ import (
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserPetsCreatePet struct {
 	bindPayload requestParamBinder[*http.Request, models.Pet]
 }
 
-func (p *paramsParserPetsCreatePet) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsCreatePetRequest, error) {
+func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) (*PetsCreatePetRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsCreatePetRequest{}
 	// body params
@@ -29,7 +29,7 @@ func newParamsParserPetsCreatePet() *paramsParserPetsCreatePet {
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{
 			field: "payload",
 			location: "body",
-			parseValue: parseJsonPayload[models.Pet],
+			parseValue: parseJSONPayload[models.Pet],
 			validateValue: newCompositeValidator[*http.Request, models.Pet](
 				validateNonEmpty,
 			),
@@ -41,7 +41,7 @@ type paramsParserPetsGetPetById struct {
 	bindPetId requestParamBinder[string, int64]
 }
 
-func (p *paramsParserPetsGetPetById) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsGetPetByIdRequest, error) {
+func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request) (*PetsGetPetByIdRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsGetPetByIdRequest{}
 	// path params
@@ -67,7 +67,7 @@ type paramsParserPetsListPets struct {
 	bindOffset requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserPetsListPets) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*PetsListPetsRequest, error) {
+func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (*PetsListPetsRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &PetsListPetsRequest{}
 	// query params

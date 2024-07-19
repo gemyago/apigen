@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Below is to workaround unused imports
+// Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserNumericTypesNumericTypesParsing struct {
@@ -23,7 +23,7 @@ type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesParsingRequest{}
 	// path params
@@ -160,7 +160,7 @@ type paramsParserNumericTypesNumericTypesRangeValidation struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationRequest{}
 	// path params
@@ -321,7 +321,7 @@ type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationExclusiveRequest{}
 	// path params
@@ -482,7 +482,7 @@ type paramsParserNumericTypesNumericTypesRequiredValidation struct {
 	bindOptionalNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, w http.ResponseWriter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
 	bindingCtx := bindingContext{}
 	reqParams := &NumericTypesNumericTypesRequiredValidationRequest{}
 	// query params

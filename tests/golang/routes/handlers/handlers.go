@@ -106,7 +106,7 @@ type voidResult *int
 
 type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
-	parse(router httpRouter, w http.ResponseWriter, req *http.Request) (TReqParams, error)
+	parse(router httpRouter, req *http.Request) (TReqParams, error)
 }
 
 type handlerFactoryParams[TReqParams any, TResData any] struct {
@@ -121,7 +121,7 @@ func createHandlerFactory[TReqParams any, TResData any](
 ) httpHandlerFactory {
 	return func(app *HTTPApp) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			params, err := factoryParams.paramsParser.parse(app.router, w, r)
+			params, err := factoryParams.paramsParser.parse(app.router, r)
 			if err != nil {
 				app.handleParsingErrors(r, w, err)
 				return
@@ -196,11 +196,11 @@ func readQueryValue(key string, values url.Values) optionalVal[[]string] {
 
 type rawValueParser[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], *TTargetVal) error
 
-func parseJsonPayload[TTargetVal any](req optionalVal[*http.Request], target *TTargetVal) error {
+func parseJSONPayload[TTargetVal any](req optionalVal[*http.Request], target *TTargetVal) error {
 	return json.NewDecoder(req.value.Body).Decode(target)
 }
 
-var _ rawValueParser[*http.Request, string] = parseJsonPayload
+var _ rawValueParser[*http.Request, string] = parseJSONPayload
 
 func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
 	bitSize int, parseFn func(string, int) (TTargetVal, error),
