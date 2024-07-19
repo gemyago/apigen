@@ -66,26 +66,36 @@ func TestBoolean(t *testing.T) {
 				}
 			})
 
-		runRouteTestCase(t, "should fail if non boolean values", setupRouter, func() testCase {
-			query := url.Values{}
-			query.Add("boolParam1InQuery", fake.Lorem().Word())
-			query.Add("boolParam2InQuery", fake.Lorem().Word())
-			query.Add("optionalBoolParam1InQuery", fake.Lorem().Word())
-			query.Add("optionalBoolParam2InQuery", fake.Lorem().Word())
+		nonBooleanValues := []string{
+			"True",
+			"False",
+			"0",
+			"1",
+			fake.Lorem().Word(),
+		}
 
-			return testCase{
-				path:  "/boolean/required-validation",
-				query: query,
-				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.BindingError{
-						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-					},
-				),
-			}
-		})
+		for _, val := range nonBooleanValues {
+			runRouteTestCase(t, "should fail if non boolean value "+val, setupRouter, func() testCase {
+				query := url.Values{}
+				query.Add("boolParam1InQuery", val)
+				query.Add("boolParam2InQuery", val)
+				query.Add("optionalBoolParam1InQuery", val)
+				query.Add("optionalBoolParam2InQuery", val)
+
+				return testCase{
+					path:  "/boolean/required-validation",
+					query: query,
+					expect: expectBindingErrors[*booleanControllerTestActions](
+						[]handlers.BindingError{
+							{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						},
+					),
+				}
+			})
+		}
 	})
 
 	t.Run("required-validation", func(t *testing.T) {
