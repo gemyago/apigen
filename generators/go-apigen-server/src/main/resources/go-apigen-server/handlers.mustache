@@ -38,7 +38,7 @@ type ActionErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
 // At this stage either logging or panic is possible.
 type ResponseErrorHandler func(r *http.Request, err error)
 
-// SlogLogger is a fully compatible with slog and used to allow injecting the instance
+// SlogLogger is a fully compatible with slog and used to allow injecting the instance.
 type SlogLogger interface {
 	Log(ctx context.Context, level slog.Level, msg string, args ...any)
 	LogAttrs(ctx context.Context, level slog.Level, msg string, attrs ...slog.Attr)
@@ -79,7 +79,6 @@ func WithLogger(logger SlogLogger) HttpAppOpt {
 }
 
 func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
-
 	app := &httpApp{
 		router: router,
 		logger: slog.Default(),
@@ -296,6 +295,28 @@ func parseStringInQuery(ov optionalVal[[]string], s *string) error {
 	return nil
 }
 
+func parseBoolInPath(ov optionalVal[string], s *bool) error {
+	if !ov.assigned {
+		return nil
+	}
+	switch ov.value {
+	case "true":
+		*s = true
+	case "false":
+		*s = false
+	default:
+		return fmt.Errorf("unexpected boolean format %v", ov.value)
+	}
+	return nil
+}
+
+func parseBoolInQuery(ov optionalVal[[]string], s *bool) error {
+	if !ov.assigned {
+		return nil
+	}
+	return parseBoolInPath(optionalVal[string]{value: ov.value[0], assigned: true}, s)
+}
+
 type knownParsersDef struct {
 	// path
 	string_in_path  rawValueParser[string, string]
@@ -305,6 +326,7 @@ type knownParsersDef struct {
 	int64_in_path   rawValueParser[string, int64]
 	float32_in_path rawValueParser[string, float32]
 	float64_in_path rawValueParser[string, float64]
+	bool_in_path    rawValueParser[string, bool]
 
 	// query
 	string_in_query  rawValueParser[[]string, string]
@@ -314,6 +336,7 @@ type knownParsersDef struct {
 	int64_in_query   rawValueParser[[]string, int64]
 	float32_in_query rawValueParser[[]string, float32]
 	float64_in_query rawValueParser[[]string, float64]
+	bool_in_query    rawValueParser[[]string, bool]
 }
 
 var knownParsers = knownParsersDef{
@@ -325,6 +348,7 @@ var knownParsers = knownParsersDef{
 	int64_in_path:   newStringToNumberParser[int64](64, parseDecInt),
 	float32_in_path: newStringToNumberParser[float32](32, parseFloat),
 	float64_in_path: newStringToNumberParser(64, strconv.ParseFloat),
+	bool_in_path:    parseBoolInPath,
 
 	// query
 	string_in_query:  parseStringInQuery,
@@ -334,22 +358,23 @@ var knownParsers = knownParsersDef{
 	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
 	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
 	float64_in_query: newStringSliceToNumberParser(64, strconv.ParseFloat),
+	bool_in_query:    parseBoolInQuery,
 }
 
 type BindingErrorCode string
 
 const (
-	// ErrBadValueFormat error means data provided can not be parsed to a target type
+	// ErrBadValueFormat error means data provided can not be parsed to a target type.
 	ErrBadValueFormat BindingErrorCode = "BAD_FORMAT"
 
-	// ErrValueRequired error code indicates that the required value has not been provided
+	// ErrValueRequired error code indicates that the required value has not been provided.
 	ErrValueRequired BindingErrorCode = "INVALID_REQUIRED"
 
 	// ErrInvalidValueOutOfRange error code indicates that the value is out of range of allowable values
-	// this is usually when number is out of min/max range, or string is outside of limits
+	// this is usually when number is out of min/max range, or string is outside of limits.
 	ErrInvalidValueOutOfRange BindingErrorCode = "INVALID_OUT_OF_RANGE"
 
-	// ErrInvalidValue error code a generic validation error
+	// ErrInvalidValue error code a generic validation error.
 	ErrInvalidValue BindingErrorCode = "INVALID"
 )
 
@@ -358,7 +383,7 @@ func (c BindingErrorCode) Error() string {
 }
 
 // BindingError occurs at parsing/validation stage and holds
-// context on field that the error is related to
+// context on field that the error is related to.
 type BindingError struct {
 	Field    string           `json:"field"`
 	Location string           `json:"location"`

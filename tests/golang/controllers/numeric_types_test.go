@@ -544,5 +544,21 @@ func TestNumericTypes(t *testing.T) {
 				),
 			}
 		})
+		runRouteTestCase(t, "should ensure required params", setupRouter, func() testCase {
+			return testCase{
+				path:  "/numeric-types/required-validation",
+				query: url.Values{},
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
+					[]handlers.BindingError{
+						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrValueRequired},
+					},
+				),
+			}
+		})
 	})
 }
