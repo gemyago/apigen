@@ -8,22 +8,22 @@ get:
 
     # params in query
     - name: boolParam1InQuery
-      in: path
+      in: query
       required: true
       schema:
         type: boolean
     - name: boolParam2InQuery
-      in: path
+      in: query
       required: true
       schema:
         type: boolean
     - name: optionalBoolParam1InQuery
-      in: path
+      in: query
       required: false
       schema:
         type: boolean
     - name: optionalBoolParam2InQuery
-      in: path
+      in: query
       required: false
       schema:
         type: boolean

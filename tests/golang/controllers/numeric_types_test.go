@@ -70,6 +70,8 @@ func TestNumericTypes(t *testing.T) {
 					},
 				}
 			})
+
+		// TODO: Invalid values test
 	})
 
 	t.Run("range-validation", func(t *testing.T) {

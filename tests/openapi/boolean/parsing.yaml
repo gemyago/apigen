@@ -18,12 +18,12 @@ get:
 
     # params in query
     - name: boolParam1InQuery
-      in: path
+      in: query
       required: true
       schema:
         type: boolean
     - name: boolParam2InQuery
-      in: path
+      in: query
       required: true
       schema:
         type: boolean
