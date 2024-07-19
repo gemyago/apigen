@@ -1,0 +1,32 @@
+get:
+  summary: API to simulate and test parsing boolean type
+  operationId: booleanParsing
+  tags:
+    - boolean
+  parameters:
+    # params in path
+    - name: boolParam1
+      in: path
+      required: true
+      schema:
+        type: boolean
+    - name: boolParam2
+      in: path
+      required: true
+      schema:
+        type: boolean
+
+    # params in query
+    - name: boolParam1InQuery
+      in: query
+      required: true
+      schema:
+        type: boolean
+    - name: boolParam2InQuery
+      in: query
+      required: true
+      schema:
+        type: boolean
+  responses:
+    '204':
+      description: Request succeeded

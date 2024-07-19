@@ -42,6 +42,11 @@ Numeric data types
 |integer|int32|query,path|&check;|&check;|
 |integer|int64|query,path|&check;|&check;|
 
+Boolean
+|type|in|supported?|
+|----|----|----|
+|boolean|query,path|&check;|
+
 ## Contributing
 
 Please have the following tools installed:
