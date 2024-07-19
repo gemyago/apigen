@@ -22,7 +22,7 @@ func TestBoolean(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBooleanRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterBooleanRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
@@ -86,7 +86,7 @@ func TestBoolean(t *testing.T) {
 					path:  "/boolean/required-validation",
 					query: query,
 					expect: expectBindingErrors[*booleanControllerTestActions](
-						[]handlers.BindingError{
+						[]handlers.FieldBindingError{
 							{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 							{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 							{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
@@ -161,7 +161,7 @@ func TestBoolean(t *testing.T) {
 				path:  "/boolean/required-validation",
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
@@ -179,7 +179,7 @@ func TestBoolean(t *testing.T) {
 				path:  "/boolean/required-validation",
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrValueRequired},
 						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrValueRequired},
 					},

@@ -87,7 +87,7 @@ func runRouteTestCase[TActions any](
 
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
 
-func expectBindingErrors[TActions any](wantErrors []handlers.BindingError) routeTestCaseExpectFn[TActions] {
+func expectBindingErrors[TActions any](wantErrors []handlers.FieldBindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
 		_ TActions,
@@ -124,7 +124,7 @@ func assertFieldError(
 	err *handlers.AggregatedBindingError,
 	location string,
 	field string,
-	code handlers.BindingErrorCode,
+	code handlers.BindingError,
 ) {
 	for _, fieldErr := range err.Errors {
 		if fieldErr.Location == location && fieldErr.Field == field {

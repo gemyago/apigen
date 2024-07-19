@@ -55,7 +55,8 @@ func NewHandler(deps HandlerDeps) http.Handler {
 	mux := http.NewServeMux()
 
 	// Real world instance of the router handler will likely to have a more advanced setup
-	// below is just some simple access logs on requests processing
+	// that may include various middleware to authenticate, log, trace e.t.c...
+	// Below is a simple access logs on requests processing
 	muxHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent())
 		defer func() {
@@ -70,7 +71,7 @@ func NewHandler(deps HandlerDeps) http.Handler {
 
 	// The httpApp provides a configuration layer of the generated routes
 	// and also serves as an adapter that allows using different router implementations
-	httpApp := handlers.NewHttpApp(
+	httpApp := handlers.NewHTTPApp(
 		httpRouter{ServeMux: mux},
 		handlers.WithActionErrorHandler(handleActionError),
 	)

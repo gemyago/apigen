@@ -353,3 +353,22 @@ issues:
         - noctx
         - wrapcheck
         - gocognit
+    - path: "routes/handlers/(.+)_(controller|params)\\.go" #TODO: Add models here
+      linters:
+        - lll # hard to control line length in generated code
+        - funlen # same as above
+        - mnd # generated code may have validation options from schema with numbers
+        - dupl # no way to avoid duplicates
+        - goimports # no way to do proper formatting of generated struct fields
+    - path: "routes/handlers/(.+)_params\\.go"
+      source: "func \\(p \\*paramsParser(.+)\\) parse\\(router httpRouter, req \\*http\\.Request\\)"
+      linters:
+        - unused # if is false reporting really used struct function
+    - path: "routes/handlers/handlers\\.go"
+      source: "(func readPathValue|func readQueryValue)"
+      linters:
+        - unused # if is false reporting really used funcs
+    - path: "routes/handlers/(.+)_params\\.go"
+      source: "func \\(p \\*paramsParser(.+)\\) parse\\(router httpRouter, req \\*http\\.Request\\)"
+      linters:
+        - revive # some params may be unused. Hard to handle this while gernerating code.
