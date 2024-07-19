@@ -106,7 +106,7 @@ lint: lint/golang
 
 .PHONY: tests/golang
 tests/golang:
-	go test ./tests/golang/...
+	TZ=US/Alaska go test ./tests/golang/...
 
 .PHONY: tests
 tests: tests/golang
