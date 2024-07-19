@@ -140,6 +140,28 @@ func TestStringTypes(t *testing.T) {
 				),
 			}
 		})
+		runRouteTestCase(t, "should fail if date formatted with time", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+			query.Set("dateStrInQuery", originalReq.DateStrInQuery.Format(time.RFC3339))
+
+			return testCase{
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
+					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]handlers.BindingError{
+						// path
+						{Field: "dateStr", Location: "path", Code: handlers.ErrBadValueFormat},
+
+						// query
+						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+					},
+				),
+			}
+		})
 	})
 
 	t.Run("range-validation", func(t *testing.T) {
