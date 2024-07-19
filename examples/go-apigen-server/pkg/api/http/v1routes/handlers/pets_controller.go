@@ -86,17 +86,17 @@ func BuildPetsController() *PetsControllerBuilder {
 	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
 	controllerBuilder.HandleCreatePet.voidResult = true
-	controllerBuilder.HandleCreatePet.paramsParser = newParamsParserPetsCreatePet()
+	controllerBuilder.HandleCreatePet.paramsParserFactory = newParamsParserPetsCreatePet
 
 	// GET /pets/{petId}
 	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
-	controllerBuilder.HandleGetPetById.paramsParser = newParamsParserPetsGetPetById()
+	controllerBuilder.HandleGetPetById.paramsParserFactory = newParamsParserPetsGetPetById
 
 	// GET /pets
 	controllerBuilder.HandleListPets.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleListPets.defaultStatusCode = 200
-	controllerBuilder.HandleListPets.paramsParser = newParamsParserPetsListPets()
+	controllerBuilder.HandleListPets.paramsParserFactory = newParamsParserPetsListPets
 
 	return controllerBuilder
 }

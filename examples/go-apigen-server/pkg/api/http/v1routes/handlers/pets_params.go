@@ -24,7 +24,7 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsCreatePet() *paramsParserPetsCreatePet {
+func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetRequest] {
 	return &paramsParserPetsCreatePet{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{
 			field: "payload",
@@ -49,12 +49,12 @@ func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsGetPetById() *paramsParserPetsGetPetById {
+func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdRequest] {
 	return &paramsParserPetsGetPetById{
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
 			field: "petId",
 			location: "path",
-			parseValue: knownParsers.int64InPath,
+			parseValue: app.knownParsers.int64InPath,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
 			),
@@ -77,12 +77,12 @@ func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsListPets() *paramsParserPetsListPets {
+func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest] {
 	return &paramsParserPetsListPets{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "limit",
 			location: "query",
-			parseValue: knownParsers.int64InQuery,
+			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
 				newMinMaxValueValidator[[]string, int64](1, false, true),
@@ -92,7 +92,7 @@ func newParamsParserPetsListPets() *paramsParserPetsListPets {
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "offset",
 			location: "query",
-			parseValue: knownParsers.int64InQuery,
+			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				newMinMaxValueValidator[[]string, int64](1, false, true),
 			),

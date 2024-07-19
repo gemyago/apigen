@@ -134,25 +134,25 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleStringTypesParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesParsing.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesParsing.voidResult = true
-	controllerBuilder.HandleStringTypesParsing.paramsParser = newParamsParserStringTypesStringTypesParsing()
+	controllerBuilder.HandleStringTypesParsing.paramsParserFactory = newParamsParserStringTypesStringTypesParsing
 
 	// GET /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
 	controllerBuilder.HandleStringTypesPatternValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesPatternValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesPatternValidation.voidResult = true
-	controllerBuilder.HandleStringTypesPatternValidation.paramsParser = newParamsParserStringTypesStringTypesPatternValidation()
+	controllerBuilder.HandleStringTypesPatternValidation.paramsParserFactory = newParamsParserStringTypesStringTypesPatternValidation
 
 	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesRangeValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesRangeValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesRangeValidation.voidResult = true
-	controllerBuilder.HandleStringTypesRangeValidation.paramsParser = newParamsParserStringTypesStringTypesRangeValidation()
+	controllerBuilder.HandleStringTypesRangeValidation.paramsParserFactory = newParamsParserStringTypesStringTypesRangeValidation
 
 	// GET /string-types/required-validation
 	controllerBuilder.HandleStringTypesRequiredValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesRequiredValidation.voidResult = true
-	controllerBuilder.HandleStringTypesRequiredValidation.paramsParser = newParamsParserStringTypesStringTypesRequiredValidation()
+	controllerBuilder.HandleStringTypesRequiredValidation.paramsParserFactory = newParamsParserStringTypesStringTypesRequiredValidation
 
 	return controllerBuilder
 }

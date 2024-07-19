@@ -49,6 +49,7 @@ type HTTPApp struct {
 	handleParsingErrors  ParsingErrorHandler
 	handleActionErrors   ActionErrorHandler
 	handleResponseErrors ResponseErrorHandler
+	knownParsers         *knownParsersDef
 	logger               SlogLogger
 }
 
@@ -80,8 +81,9 @@ func WithLogger(logger SlogLogger) HTTPAppOpt {
 
 func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	app := &HTTPApp{
-		router: router,
-		logger: slog.Default(),
+		router:       router,
+		logger:       slog.Default(),
+		knownParsers: newKnownParsers(),
 	}
 	app.handleResponseErrors = func(r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
@@ -110,20 +112,22 @@ type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
 	parse(router httpRouter, req *http.Request) (TReqParams, error)
 }
+type paramsParserFactory[TReqParams any] func(app *HTTPApp) paramsParser[TReqParams]
 
 type handlerFactoryParams[TReqParams any, TResData any] struct {
-	defaultStatus int
-	voidResult    bool
-	paramsParser  paramsParser[TReqParams]
-	handler       func(context.Context, TReqParams) (TResData, error)
+	defaultStatus       int
+	voidResult          bool
+	paramsParserFactory func(app *HTTPApp) paramsParser[TReqParams]
+	handler             func(context.Context, TReqParams) (TResData, error)
 }
 
 func createHandlerFactory[TReqParams any, TResData any](
 	factoryParams handlerFactoryParams[TReqParams, TResData],
 ) httpHandlerFactory {
 	return func(app *HTTPApp) http.Handler {
+		paramsParser := factoryParams.paramsParserFactory(app)
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			params, err := factoryParams.paramsParser.parse(app.router, r)
+			params, err := paramsParser.parse(app.router, r)
 			if err != nil {
 				app.handleParsingErrors(r, w, err)
 				return
@@ -149,21 +153,21 @@ func createHandlerFactory[TReqParams any, TResData any](
 }
 
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
-	defaultStatusCode  int
-	voidResult         bool
-	httpHandlerFactory func(app *HTTPApp) http.Handler
-	paramsParser       paramsParser[TReqParams]
-	controllerBuilder  TControllerBuilder
+	defaultStatusCode   int
+	voidResult          bool
+	httpHandlerFactory  func(app *HTTPApp) http.Handler
+	paramsParserFactory paramsParserFactory[TReqParams]
+	controllerBuilder   TControllerBuilder
 }
 
 func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
 	handler func(context.Context, TReqParams) (TResData, error),
 ) TControllerBuilder {
 	ab.httpHandlerFactory = createHandlerFactory(handlerFactoryParams[TReqParams, TResData]{
-		defaultStatus: ab.defaultStatusCode,
-		voidResult:    ab.voidResult,
-		paramsParser:  ab.paramsParser,
-		handler:       handler,
+		defaultStatus:       ab.defaultStatusCode,
+		voidResult:          ab.voidResult,
+		paramsParserFactory: ab.paramsParserFactory,
+		handler:             handler,
 	})
 	return ab.controllerBuilder
 }
@@ -345,26 +349,28 @@ type knownParsersDef struct {
 const bitSize32 = 32
 const bitSize64 = 64
 
-var knownParsers = knownParsersDef{
-	// path
-	stringInPath:  parseStringInPath,
-	dateInPath:    newStringToDateTimeParser(true),
-	timeInPath:    newStringToDateTimeParser(false),
-	int32InPath:   newStringToNumberParser[int32](bitSize32, parseDecInt),
-	int64InPath:   newStringToNumberParser[int64](bitSize64, parseDecInt),
-	float32InPath: newStringToNumberParser[float32](bitSize32, parseFloat),
-	float64InPath: newStringToNumberParser(bitSize64, strconv.ParseFloat),
-	boolInPath:    parseBoolInPath,
+func newKnownParsers() *knownParsersDef {
+	return &knownParsersDef{
+		// path
+		stringInPath:  parseStringInPath,
+		dateInPath:    newStringToDateTimeParser(true),
+		timeInPath:    newStringToDateTimeParser(false),
+		int32InPath:   newStringToNumberParser[int32](bitSize32, parseDecInt),
+		int64InPath:   newStringToNumberParser[int64](bitSize64, parseDecInt),
+		float32InPath: newStringToNumberParser[float32](bitSize32, parseFloat),
+		float64InPath: newStringToNumberParser(bitSize64, strconv.ParseFloat),
+		boolInPath:    parseBoolInPath,
 
-	// query
-	stringInQuery:  parseStringInQuery,
-	dateInQuery:    newStringSliceToDateTimeParser(true),
-	timeInQuery:    newStringSliceToDateTimeParser(false),
-	int32InQuery:   newStringSliceToNumberParser[int32](bitSize32, parseDecInt),
-	int64InQuery:   newStringSliceToNumberParser[int64](bitSize64, parseDecInt),
-	float32InQuery: newStringSliceToNumberParser[float32](bitSize32, parseFloat),
-	float64InQuery: newStringSliceToNumberParser(bitSize64, strconv.ParseFloat),
-	boolInQuery:    parseBoolInQuery,
+		// query
+		stringInQuery:  parseStringInQuery,
+		dateInQuery:    newStringSliceToDateTimeParser(true),
+		timeInQuery:    newStringSliceToDateTimeParser(false),
+		int32InQuery:   newStringSliceToNumberParser[int32](bitSize32, parseDecInt),
+		int64InQuery:   newStringSliceToNumberParser[int64](bitSize64, parseDecInt),
+		float32InQuery: newStringSliceToNumberParser[float32](bitSize32, parseFloat),
+		float64InQuery: newStringSliceToNumberParser(bitSize64, strconv.ParseFloat),
+		boolInQuery:    parseBoolInQuery,
+	}
 }
 
 type BindingError string

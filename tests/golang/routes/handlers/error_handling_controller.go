@@ -66,13 +66,13 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	controllerBuilder.HandleErrorHandlingParsingErrors.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleErrorHandlingParsingErrors.defaultStatusCode = 204
 	controllerBuilder.HandleErrorHandlingParsingErrors.voidResult = true
-	controllerBuilder.HandleErrorHandlingParsingErrors.paramsParser = newParamsParserErrorHandlingErrorHandlingParsingErrors()
+	controllerBuilder.HandleErrorHandlingParsingErrors.paramsParserFactory = newParamsParserErrorHandlingErrorHandlingParsingErrors
 
 	// GET /error-handling/validation-errors
 	controllerBuilder.HandleErrorHandlingValidationErrors.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleErrorHandlingValidationErrors.defaultStatusCode = 204
 	controllerBuilder.HandleErrorHandlingValidationErrors.voidResult = true
-	controllerBuilder.HandleErrorHandlingValidationErrors.paramsParser = newParamsParserErrorHandlingErrorHandlingValidationErrors()
+	controllerBuilder.HandleErrorHandlingValidationErrors.paramsParserFactory = newParamsParserErrorHandlingErrorHandlingValidationErrors
 
 	return controllerBuilder
 }

@@ -28,12 +28,12 @@ func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserErrorHandlingErrorHandlingParsingErrors() *paramsParserErrorHandlingErrorHandlingParsingErrors {
+func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingParsingErrors{
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
-			parseValue: knownParsers.float32InPath,
+			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
@@ -41,7 +41,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors() *paramsParserError
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam2",
 			location: "path",
-			parseValue: knownParsers.float32InPath,
+			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
@@ -49,7 +49,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors() *paramsParserError
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
-			parseValue: knownParsers.float32InQuery,
+			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
@@ -57,7 +57,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors() *paramsParserError
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
-			parseValue: knownParsers.float32InQuery,
+			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
@@ -80,12 +80,12 @@ func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserErrorHandlingErrorHandlingValidationErrors() *paramsParserErrorHandlingErrorHandlingValidationErrors {
+func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingValidationErrors{
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
-			parseValue: knownParsers.float32InQuery,
+			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 				newMinMaxValueValidator[[]string, float32](10, false, true),
@@ -94,7 +94,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors() *paramsParserEr
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
-			parseValue: knownParsers.float32InQuery,
+			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 				newMinMaxValueValidator[[]string, float32](10, false, true),

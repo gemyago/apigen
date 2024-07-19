@@ -41,13 +41,13 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParser{{baseName}}{{operationId}}() *paramsParser{{baseName}}{{operationId}} {
+func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>request-type}}] {
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
-			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
+			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
 			validateValue: newCompositeValidator[{{>params/binder-types}}]({{#required}}
 				validateNonEmpty,{{/required}}{{#minimum}}
 				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}

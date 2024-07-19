@@ -68,13 +68,13 @@ func BuildBooleanController() *BooleanControllerBuilder {
 	controllerBuilder.HandleBooleanParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBooleanParsing.defaultStatusCode = 204
 	controllerBuilder.HandleBooleanParsing.voidResult = true
-	controllerBuilder.HandleBooleanParsing.paramsParser = newParamsParserBooleanBooleanParsing()
+	controllerBuilder.HandleBooleanParsing.paramsParserFactory = newParamsParserBooleanBooleanParsing
 
 	// GET /boolean/required-validation
 	controllerBuilder.HandleBooleanRequiredValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBooleanRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleBooleanRequiredValidation.voidResult = true
-	controllerBuilder.HandleBooleanRequiredValidation.paramsParser = newParamsParserBooleanBooleanRequiredValidation()
+	controllerBuilder.HandleBooleanRequiredValidation.paramsParserFactory = newParamsParserBooleanBooleanRequiredValidation
 
 	return controllerBuilder
 }

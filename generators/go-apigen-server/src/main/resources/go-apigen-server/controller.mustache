@@ -68,7 +68,7 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
 	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}{{^returnType}}
 	controllerBuilder.Handle{{operationId}}.voidResult = true{{/returnType}}
-	controllerBuilder.Handle{{operationId}}.paramsParser = newParamsParser{{baseName}}{{operationId}}()
+	controllerBuilder.Handle{{operationId}}.paramsParserFactory = newParamsParser{{baseName}}{{operationId}}
 
 	{{/operation}}
 	{{/operations}}
