@@ -356,3 +356,5 @@ issues:
     - path: "(.+)_(controller|params)\\.go" #TODO: Add models here
       linters:
         - lll # hard to control line length in generated code
+        - mnd # generated code may have validation options from schema with numbers
+        - dupl # no way to avoid duplicates

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-  "time"
+	"time"
 )
 
 // Below is to workaround unused imports
