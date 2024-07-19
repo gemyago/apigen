@@ -33,7 +33,7 @@ func newParamsParserBooleanBooleanParsing() *paramsParserBooleanBooleanParsing {
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
 			field: "boolParam1",
 			location: "path",
-			parseValue: knownParsers.bool_in_path,
+			parseValue: knownParsers.boolInPath,
 			validateValue: newCompositeValidator[string, bool](
 				validateNonEmpty,
 			),
@@ -41,7 +41,7 @@ func newParamsParserBooleanBooleanParsing() *paramsParserBooleanBooleanParsing {
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
 			field: "boolParam2",
 			location: "path",
-			parseValue: knownParsers.bool_in_path,
+			parseValue: knownParsers.boolInPath,
 			validateValue: newCompositeValidator[string, bool](
 				validateNonEmpty,
 			),
@@ -49,7 +49,7 @@ func newParamsParserBooleanBooleanParsing() *paramsParserBooleanBooleanParsing {
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam1InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 				validateNonEmpty,
 			),
@@ -57,7 +57,7 @@ func newParamsParserBooleanBooleanParsing() *paramsParserBooleanBooleanParsing {
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam2InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 				validateNonEmpty,
 			),
@@ -89,7 +89,7 @@ func newParamsParserBooleanBooleanRequiredValidation() *paramsParserBooleanBoole
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam1InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 				validateNonEmpty,
 			),
@@ -97,7 +97,7 @@ func newParamsParserBooleanBooleanRequiredValidation() *paramsParserBooleanBoole
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam2InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 				validateNonEmpty,
 			),
@@ -105,14 +105,14 @@ func newParamsParserBooleanBooleanRequiredValidation() *paramsParserBooleanBoole
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam1InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 			),
 		}),
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam2InQuery",
 			location: "query",
-			parseValue: knownParsers.bool_in_query,
+			parseValue: knownParsers.boolInQuery,
 			validateValue: newCompositeValidator[[]string, bool](
 			),
 		}),

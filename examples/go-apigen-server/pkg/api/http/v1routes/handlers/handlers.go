@@ -322,46 +322,49 @@ func parseBoolInQuery(ov optionalVal[[]string], s *bool) error {
 
 type knownParsersDef struct {
 	// path
-	string_in_path  rawValueParser[string, string]
-	date_in_path    rawValueParser[string, time.Time]
-	time_in_path    rawValueParser[string, time.Time]
-	int32_in_path   rawValueParser[string, int32]
-	int64_in_path   rawValueParser[string, int64]
-	float32_in_path rawValueParser[string, float32]
-	float64_in_path rawValueParser[string, float64]
-	bool_in_path    rawValueParser[string, bool]
+	stringInPath  rawValueParser[string, string]
+	dateInPath    rawValueParser[string, time.Time]
+	timeInPath    rawValueParser[string, time.Time]
+	int32InPath   rawValueParser[string, int32]
+	int64InPath   rawValueParser[string, int64]
+	float32InPath rawValueParser[string, float32]
+	float64InPath rawValueParser[string, float64]
+	boolInPath    rawValueParser[string, bool]
 
 	// query
-	string_in_query  rawValueParser[[]string, string]
-	date_in_query    rawValueParser[[]string, time.Time]
-	time_in_query    rawValueParser[[]string, time.Time]
-	int32_in_query   rawValueParser[[]string, int32]
-	int64_in_query   rawValueParser[[]string, int64]
-	float32_in_query rawValueParser[[]string, float32]
-	float64_in_query rawValueParser[[]string, float64]
-	bool_in_query    rawValueParser[[]string, bool]
+	stringInQuery  rawValueParser[[]string, string]
+	dateInQuery    rawValueParser[[]string, time.Time]
+	timeInQuery    rawValueParser[[]string, time.Time]
+	int32InQuery   rawValueParser[[]string, int32]
+	int64InQuery   rawValueParser[[]string, int64]
+	float32InQuery rawValueParser[[]string, float32]
+	float64InQuery rawValueParser[[]string, float64]
+	boolInQuery    rawValueParser[[]string, bool]
 }
+
+const bitSize32 = 32
+const bitSize64 = 64
 
 var knownParsers = knownParsersDef{
 	// path
-	string_in_path:  parseStringInPath,
-	date_in_path:    newStringToDateTimeParser(true),
-	time_in_path:    newStringToDateTimeParser(false),
-	int32_in_path:   newStringToNumberParser[int32](32, parseDecInt),
-	int64_in_path:   newStringToNumberParser[int64](64, parseDecInt),
-	float32_in_path: newStringToNumberParser[float32](32, parseFloat),
-	float64_in_path: newStringToNumberParser(64, strconv.ParseFloat),
-	bool_in_path:    parseBoolInPath,
+	stringInPath:  parseStringInPath,
+	dateInPath:    newStringToDateTimeParser(true),
+	timeInPath:    newStringToDateTimeParser(false),
+	int32InPath:   newStringToNumberParser[int32](bitSize32, parseDecInt),
+	int64InPath:   newStringToNumberParser[int64](bitSize64, parseDecInt),
+	float32InPath: newStringToNumberParser[float32](bitSize32, parseFloat),
+	float64InPath: newStringToNumberParser(bitSize64, strconv.ParseFloat),
+	boolInPath:    parseBoolInPath,
 
 	// query
-	string_in_query:  parseStringInQuery,
-	date_in_query:    newStringSliceToDateTimeParser(true),
-	time_in_query:    newStringSliceToDateTimeParser(false),
-	int32_in_query:   newStringSliceToNumberParser[int32](32, parseDecInt),
-	int64_in_query:   newStringSliceToNumberParser[int64](64, parseDecInt),
-	float32_in_query: newStringSliceToNumberParser[float32](32, parseFloat),
-	float64_in_query: newStringSliceToNumberParser(64, strconv.ParseFloat),
-	bool_in_query:    parseBoolInQuery,
+	stringInQuery:  parseStringInQuery,
+	dateInQuery:    newStringSliceToDateTimeParser(true),
+	timeInQuery:    newStringSliceToDateTimeParser(false),
+	int32InQuery:   newStringSliceToNumberParser[int32](bitSize32, parseDecInt),
+	int64InQuery:   newStringSliceToNumberParser[int64](bitSize64, parseDecInt),
+	float32InQuery: newStringSliceToNumberParser[float32](bitSize32, parseFloat),
+	float64InQuery: newStringSliceToNumberParser(bitSize64, strconv.ParseFloat),
+	boolInQuery:    parseBoolInQuery,
 }
 
 type BindingError string

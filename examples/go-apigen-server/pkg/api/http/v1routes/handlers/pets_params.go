@@ -54,7 +54,7 @@ func newParamsParserPetsGetPetById() *paramsParserPetsGetPetById {
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
 			field: "petId",
 			location: "path",
-			parseValue: knownParsers.int64_in_path,
+			parseValue: knownParsers.int64InPath,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
 			),
@@ -82,7 +82,7 @@ func newParamsParserPetsListPets() *paramsParserPetsListPets {
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "limit",
 			location: "query",
-			parseValue: knownParsers.int64_in_query,
+			parseValue: knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
 				newMinMaxValueValidator[[]string, int64](1, false, true),
@@ -92,7 +92,7 @@ func newParamsParserPetsListPets() *paramsParserPetsListPets {
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "offset",
 			location: "query",
-			parseValue: knownParsers.int64_in_query,
+			parseValue: knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				newMinMaxValueValidator[[]string, int64](1, false, true),
 			),
