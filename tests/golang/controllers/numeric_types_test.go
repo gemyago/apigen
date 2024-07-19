@@ -70,8 +70,42 @@ func TestNumericTypes(t *testing.T) {
 					},
 				}
 			})
+		runRouteTestCase(t, "should fail if invalid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				query := url.Values{}
+				query.Add("numberAnyInQuery", fake.Lorem().Word())
+				query.Add("numberFloatInQuery", fake.Lorem().Word())
+				query.Add("numberDoubleInQuery", fake.Lorem().Word())
+				query.Add("numberIntInQuery", fake.Lorem().Word())
+				query.Add("numberInt32InQuery", fake.Lorem().Word())
+				query.Add("numberInt64InQuery", fake.Lorem().Word())
 
-		// TODO: Invalid values test
+				return routeTestCase[*numericTypesControllerTestActions]{
+					path: fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v",
+						fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word(),
+						fake.Lorem().Word(), fake.Lorem().Word()),
+					query: query,
+					expect: expectBindingErrors[*numericTypesControllerTestActions](
+						[]handlers.BindingError{
+							// path
+							{Field: "numberAny", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberFloat", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberDouble", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberInt", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberInt32", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberInt64", Location: "path", Code: handlers.ErrBadValueFormat},
+
+							// query
+							{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						},
+					),
+				}
+			})
 	})
 
 	t.Run("range-validation", func(t *testing.T) {
