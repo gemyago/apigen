@@ -239,12 +239,13 @@ func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time
 		if !ov.assigned {
 			return nil
 		}
-		val, err := time.Parse(time.RFC3339Nano, ov.value)
+		format := time.RFC3339Nano
+		if isDateOnly {
+			format = time.DateOnly
+		}
+		val, err := time.Parse(format, ov.value)
 		if err != nil {
 			return err
-		}
-		if isDateOnly {
-			val = val.Truncate(24 * time.Hour)
 		}
 		*t = val
 		return nil
@@ -256,12 +257,13 @@ func newStringSliceToDateTimeParser(isDateOnly bool) rawValueParser[[]string, ti
 		if !ov.assigned {
 			return nil
 		}
-		val, err := time.Parse(time.RFC3339Nano, ov.value[0])
+		format := time.RFC3339Nano
+		if isDateOnly {
+			format = time.DateOnly
+		}
+		val, err := time.Parse(format, ov.value[0])
 		if err != nil {
 			return err
-		}
-		if isDateOnly {
-			val = val.Truncate(24 * time.Hour)
 		}
 		*t = val
 		return nil
