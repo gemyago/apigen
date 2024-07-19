@@ -77,7 +77,7 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	return controllerBuilder
 }
 
-func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *httpApp) {
+func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(app))
 }

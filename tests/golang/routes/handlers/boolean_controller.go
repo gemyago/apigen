@@ -79,7 +79,7 @@ func BuildBooleanController() *BooleanControllerBuilder {
 	return controllerBuilder
 }
 
-func RegisterBooleanRoutes(controller *BooleanController, app *httpApp) {
+func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
 	app.router.HandleRoute("GET", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
 }

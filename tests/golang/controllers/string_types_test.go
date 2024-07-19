@@ -25,7 +25,7 @@ func TestStringTypes(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterStringTypesRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterStringTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
@@ -128,7 +128,7 @@ func TestStringTypes(t *testing.T) {
 					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: handlers.ErrBadValueFormat},
 						{Field: "dateTimeStr", Location: "path", Code: handlers.ErrBadValueFormat},
@@ -152,7 +152,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: handlers.ErrBadValueFormat},
 
@@ -240,7 +240,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -303,7 +303,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -460,7 +460,7 @@ func TestStringTypes(t *testing.T) {
 				path:  "/string-types/required-validation",
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
@@ -550,7 +550,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano)),
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValue},
 						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValue},
 

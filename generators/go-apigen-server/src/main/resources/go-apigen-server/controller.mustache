@@ -3,7 +3,7 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
-  "time"
+	"time"
 	{{#hasModel}}
 
 	"{{invokerPackage}}/models"
@@ -75,7 +75,7 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	return controllerBuilder
 }
 
-func Register{{baseName}}Routes(controller *{{baseName}}Controller, app *httpApp) {
+func Register{{baseName}}Routes(controller *{{baseName}}Controller, app *HTTPApp) {
 	{{#operations}}
 	{{#operation}}
 	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(app))

@@ -22,7 +22,7 @@ func TestNumericTypes(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHttpApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
@@ -86,7 +86,7 @@ func TestNumericTypes(t *testing.T) {
 						fake.Lorem().Word(), fake.Lorem().Word()),
 					query: query,
 					expect: expectBindingErrors[*numericTypesControllerTestActions](
-						[]handlers.BindingError{
+						[]handlers.FieldBindingError{
 							// path
 							{Field: "numberAny", Location: "path", Code: handlers.ErrBadValueFormat},
 							{Field: "numberFloat", Location: "path", Code: handlers.ErrBadValueFormat},
@@ -145,7 +145,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -222,7 +222,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -312,7 +312,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -357,7 +357,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
@@ -494,7 +494,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
 						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
@@ -527,7 +527,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
@@ -549,7 +549,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: url.Values{},
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.BindingError{
+					[]handlers.FieldBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrValueRequired},
 						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrValueRequired},
 						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrValueRequired},

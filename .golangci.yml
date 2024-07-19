@@ -353,3 +353,6 @@ issues:
         - noctx
         - wrapcheck
         - gocognit
+    - path: "(.+)_(controller|params)\\.go" #TODO: Add models here
+      linters:
+        - lll # hard to control line length in generated code

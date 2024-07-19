@@ -44,7 +44,7 @@ type SlogLogger interface {
 	LogAttrs(ctx context.Context, level slog.Level, msg string, attrs ...slog.Attr)
 }
 
-type httpApp struct {
+type HTTPApp struct {
 	router               httpRouter
 	handleParsingErrors  ParsingErrorHandler
 	handleActionErrors   ActionErrorHandler
@@ -52,34 +52,34 @@ type httpApp struct {
 	logger               SlogLogger
 }
 
-type HttpAppOpt func(app *httpApp)
+type HTTPAppOpt func(app *HTTPApp)
 
-func WithParsingErrorHandler(handler ParsingErrorHandler) HttpAppOpt {
-	return func(app *httpApp) {
+func WithParsingErrorHandler(handler ParsingErrorHandler) HTTPAppOpt {
+	return func(app *HTTPApp) {
 		app.handleParsingErrors = handler
 	}
 }
 
-func WithActionErrorHandler(handler ActionErrorHandler) HttpAppOpt {
-	return func(app *httpApp) {
+func WithActionErrorHandler(handler ActionErrorHandler) HTTPAppOpt {
+	return func(app *HTTPApp) {
 		app.handleActionErrors = handler
 	}
 }
 
-func WithResponseErrorHandler(handler ResponseErrorHandler) HttpAppOpt {
-	return func(app *httpApp) {
+func WithResponseErrorHandler(handler ResponseErrorHandler) HTTPAppOpt {
+	return func(app *HTTPApp) {
 		app.handleResponseErrors = handler
 	}
 }
 
-func WithLogger(logger SlogLogger) HttpAppOpt {
-	return func(app *httpApp) {
+func WithLogger(logger SlogLogger) HTTPAppOpt {
+	return func(app *HTTPApp) {
 		app.logger = logger
 	}
 }
 
-func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
-	app := &httpApp{
+func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
+	app := &HTTPApp{
 		router: router,
 		logger: slog.Default(),
 	}
@@ -88,10 +88,11 @@ func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
 	}
 	app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) {
 		w.Header().Add("content-type", "application/json; charset=utf-8")
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
 		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
-		if httpErr, ok := err.(AggregatedBindingError); ok {
-			if writeErr := json.NewEncoder(w).Encode(httpErr); writeErr != nil {
+		var aggregatedErr AggregatedBindingError
+		if ok := errors.As(err, &aggregatedErr); ok {
+			if writeErr := json.NewEncoder(w).Encode(aggregatedErr); writeErr != nil {
 				app.handleResponseErrors(r, writeErr)
 			}
 			return
@@ -105,7 +106,7 @@ func NewHttpApp(router httpRouter, opts ...HttpAppOpt) *httpApp {
 
 type voidResult *int
 
-type httpHandlerFactory func(app *httpApp) http.Handler
+type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
 	parse(router httpRouter, w http.ResponseWriter, req *http.Request) (TReqParams, error)
 }
@@ -117,8 +118,10 @@ type handlerFactoryParams[TReqParams any, TResData any] struct {
 	handler       func(context.Context, TReqParams) (TResData, error)
 }
 
-func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFactoryParams[TReqParams, TResData]) httpHandlerFactory {
-	return func(app *httpApp) http.Handler {
+func createHandlerFactory[TReqParams any, TResData any](
+	factoryParams handlerFactoryParams[TReqParams, TResData],
+) httpHandlerFactory {
+	return func(app *HTTPApp) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			params, err := factoryParams.paramsParser.parse(app.router, w, r)
 			if err != nil {
@@ -138,8 +141,8 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 
 			w.Header().Add("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(factoryParams.defaultStatus)
-			if err := json.NewEncoder(w).Encode(resData); err != nil {
-				app.handleResponseErrors(r, err)
+			if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
+				app.handleResponseErrors(r, encodingErr)
 			}
 		})
 	}
@@ -148,7 +151,7 @@ func createHandlerFactory[TReqParams any, TResData any](factoryParams handlerFac
 type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
 	defaultStatusCode  int
 	voidResult         bool
-	httpHandlerFactory func(app *httpApp) http.Handler
+	httpHandlerFactory func(app *HTTPApp) http.Handler
 	paramsParser       paramsParser[TReqParams]
 	controllerBuilder  TControllerBuilder
 }
@@ -361,42 +364,42 @@ var knownParsers = knownParsersDef{
 	bool_in_query:    parseBoolInQuery,
 }
 
-type BindingErrorCode string
+type BindingError string
 
 const (
 	// ErrBadValueFormat error means data provided can not be parsed to a target type.
-	ErrBadValueFormat BindingErrorCode = "BAD_FORMAT"
+	ErrBadValueFormat BindingError = "BAD_FORMAT"
 
 	// ErrValueRequired error code indicates that the required value has not been provided.
-	ErrValueRequired BindingErrorCode = "INVALID_REQUIRED"
+	ErrValueRequired BindingError = "INVALID_REQUIRED"
 
 	// ErrInvalidValueOutOfRange error code indicates that the value is out of range of allowable values
 	// this is usually when number is out of min/max range, or string is outside of limits.
-	ErrInvalidValueOutOfRange BindingErrorCode = "INVALID_OUT_OF_RANGE"
+	ErrInvalidValueOutOfRange BindingError = "INVALID_OUT_OF_RANGE"
 
 	// ErrInvalidValue error code a generic validation error.
-	ErrInvalidValue BindingErrorCode = "INVALID"
+	ErrInvalidValue BindingError = "INVALID"
 )
 
-func (c BindingErrorCode) Error() string {
+func (c BindingError) Error() string {
 	return string(c)
 }
 
-// BindingError occurs at parsing/validation stage and holds
+// FieldBindingError occurs at parsing/validation stage and holds
 // context on field that the error is related to.
-type BindingError struct {
-	Field    string           `json:"field"`
-	Location string           `json:"location"`
-	Err      error            `json:"-"`
-	Code     BindingErrorCode `json:"code"`
+type FieldBindingError struct {
+	Field    string       `json:"field"`
+	Location string       `json:"location"`
+	Err      error        `json:"-"`
+	Code     BindingError `json:"code"`
 }
 
-func (be BindingError) Error() string {
+func (be FieldBindingError) Error() string {
 	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
 }
 
 type AggregatedBindingError struct {
-	Errors []BindingError `json:"errors"`
+	Errors []FieldBindingError `json:"errors"`
 }
 
 func (c AggregatedBindingError) Error() string {
@@ -408,7 +411,7 @@ func (c AggregatedBindingError) Error() string {
 }
 
 type bindingContext struct {
-	errors []BindingError
+	errors []FieldBindingError
 }
 
 func (c bindingContext) AggregatedError() error {
@@ -473,10 +476,16 @@ func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
 
 		targetLen := len(tv)
 		if isMin && targetLen < threshold {
-			return fmt.Errorf("value %v has length (%d) less than minimum %v: %w", tv, targetLen, threshold, ErrInvalidValueOutOfRange)
+			return fmt.Errorf(
+				"value %v has length (%d) less than minimum %v: %w",
+				tv, targetLen, threshold, ErrInvalidValueOutOfRange,
+			)
 		}
 		if !isMin && targetLen > threshold {
-			return fmt.Errorf("value %v has length (%d) more than maximum %v: %w", tv, targetLen, threshold, ErrInvalidValueOutOfRange)
+			return fmt.Errorf(
+				"value %v has length (%d) more than maximum %v: %w", tv,
+				targetLen, threshold, ErrInvalidValueOutOfRange,
+			)
 		}
 
 		return nil
@@ -496,7 +505,9 @@ func newPatternValidator[TRawVal any, TTargetValue string](patternStr string) va
 	}
 }
 
-func newCompositeValidator[TRawVal any, TTargetVal any](validators ...valueValidator[TRawVal, TTargetVal]) valueValidator[TRawVal, TTargetVal] {
+func newCompositeValidator[
+	TRawVal any, TTargetVal any,
+](validators ...valueValidator[TRawVal, TTargetVal]) valueValidator[TRawVal, TTargetVal] {
 	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
 		for _, v := range validators {
 			if err := v(ov, tv); err != nil {
@@ -523,7 +534,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 		receiver *TTargetVal,
 	) {
 		if err := params.parseValue(rawVal, receiver); err != nil {
-			bindingCtx.errors = append(bindingCtx.errors, BindingError{
+			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
 				Code:     ErrBadValueFormat,
@@ -534,7 +545,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 		if err := params.validateValue(rawVal, *receiver); err != nil {
 			errCode := ErrInvalidValue
 			errors.As(err, &errCode)
-			bindingCtx.errors = append(bindingCtx.errors, BindingError{
+			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
 				Code:     errCode,

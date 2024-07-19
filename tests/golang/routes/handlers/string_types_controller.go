@@ -157,7 +157,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	return controllerBuilder
 }
 
-func RegisterStringTypesRoutes(controller *StringTypesController, app *httpApp) {
+func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
 	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(app))
 	app.router.HandleRoute("GET", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))

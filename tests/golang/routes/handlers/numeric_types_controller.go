@@ -167,7 +167,7 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	return controllerBuilder
 }
 
-func RegisterNumericTypesRoutes(controller *NumericTypesController, app *httpApp) {
+func RegisterNumericTypesRoutes(controller *NumericTypesController, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
