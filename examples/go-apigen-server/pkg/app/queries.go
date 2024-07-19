@@ -10,18 +10,18 @@ import (
 
 type Queries interface {
 	ListPets(context.Context, *handlers.PetsListPetsRequest) (*models.PetsResponse, error)
-	GetPetById(context.Context, *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error)
+	GetPetByID(context.Context, *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error)
 }
 
 type QueriesDeps struct {
-	Storage *storage
+	Storage *Storage
 }
 
 type queriesImpl struct {
 	QueriesDeps
 }
 
-func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRequest) (*models.PetsResponse, error) {
+func (q *queriesImpl) ListPets(_ context.Context, req *handlers.PetsListPetsRequest) (*models.PetsResponse, error) {
 	allPetsLen := int64(len(q.Storage.allPets))
 	limit := req.Limit
 	offset := req.Offset
@@ -35,8 +35,8 @@ func (q *queriesImpl) ListPets(ctx context.Context, req *handlers.PetsListPetsRe
 	return &models.PetsResponse{Data: result}, nil
 }
 
-func (q *queriesImpl) GetPetById(ctx context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
-	pet, ok := q.Storage.petsById[req.PetId]
+func (q *queriesImpl) GetPetByID(_ context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
+	pet, ok := q.Storage.petsByID[req.PetId]
 	if !ok {
 		return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)
 	}

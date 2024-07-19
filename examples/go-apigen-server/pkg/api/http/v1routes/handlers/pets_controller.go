@@ -101,7 +101,7 @@ func BuildPetsController() *PetsControllerBuilder {
 	return controllerBuilder
 }
 
-func MountPetsRoutes(controller *PetsController, app *httpApp) {
+func RegisterPetsRoutes(controller *PetsController, app *httpApp) {
 	app.router.HandleRoute("POST", "/pets", controller.CreatePet(app))
 	app.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(app))
 	app.router.HandleRoute("GET", "/pets", controller.ListPets(app))

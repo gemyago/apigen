@@ -1,0 +1,26 @@
+name: Delete Merged Branch
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  run:
+    if: |
+      (
+        github.event.pull_request.merged == true &&
+        github.event.pull_request.head.ref != 'main'
+      )
+    name: Delete Merged PR Branch
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Delete merged branch
+      shell: bash
+      run: |
+        set -e -o pipefail
+        headRefName=$(gh pr view ${{ github.event.pull_request.number }} --json headRefName -q ".headRefName")
+        git push origin --delete ${headRefName}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

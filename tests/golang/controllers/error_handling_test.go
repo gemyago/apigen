@@ -18,7 +18,7 @@ func TestErrorHandling(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.MountErrorHandlingRoutes(
+		handlers.RegisterErrorHandlingRoutes(
 			newErrorHandlingController(),
 			handlers.NewHttpApp(router, handlers.WithLogger(newLogger())),
 		)
@@ -35,7 +35,7 @@ func TestErrorHandling(t *testing.T) {
 	runTestCase := func(t *testing.T, tc testCase) {
 		router := setupRouter()
 		testReq := httptest.NewRequest(
-			"GET",
+			http.MethodGet,
 			tc.path,
 			http.NoBody,
 		)
@@ -59,7 +59,10 @@ func TestErrorHandling(t *testing.T) {
 	t.Run("parsing-errors", func(t *testing.T) {
 		runTestCase(t, testCase{
 			name: "respond with 400 if parsing fails",
-			path: fmt.Sprintf("/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s", fake.Lorem().Word()),
+			path: fmt.Sprintf(
+				"/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s",
+				fake.Lorem().Word(),
+			),
 			wantErrors: []handlers.BindingError{
 				{Field: "pathParam1", Location: "path", Code: "BAD_FORMAT"},
 				{Field: "pathParam2", Location: "path", Code: "BAD_FORMAT"},

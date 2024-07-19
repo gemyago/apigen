@@ -75,7 +75,7 @@ func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
 	return controllerBuilder
 }
 
-func Mount{{baseName}}Routes(controller *{{baseName}}Controller, app *httpApp) {
+func Register{{baseName}}Routes(controller *{{baseName}}Controller, app *httpApp) {
 	{{#operations}}
 	{{#operation}}
 	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(app))

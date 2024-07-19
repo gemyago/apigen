@@ -31,12 +31,12 @@ func (r *routerAdapter) HandleRoute(method, pathPattern string, h http.Handler) 
 	r.mux.Handle(method+" "+pathPattern, h)
 }
 
-func (r *routerAdapter) HandleError(req *http.Request, w http.ResponseWriter, err error) {
+func (r *routerAdapter) HandleError(_ *http.Request, w http.ResponseWriter, err error) {
 	r.handledErrors = append(r.handledErrors, err)
 	w.WriteHeader(http.StatusInternalServerError)
 }
 
-// openTestLogFile will open a log file in a project root directory
+// openTestLogFile will open a log file in a project root directory.
 func openTestLogFile() *os.File {
 	_, filename, _, _ := runtime.Caller(0) // Will be current file
 	testFilePath := filepath.Join(filename, "..", "..", "..", "..", "golang-test.log")
@@ -48,7 +48,7 @@ func openTestLogFile() *os.File {
 	return f
 }
 
-var testOutput = openTestLogFile()
+var testOutput = openTestLogFile() //nolint:gochecknoglobals // we want to open it once for all tests
 
 func newLogger() *slog.Logger {
 	return slog.New(slog.NewJSONHandler(testOutput, nil))
@@ -72,7 +72,7 @@ func runRouteTestCase[TActions any](
 		tc := tc()
 		testActions, router := setupFn()
 		testReq := httptest.NewRequest(
-			"GET",
+			http.MethodGet,
 			tc.path,
 			http.NoBody,
 		)
@@ -90,10 +90,10 @@ type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions
 func expectBindingErrors[TActions any](wantErrors []handlers.BindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
-		testActions TActions,
+		_ TActions,
 		recorder *httptest.ResponseRecorder,
 	) {
-		if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+		if !assert.Equal(t, http.StatusBadRequest, recorder.Code, "Unexpected response: %v", recorder.Body) {
 			return
 		}
 		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
@@ -125,14 +125,14 @@ func assertFieldError(
 	location string,
 	field string,
 	code handlers.BindingErrorCode,
-) bool {
+) {
 	for _, fieldErr := range err.Errors {
 		if fieldErr.Location == location && fieldErr.Field == field {
-			return assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", field)
+			assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", field)
+			return
 		}
 	}
 	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
-	return false
 }
 
 type mockActionCall[TParams any] struct {
