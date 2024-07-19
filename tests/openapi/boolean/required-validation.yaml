@@ -1,0 +1,32 @@
+get:
+  summary: API to simulate and test required validation of boolean type
+  operationId: booleanRequiredValidation
+  tags:
+    - boolean
+  parameters:
+    # path params are always required
+
+    # params in query
+    - name: boolParam1InQuery
+      in: path
+      required: true
+      schema:
+        type: boolean
+    - name: boolParam2InQuery
+      in: path
+      required: true
+      schema:
+        type: boolean
+    - name: optionalBoolParam1InQuery
+      in: path
+      required: false
+      schema:
+        type: boolean
+    - name: optionalBoolParam2InQuery
+      in: path
+      required: false
+      schema:
+        type: boolean
+  responses:
+    '204':
+      description: Request succeeded

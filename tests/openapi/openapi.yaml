@@ -31,6 +31,12 @@ paths:
   /numeric-types/required-validation:
     $ref: "./numeric-types/required-validation.yaml"
 
+  # boolean routes
+  /boolean/parsing/{boolParam1}/{boolParam2}:
+    $ref: "./boolean/parsing.yaml"
+  /boolean/required-validation:
+    $ref: "./boolean/required-validation.yaml"
+
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
     $ref: "./error-handling/parsing-errors.yaml"
