@@ -58,7 +58,7 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 }
 
 type StringTypesController struct {
-	// GET /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesParsingRequest,
 	//
@@ -88,7 +88,7 @@ type StringTypesController struct {
 }
 
 type StringTypesControllerBuilder struct {
-	// GET /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesParsingRequest,
 	//
@@ -130,7 +130,7 @@ func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder := &StringTypesControllerBuilder{}
 
-	// GET /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesParsing.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesParsing.voidResult = true
@@ -158,7 +158,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 }
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
-	app.router.HandleRoute("GET", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
+	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
 	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(app))
 	app.router.HandleRoute("GET", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/string-types/required-validation", controller.StringTypesRequiredValidation(app))

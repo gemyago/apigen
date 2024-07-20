@@ -73,6 +73,7 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
@@ -98,6 +99,7 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
@@ -122,6 +124,7 @@ func TestStringTypes(t *testing.T) {
 			query.Set("dateTimeStrInQuery", fake.Lorem().Word())
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
@@ -146,6 +149,7 @@ func TestStringTypes(t *testing.T) {
 			query.Set("dateStrInQuery", originalReq.DateStrInQuery.Format(time.RFC3339))
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),

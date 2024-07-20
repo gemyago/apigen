@@ -55,6 +55,7 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
+	method string
 	path   string
 	query  url.Values
 	expect routeTestCaseExpectFn[TActions]
@@ -71,8 +72,12 @@ func runRouteTestCase[TActions any](
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
 		testActions, router := setupFn()
+		method := tc.method
+		if method == "" {
+			method = http.MethodGet
+		}
 		testReq := httptest.NewRequest(
-			http.MethodGet,
+			method,
 			tc.path,
 			http.NoBody,
 		)
