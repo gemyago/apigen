@@ -88,7 +88,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
 				),
 				query: query,
-				body:  marshalJsonDataAsReader(t, originalReq.Payload),
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
@@ -117,7 +117,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
 				),
 				query: query,
-				body:  marshalJsonDataAsReader(t, originalReq.Payload),
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Unexpected response", recorder.Body) {
 						return
@@ -142,7 +142,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
 					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
-				body:  marshalJsonDataAsReader(t, originalReq.Payload),
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
@@ -168,7 +168,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
 					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
-				body:  marshalJsonDataAsReader(t, originalReq.Payload),
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path

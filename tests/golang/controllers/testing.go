@@ -96,7 +96,7 @@ func runRouteTestCase[TActions any](
 	})
 }
 
-func marshalJsonDataAsReader(t *testing.T, data any) io.Reader {
+func marshalJSONDataAsReader(t *testing.T, data any) io.Reader {
 	body, err := json.Marshal(data)
 	if err != nil {
 		t.Errorf("failed to marshal body: %v", err)
