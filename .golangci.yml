@@ -353,7 +353,7 @@ issues:
         - noctx
         - wrapcheck
         - gocognit
-    - path: "routes/handlers/(.+)_(controller|params)\\.go" #TODO: Add models here
+    - path: "(routes/handlers/(.+)_(controller|params)\\.go)|(routes/models/(.+)\\.go)"
       linters:
         - lll # hard to control line length in generated code
         - funlen # same as above
