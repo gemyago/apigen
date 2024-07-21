@@ -7,3 +7,4 @@ handlers/numeric_types_controller.go
 handlers/numeric_types_params.go
 handlers/string_types_controller.go
 handlers/string_types_params.go
+models/string_types_parsing_request.go

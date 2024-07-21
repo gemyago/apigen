@@ -81,7 +81,9 @@ func TestStringTypes(t *testing.T) {
 				),
 				query: query,
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
-					assert.Equal(t, 204, recorder.Code)
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
 
 					wantReq := *originalReq
 					wantReq.DateStr = lo.Must(time.Parse(time.DateOnly, wantReq.DateStr.Format(time.DateOnly)))

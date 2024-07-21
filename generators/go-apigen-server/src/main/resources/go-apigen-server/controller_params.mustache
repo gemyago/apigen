@@ -5,10 +5,10 @@
 import (
 	"net/http"
 	"time"
-	{{#hasModel}}
+	{{#hasImportedModel}}
 
 	"{{invokerPackage}}/models"
-{{/hasModel}}
+{{/hasImportedModel}}
 )
 
 // Below is to workaround unused imports.

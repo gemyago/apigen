@@ -5,7 +5,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +15,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
 
 import com.google.common.collect.ImmutableMap;
@@ -229,5 +233,24 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
     // Pattern is considered platform specific, so we're using as it (escaping only)
     return pattern.replace("\\", "\\\\");
+  }
+
+  @Override
+  public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> allModels) {
+    OperationsMap operationsMap = super.postProcessOperationsWithModels(objs, allModels);
+    List<Map<String, String>> imports = objs.getImports();
+    if (imports == null)
+        return objs;
+
+    operationsMap.put("hasImportedModel", false);
+    Iterator<Map<String, String>> iterator = imports.iterator();
+    while (iterator.hasNext()) {
+        String _import = iterator.next().get("import");
+        if (_import.startsWith(modelPackage())) {
+          operationsMap.put("hasImportedModel", true);
+        }
+    }
+
+    return operationsMap;
   }
 }

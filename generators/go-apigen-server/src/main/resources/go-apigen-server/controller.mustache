@@ -4,10 +4,10 @@
 
 import (
 	"time"
-	{{#hasModel}}
+	{{#hasImportedModel}}
 
 	"{{invokerPackage}}/models"
-{{/hasModel}}
+{{/hasImportedModel}}
 )
 
 // Below is to workaround unused imports.

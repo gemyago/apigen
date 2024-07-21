@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -19,6 +21,7 @@ type paramsParserStringTypesStringTypesParsing struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
+	bindPayload requestParamBinder[*http.Request, models.StringTypesParsingRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesParsingRequest, error) {
@@ -37,6 +40,8 @@ func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req
 	p.bindDateStrInQuery(&bindingCtx, readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
 	p.bindDateTimeStrInQuery(&bindingCtx, readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
 	p.bindByteStrInQuery(&bindingCtx, readQueryValue("byteStrInQuery", query), &reqParams.ByteStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -119,6 +124,14 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			location: "query",
 			parseValue: app.knownParsers.stringInQuery,
 			validateValue: newCompositeValidator[[]string, string](
+				validateNonEmpty,
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.StringTypesParsingRequest]{
+			field: "payload",
+			location: "body",
+			parseValue: parseJSONPayload[models.StringTypesParsingRequest],
+			validateValue: newCompositeValidator[*http.Request, models.StringTypesParsingRequest](
 				validateNonEmpty,
 			),
 		}),

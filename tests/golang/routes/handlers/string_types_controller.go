@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -18,6 +20,7 @@ type StringTypesStringTypesParsingRequest struct {
 	DateStrInQuery time.Time
 	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
+	Payload models.StringTypesParsingRequest
 }
 
 type StringTypesStringTypesPatternValidationRequest struct {
