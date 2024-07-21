@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strconv"
 	"time"
 
@@ -367,34 +366,13 @@ func newKnownParsers() *knownParsersDef {
 	}
 }
 
-type BindingError string
-
-const (
-	// ErrBadValueFormat error means data provided can not be parsed to a target type.
-	ErrBadValueFormat BindingError = "BAD_FORMAT"
-
-	// ErrValueRequired error code indicates that the required value has not been provided.
-	ErrValueRequired BindingError = "INVALID_REQUIRED"
-
-	// ErrInvalidValueOutOfRange error code indicates that the value is out of range of allowable values
-	// this is usually when number is out of min/max range, or string is outside of limits.
-	ErrInvalidValueOutOfRange BindingError = "INVALID_OUT_OF_RANGE"
-
-	// ErrInvalidValue error code a generic validation error.
-	ErrInvalidValue BindingError = "INVALID"
-)
-
-func (c BindingError) Error() string {
-	return string(c)
-}
-
 // FieldBindingError occurs at parsing/validation stage and holds
 // context on field that the error is related to.
 type FieldBindingError struct {
-	Field    string       `json:"field"`
-	Location string       `json:"location"`
-	Err      error        `json:"-"`
-	Code     BindingError `json:"code"`
+	Field    string                `json:"field"`
+	Location string                `json:"location"`
+	Err      error                 `json:"-"`
+	Code     internal.BindingError `json:"code"`
 }
 
 func (be FieldBindingError) Error() string {
@@ -430,102 +408,11 @@ type requestParamBinder[TRawVal any, TTargetVal any] func(
 	receiver *TTargetVal,
 )
 
-type valueValidator[TRawVal any, TTargetVal any] func(internal.OptionalVal[TRawVal], TTargetVal) error
-
-func validateNonEmpty[TRawVal any, TTargetVal any](rawVal internal.OptionalVal[TRawVal], _ TTargetVal) error {
-	if !rawVal.Assigned {
-		return ErrValueRequired
-	}
-	return nil
-}
-
-var _ valueValidator[string, string] = validateNonEmpty
-
-func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
-	threshold TTargetVal,
-	exclusive bool,
-	isMin bool,
-) valueValidator[TRawVal, TTargetVal] {
-	return func(ov internal.OptionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-
-		// From OpenAPI spec:
-		// exclusiveMinimum: false or not included	value ≥ minimum
-		// exclusiveMinimum: true	value > minimum
-		// exclusiveMaximum: false or not included	value ≤ maximum
-		// exclusiveMaximum: true	value < maximum
-
-		if isMin && ((exclusive && tv <= threshold) || (!exclusive && tv < threshold)) {
-			return fmt.Errorf("value %v is less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
-		}
-		if !isMin && ((exclusive && tv >= threshold) || (!exclusive && tv > threshold)) {
-			return fmt.Errorf("value %v is greater than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
-		}
-
-		return nil
-	}
-}
-
-func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
-	threshold int,
-	isMin bool,
-) valueValidator[TRawVal, TTargetVal] {
-	return func(ov internal.OptionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-
-		targetLen := len(tv)
-		if isMin && targetLen < threshold {
-			return fmt.Errorf(
-				"value %v has length (%d) less than minimum %v: %w",
-				tv, targetLen, threshold, ErrInvalidValueOutOfRange,
-			)
-		}
-		if !isMin && targetLen > threshold {
-			return fmt.Errorf(
-				"value %v has length (%d) more than maximum %v: %w", tv,
-				targetLen, threshold, ErrInvalidValueOutOfRange,
-			)
-		}
-
-		return nil
-	}
-}
-
-func newPatternValidator[TRawVal any, TTargetValue string](patternStr string) valueValidator[TRawVal, string] {
-	pattern := regexp.MustCompile(patternStr)
-	return func(ov internal.OptionalVal[TRawVal], tv string) error {
-		if !ov.Assigned {
-			return nil
-		}
-		if !pattern.MatchString(tv) {
-			return fmt.Errorf("value %v does not match pattern %v: %w", tv, patternStr, ErrInvalidValue)
-		}
-		return nil
-	}
-}
-
-func newCompositeValidator[
-	TRawVal any, TTargetVal any,
-](validators ...valueValidator[TRawVal, TTargetVal]) valueValidator[TRawVal, TTargetVal] {
-	return func(ov internal.OptionalVal[TRawVal], tv TTargetVal) error {
-		for _, v := range validators {
-			if err := v(ov, tv); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-}
-
 type binderParams[TRawVal any, TTargetVal any] struct {
 	field         string
 	location      string
 	parseValue    rawValueParser[TRawVal, TTargetVal]
-	validateValue valueValidator[TRawVal, TTargetVal]
+	validateValue internal.ValueValidator[TRawVal, TTargetVal]
 }
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
@@ -540,13 +427,13 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     ErrBadValueFormat,
+				Code:     internal.ErrBadValueFormat,
 				Err:      err,
 			})
 			return
 		}
 		if err := params.validateValue(rawVal, *receiver); err != nil {
-			errCode := ErrInvalidValue
+			errCode := internal.ErrInvalidValue
 			errors.As(err, &errCode)
 			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
