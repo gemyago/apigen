@@ -1,6 +1,7 @@
 handlers/handlers.go
 handlers/pets_controller.go
 handlers/pets_params.go
+internal/validators.go
 models/error.go
 models/pet.go
 models/pet_response.go

@@ -8,63 +8,63 @@ import (
 var _ = time.Time{}
 
 type NumericTypesNumericTypesParsingRequest struct {
-	NumberAny float32
-	NumberFloat float32
-	NumberDouble float64
-	NumberInt int32
-	NumberInt32 int32
-	NumberInt64 int64
-	NumberAnyInQuery float32
-	NumberFloatInQuery float32
+	NumberAny           float32
+	NumberFloat         float32
+	NumberDouble        float64
+	NumberInt           int32
+	NumberInt32         int32
+	NumberInt64         int64
+	NumberAnyInQuery    float32
+	NumberFloatInQuery  float32
 	NumberDoubleInQuery float64
-	NumberIntInQuery int32
-	NumberInt32InQuery int32
-	NumberInt64InQuery int64
+	NumberIntInQuery    int32
+	NumberInt32InQuery  int32
+	NumberInt64InQuery  int64
 }
 
 type NumericTypesNumericTypesRangeValidationRequest struct {
-	NumberAny float32
-	NumberFloat float32
-	NumberDouble float64
-	NumberInt int32
-	NumberInt32 int32
-	NumberInt64 int64
-	NumberAnyInQuery float32
-	NumberFloatInQuery float32
+	NumberAny           float32
+	NumberFloat         float32
+	NumberDouble        float64
+	NumberInt           int32
+	NumberInt32         int32
+	NumberInt64         int64
+	NumberAnyInQuery    float32
+	NumberFloatInQuery  float32
 	NumberDoubleInQuery float64
-	NumberIntInQuery int32
-	NumberInt32InQuery int32
-	NumberInt64InQuery int64
+	NumberIntInQuery    int32
+	NumberInt32InQuery  int32
+	NumberInt64InQuery  int64
 }
 
 type NumericTypesNumericTypesRangeValidationExclusiveRequest struct {
-	NumberAny float32
-	NumberFloat float32
-	NumberDouble float64
-	NumberInt int32
-	NumberInt32 int32
-	NumberInt64 int64
-	NumberAnyInQuery float32
-	NumberFloatInQuery float32
+	NumberAny           float32
+	NumberFloat         float32
+	NumberDouble        float64
+	NumberInt           int32
+	NumberInt32         int32
+	NumberInt64         int64
+	NumberAnyInQuery    float32
+	NumberFloatInQuery  float32
 	NumberDoubleInQuery float64
-	NumberIntInQuery int32
-	NumberInt32InQuery int32
-	NumberInt64InQuery int64
+	NumberIntInQuery    int32
+	NumberInt32InQuery  int32
+	NumberInt64InQuery  int64
 }
 
 type NumericTypesNumericTypesRequiredValidationRequest struct {
-	NumberAnyInQuery float32
-	NumberFloatInQuery float32
-	NumberDoubleInQuery float64
-	NumberIntInQuery int32
-	NumberInt32InQuery int32
-	NumberInt64InQuery int64
-	OptionalNumberAnyInQuery float32
-	OptionalNumberFloatInQuery float32
+	NumberAnyInQuery            float32
+	NumberFloatInQuery          float32
+	NumberDoubleInQuery         float64
+	NumberIntInQuery            int32
+	NumberInt32InQuery          int32
+	NumberInt64InQuery          int64
+	OptionalNumberAnyInQuery    float32
+	OptionalNumberFloatInQuery  float32
 	OptionalNumberDoubleInQuery float64
-	OptionalNumberIntInQuery int32
-	OptionalNumberInt32InQuery int32
-	OptionalNumberInt64InQuery int64
+	OptionalNumberIntInQuery    int32
+	OptionalNumberInt32InQuery  int32
+	OptionalNumberInt64InQuery  int64
 }
 
 type NumericTypesController struct {
@@ -130,10 +130,10 @@ type NumericTypesControllerBuilder struct {
 func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 	// TODO: panic if any handler is null
 	return &NumericTypesController{
-		NumericTypesParsing: c.HandleNumericTypesParsing.httpHandlerFactory,
-		NumericTypesRangeValidation: c.HandleNumericTypesRangeValidation.httpHandlerFactory,
+		NumericTypesParsing:                  c.HandleNumericTypesParsing.httpHandlerFactory,
+		NumericTypesRangeValidation:          c.HandleNumericTypesRangeValidation.httpHandlerFactory,
 		NumericTypesRangeValidationExclusive: c.HandleNumericTypesRangeValidationExclusive.httpHandlerFactory,
-		NumericTypesRequiredValidation: c.HandleNumericTypesRequiredValidation.httpHandlerFactory,
+		NumericTypesRequiredValidation:       c.HandleNumericTypesRequiredValidation.httpHandlerFactory,
 	}
 }
 

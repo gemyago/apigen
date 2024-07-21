@@ -133,6 +133,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         apiPackage,
         "handlers.go"));
 
+    supportingFiles.add(new SupportingFile(
+        "validators.mustache",
+        "internal",
+        "validators.go"));
+
     typeMapping.put("date", "time.Time");
   }
 

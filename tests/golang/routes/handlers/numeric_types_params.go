@@ -9,18 +9,18 @@ import (
 var _ = time.Time{}
 
 type paramsParserNumericTypesNumericTypesParsing struct {
-	bindNumberAny requestParamBinder[string, float32]
-	bindNumberFloat requestParamBinder[string, float32]
-	bindNumberDouble requestParamBinder[string, float64]
-	bindNumberInt requestParamBinder[string, int32]
-	bindNumberInt32 requestParamBinder[string, int32]
-	bindNumberInt64 requestParamBinder[string, int64]
-	bindNumberAnyInQuery requestParamBinder[[]string, float32]
-	bindNumberFloatInQuery requestParamBinder[[]string, float32]
+	bindNumberAny           requestParamBinder[string, float32]
+	bindNumberFloat         requestParamBinder[string, float32]
+	bindNumberDouble        requestParamBinder[string, float64]
+	bindNumberInt           requestParamBinder[string, int32]
+	bindNumberInt32         requestParamBinder[string, int32]
+	bindNumberInt64         requestParamBinder[string, int64]
+	bindNumberAnyInQuery    requestParamBinder[[]string, float32]
+	bindNumberFloatInQuery  requestParamBinder[[]string, float32]
 	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
-	bindNumberIntInQuery requestParamBinder[[]string, int32]
-	bindNumberInt32InQuery requestParamBinder[[]string, int32]
-	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindNumberIntInQuery    requestParamBinder[[]string, int32]
+	bindNumberInt32InQuery  requestParamBinder[[]string, int32]
+	bindNumberInt64InQuery  requestParamBinder[[]string, int64]
 }
 
 func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
@@ -47,96 +47,96 @@ func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, r
 func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*NumericTypesNumericTypesParsingRequest] {
 	return &paramsParserNumericTypesNumericTypesParsing{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberAny",
-			location: "path",
+			field:      "numberAny",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberFloat",
-			location: "path",
+			field:      "numberFloat",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
-			field: "numberDouble",
-			location: "path",
+			field:      "numberDouble",
+			location:   "path",
 			parseValue: app.knownParsers.float64InPath,
 			validateValue: newCompositeValidator[string, float64](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt",
-			location: "path",
+			field:      "numberInt",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt32",
-			location: "path",
+			field:      "numberInt32",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
-			field: "numberInt64",
-			location: "path",
+			field:      "numberInt64",
+			location:   "path",
 			parseValue: app.knownParsers.int64InPath,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberAnyInQuery",
-			location: "query",
+			field:      "numberAnyInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberFloatInQuery",
-			location: "query",
+			field:      "numberFloatInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "numberDoubleInQuery",
-			location: "query",
+			field:      "numberDoubleInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float64InQuery,
 			validateValue: newCompositeValidator[[]string, float64](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberIntInQuery",
-			location: "query",
+			field:      "numberIntInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberInt32InQuery",
-			location: "query",
+			field:      "numberInt32InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "numberInt64InQuery",
-			location: "query",
+			field:      "numberInt64InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
@@ -146,18 +146,18 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 }
 
 type paramsParserNumericTypesNumericTypesRangeValidation struct {
-	bindNumberAny requestParamBinder[string, float32]
-	bindNumberFloat requestParamBinder[string, float32]
-	bindNumberDouble requestParamBinder[string, float64]
-	bindNumberInt requestParamBinder[string, int32]
-	bindNumberInt32 requestParamBinder[string, int32]
-	bindNumberInt64 requestParamBinder[string, int64]
-	bindNumberAnyInQuery requestParamBinder[[]string, float32]
-	bindNumberFloatInQuery requestParamBinder[[]string, float32]
+	bindNumberAny           requestParamBinder[string, float32]
+	bindNumberFloat         requestParamBinder[string, float32]
+	bindNumberDouble        requestParamBinder[string, float64]
+	bindNumberInt           requestParamBinder[string, int32]
+	bindNumberInt32         requestParamBinder[string, int32]
+	bindNumberInt64         requestParamBinder[string, int64]
+	bindNumberAnyInQuery    requestParamBinder[[]string, float32]
+	bindNumberFloatInQuery  requestParamBinder[[]string, float32]
 	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
-	bindNumberIntInQuery requestParamBinder[[]string, int32]
-	bindNumberInt32InQuery requestParamBinder[[]string, int32]
-	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindNumberIntInQuery    requestParamBinder[[]string, int32]
+	bindNumberInt32InQuery  requestParamBinder[[]string, int32]
+	bindNumberInt64InQuery  requestParamBinder[[]string, int64]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
@@ -184,8 +184,8 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpR
 func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidation{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberAny",
-			location: "path",
+			field:      "numberAny",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
@@ -194,8 +194,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberFloat",
-			location: "path",
+			field:      "numberFloat",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
@@ -204,8 +204,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
-			field: "numberDouble",
-			location: "path",
+			field:      "numberDouble",
+			location:   "path",
 			parseValue: app.knownParsers.float64InPath,
 			validateValue: newCompositeValidator[string, float64](
 				validateNonEmpty,
@@ -214,8 +214,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt",
-			location: "path",
+			field:      "numberInt",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
@@ -224,8 +224,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt32",
-			location: "path",
+			field:      "numberInt32",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
@@ -234,8 +234,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
-			field: "numberInt64",
-			location: "path",
+			field:      "numberInt64",
+			location:   "path",
 			parseValue: app.knownParsers.int64InPath,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
@@ -244,8 +244,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberAnyInQuery",
-			location: "query",
+			field:      "numberAnyInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
@@ -254,8 +254,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberFloatInQuery",
-			location: "query",
+			field:      "numberFloatInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
@@ -264,8 +264,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "numberDoubleInQuery",
-			location: "query",
+			field:      "numberDoubleInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float64InQuery,
 			validateValue: newCompositeValidator[[]string, float64](
 				validateNonEmpty,
@@ -274,8 +274,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberIntInQuery",
-			location: "query",
+			field:      "numberIntInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
@@ -284,8 +284,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberInt32InQuery",
-			location: "query",
+			field:      "numberInt32InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
@@ -294,8 +294,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "numberInt64InQuery",
-			location: "query",
+			field:      "numberInt64InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
@@ -307,18 +307,18 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 }
 
 type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
-	bindNumberAny requestParamBinder[string, float32]
-	bindNumberFloat requestParamBinder[string, float32]
-	bindNumberDouble requestParamBinder[string, float64]
-	bindNumberInt requestParamBinder[string, int32]
-	bindNumberInt32 requestParamBinder[string, int32]
-	bindNumberInt64 requestParamBinder[string, int64]
-	bindNumberAnyInQuery requestParamBinder[[]string, float32]
-	bindNumberFloatInQuery requestParamBinder[[]string, float32]
+	bindNumberAny           requestParamBinder[string, float32]
+	bindNumberFloat         requestParamBinder[string, float32]
+	bindNumberDouble        requestParamBinder[string, float64]
+	bindNumberInt           requestParamBinder[string, int32]
+	bindNumberInt32         requestParamBinder[string, int32]
+	bindNumberInt64         requestParamBinder[string, int64]
+	bindNumberAnyInQuery    requestParamBinder[[]string, float32]
+	bindNumberFloatInQuery  requestParamBinder[[]string, float32]
 	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
-	bindNumberIntInQuery requestParamBinder[[]string, int32]
-	bindNumberInt32InQuery requestParamBinder[[]string, int32]
-	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindNumberIntInQuery    requestParamBinder[[]string, int32]
+	bindNumberInt32InQuery  requestParamBinder[[]string, int32]
+	bindNumberInt64InQuery  requestParamBinder[[]string, int64]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
@@ -345,8 +345,8 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(rou
 func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationExclusiveRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidationExclusive{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberAny",
-			location: "path",
+			field:      "numberAny",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
@@ -355,8 +355,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
-			field: "numberFloat",
-			location: "path",
+			field:      "numberFloat",
+			location:   "path",
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: newCompositeValidator[string, float32](
 				validateNonEmpty,
@@ -365,8 +365,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
-			field: "numberDouble",
-			location: "path",
+			field:      "numberDouble",
+			location:   "path",
 			parseValue: app.knownParsers.float64InPath,
 			validateValue: newCompositeValidator[string, float64](
 				validateNonEmpty,
@@ -375,8 +375,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt",
-			location: "path",
+			field:      "numberInt",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
@@ -385,8 +385,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
-			field: "numberInt32",
-			location: "path",
+			field:      "numberInt32",
+			location:   "path",
 			parseValue: app.knownParsers.int32InPath,
 			validateValue: newCompositeValidator[string, int32](
 				validateNonEmpty,
@@ -395,8 +395,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
-			field: "numberInt64",
-			location: "path",
+			field:      "numberInt64",
+			location:   "path",
 			parseValue: app.knownParsers.int64InPath,
 			validateValue: newCompositeValidator[string, int64](
 				validateNonEmpty,
@@ -405,8 +405,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberAnyInQuery",
-			location: "query",
+			field:      "numberAnyInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
@@ -415,8 +415,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberFloatInQuery",
-			location: "query",
+			field:      "numberFloatInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
@@ -425,8 +425,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "numberDoubleInQuery",
-			location: "query",
+			field:      "numberDoubleInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float64InQuery,
 			validateValue: newCompositeValidator[[]string, float64](
 				validateNonEmpty,
@@ -435,8 +435,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberIntInQuery",
-			location: "query",
+			field:      "numberIntInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
@@ -445,8 +445,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberInt32InQuery",
-			location: "query",
+			field:      "numberInt32InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
@@ -455,8 +455,8 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "numberInt64InQuery",
-			location: "query",
+			field:      "numberInt64InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
@@ -468,18 +468,18 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 }
 
 type paramsParserNumericTypesNumericTypesRequiredValidation struct {
-	bindNumberAnyInQuery requestParamBinder[[]string, float32]
-	bindNumberFloatInQuery requestParamBinder[[]string, float32]
-	bindNumberDoubleInQuery requestParamBinder[[]string, float64]
-	bindNumberIntInQuery requestParamBinder[[]string, int32]
-	bindNumberInt32InQuery requestParamBinder[[]string, int32]
-	bindNumberInt64InQuery requestParamBinder[[]string, int64]
-	bindOptionalNumberAnyInQuery requestParamBinder[[]string, float32]
-	bindOptionalNumberFloatInQuery requestParamBinder[[]string, float32]
+	bindNumberAnyInQuery            requestParamBinder[[]string, float32]
+	bindNumberFloatInQuery          requestParamBinder[[]string, float32]
+	bindNumberDoubleInQuery         requestParamBinder[[]string, float64]
+	bindNumberIntInQuery            requestParamBinder[[]string, int32]
+	bindNumberInt32InQuery          requestParamBinder[[]string, int32]
+	bindNumberInt64InQuery          requestParamBinder[[]string, int64]
+	bindOptionalNumberAnyInQuery    requestParamBinder[[]string, float32]
+	bindOptionalNumberFloatInQuery  requestParamBinder[[]string, float32]
 	bindOptionalNumberDoubleInQuery requestParamBinder[[]string, float64]
-	bindOptionalNumberIntInQuery requestParamBinder[[]string, int32]
-	bindOptionalNumberInt32InQuery requestParamBinder[[]string, int32]
-	bindOptionalNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindOptionalNumberIntInQuery    requestParamBinder[[]string, int32]
+	bindOptionalNumberInt32InQuery  requestParamBinder[[]string, int32]
+	bindOptionalNumberInt64InQuery  requestParamBinder[[]string, int64]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
@@ -505,96 +505,96 @@ func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router ht
 func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRequiredValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRequiredValidation{
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberAnyInQuery",
-			location: "query",
+			field:      "numberAnyInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "numberFloatInQuery",
-			location: "query",
+			field:      "numberFloatInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "numberDoubleInQuery",
-			location: "query",
+			field:      "numberDoubleInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float64InQuery,
 			validateValue: newCompositeValidator[[]string, float64](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberIntInQuery",
-			location: "query",
+			field:      "numberIntInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "numberInt32InQuery",
-			location: "query",
+			field:      "numberInt32InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				validateNonEmpty,
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "numberInt64InQuery",
-			location: "query",
+			field:      "numberInt64InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				validateNonEmpty,
 			),
 		}),
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "optionalNumberAnyInQuery",
-			location: "query",
+			field:      "optionalNumberAnyInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				newMinMaxValueValidator[[]string, float32](100.01, false, true),
 			),
 		}),
 		bindOptionalNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
-			field: "optionalNumberFloatInQuery",
-			location: "query",
+			field:      "optionalNumberFloatInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: newCompositeValidator[[]string, float32](
 				newMinMaxValueValidator[[]string, float32](200.02, false, true),
 			),
 		}),
 		bindOptionalNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
-			field: "optionalNumberDoubleInQuery",
-			location: "query",
+			field:      "optionalNumberDoubleInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.float64InQuery,
 			validateValue: newCompositeValidator[[]string, float64](
 				newMinMaxValueValidator[[]string, float64](300.03, false, true),
 			),
 		}),
 		bindOptionalNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "optionalNumberIntInQuery",
-			location: "query",
+			field:      "optionalNumberIntInQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				newMinMaxValueValidator[[]string, int32](400, false, true),
 			),
 		}),
 		bindOptionalNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
-			field: "optionalNumberInt32InQuery",
-			location: "query",
+			field:      "optionalNumberInt32InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int32InQuery,
 			validateValue: newCompositeValidator[[]string, int32](
 				newMinMaxValueValidator[[]string, int32](500, false, true),
 			),
 		}),
 		bindOptionalNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "optionalNumberInt64InQuery",
-			location: "query",
+			field:      "optionalNumberInt64InQuery",
+			location:   "query",
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: newCompositeValidator[[]string, int64](
 				newMinMaxValueValidator[[]string, int64](600, false, true),

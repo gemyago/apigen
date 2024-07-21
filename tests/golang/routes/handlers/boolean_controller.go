@@ -8,15 +8,15 @@ import (
 var _ = time.Time{}
 
 type BooleanBooleanParsingRequest struct {
-	BoolParam1 bool
-	BoolParam2 bool
+	BoolParam1        bool
+	BoolParam2        bool
 	BoolParam1InQuery bool
 	BoolParam2InQuery bool
 }
 
 type BooleanBooleanRequiredValidationRequest struct {
-	BoolParam1InQuery bool
-	BoolParam2InQuery bool
+	BoolParam1InQuery         bool
+	BoolParam2InQuery         bool
 	OptionalBoolParam1InQuery bool
 	OptionalBoolParam2InQuery bool
 }
@@ -56,7 +56,7 @@ type BooleanControllerBuilder struct {
 func (c *BooleanControllerBuilder) Finalize() *BooleanController {
 	// TODO: panic if any handler is null
 	return &BooleanController{
-		BooleanParsing: c.HandleBooleanParsing.httpHandlerFactory,
+		BooleanParsing:            c.HandleBooleanParsing.httpHandlerFactory,
 		BooleanRequiredValidation: c.HandleBooleanRequiredValidation.httpHandlerFactory,
 	}
 }
