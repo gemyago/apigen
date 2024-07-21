@@ -144,7 +144,7 @@ func assertFieldError(
 	err *handlers.AggregatedBindingError,
 	location string,
 	field string,
-	code handlers.BindingError,
+	code string,
 ) {
 	for _, fieldErr := range err.Errors {
 		if fieldErr.Location == location && fieldErr.Field == field {

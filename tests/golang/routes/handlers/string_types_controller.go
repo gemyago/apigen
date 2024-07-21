@@ -10,54 +10,54 @@ import (
 var _ = time.Time{}
 
 type StringTypesStringTypesParsingRequest struct {
-	UnformattedStr         string
-	CustomFormatStr        string
-	DateStr                time.Time
-	DateTimeStr            time.Time
-	ByteStr                string
-	UnformattedStrInQuery  string
+	UnformattedStr string
+	CustomFormatStr string
+	DateStr time.Time
+	DateTimeStr time.Time
+	ByteStr string
+	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
-	DateStrInQuery         time.Time
-	DateTimeStrInQuery     time.Time
-	ByteStrInQuery         string
-	Payload                models.StringTypesParsingRequest
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
+	ByteStrInQuery string
+	Payload models.StringTypesParsingRequest
 }
 
 type StringTypesStringTypesPatternValidationRequest struct {
-	UnformattedStr         string
-	CustomFormatStr        string
-	DateStr                time.Time
-	DateTimeStr            time.Time
-	UnformattedStrInQuery  string
+	UnformattedStr string
+	CustomFormatStr string
+	DateStr time.Time
+	DateTimeStr time.Time
+	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
-	DateStrInQuery         time.Time
-	DateTimeStrInQuery     time.Time
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
 }
 
 type StringTypesStringTypesRangeValidationRequest struct {
-	UnformattedStr         string
-	CustomFormatStr        string
-	DateStr                time.Time
-	DateTimeStr            time.Time
-	ByteStr                string
-	UnformattedStrInQuery  string
+	UnformattedStr string
+	CustomFormatStr string
+	DateStr time.Time
+	DateTimeStr time.Time
+	ByteStr string
+	UnformattedStrInQuery string
 	CustomFormatStrInQuery string
-	DateStrInQuery         time.Time
-	DateTimeStrInQuery     time.Time
-	ByteStrInQuery         string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
+	ByteStrInQuery string
 }
 
 type StringTypesStringTypesRequiredValidationRequest struct {
-	UnformattedStrInQuery          string
-	CustomFormatStrInQuery         string
-	DateStrInQuery                 time.Time
-	DateTimeStrInQuery             time.Time
-	ByteStrInQuery                 string
-	OptionalUnformattedStrInQuery  string
+	UnformattedStrInQuery string
+	CustomFormatStrInQuery string
+	DateStrInQuery time.Time
+	DateTimeStrInQuery time.Time
+	ByteStrInQuery string
+	OptionalUnformattedStrInQuery string
 	OptionalCustomFormatStrInQuery string
-	OptionalDateStrInQuery         time.Time
-	OptionalDateTimeStrInQuery     time.Time
-	OptionalByteStrInQuery         string
+	OptionalDateStrInQuery time.Time
+	OptionalDateTimeStrInQuery time.Time
+	OptionalByteStrInQuery string
 }
 
 type StringTypesController struct {
@@ -123,9 +123,9 @@ type StringTypesControllerBuilder struct {
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	// TODO: panic if any handler is null
 	return &StringTypesController{
-		StringTypesParsing:            c.HandleStringTypesParsing.httpHandlerFactory,
-		StringTypesPatternValidation:  c.HandleStringTypesPatternValidation.httpHandlerFactory,
-		StringTypesRangeValidation:    c.HandleStringTypesRangeValidation.httpHandlerFactory,
+		StringTypesParsing: c.HandleStringTypesParsing.httpHandlerFactory,
+		StringTypesPatternValidation: c.HandleStringTypesPatternValidation.httpHandlerFactory,
+		StringTypesRangeValidation: c.HandleStringTypesRangeValidation.httpHandlerFactory,
 		StringTypesRequiredValidation: c.HandleStringTypesRequiredValidation.httpHandlerFactory,
 	}
 }

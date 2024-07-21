@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/internal"
 )
 
 // Below is to workaround unused imports.
@@ -20,7 +21,7 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 	bindingCtx := bindingContext{}
 	reqParams := &PetsCreatePetRequest{}
 	// body params
-	p.bindPayload(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
+	p.bindPayload(&bindingCtx, internal.OptionalVal[*http.Request]{Value: req, Assigned: true}, &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -30,8 +31,8 @@ func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetReque
 			field: "payload",
 			location: "body",
 			parseValue: parseJSONPayload[models.Pet],
-			validateValue: newCompositeValidator[*http.Request, models.Pet](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[*http.Request, models.Pet](
+				internal.ValidateNonEmpty,
 			),
 		}),
 	}
@@ -55,8 +56,8 @@ func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdReq
 			field: "petId",
 			location: "path",
 			parseValue: app.knownParsers.int64InPath,
-			validateValue: newCompositeValidator[string, int64](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[string, int64](
+				internal.ValidateNonEmpty,
 			),
 		}),
 	}
@@ -83,18 +84,18 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 			field: "limit",
 			location: "query",
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: newCompositeValidator[[]string, int64](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, int64](1, false, true),
-				newMinMaxValueValidator[[]string, int64](100, false, false),
+			validateValue: internal.NewCompositeValidator[[]string, int64](
+				internal.ValidateNonEmpty,
+				internal.NewMinMaxValueValidator[[]string, int64](1, false, true),
+				internal.NewMinMaxValueValidator[[]string, int64](100, false, false),
 			),
 		}),
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "offset",
 			location: "query",
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: newCompositeValidator[[]string, int64](
-				newMinMaxValueValidator[[]string, int64](1, false, true),
+			validateValue: internal.NewCompositeValidator[[]string, int64](
+				internal.NewMinMaxValueValidator[[]string, int64](1, false, true),
 			),
 		}),
 	}

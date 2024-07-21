@@ -88,20 +88,20 @@ func TestNumericTypes(t *testing.T) {
 					expect: expectBindingErrors[*numericTypesControllerTestActions](
 						[]handlers.FieldBindingError{
 							// path
-							{Field: "numberAny", Location: "path", Code: handlers.ErrBadValueFormat},
-							{Field: "numberFloat", Location: "path", Code: handlers.ErrBadValueFormat},
-							{Field: "numberDouble", Location: "path", Code: handlers.ErrBadValueFormat},
-							{Field: "numberInt", Location: "path", Code: handlers.ErrBadValueFormat},
-							{Field: "numberInt32", Location: "path", Code: handlers.ErrBadValueFormat},
-							{Field: "numberInt64", Location: "path", Code: handlers.ErrBadValueFormat},
+							{Field: "numberAny", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberFloat", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberDouble", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt32", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt64", Location: "path", Code: "BAD_FORMAT"},
 
 							// query
-							{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "numberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberIntInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberInt32InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
 						},
 					),
 				}
@@ -147,20 +147,20 @@ func TestNumericTypes(t *testing.T) {
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDouble", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -224,20 +224,20 @@ func TestNumericTypes(t *testing.T) {
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDouble", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -314,20 +314,20 @@ func TestNumericTypes(t *testing.T) {
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDouble", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -359,20 +359,20 @@ func TestNumericTypes(t *testing.T) {
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "numberAny", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloat", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDouble", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -495,12 +495,12 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalNumberIntInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalNumberInt32InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalNumberInt64InQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalNumberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -528,18 +528,18 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberAnyInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberFloatInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberIntInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberInt32InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalNumberInt64InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "numberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "numberIntInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberIntInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberInt32InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalNumberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -550,12 +550,12 @@ func TestNumericTypes(t *testing.T) {
 				query: url.Values{},
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "numberAnyInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberFloatInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberDoubleInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberIntInQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberInt32InQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "numberInt64InQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 					},
 				),
 			}

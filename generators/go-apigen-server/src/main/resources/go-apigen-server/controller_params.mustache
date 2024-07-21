@@ -9,6 +9,7 @@ import (
 
 	"{{invokerPackage}}/models"
 {{/hasImportedModel}}
+	"{{invokerPackage}}/internal"
 )
 
 // Below is to workaround unused imports.
@@ -36,7 +37,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, internal.OptionalVal[*http.Request]{Value: req, Assigned: true}, &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -48,13 +49,13 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
 			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
-			validateValue: newCompositeValidator[{{>params/binder-types}}]({{#required}}
-				validateNonEmpty,{{/required}}{{#minimum}}
-				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
-				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
-				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{#pattern}}
-				newPatternValidator[{{>params/binder-types}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
+			validateValue: internal.NewCompositeValidator[{{>params/binder-types}}]({{#required}}
+				internal.ValidateNonEmpty,{{/required}}{{#minimum}}
+				internal.NewMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
+				internal.NewMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
+				internal.NewMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, true),{{/minLength}}{{#maxLength}}
+				internal.NewMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{#pattern}}
+				internal.NewPatternValidator[{{>params/binder-types}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
 			),
 		}),
 		{{/allParams}}

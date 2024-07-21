@@ -3,14 +3,15 @@ package handlers
 import (
 	"net/http"
 	"time"
+	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
-	bindPathParam1     requestParamBinder[string, float32]
-	bindPathParam2     requestParamBinder[string, float32]
+	bindPathParam1 requestParamBinder[string, float32]
+	bindPathParam2 requestParamBinder[string, float32]
 	bindRequiredQuery1 requestParamBinder[[]string, float32]
 	bindRequiredQuery2 requestParamBinder[[]string, float32]
 }
@@ -31,35 +32,35 @@ func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpR
 func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingParsingErrors{
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
-			field:      "pathParam1",
-			location:   "path",
+			field: "pathParam1",
+			location: "path",
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: newCompositeValidator[string, float32](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[string, float32](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
-			field:      "pathParam2",
-			location:   "path",
+			field: "pathParam2",
+			location: "path",
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: newCompositeValidator[string, float32](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[string, float32](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
-			field:      "requiredQuery1",
-			location:   "query",
+			field: "requiredQuery1",
+			location: "query",
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, float32](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
-			field:      "requiredQuery2",
-			location:   "query",
+			field: "requiredQuery2",
+			location: "query",
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, float32](
+				internal.ValidateNonEmpty,
 			),
 		}),
 	}
@@ -83,21 +84,21 @@ func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router ht
 func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingValidationErrors{
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
-			field:      "requiredQuery1",
-			location:   "query",
+			field: "requiredQuery1",
+			location: "query",
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, float32](10, false, true),
+			validateValue: internal.NewCompositeValidator[[]string, float32](
+				internal.ValidateNonEmpty,
+				internal.NewMinMaxValueValidator[[]string, float32](10, false, true),
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
-			field:      "requiredQuery2",
-			location:   "query",
+			field: "requiredQuery2",
+			location: "query",
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: newCompositeValidator[[]string, float32](
-				validateNonEmpty,
-				newMinMaxValueValidator[[]string, float32](10, false, true),
+			validateValue: internal.NewCompositeValidator[[]string, float32](
+				internal.ValidateNonEmpty,
+				internal.NewMinMaxValueValidator[[]string, float32](10, false, true),
 			),
 		}),
 	}

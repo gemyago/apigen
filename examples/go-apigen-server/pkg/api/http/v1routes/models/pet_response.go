@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// Unused imports workaround
+// Unused imports workaround.
 var _ = json.Marshal
 var _ = errors.New
 var _ = fmt.Errorf

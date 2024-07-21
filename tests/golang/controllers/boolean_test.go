@@ -87,10 +87,10 @@ func TestBoolean(t *testing.T) {
 					query: query,
 					expect: expectBindingErrors[*booleanControllerTestActions](
 						[]handlers.FieldBindingError{
-							{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+							{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "optionalBoolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
 						},
 					),
 				}
@@ -162,10 +162,10 @@ func TestBoolean(t *testing.T) {
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalBoolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -180,8 +180,8 @@ func TestBoolean(t *testing.T) {
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrValueRequired},
+						{Field: "boolParam1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "boolParam2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 					},
 				),
 			}

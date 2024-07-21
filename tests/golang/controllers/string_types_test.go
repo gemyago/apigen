@@ -150,15 +150,15 @@ func TestStringTypes(t *testing.T) {
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "dateStr", Location: "path", Code: handlers.ErrBadValueFormat},
-						{Field: "dateTimeStr", Location: "path", Code: handlers.ErrBadValueFormat},
+						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
 
 						// query
-						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "dateTimeStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: handlers.ErrBadValueFormat},
+						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -191,14 +191,14 @@ func TestStringTypes(t *testing.T) {
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "dateStr", Location: "path", Code: handlers.ErrBadValueFormat},
+						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 
 						// query
-						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
 						// TODO
-						// {Field: "dateStr", Location: "body", Code: handlers.ErrBadValueFormat},
+						// {Field: "dateStr", Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -283,14 +283,14 @@ func TestStringTypes(t *testing.T) {
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "byteStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -346,14 +346,14 @@ func TestStringTypes(t *testing.T) {
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
-						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "byteStr", Location: "path", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -502,17 +502,17 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "dateTimeStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "byteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 
-						{Field: "optionalUnformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalCustomFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
-						{Field: "optionalDateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalDateTimeStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalByteStrInQuery", Location: "query", Code: handlers.ErrInvalidValueOutOfRange},
+						{Field: "optionalUnformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalCustomFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalDateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalDateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalByteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -592,11 +592,11 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
-						{Field: "unformattedStr", Location: "path", Code: handlers.ErrInvalidValue},
-						{Field: "customFormatStr", Location: "path", Code: handlers.ErrInvalidValue},
+						{Field: "unformattedStr", Location: "path", Code: "INVALID"},
+						{Field: "customFormatStr", Location: "path", Code: "INVALID"},
 
-						{Field: "unformattedStrInQuery", Location: "query", Code: handlers.ErrInvalidValue},
-						{Field: "customFormatStrInQuery", Location: "query", Code: handlers.ErrInvalidValue},
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID"},
 					},
 				),
 			}

@@ -369,10 +369,10 @@ func newKnownParsers() *knownParsersDef {
 // FieldBindingError occurs at parsing/validation stage and holds
 // context on field that the error is related to.
 type FieldBindingError struct {
-	Field    string                `json:"field"`
-	Location string                `json:"location"`
-	Err      error                 `json:"-"`
-	Code     internal.BindingError `json:"code"`
+	Field    string `json:"field"`
+	Location string `json:"location"`
+	Err      error  `json:"-"`
+	Code     string `json:"code"`
 }
 
 func (be FieldBindingError) Error() string {
@@ -427,7 +427,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     internal.ErrBadValueFormat,
+				Code:     internal.ErrBadValueFormat.Error(),
 				Err:      err,
 			})
 			return
@@ -438,7 +438,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     errCode,
+				Code:     errCode.Error(),
 				Err:      err,
 			})
 		}

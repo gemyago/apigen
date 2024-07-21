@@ -8,8 +8,8 @@ import (
 var _ = time.Time{}
 
 type ErrorHandlingErrorHandlingParsingErrorsRequest struct {
-	PathParam1     float32
-	PathParam2     float32
+	PathParam1 float32
+	PathParam2 float32
 	RequiredQuery1 float32
 	RequiredQuery2 float32
 }
@@ -54,7 +54,7 @@ type ErrorHandlingControllerBuilder struct {
 func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
 	// TODO: panic if any handler is null
 	return &ErrorHandlingController{
-		ErrorHandlingParsingErrors:    c.HandleErrorHandlingParsingErrors.httpHandlerFactory,
+		ErrorHandlingParsingErrors: c.HandleErrorHandlingParsingErrors.httpHandlerFactory,
 		ErrorHandlingValidationErrors: c.HandleErrorHandlingValidationErrors.httpHandlerFactory,
 	}
 }

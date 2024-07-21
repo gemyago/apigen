@@ -3,14 +3,15 @@ package handlers
 import (
 	"net/http"
 	"time"
+	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
 type paramsParserBooleanBooleanParsing struct {
-	bindBoolParam1        requestParamBinder[string, bool]
-	bindBoolParam2        requestParamBinder[string, bool]
+	bindBoolParam1 requestParamBinder[string, bool]
+	bindBoolParam2 requestParamBinder[string, bool]
 	bindBoolParam1InQuery requestParamBinder[[]string, bool]
 	bindBoolParam2InQuery requestParamBinder[[]string, bool]
 }
@@ -31,43 +32,43 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBooleanParsingRequest] {
 	return &paramsParserBooleanBooleanParsing{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
-			field:      "boolParam1",
-			location:   "path",
+			field: "boolParam1",
+			location: "path",
 			parseValue: app.knownParsers.boolInPath,
-			validateValue: newCompositeValidator[string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
-			field:      "boolParam2",
-			location:   "path",
+			field: "boolParam2",
+			location: "path",
 			parseValue: app.knownParsers.boolInPath,
-			validateValue: newCompositeValidator[string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:      "boolParam1InQuery",
-			location:   "query",
+			field: "boolParam1InQuery",
+			location: "query",
 			parseValue: app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:      "boolParam2InQuery",
-			location:   "query",
+			field: "boolParam2InQuery",
+			location: "query",
 			parseValue: app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 	}
 }
 
 type paramsParserBooleanBooleanRequiredValidation struct {
-	bindBoolParam1InQuery         requestParamBinder[[]string, bool]
-	bindBoolParam2InQuery         requestParamBinder[[]string, bool]
+	bindBoolParam1InQuery requestParamBinder[[]string, bool]
+	bindBoolParam2InQuery requestParamBinder[[]string, bool]
 	bindOptionalBoolParam1InQuery requestParamBinder[[]string, bool]
 	bindOptionalBoolParam2InQuery requestParamBinder[[]string, bool]
 }
@@ -87,32 +88,34 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[*BooleanBooleanRequiredValidationRequest] {
 	return &paramsParserBooleanBooleanRequiredValidation{
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:      "boolParam1InQuery",
-			location:   "query",
+			field: "boolParam1InQuery",
+			location: "query",
 			parseValue: app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:      "boolParam2InQuery",
-			location:   "query",
+			field: "boolParam2InQuery",
+			location: "query",
 			parseValue: app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](
-				validateNonEmpty,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+				internal.ValidateNonEmpty,
 			),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:         "optionalBoolParam1InQuery",
-			location:      "query",
-			parseValue:    app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](),
+			field: "optionalBoolParam1InQuery",
+			location: "query",
+			parseValue: app.knownParsers.boolInQuery,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+			),
 		}),
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field:         "optionalBoolParam2InQuery",
-			location:      "query",
-			parseValue:    app.knownParsers.boolInQuery,
-			validateValue: newCompositeValidator[[]string, bool](),
+			field: "optionalBoolParam2InQuery",
+			location: "query",
+			parseValue: app.knownParsers.boolInQuery,
+			validateValue: internal.NewCompositeValidator[[]string, bool](
+			),
 		}),
 	}
 }
