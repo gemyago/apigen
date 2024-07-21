@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
@@ -58,6 +59,7 @@ type routeTestCase[TActions any] struct {
 	method string
 	path   string
 	query  url.Values
+	body   io.Reader
 	expect routeTestCaseExpectFn[TActions]
 }
 
@@ -76,10 +78,14 @@ func runRouteTestCase[TActions any](
 		if method == "" {
 			method = http.MethodGet
 		}
+		body := tc.body
+		if body == nil {
+			body = http.NoBody
+		}
 		testReq := httptest.NewRequest(
 			method,
 			tc.path,
-			http.NoBody,
+			body,
 		)
 		if len(tc.query) != 0 {
 			testReq.URL.RawQuery = tc.query.Encode()
@@ -88,6 +94,15 @@ func runRouteTestCase[TActions any](
 		router.ServeHTTP(recorder, testReq)
 		tc.expect(t, testActions, recorder)
 	})
+}
+
+func marshalJsonDataAsReader(t *testing.T, data any) io.Reader {
+	body, err := json.Marshal(data)
+	if err != nil {
+		t.Errorf("failed to marshal body: %v", err)
+		t.FailNow()
+	}
+	return bytes.NewBuffer(body)
 }
 
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)

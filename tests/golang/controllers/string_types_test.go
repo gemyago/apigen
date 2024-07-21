@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
@@ -49,6 +50,15 @@ func TestStringTypes(t *testing.T) {
 				DateStrInQuery:         fake.Time().Time(time.Now()),
 				DateTimeStrInQuery:     fake.Time().Time(time.Now()),
 				ByteStrInQuery:         fake.BinaryString().BinaryString(10),
+
+				// body
+				Payload: models.StringTypesParsingRequest{
+					UnformattedStr:  fake.Lorem().Word(),
+					CustomFormatStr: fake.Lorem().Word(),
+					DateStr:         fake.Time().Time(time.Now()),
+					DateTimeStr:     fake.Time().Time(time.Now()),
+					ByteStr:         fake.BinaryString().BinaryString(10),
+				},
 			}
 			for _, opt := range opts {
 				opt(req)
@@ -66,8 +76,6 @@ func TestStringTypes(t *testing.T) {
 			return query
 		}
 
-		// TODO: Should fail if date includes time
-
 		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
 			originalReq := randomReq()
 			query := buildQuery(originalReq)
@@ -80,6 +88,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
 				),
 				query: query,
+				body:  marshalJsonDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
@@ -108,6 +117,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
 				),
 				query: query,
+				body:  marshalJsonDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Unexpected response", recorder.Body) {
 						return
@@ -132,6 +142,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
 					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
+				body:  marshalJsonDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
@@ -157,6 +168,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
 					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
+				body:  marshalJsonDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
