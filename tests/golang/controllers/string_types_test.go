@@ -175,7 +175,19 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
 					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
-				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+					"unformattedStr": "%v",
+					"customFormatStr": "%v",
+					"dateStr": "%v",
+					"dateTimeStr": "%v",
+					"byteStr": "%v"
+				}`,
+					originalReq.Payload.UnformattedStr,
+					originalReq.Payload.CustomFormatStr,
+					originalReq.Payload.DateStr.Format(time.RFC3339),
+					originalReq.Payload.DateTimeStr.Format(time.RFC3339),
+					originalReq.Payload.ByteStr,
+				))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
@@ -183,6 +195,9 @@ func TestStringTypes(t *testing.T) {
 
 						// query
 						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+
+						// body
+						{Field: "dateStr", Location: "body", Code: handlers.ErrBadValueFormat},
 					},
 				),
 			}
