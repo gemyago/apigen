@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -106,6 +107,7 @@ func TestStringTypes(t *testing.T) {
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesParsingRequest) {
 				req.DateTimeStr = req.DateTimeStr.In(location)
 				req.DateTimeStrInQuery = req.DateTimeStrInQuery.In(location)
+				req.Payload.DateTimeStr = req.Payload.DateTimeStr.In(location)
 			})
 			query := buildQuery(originalReq)
 
@@ -142,7 +144,9 @@ func TestStringTypes(t *testing.T) {
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
 					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
-				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+					"unformattedStr": %v
+				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]handlers.FieldBindingError{
 						// path
@@ -152,6 +156,9 @@ func TestStringTypes(t *testing.T) {
 						// query
 						{Field: "dateStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
 						{Field: "dateTimeStrInQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+
+						// body
+						{Field: "payload", Location: "body", Code: handlers.ErrBadValueFormat},
 					},
 				),
 			}
