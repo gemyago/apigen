@@ -1,0 +1,64 @@
+post:
+  summary: API to test nested objects
+  operationId: objectsNested
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - requiredField1
+            - nestedObject1
+            - nestedObject2
+          properties: 
+            simpleRequiredField1:
+              type: string
+            nestedObject1:
+              type: object
+              required:
+                - simpleRequiredField1
+                - nestedObject11
+                - nestedObject12
+              properties:
+                simpleRequiredField1:
+                  type: string
+                nestedObject11:
+                  type: object
+                  required:
+                    - simpleRequiredField1
+                  properties:
+                    simpleRequiredField1:
+                      type: string
+                nestedObject12:
+                  type: object
+                  required:
+                    - simpleRequiredField1
+                  properties:
+                    simpleRequiredField1:
+                      type: string
+            nestedObject2:
+              type: object
+              required:
+                - simpleRequiredField1
+                - nestedObject21
+                - nestedObject22
+              properties:
+                simpleRequiredField1:
+                  type: string
+                nestedObject21:
+                  type: object
+                  required:
+                    - simpleRequiredField1
+                  properties:
+                    simpleRequiredField1:
+                      type: string
+                nestedObject22:
+                  type: object
+                  required:
+                    - simpleRequiredField1
+                  properties:
+                    simpleRequiredField1:
+                      type: string
