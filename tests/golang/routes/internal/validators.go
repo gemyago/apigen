@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 
@@ -43,6 +44,22 @@ func ValidateNonEmpty[TRawVal any, TTargetVal any](rawVal OptionalVal[TRawVal], 
 }
 
 var _ ValueValidator[string, string] = ValidateNonEmpty
+
+type ModelValidationContext struct {
+	Errors []error
+}
+
+type ModelValidator[TTargetVal any] func(validationCtx *ModelValidationContext, val TTargetVal)
+
+func NewModelParamValidator[TRawVal any, TTargetVal any](
+	validateModel ModelValidator[TTargetVal],
+) ValueValidator[TRawVal, TTargetVal] {
+	return func(_ OptionalVal[TRawVal], tv TTargetVal) error {
+		validationCtx := ModelValidationContext{}
+		validateModel(&validationCtx, tv)
+		return errors.Join(validationCtx.Errors...)
+	}
+}
 
 func NewMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 	threshold TTargetVal,
