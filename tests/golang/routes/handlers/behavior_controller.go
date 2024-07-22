@@ -9,17 +9,9 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-
-
-
-
-
-
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	QueryParam1 string
 }
-
-
 
 type BehaviorController struct {
 	// GET /behavior/no-params-no-response
@@ -64,21 +56,21 @@ type BehaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	HandleBehaviorNoParamsNoResponse actionBuilderVoidResult[*BehaviorControllerBuilder, *BehaviorBehaviorNoParamsNoResponseRequest]
+	HandleBehaviorNoParamsNoResponse actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
 
 	// GET /behavior/no-params-with-response
 	//
 	// Request type: none
 	//
 	// Response type: models.BehaviorNoParamsWithResponse202Response
-	HandleBehaviorNoParamsWithResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorNoParamsWithResponseRequest, *models.BehaviorNoParamsWithResponse202Response]
+	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *models.BehaviorNoParamsWithResponse202Response]
 
 	// GET /behavior/no-status-defined
 	//
 	// Request type: none
 	//
 	// Response type: none
-	HandleBehaviorNoStatusDefined actionBuilderVoidResult[*BehaviorControllerBuilder, *BehaviorBehaviorNoStatusDefinedRequest]
+	HandleBehaviorNoStatusDefined actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
 
 	// GET /behavior/with-params-and-response
 	//
@@ -92,17 +84,17 @@ type BehaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	HandleBehaviorWithStatusDefined actionBuilderVoidResult[*BehaviorControllerBuilder, *BehaviorBehaviorWithStatusDefinedRequest]
+	HandleBehaviorWithStatusDefined actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
 }
 
 func (c *BehaviorControllerBuilder) Finalize() *BehaviorController {
 	// TODO: panic if any handler is null
 	return &BehaviorController{
-		BehaviorNoParamsNoResponse: c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
-		BehaviorNoParamsWithResponse: c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
-		BehaviorNoStatusDefined: c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
+		BehaviorNoParamsNoResponse:    c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
+		BehaviorNoParamsWithResponse:  c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
+		BehaviorNoStatusDefined:       c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
 		BehaviorWithParamsAndResponse: c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory,
-		BehaviorWithStatusDefined: c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
+		BehaviorWithStatusDefined:     c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
 	}
 }
 
@@ -113,18 +105,15 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.defaultStatusCode = 202200
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.voidResult = true
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.paramsParserFactory = newParamsParserBehaviorBehaviorNoParamsNoResponse
 
 	// GET /behavior/no-params-with-response
 	controllerBuilder.HandleBehaviorNoParamsWithResponse.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoParamsWithResponse.defaultStatusCode = 202
-	controllerBuilder.HandleBehaviorNoParamsWithResponse.paramsParserFactory = newParamsParserBehaviorBehaviorNoParamsWithResponse
 
 	// GET /behavior/no-status-defined
 	controllerBuilder.HandleBehaviorNoStatusDefined.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoStatusDefined.defaultStatusCode = 200
 	controllerBuilder.HandleBehaviorNoStatusDefined.voidResult = true
-	controllerBuilder.HandleBehaviorNoStatusDefined.paramsParserFactory = newParamsParserBehaviorBehaviorNoStatusDefined
 
 	// GET /behavior/with-params-and-response
 	controllerBuilder.HandleBehaviorWithParamsAndResponse.controllerBuilder = controllerBuilder
@@ -135,7 +124,6 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 	controllerBuilder.HandleBehaviorWithStatusDefined.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorWithStatusDefined.defaultStatusCode = 202200
 	controllerBuilder.HandleBehaviorWithStatusDefined.voidResult = true
-	controllerBuilder.HandleBehaviorWithStatusDefined.paramsParserFactory = newParamsParserBehaviorBehaviorWithStatusDefined
 
 	return controllerBuilder
 }
