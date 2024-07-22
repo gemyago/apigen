@@ -147,6 +147,7 @@ type paramsParserStringTypesStringTypesPatternValidation struct {
 	bindCustomFormatStrInQuery requestParamBinder[[]string, string]
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesPatternValidationRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesPatternValidationRequest, error) {
@@ -163,6 +164,8 @@ func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpR
 	p.bindCustomFormatStrInQuery(&bindingCtx, readQueryValue("customFormatStrInQuery", query), &reqParams.CustomFormatStrInQuery)
 	p.bindDateStrInQuery(&bindingCtx, readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
 	p.bindDateTimeStrInQuery(&bindingCtx, readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -235,6 +238,13 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			parseValue: app.knownParsers.timeInQuery,
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesPatternValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.StringTypesPatternValidationRequest],
+			validateValue: internal.NewStringTypesPatternValidationRequestValidator(),
 		}),
 	}
 }

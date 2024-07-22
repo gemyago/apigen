@@ -9,16 +9,14 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesRangeValidationRequestValidator() FieldValidator[*models.StringTypesRangeValidationRequest] {
+func NewStringTypesPatternValidationRequestValidator() FieldValidator[*models.StringTypesPatternValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
-		NewMinMaxLengthValidator[string](10, true),
-		NewMinMaxLengthValidator[string](20, false),
+		NewPatternValidator[string]("^\\d{10}$"),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
-		NewMinMaxLengthValidator[string](20, true),
-		NewMinMaxLengthValidator[string](30, false),
+		NewPatternValidator[string]("^\\d{20}$"),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
@@ -26,16 +24,10 @@ func NewStringTypesRangeValidationRequestValidator() FieldValidator[*models.Stri
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
 	)
-	validateByteStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
-		NewMinMaxLengthValidator[string](30, true),
-		NewMinMaxLengthValidator[string](40, false),
-	)
-	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesRangeValidationRequest) {
+	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesPatternValidationRequest) {
 		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
 		validateCustomFormatStr(bindingCtx, "customFormatStr", location, value.CustomFormatStr)
 		validateDateStr(bindingCtx, "dateStr", location, value.DateStr)
 		validateDateTimeStr(bindingCtx, "dateTimeStr", location, value.DateTimeStr)
-		validateByteStr(bindingCtx, "byteStr", location, value.ByteStr)
 	}
 }
