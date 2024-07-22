@@ -4,11 +4,25 @@
 
 {{#models}}
 import (
+	"time"
 	"{{invokerPackage}}/{{ package }}"
 )
+
+// Below is to workaround unused imports.
+var _ = time.Time{}
+
 {{#model}}
 func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
+	{{#vars}}
+	validate{{name}} := NewSimpleFieldValidator[{{{dataType}}}]({{^isDate}}{{^isDateTime}}{{#minLength}}
+		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
+		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{/isDateTime}}{{/isDate}}
+	)
+	{{/vars}}
 	return func(bindingCtx *BindingContext, field, location string, value *{{package}}.{{classname}}) {
+		{{#vars}}
+		validate{{name}}(bindingCtx, "{{baseName}}", location, value.{{name}})
+		{{/vars}}
 	}
 }
 {{/model}}

@@ -219,6 +219,15 @@ func TestStringTypes(t *testing.T) {
 				DateStrInQuery:         fake.Time().Time(time.Now()),
 				DateTimeStrInQuery:     fake.Time().Time(time.Now()),
 				ByteStrInQuery:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+
+				// body
+				Payload: &models.StringTypesRangeValidationRequest{
+					UnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+					CustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
+					DateStr:         fake.Time().Time(time.Now()),
+					DateTimeStr:     fake.Time().Time(time.Now()),
+					ByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+				},
 			}
 			for _, opt := range opts {
 				opt(req)
@@ -241,11 +250,13 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/range-validation/%v/%v/%v/%v/%v", originalReq.UnformattedStr, originalReq.CustomFormatStr,
 					originalReq.DateStr.Format(time.DateOnly), originalReq.DateTimeStr.Format(time.RFC3339Nano),
 					originalReq.ByteStr),
 				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
 						t.Fatalf("unexpected response: %v", recorder.Body)
@@ -267,15 +278,21 @@ func TestStringTypes(t *testing.T) {
 				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(9)
 				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(19)
 				req.ByteStrInQuery = fake.BinaryString().BinaryString(29)
+
+				req.Payload.UnformattedStr = fake.BinaryString().BinaryString(9)
+				req.Payload.CustomFormatStr = fake.BinaryString().BinaryString(19)
+				req.Payload.ByteStr = fake.BinaryString().BinaryString(29)
 			})
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/range-validation/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -287,6 +304,11 @@ func TestStringTypes(t *testing.T) {
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -300,15 +322,21 @@ func TestStringTypes(t *testing.T) {
 				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(10)
 				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(20)
 				req.ByteStrInQuery = fake.BinaryString().BinaryString(30)
+
+				req.Payload.UnformattedStr = fake.BinaryString().BinaryString(10)
+				req.Payload.CustomFormatStr = fake.BinaryString().BinaryString(20)
+				req.Payload.ByteStr = fake.BinaryString().BinaryString(30)
 			})
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/range-validation/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
 						t.Fatalf("unexpected response: %v", recorder.Body)
@@ -330,15 +358,21 @@ func TestStringTypes(t *testing.T) {
 				req.UnformattedStrInQuery = fake.Lorem().Text(21)
 				req.CustomFormatStrInQuery = fake.Lorem().Text(31)
 				req.ByteStrInQuery = fake.Lorem().Text(41)
+
+				req.Payload.UnformattedStr = fake.Lorem().Text(21)
+				req.Payload.CustomFormatStr = fake.Lorem().Text(31)
+				req.Payload.ByteStr = fake.Lorem().Text(41)
 			})
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/range-validation/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -350,6 +384,11 @@ func TestStringTypes(t *testing.T) {
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -363,15 +402,21 @@ func TestStringTypes(t *testing.T) {
 				req.UnformattedStrInQuery = fake.BinaryString().BinaryString(20)
 				req.CustomFormatStrInQuery = fake.BinaryString().BinaryString(30)
 				req.ByteStrInQuery = fake.BinaryString().BinaryString(40)
+
+				req.Payload.UnformattedStr = fake.BinaryString().BinaryString(20)
+				req.Payload.CustomFormatStr = fake.BinaryString().BinaryString(30)
+				req.Payload.ByteStr = fake.BinaryString().BinaryString(40)
 			})
 			query := buildQuery(originalReq)
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/string-types/range-validation/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
 					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
 						t.Fatalf("unexpected response: %v", recorder.Body)
