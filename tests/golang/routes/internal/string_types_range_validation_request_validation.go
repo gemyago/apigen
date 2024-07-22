@@ -2,6 +2,7 @@ package internal
 
 import (
 	"time"
+
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
