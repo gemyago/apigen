@@ -86,7 +86,7 @@ func TestNumericTypes(t *testing.T) {
 						fake.Lorem().Word(), fake.Lorem().Word()),
 					query: query,
 					expect: expectBindingErrors[*numericTypesControllerTestActions](
-						[]handlers.FieldBindingError{
+						[]fieldBindingError{
 							// path
 							{Field: "numberAny", Location: "path", Code: "BAD_FORMAT"},
 							{Field: "numberFloat", Location: "path", Code: "BAD_FORMAT"},
@@ -145,7 +145,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -222,7 +222,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -312,7 +312,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -357,7 +357,7 @@ func TestNumericTypes(t *testing.T) {
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -494,7 +494,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						{Field: "optionalNumberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalNumberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
@@ -527,7 +527,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "numberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "numberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -549,7 +549,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: url.Values{},
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_REQUIRED"},

@@ -86,7 +86,7 @@ func TestBoolean(t *testing.T) {
 					path:  "/boolean/required-validation",
 					query: query,
 					expect: expectBindingErrors[*booleanControllerTestActions](
-						[]handlers.FieldBindingError{
+						[]fieldBindingError{
 							{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
 							{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
 							{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -161,7 +161,7 @@ func TestBoolean(t *testing.T) {
 				path:  "/boolean/required-validation",
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -179,7 +179,7 @@ func TestBoolean(t *testing.T) {
 				path:  "/boolean/required-validation",
 				query: query,
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.FieldBindingError{
+					[]fieldBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "boolParam2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 					},

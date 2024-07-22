@@ -15,7 +15,6 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -107,7 +106,17 @@ func marshalJSONDataAsReader(t *testing.T, data any) io.Reader {
 
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
 
-func expectBindingErrors[TActions any](wantErrors []handlers.FieldBindingError) routeTestCaseExpectFn[TActions] {
+type fieldBindingError struct {
+	Field    string `json:"field"`
+	Location string `json:"location"`
+	Code     string `json:"code"`
+}
+
+type aggregatedBindingError struct {
+	Errors []fieldBindingError `json:"errors"`
+}
+
+func expectBindingErrors[TActions any](wantErrors []fieldBindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
 		_ TActions,
@@ -130,8 +139,8 @@ func expectBindingErrors[TActions any](wantErrors []handlers.FieldBindingError) 
 func unmarshalBindingErrors(
 	t *testing.T,
 	body *bytes.Buffer,
-) *handlers.AggregatedBindingError {
-	var gotErrors handlers.AggregatedBindingError
+) *aggregatedBindingError {
+	var gotErrors aggregatedBindingError
 	if err := json.Unmarshal(body.Bytes(), &gotErrors); !assert.NoError(t, err) {
 		t.FailNow()
 		return nil
@@ -141,7 +150,7 @@ func unmarshalBindingErrors(
 
 func assertFieldError(
 	t *testing.T,
-	err *handlers.AggregatedBindingError,
+	err *aggregatedBindingError,
 	location string,
 	field string,
 	code string,
