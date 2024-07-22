@@ -2,7 +2,6 @@ package internal
 
 import (
 	"time"
-
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -27,11 +26,16 @@ func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.S
 	validateByteStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)
-	validateOptionalUnformattedStr := NewSimpleFieldValidator[string]()
-	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string]()
-	validateOptionalDateStr := NewSimpleFieldValidator[time.Time]()
-	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time]()
-	validateOptionalByteStr := NewSimpleFieldValidator[string]()
+	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
+	)
+	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string](
+	)
+	validateOptionalDateStr := NewSimpleFieldValidator[time.Time](
+	)
+	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time](
+	)
+	validateOptionalByteStr := NewSimpleFieldValidator[string](
+	)
 	validateOptionalValidatedUnformattedStr := NewSimpleFieldValidator[string](
 		NewMinMaxLengthValidator[string](10, true),
 	)

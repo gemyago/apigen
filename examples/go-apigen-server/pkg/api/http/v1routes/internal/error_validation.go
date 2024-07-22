@@ -12,6 +12,7 @@ var _ = time.Time{}
 
 func NewErrorValidator() FieldValidator[*models.Error] {
 	validateCode := NewSimpleFieldValidator[interface{}](
+		EnsureNonDefault,
 	)
 	validateMessage := NewSimpleFieldValidator[string](
 	)

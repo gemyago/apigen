@@ -2,7 +2,6 @@ package internal
 
 import (
 	"time"
-
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -10,11 +9,21 @@ import (
 var _ = time.Time{}
 
 func NewStringTypesParsingRequestValidator() FieldValidator[*models.StringTypesParsingRequest] {
-	validateUnformattedStr := NewSimpleFieldValidator[string]()
-	validateCustomFormatStr := NewSimpleFieldValidator[string]()
-	validateDateStr := NewSimpleFieldValidator[time.Time]()
-	validateDateTimeStr := NewSimpleFieldValidator[time.Time]()
-	validateByteStr := NewSimpleFieldValidator[string]()
+	validateUnformattedStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
+	)
+	validateCustomFormatStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
+	)
+	validateDateStr := NewSimpleFieldValidator[time.Time](
+		EnsureNonDefault,
+	)
+	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
+		EnsureNonDefault,
+	)
+	validateByteStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
+	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesParsingRequest) {
 		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
 		validateCustomFormatStr(bindingCtx, "customFormatStr", location, value.CustomFormatStr)

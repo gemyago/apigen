@@ -12,8 +12,10 @@ var _ = time.Time{}
 
 func NewPetValidator() FieldValidator[*models.Pet] {
 	validateId := NewSimpleFieldValidator[int64](
+		EnsureNonDefault,
 	)
 	validateName := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
 	)
 	validateComments := NewSimpleFieldValidator[string](
 	)

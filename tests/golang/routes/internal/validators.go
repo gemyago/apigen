@@ -76,6 +76,11 @@ type OptionalVal[TVal any] struct {
 
 type ValueValidator[TTargetVal any] func(TTargetVal) error
 
+// EnsureNonDefault will validate if given value is non default for given type.
+//
+// There is no easy way to make a truly required validation (e.g if field is present)
+// without a custom marshaler and shadow models, which will impact performance.
+// So keeping a non default validation as a reasonable tradeoff.
 func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
 	var empty TTargetVal
 	if val == empty {
