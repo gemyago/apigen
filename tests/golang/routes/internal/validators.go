@@ -76,6 +76,14 @@ type OptionalVal[TVal any] struct {
 
 type ValueValidator[TTargetVal any] func(TTargetVal) error
 
+func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
+	var empty TTargetVal
+	if val == empty {
+		return fmt.Errorf("provided value %v is default for given type and considered empty: %w", val, ErrValueRequired)
+	}
+	return nil
+}
+
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,

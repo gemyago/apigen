@@ -2,6 +2,7 @@ package internal
 
 import (
 	"time"
+
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -17,10 +18,8 @@ func NewStringTypesRangeValidationRequestValidator() FieldValidator[*models.Stri
 		NewMinMaxLengthValidator[string](20, true),
 		NewMinMaxLengthValidator[string](30, false),
 	)
-	validateDateStr := NewSimpleFieldValidator[time.Time](
-	)
-	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
-	)
+	validateDateStr := NewSimpleFieldValidator[time.Time]()
+	validateDateTimeStr := NewSimpleFieldValidator[time.Time]()
 	validateByteStr := NewSimpleFieldValidator[string](
 		NewMinMaxLengthValidator[string](30, true),
 		NewMinMaxLengthValidator[string](40, false),

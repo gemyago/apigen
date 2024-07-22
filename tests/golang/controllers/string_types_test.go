@@ -462,6 +462,10 @@ func TestStringTypes(t *testing.T) {
 					OptionalDateStr:         fake.Time().Time(time.Now()),
 					OptionalDateTimeStr:     fake.Time().Time(time.Now()),
 					OptionalByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+
+					OptionalValidatedUnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+					OptionalValidatedCustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
+					OptionalValidatedByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
 				},
 			}
 			for _, opt := range opts {
@@ -553,6 +557,9 @@ func TestStringTypes(t *testing.T) {
 				req.Payload.OptionalUnformattedStr = ""
 				req.Payload.OptionalCustomFormatStr = ""
 				req.Payload.OptionalByteStr = ""
+				req.Payload.OptionalValidatedUnformattedStr = ""
+				req.Payload.OptionalValidatedCustomFormatStr = ""
+				req.Payload.OptionalValidatedByteStr = ""
 			})
 
 			query := url.Values{}
@@ -590,9 +597,9 @@ func TestStringTypes(t *testing.T) {
 						{Field: "optionalByteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 
 						// body
-						{Field: "optionalUnformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "optionalCustomFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "optionalByteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalValidatedUnformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalValidatedCustomFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalValidatedByteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -624,6 +631,8 @@ func TestStringTypes(t *testing.T) {
 						// body
 						{Field: "unformattedStr", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "customFormatStr", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "dateStr", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "dateTimeStr", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "byteStr", Location: "body", Code: "INVALID_REQUIRED"},
 					},
 				),

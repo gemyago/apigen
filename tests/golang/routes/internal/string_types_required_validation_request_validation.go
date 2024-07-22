@@ -2,6 +2,7 @@ package internal
 
 import (
 	"time"
+
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -10,27 +11,27 @@ var _ = time.Time{}
 
 func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.StringTypesRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
+		EnsureNonDefault,
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
+		EnsureNonDefault,
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
+		EnsureNonDefault,
 	)
-	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
-	)
-	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string](
-	)
-	validateOptionalDateStr := NewSimpleFieldValidator[time.Time](
-	)
-	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time](
-	)
-	validateOptionalByteStr := NewSimpleFieldValidator[string](
-	)
+	validateOptionalUnformattedStr := NewSimpleFieldValidator[string]()
+	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string]()
+	validateOptionalDateStr := NewSimpleFieldValidator[time.Time]()
+	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time]()
+	validateOptionalByteStr := NewSimpleFieldValidator[string]()
 	validateOptionalValidatedUnformattedStr := NewSimpleFieldValidator[string](
 		NewMinMaxLengthValidator[string](10, true),
 	)
