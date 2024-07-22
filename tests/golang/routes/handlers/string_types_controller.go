@@ -54,6 +54,7 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 	DateStrInQuery time.Time
 	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
+	Payload *models.StringTypesRequiredValidationRequest
 	OptionalUnformattedStrInQuery string
 	OptionalCustomFormatStrInQuery string
 	OptionalDateStrInQuery time.Time
@@ -83,7 +84,7 @@ type StringTypesController struct {
 	// Response type: none
 	StringTypesRangeValidation httpHandlerFactory
 
-	// GET /string-types/required-validation
+	// POST /string-types/required-validation
 	//
 	// Request type: StringTypesStringTypesRequiredValidationRequest,
 	//
@@ -113,7 +114,7 @@ type StringTypesControllerBuilder struct {
 	// Response type: none
 	HandleStringTypesRangeValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesRangeValidationRequest]
 
-	// GET /string-types/required-validation
+	// POST /string-types/required-validation
 	//
 	// Request type: StringTypesStringTypesRequiredValidationRequest,
 	//
@@ -152,7 +153,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleStringTypesRangeValidation.voidResult = true
 	controllerBuilder.HandleStringTypesRangeValidation.paramsParserFactory = newParamsParserStringTypesStringTypesRangeValidation
 
-	// GET /string-types/required-validation
+	// POST /string-types/required-validation
 	controllerBuilder.HandleStringTypesRequiredValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesRequiredValidation.voidResult = true
@@ -165,5 +166,5 @@ func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) 
 	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
 	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(app))
 	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))
-	app.router.HandleRoute("GET", "/string-types/required-validation", controller.StringTypesRequiredValidation(app))
+	app.router.HandleRoute("POST", "/string-types/required-validation", controller.StringTypesRequiredValidation(app))
 }

@@ -384,6 +384,7 @@ type paramsParserStringTypesStringTypesRequiredValidation struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesRequiredValidationRequest]
 	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, string]
 	bindOptionalCustomFormatStrInQuery requestParamBinder[[]string, string]
 	bindOptionalDateStrInQuery requestParamBinder[[]string, time.Time]
@@ -406,6 +407,8 @@ func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router http
 	p.bindOptionalDateStrInQuery(&bindingCtx, readQueryValue("optionalDateStrInQuery", query), &reqParams.OptionalDateStrInQuery)
 	p.bindOptionalDateTimeStrInQuery(&bindingCtx, readQueryValue("optionalDateTimeStrInQuery", query), &reqParams.OptionalDateTimeStrInQuery)
 	p.bindOptionalByteStrInQuery(&bindingCtx, readQueryValue("optionalByteStrInQuery", query), &reqParams.OptionalByteStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -453,6 +456,13 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.NewMinMaxLengthValidator[string](30, true),
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRequiredValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.StringTypesRequiredValidationRequest],
+			validateValue: internal.NewStringTypesRequiredValidationRequestValidator(),
 		}),
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			field: "optionalUnformattedStrInQuery",
