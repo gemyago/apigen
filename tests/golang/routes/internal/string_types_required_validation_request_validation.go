@@ -25,15 +25,12 @@ func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.S
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
 		SimpleFieldValidatorOpts{},
-		NewMinMaxLengthValidator[string](30, true),
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
 		SimpleFieldValidatorOpts{},
-		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string](
 		SimpleFieldValidatorOpts{},
-		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateOptionalDateStr := NewSimpleFieldValidator[time.Time](
 		SimpleFieldValidatorOpts{},
@@ -42,6 +39,17 @@ func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.S
 		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalByteStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
+	)
+	validateOptionalValidatedUnformattedStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
+		NewMinMaxLengthValidator[string](10, true),
+	)
+	validateOptionalValidatedCustomFormatStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
+		NewMinMaxLengthValidator[string](20, true),
+	)
+	validateOptionalValidatedByteStr := NewSimpleFieldValidator[string](
 		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](30, true),
 	)
@@ -56,5 +64,8 @@ func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.S
 		validateOptionalDateStr(bindingCtx, "optionalDateStr", location, value.OptionalDateStr)
 		validateOptionalDateTimeStr(bindingCtx, "optionalDateTimeStr", location, value.OptionalDateTimeStr)
 		validateOptionalByteStr(bindingCtx, "optionalByteStr", location, value.OptionalByteStr)
+		validateOptionalValidatedUnformattedStr(bindingCtx, "optionalValidatedUnformattedStr", location, value.OptionalValidatedUnformattedStr)
+		validateOptionalValidatedCustomFormatStr(bindingCtx, "optionalValidatedCustomFormatStr", location, value.OptionalValidatedCustomFormatStr)
+		validateOptionalValidatedByteStr(bindingCtx, "optionalValidatedByteStr", location, value.OptionalValidatedByteStr)
 	}
 }

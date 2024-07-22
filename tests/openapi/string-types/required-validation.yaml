@@ -98,14 +98,11 @@ post:
             byteStr:
               type: string
               format: byte
-              minLength: 30
             optionalUnformattedStr:
               type: string
-              minLength: 10
             optionalCustomFormatStr:
               type: string
               format: vendor-specific
-              minLength: 20
             optionalDateStr:
               type: string
               format: date
@@ -113,6 +110,16 @@ post:
               type: string
               format: date-time
             optionalByteStr:
+              type: string
+              format: byte
+            optionalValidatedUnformattedStr:
+              type: string
+              minLength: 10
+            optionalValidatedCustomFormatStr:
+              type: string
+              format: vendor-specific
+              minLength: 20
+            optionalValidatedByteStr:
               type: string
               format: byte
               minLength: 30

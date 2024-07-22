@@ -18,4 +18,7 @@ type StringTypesRequiredValidationRequest struct {
 	OptionalDateStr time.Time `json:"optionalDateStr,omitempty"`
 	OptionalDateTimeStr time.Time `json:"optionalDateTimeStr,omitempty"`
 	OptionalByteStr string `json:"optionalByteStr,omitempty"`
+	OptionalValidatedUnformattedStr string `json:"optionalValidatedUnformattedStr,omitempty"`
+	OptionalValidatedCustomFormatStr string `json:"optionalValidatedCustomFormatStr,omitempty"`
+	OptionalValidatedByteStr string `json:"optionalValidatedByteStr,omitempty"`
 }
