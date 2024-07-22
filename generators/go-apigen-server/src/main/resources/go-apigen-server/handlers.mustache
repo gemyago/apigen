@@ -92,7 +92,7 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 		w.Header().Add("content-type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusBadRequest)
 		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
-		var aggregatedErr AggregatedBindingError
+		var aggregatedErr internal.AggregatedBindingError
 		if ok := errors.As(err, &aggregatedErr); ok {
 			if writeErr := json.NewEncoder(w).Encode(aggregatedErr); writeErr != nil {
 				app.handleResponseErrors(r, writeErr)
@@ -195,10 +195,17 @@ func readQueryValue(key string, values url.Values) internal.OptionalVal[[]string
 	return internal.OptionalVal[[]string]{}
 }
 
-type rawValueParser[TRawVal any, TTargetVal any] func(internal.OptionalVal[TRawVal], *TTargetVal) error
+func readRequestBodyValue(req *http.Request) internal.OptionalVal[*http.Request] {
+	if req.ContentLength != 0 {
+		return internal.OptionalVal[*http.Request]{Value: req, Assigned: true}
+	}
+	return internal.OptionalVal[*http.Request]{}
+}
 
-func parseJSONPayload[TTargetVal any](req internal.OptionalVal[*http.Request], target *TTargetVal) error {
-	return json.NewDecoder(req.Value.Body).Decode(target)
+type rawValueParser[TRawVal any, TTargetVal any] func(TRawVal, *TTargetVal) error
+
+func parseJSONPayload[TTargetVal any](req *http.Request, target *TTargetVal) error {
+	return json.NewDecoder(req.Body).Decode(target)
 }
 
 var _ rawValueParser[*http.Request, string] = parseJSONPayload
@@ -206,11 +213,8 @@ var _ rawValueParser[*http.Request, string] = parseJSONPayload
 func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
 	bitSize int, parseFn func(string, int) (TTargetVal, error),
 ) rawValueParser[string, TTargetVal] {
-	return func(ov internal.OptionalVal[string], target *TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-		val, err := parseFn(ov.Value, bitSize)
+	return func(ov string, target *TTargetVal) error {
+		val, err := parseFn(ov, bitSize)
 		if err != nil {
 			return err
 		}
@@ -222,11 +226,8 @@ func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float]
 func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.Float](
 	bitSize int, parseFn func(string, int) (TTargetVal, error),
 ) rawValueParser[[]string, TTargetVal] {
-	return func(ov internal.OptionalVal[[]string], target *TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-		val, err := parseFn(ov.Value[0], bitSize)
+	return func(ov []string, target *TTargetVal) error {
+		val, err := parseFn(ov[0], bitSize)
 		if err != nil {
 			return err
 		}
@@ -236,15 +237,12 @@ func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.F
 }
 
 func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] {
-	return func(ov internal.OptionalVal[string], t *time.Time) error {
-		if !ov.Assigned {
-			return nil
-		}
+	return func(ov string, t *time.Time) error {
 		format := time.RFC3339Nano
 		if isDateOnly {
 			format = time.DateOnly
 		}
-		val, err := time.Parse(format, ov.Value)
+		val, err := time.Parse(format, ov)
 		if err != nil {
 			return err
 		}
@@ -254,15 +252,12 @@ func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time
 }
 
 func newStringSliceToDateTimeParser(isDateOnly bool) rawValueParser[[]string, time.Time] {
-	return func(ov internal.OptionalVal[[]string], t *time.Time) error {
-		if !ov.Assigned {
-			return nil
-		}
+	return func(ov []string, t *time.Time) error {
 		format := time.RFC3339Nano
 		if isDateOnly {
 			format = time.DateOnly
 		}
-		val, err := time.Parse(format, ov.Value[0])
+		val, err := time.Parse(format, ov[0])
 		if err != nil {
 			return err
 		}
@@ -281,42 +276,30 @@ func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, erro
 	return (TFloat)(res), err
 }
 
-func parseStringInPath(ov internal.OptionalVal[string], s *string) error {
-	if !ov.Assigned {
-		return nil
-	}
-	*s = ov.Value
+func parseStringInPath(ov string, s *string) error {
+	*s = ov
 	return nil
 }
 
-func parseStringInQuery(ov internal.OptionalVal[[]string], s *string) error {
-	if !ov.Assigned {
-		return nil
-	}
-	*s = ov.Value[0]
+func parseStringInQuery(ov []string, s *string) error {
+	*s = ov[0]
 	return nil
 }
 
-func parseBoolInPath(ov internal.OptionalVal[string], s *bool) error {
-	if !ov.Assigned {
-		return nil
-	}
-	switch ov.Value {
+func parseBoolInPath(ov string, s *bool) error {
+	switch ov {
 	case "true":
 		*s = true
 	case "false":
 		*s = false
 	default:
-		return fmt.Errorf("unexpected boolean format %v", ov.Value)
+		return fmt.Errorf("unexpected boolean format %v", ov)
 	}
 	return nil
 }
 
-func parseBoolInQuery(ov internal.OptionalVal[[]string], s *bool) error {
-	if !ov.Assigned {
-		return nil
-	}
-	return parseBoolInPath(internal.OptionalVal[string]{Value: ov.Value[0], Assigned: true}, s)
+func parseBoolInQuery(ov []string, s *bool) error {
+	return parseBoolInPath(ov[0], s)
 }
 
 type knownParsersDef struct {
@@ -368,44 +351,8 @@ func newKnownParsers() *knownParsersDef {
 	}
 }
 
-// FieldBindingError occurs at parsing/validation stage and holds
-// context on field that the error is related to.
-type FieldBindingError struct {
-	Field    string `json:"field"`
-	Location string `json:"location"`
-	Err      error  `json:"-"`
-	Code     string `json:"code"`
-}
-
-func (be FieldBindingError) Error() string {
-	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
-}
-
-type AggregatedBindingError struct {
-	Errors []FieldBindingError `json:"errors"`
-}
-
-func (c AggregatedBindingError) Error() string {
-	errs := make([]error, len(c.Errors))
-	for i, err := range c.Errors {
-		errs[i] = err
-	}
-	return errors.Join(errs...).Error()
-}
-
-type bindingContext struct {
-	errors []FieldBindingError
-}
-
-func (c bindingContext) AggregatedError() error {
-	if len(c.errors) == 0 {
-		return nil
-	}
-	return AggregatedBindingError{Errors: c.errors}
-}
-
 type requestParamBinder[TRawVal any, TTargetVal any] func(
-	bindingCtx *bindingContext,
+	bindingCtx *internal.BindingContext,
 	rawVal internal.OptionalVal[TRawVal],
 	receiver *TTargetVal,
 )
@@ -413,20 +360,31 @@ type requestParamBinder[TRawVal any, TTargetVal any] func(
 type binderParams[TRawVal any, TTargetVal any] struct {
 	field         string
 	location      string
+	required      bool
 	parseValue    rawValueParser[TRawVal, TTargetVal]
-	validateValue internal.ValueValidator[TRawVal, TTargetVal]
+	validateValue internal.ValueValidator[TTargetVal]
 }
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
 	params binderParams[TRawVal, TTargetVal],
 ) requestParamBinder[TRawVal, TTargetVal] {
 	return func(
-		bindingCtx *bindingContext,
+		bindingCtx *internal.BindingContext,
 		rawVal internal.OptionalVal[TRawVal],
 		receiver *TTargetVal,
 	) {
-		if err := params.parseValue(rawVal, receiver); err != nil {
-			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
+		if !rawVal.Assigned {
+			if params.required {
+				bindingCtx.AppendFieldError(internal.FieldBindingError{
+					Field:    params.field,
+					Location: params.location,
+					Code:     internal.ErrValueRequired.Error(),
+				})
+			}
+			return
+		}
+		if err := params.parseValue(rawVal.Value, receiver); err != nil {
+			bindingCtx.AppendFieldError(internal.FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
 				Code:     internal.ErrBadValueFormat.Error(),
@@ -434,10 +392,10 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			})
 			return
 		}
-		if err := params.validateValue(rawVal, *receiver); err != nil {
+		if err := params.validateValue(*receiver); err != nil {
 			errCode := internal.ErrInvalidValue
 			errors.As(err, &errCode)
-			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
+			bindingCtx.AppendFieldError(internal.FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
 				Code:     errCode.Error(),

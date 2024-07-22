@@ -29,21 +29,52 @@ func (c BindingError) Error() string {
 	return string(c)
 }
 
+// FieldBindingError occurs at parsing/validation stage and holds
+// context on field that the error is related to.
+type FieldBindingError struct {
+	Field    string `json:"field"`
+	Location string `json:"location"`
+	Err      error  `json:"-"`
+	Code     string `json:"code"`
+}
+
+func (be FieldBindingError) Error() string {
+	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
+}
+
+type AggregatedBindingError struct {
+	Errors []FieldBindingError `json:"errors"`
+}
+
+func (c AggregatedBindingError) Error() string {
+	errs := make([]error, len(c.Errors))
+	for i, err := range c.Errors {
+		errs[i] = err
+	}
+	return errors.Join(errs...).Error()
+}
+
+type BindingContext struct {
+	errors []FieldBindingError
+}
+
+func (c *BindingContext) AppendFieldError(err FieldBindingError) {
+	c.errors = append(c.errors, err)
+}
+
+func (c BindingContext) AggregatedError() error {
+	if len(c.errors) == 0 {
+		return nil
+	}
+	return AggregatedBindingError{Errors: c.errors}
+}
+
 type OptionalVal[TVal any] struct {
 	Value    TVal
 	Assigned bool
 }
 
-type ValueValidator[TRawVal any, TTargetVal any] func(OptionalVal[TRawVal], TTargetVal) error
-
-func ValidateNonEmpty[TRawVal any, TTargetVal any](rawVal OptionalVal[TRawVal], _ TTargetVal) error {
-	if !rawVal.Assigned {
-		return ErrValueRequired
-	}
-	return nil
-}
-
-var _ ValueValidator[string, string] = ValidateNonEmpty
+type ValueValidator[TTargetVal any] func(TTargetVal) error
 
 type ModelValidationContext struct {
 	Errors []error
@@ -53,24 +84,20 @@ type ModelValidator[TTargetVal any] func(validationCtx *ModelValidationContext, 
 
 func NewModelParamValidator[TRawVal any, TTargetVal any](
 	validateModel ModelValidator[TTargetVal],
-) ValueValidator[TRawVal, TTargetVal] {
-	return func(_ OptionalVal[TRawVal], tv TTargetVal) error {
+) ValueValidator[TTargetVal] {
+	return func(tv TTargetVal) error {
 		validationCtx := ModelValidationContext{}
 		validateModel(&validationCtx, tv)
 		return errors.Join(validationCtx.Errors...)
 	}
 }
 
-func NewMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
+func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,
 	isMin bool,
-) ValueValidator[TRawVal, TTargetVal] {
-	return func(ov OptionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-
+) ValueValidator[TTargetVal] {
+	return func(tv TTargetVal) error {
 		// From OpenAPI spec:
 		// exclusiveMinimum: false or not included	value ≥ minimum
 		// exclusiveMinimum: true	value > minimum
@@ -88,15 +115,11 @@ func NewMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
 	}
 }
 
-func NewMinMaxLengthValidator[TRawVal any, TTargetVal string](
+func NewMinMaxLengthValidator[TTargetVal string](
 	threshold int,
 	isMin bool,
-) ValueValidator[TRawVal, TTargetVal] {
-	return func(ov OptionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.Assigned {
-			return nil
-		}
-
+) ValueValidator[TTargetVal] {
+	return func(tv TTargetVal) error {
 		targetLen := len(tv)
 		if isMin && targetLen < threshold {
 			return fmt.Errorf(
@@ -115,25 +138,22 @@ func NewMinMaxLengthValidator[TRawVal any, TTargetVal string](
 	}
 }
 
-func NewPatternValidator[TRawVal any, TTargetValue string](patternStr string) ValueValidator[TRawVal, string] {
+func NewPatternValidator[TTargetValue string](patternStr string) ValueValidator[string] {
 	pattern := regexp.MustCompile(patternStr)
-	return func(ov OptionalVal[TRawVal], tv string) error {
-		if !ov.Assigned {
-			return nil
-		}
-		if !pattern.MatchString(tv) {
-			return fmt.Errorf("value %v does not match pattern %v: %w", tv, patternStr, ErrInvalidValue)
+	return func(v string) error {
+		if !pattern.MatchString(v) {
+			return fmt.Errorf("value %v does not match pattern %v: %w", v, patternStr, ErrInvalidValue)
 		}
 		return nil
 	}
 }
 
 func NewCompositeValidator[
-	TRawVal any, TTargetVal any,
-](validators ...ValueValidator[TRawVal, TTargetVal]) ValueValidator[TRawVal, TTargetVal] {
-	return func(ov OptionalVal[TRawVal], tv TTargetVal) error {
+	TTargetVal any,
+](validators ...ValueValidator[TTargetVal]) ValueValidator[TTargetVal] {
+	return func(tv TTargetVal) error {
 		for _, v := range validators {
-			if err := v(ov, tv); err != nil {
+			if err := v(tv); err != nil {
 				return err
 			}
 		}

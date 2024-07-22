@@ -25,7 +25,7 @@ type paramsParserNumericTypesNumericTypesParsing struct {
 }
 
 func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &NumericTypesNumericTypesParsingRequest{}
 	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -50,97 +50,97 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float64InPath,
-			validateValue: internal.NewCompositeValidator[string, float64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float64](
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int64InPath,
-			validateValue: internal.NewCompositeValidator[string, int64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int64](
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float64](
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int64](
 			),
 		}),
 	}
@@ -162,7 +162,7 @@ type paramsParserNumericTypesNumericTypesRangeValidation struct {
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationRequest{}
 	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -187,121 +187,121 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float32](100.01, false, true),
-				internal.NewMinMaxValueValidator[string, float32](200.02, false, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](100.01, false, true),
+				internal.NewMinMaxValueValidator[float32](200.02, false, false),
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float32](200.02, false, true),
-				internal.NewMinMaxValueValidator[string, float32](300.03, false, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](200.02, false, true),
+				internal.NewMinMaxValueValidator[float32](300.03, false, false),
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float64InPath,
-			validateValue: internal.NewCompositeValidator[string, float64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float64](300.03, false, true),
-				internal.NewMinMaxValueValidator[string, float64](400.04, false, false),
+			validateValue: internal.NewCompositeValidator[float64](
+				internal.NewMinMaxValueValidator[float64](300.03, false, true),
+				internal.NewMinMaxValueValidator[float64](400.04, false, false),
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int32](400, false, true),
-				internal.NewMinMaxValueValidator[string, int32](500, false, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](400, false, true),
+				internal.NewMinMaxValueValidator[int32](500, false, false),
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int32](500, false, true),
-				internal.NewMinMaxValueValidator[string, int32](600, false, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](500, false, true),
+				internal.NewMinMaxValueValidator[int32](600, false, false),
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int64InPath,
-			validateValue: internal.NewCompositeValidator[string, int64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int64](600, false, true),
-				internal.NewMinMaxValueValidator[string, int64](700, false, false),
+			validateValue: internal.NewCompositeValidator[int64](
+				internal.NewMinMaxValueValidator[int64](600, false, true),
+				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](100.01, false, true),
-				internal.NewMinMaxValueValidator[[]string, float32](200.02, false, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](100.01, false, true),
+				internal.NewMinMaxValueValidator[float32](200.02, false, false),
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](200.02, false, true),
-				internal.NewMinMaxValueValidator[[]string, float32](300.03, false, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](200.02, false, true),
+				internal.NewMinMaxValueValidator[float32](300.03, false, false),
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float64](300.03, false, true),
-				internal.NewMinMaxValueValidator[[]string, float64](400.04, false, false),
+			validateValue: internal.NewCompositeValidator[float64](
+				internal.NewMinMaxValueValidator[float64](300.03, false, true),
+				internal.NewMinMaxValueValidator[float64](400.04, false, false),
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int32](400, false, true),
-				internal.NewMinMaxValueValidator[[]string, int32](500, false, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](400, false, true),
+				internal.NewMinMaxValueValidator[int32](500, false, false),
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int32](500, false, true),
-				internal.NewMinMaxValueValidator[[]string, int32](600, false, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](500, false, true),
+				internal.NewMinMaxValueValidator[int32](600, false, false),
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int64](600, false, true),
-				internal.NewMinMaxValueValidator[[]string, int64](700, false, false),
+			validateValue: internal.NewCompositeValidator[int64](
+				internal.NewMinMaxValueValidator[int64](600, false, true),
+				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
 	}
@@ -323,7 +323,7 @@ type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &NumericTypesNumericTypesRangeValidationExclusiveRequest{}
 	// path params
 	p.bindNumberAny(&bindingCtx, readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -348,121 +348,121 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float32](100.01, true, true),
-				internal.NewMinMaxValueValidator[string, float32](200.02, true, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](100.01, true, true),
+				internal.NewMinMaxValueValidator[float32](200.02, true, false),
 			),
 		}),
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float32](200.02, true, true),
-				internal.NewMinMaxValueValidator[string, float32](300.03, true, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](200.02, true, true),
+				internal.NewMinMaxValueValidator[float32](300.03, true, false),
 			),
 		}),
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float64InPath,
-			validateValue: internal.NewCompositeValidator[string, float64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, float64](300.03, true, true),
-				internal.NewMinMaxValueValidator[string, float64](400.04, true, false),
+			validateValue: internal.NewCompositeValidator[float64](
+				internal.NewMinMaxValueValidator[float64](300.03, true, true),
+				internal.NewMinMaxValueValidator[float64](400.04, true, false),
 			),
 		}),
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int32](400, true, true),
-				internal.NewMinMaxValueValidator[string, int32](500, true, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](400, true, true),
+				internal.NewMinMaxValueValidator[int32](500, true, false),
 			),
 		}),
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int32InPath,
-			validateValue: internal.NewCompositeValidator[string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int32](500, true, true),
-				internal.NewMinMaxValueValidator[string, int32](600, true, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](500, true, true),
+				internal.NewMinMaxValueValidator[int32](600, true, false),
 			),
 		}),
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.int64InPath,
-			validateValue: internal.NewCompositeValidator[string, int64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[string, int64](600, true, true),
-				internal.NewMinMaxValueValidator[string, int64](700, true, false),
+			validateValue: internal.NewCompositeValidator[int64](
+				internal.NewMinMaxValueValidator[int64](600, true, true),
+				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
 		}),
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](100.01, true, true),
-				internal.NewMinMaxValueValidator[[]string, float32](200.02, true, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](100.01, true, true),
+				internal.NewMinMaxValueValidator[float32](200.02, true, false),
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](200.02, true, true),
-				internal.NewMinMaxValueValidator[[]string, float32](300.03, true, false),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](200.02, true, true),
+				internal.NewMinMaxValueValidator[float32](300.03, true, false),
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float64](300.03, true, true),
-				internal.NewMinMaxValueValidator[[]string, float64](400.04, true, false),
+			validateValue: internal.NewCompositeValidator[float64](
+				internal.NewMinMaxValueValidator[float64](300.03, true, true),
+				internal.NewMinMaxValueValidator[float64](400.04, true, false),
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int32](400, true, true),
-				internal.NewMinMaxValueValidator[[]string, int32](500, true, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](400, true, true),
+				internal.NewMinMaxValueValidator[int32](500, true, false),
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int32](500, true, true),
-				internal.NewMinMaxValueValidator[[]string, int32](600, true, false),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](500, true, true),
+				internal.NewMinMaxValueValidator[int32](600, true, false),
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int64](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, int64](600, true, true),
-				internal.NewMinMaxValueValidator[[]string, int64](700, true, false),
+			validateValue: internal.NewCompositeValidator[int64](
+				internal.NewMinMaxValueValidator[int64](600, true, true),
+				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
 		}),
 	}
@@ -484,7 +484,7 @@ type paramsParserNumericTypesNumericTypesRequiredValidation struct {
 }
 
 func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &NumericTypesNumericTypesRequiredValidationRequest{}
 	// query params
 	query := req.URL.Query()
@@ -508,97 +508,103 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float64](
 			),
 		}),
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int32](
 			),
 		}),
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int64](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[int64](
 			),
 		}),
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "optionalNumberAnyInQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.NewMinMaxValueValidator[[]string, float32](100.01, false, true),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](100.01, false, true),
 			),
 		}),
 		bindOptionalNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "optionalNumberFloatInQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.NewMinMaxValueValidator[[]string, float32](200.02, false, true),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](200.02, false, true),
 			),
 		}),
 		bindOptionalNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "optionalNumberDoubleInQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.float64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float64](
-				internal.NewMinMaxValueValidator[[]string, float64](300.03, false, true),
+			validateValue: internal.NewCompositeValidator[float64](
+				internal.NewMinMaxValueValidator[float64](300.03, false, true),
 			),
 		}),
 		bindOptionalNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "optionalNumberIntInQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.NewMinMaxValueValidator[[]string, int32](400, false, true),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](400, false, true),
 			),
 		}),
 		bindOptionalNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "optionalNumberInt32InQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.int32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int32](
-				internal.NewMinMaxValueValidator[[]string, int32](500, false, true),
+			validateValue: internal.NewCompositeValidator[int32](
+				internal.NewMinMaxValueValidator[int32](500, false, true),
 			),
 		}),
 		bindOptionalNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "optionalNumberInt64InQuery",
 			location: "query",
+			required: false,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, int64](
-				internal.NewMinMaxValueValidator[[]string, int64](600, false, true),
+			validateValue: internal.NewCompositeValidator[int64](
+				internal.NewMinMaxValueValidator[int64](600, false, true),
 			),
 		}),
 	}

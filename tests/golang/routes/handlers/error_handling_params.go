@@ -17,7 +17,7 @@ type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
 }
 
 func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingParsingErrorsRequest{}
 	// path params
 	p.bindPathParam1(&bindingCtx, readPathValue("pathParam1", router, req), &reqParams.PathParam1)
@@ -34,33 +34,33 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam2",
 			location: "path",
+			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
+			validateValue: internal.NewCompositeValidator[float32](
 			),
 		}),
 	}
@@ -72,7 +72,7 @@ type paramsParserErrorHandlingErrorHandlingValidationErrors struct {
 }
 
 func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingValidationErrorsRequest{}
 	// query params
 	query := req.URL.Query()
@@ -86,19 +86,19 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](10, false, true),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
+			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[[]string, float32](
-				internal.ValidateNonEmpty,
-				internal.NewMinMaxValueValidator[[]string, float32](10, false, true),
+			validateValue: internal.NewCompositeValidator[float32](
+				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 	}

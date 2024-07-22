@@ -24,7 +24,7 @@ type paramsParser{{baseName}}{{operationId}} struct {
 }
 
 func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *http.Request) (*{{>request-type}}, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
@@ -37,7 +37,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, internal.OptionalVal[*http.Request]{Value: req, Assigned: true}, &reqParams.Payload)
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -48,14 +48,14 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
+			required: {{required}},
 			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
-			validateValue: internal.NewCompositeValidator[{{>params/binder-types}}]({{#required}}
-				internal.ValidateNonEmpty,{{/required}}{{#minimum}}
-				internal.NewMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
-				internal.NewMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
-				internal.NewMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-				internal.NewMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{#pattern}}
-				internal.NewPatternValidator[{{>params/binder-types}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
+			validateValue: internal.NewCompositeValidator[{{>params/type}}]({{#minimum}}
+				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
+				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
+				internal.NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
+				internal.NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}
+				internal.NewPatternValidator[{{>params/type}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
 			),
 		}),
 		{{/allParams}}
