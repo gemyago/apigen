@@ -1,5 +1,0 @@
-post:
-  summary: API to test if no status defined
-  operationId: responsesNoStatusDefined
-  tags:
-    - responses

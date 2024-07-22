@@ -84,7 +84,7 @@ func BuildPetsController() *PetsControllerBuilder {
 
 	// POST /pets
 	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
+	controllerBuilder.HandleCreatePet.defaultStatusCode = 201200
 	controllerBuilder.HandleCreatePet.voidResult = true
 	controllerBuilder.HandleCreatePet.paramsParserFactory = newParamsParserPetsCreatePet
 

@@ -1,3 +1,5 @@
+handlers/behavior_controller.go
+handlers/behavior_params.go
 handlers/boolean_controller.go
 handlers/boolean_params.go
 handlers/error_handling_controller.go
@@ -7,10 +9,9 @@ handlers/numeric_types_controller.go
 handlers/numeric_types_params.go
 handlers/objects_controller.go
 handlers/objects_params.go
-handlers/responses_controller.go
-handlers/responses_params.go
 handlers/string_types_controller.go
 handlers/string_types_params.go
+internal/behavior_no_params_with_response_202_response_validation.go
 internal/objects_nested_request_nested_object1_nested_object11_validation.go
 internal/objects_nested_request_nested_object1_validation.go
 internal/objects_nested_request_nested_object2_validation.go
@@ -20,6 +21,7 @@ internal/string_types_pattern_validation_request_validation.go
 internal/string_types_range_validation_request_validation.go
 internal/string_types_required_validation_request_validation.go
 internal/validators.go
+models/behavior_no_params_with_response_202_response.go
 models/objects_nested_request.go
 models/objects_nested_request_nested_object1.go
 models/objects_nested_request_nested_object1_nested_object11.go

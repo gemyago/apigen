@@ -138,25 +138,25 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesParsing.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleStringTypesParsing.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesParsing.defaultStatusCode = 204200
 	controllerBuilder.HandleStringTypesParsing.voidResult = true
 	controllerBuilder.HandleStringTypesParsing.paramsParserFactory = newParamsParserStringTypesStringTypesParsing
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
 	controllerBuilder.HandleStringTypesPatternValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleStringTypesPatternValidation.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesPatternValidation.defaultStatusCode = 204200
 	controllerBuilder.HandleStringTypesPatternValidation.voidResult = true
 	controllerBuilder.HandleStringTypesPatternValidation.paramsParserFactory = newParamsParserStringTypesStringTypesPatternValidation
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesRangeValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleStringTypesRangeValidation.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesRangeValidation.defaultStatusCode = 204200
 	controllerBuilder.HandleStringTypesRangeValidation.voidResult = true
 	controllerBuilder.HandleStringTypesRangeValidation.paramsParserFactory = newParamsParserStringTypesStringTypesRangeValidation
 
 	// POST /string-types/required-validation
 	controllerBuilder.HandleStringTypesRequiredValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleStringTypesRequiredValidation.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesRequiredValidation.defaultStatusCode = 204200
 	controllerBuilder.HandleStringTypesRequiredValidation.voidResult = true
 	controllerBuilder.HandleStringTypesRequiredValidation.paramsParserFactory = newParamsParserStringTypesStringTypesRequiredValidation
 

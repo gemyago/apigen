@@ -42,10 +42,16 @@ paths:
     $ref: "./objects/nested.yaml"
 
   # responses routes
-  /responses/with-status-defined:
-    $ref: "./responses/with-status-defined.yaml"
-  /responses/no-status-defined:
-    $ref: "./responses/no-status-defined.yaml"
+  /behavior/no-params-no-response:
+    $ref: "./behavior/no-params-no-response.yaml"
+  /behavior/no-params-with-response:
+    $ref: "./behavior/no-params-with-response.yaml"
+  /behavior/with-params-and-response:
+    $ref: "./behavior/with-params-and-response.yaml"
+  /behavior/no-status-defined:
+    $ref: "./behavior/no-status-defined.yaml"
+  /behavior/with-status-defined:
+    $ref: "./behavior/with-status-defined.yaml"
 
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:

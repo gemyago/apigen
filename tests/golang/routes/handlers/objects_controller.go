@@ -43,7 +43,7 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 
 	// POST /objects/nested
 	controllerBuilder.HandleObjectsNested.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsNested.defaultStatusCode = 
+	controllerBuilder.HandleObjectsNested.defaultStatusCode = 200
 	controllerBuilder.HandleObjectsNested.voidResult = true
 	controllerBuilder.HandleObjectsNested.paramsParserFactory = newParamsParserObjectsObjectsNested
 

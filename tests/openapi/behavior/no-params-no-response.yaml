@@ -1,0 +1,8 @@
+get:
+  summary: API to test if no params and no response
+  operationId: behaviorNoParamsNoResponse
+  tags:
+    - behavior
+  responses:
+    '202':
+      description: Request succeeded

@@ -1,0 +1,15 @@
+get:
+  summary: API to test if no params but response
+  operationId: behaviorNoParamsWithResponse
+  tags:
+    - behavior
+  responses:
+    '202':
+      description: Request succeeded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              field1: 
+                type: string
