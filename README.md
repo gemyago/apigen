@@ -25,12 +25,12 @@ Set of features compatible with golang
 ## Supported OpenAPI features
 
 Strings
-|format|in|minLength|maxLength|pattern|
-|----|----|----|----|----|
-|none or custom|query,path|&check;|&check;|&check;|
-|date|query,path|-|-|-|
-|date-time|query,path|-|-|-|
-|byte|query,path|&check;|&check;|-|
+|format|in|minLength|maxLength|pattern|notes|
+|----|----|----|----|----|----|
+|none or custom|query,path,body|&check;|&check;|&check;||
+|date|query,path,body|-|-|-|golang: request body parsed as time.Time RFC3339Nano|
+|date-time|query,path,body|-|-|-||
+|byte|query,path,body|&check;|&check;|-||
 
 Numeric data types
 |type|format|in|minimum|maximum|
