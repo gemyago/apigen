@@ -250,6 +250,7 @@ type paramsParserStringTypesStringTypesRangeValidation struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesRangeValidationRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRangeValidationRequest, error) {
@@ -268,6 +269,8 @@ func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRou
 	p.bindDateStrInQuery(&bindingCtx, readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
 	p.bindDateTimeStrInQuery(&bindingCtx, readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
 	p.bindByteStrInQuery(&bindingCtx, readQueryValue("byteStrInQuery", query), &reqParams.ByteStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -364,6 +367,13 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				internal.NewMinMaxLengthValidator[string](30, true),
 				internal.NewMinMaxLengthValidator[string](40, false),
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRangeValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.StringTypesRangeValidationRequest],
+			validateValue: internal.NewStringTypesRangeValidationRequestValidator(),
 		}),
 	}
 }

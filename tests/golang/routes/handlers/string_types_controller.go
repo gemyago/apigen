@@ -45,6 +45,7 @@ type StringTypesStringTypesRangeValidationRequest struct {
 	DateStrInQuery time.Time
 	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
+	Payload *models.StringTypesRangeValidationRequest
 }
 
 type StringTypesStringTypesRequiredValidationRequest struct {
@@ -75,7 +76,7 @@ type StringTypesController struct {
 	// Response type: none
 	StringTypesPatternValidation httpHandlerFactory
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
@@ -105,7 +106,7 @@ type StringTypesControllerBuilder struct {
 	// Response type: none
 	HandleStringTypesPatternValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesPatternValidationRequest]
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
@@ -145,7 +146,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleStringTypesPatternValidation.voidResult = true
 	controllerBuilder.HandleStringTypesPatternValidation.paramsParserFactory = newParamsParserStringTypesStringTypesPatternValidation
 
-	// GET /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesRangeValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleStringTypesRangeValidation.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesRangeValidation.voidResult = true
@@ -163,6 +164,6 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
 	app.router.HandleRoute("GET", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(app))
-	app.router.HandleRoute("GET", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))
+	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/string-types/required-validation", controller.StringTypesRequiredValidation(app))
 }
