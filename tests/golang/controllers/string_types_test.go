@@ -448,6 +448,21 @@ func TestStringTypes(t *testing.T) {
 				OptionalDateStrInQuery:         fake.Time().Time(time.Now()),
 				OptionalDateTimeStrInQuery:     fake.Time().Time(time.Now()),
 				OptionalByteStrInQuery:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+
+				// body
+				Payload: &models.StringTypesRequiredValidationRequest{
+					UnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+					CustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
+					DateStr:         fake.Time().Time(time.Now()),
+					DateTimeStr:     fake.Time().Time(time.Now()),
+					ByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+
+					OptionalUnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
+					OptionalCustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
+					OptionalDateStr:         fake.Time().Time(time.Now()),
+					OptionalDateTimeStr:     fake.Time().Time(time.Now()),
+					OptionalByteStr:         fake.BinaryString().BinaryString(fake.IntBetween(30, 40)),
+				},
 			}
 			for _, opt := range opts {
 				opt(req)
@@ -475,8 +490,10 @@ func TestStringTypes(t *testing.T) {
 			originalReq := randomReq()
 			query := buildQuery(originalReq)
 			return testCase{
-				path:  "/string-types/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/string-types/required-validation",
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
 						t.Fatalf("unexpected response: %v", recorder.Body)
@@ -499,6 +516,12 @@ func TestStringTypes(t *testing.T) {
 				req.OptionalDateStrInQuery = time.Time{}
 				req.OptionalDateTimeStrInQuery = time.Time{}
 				req.OptionalByteStrInQuery = ""
+
+				req.Payload.OptionalUnformattedStr = ""
+				req.Payload.OptionalCustomFormatStr = ""
+				req.Payload.OptionalDateStr = time.Time{}
+				req.Payload.OptionalDateTimeStr = time.Time{}
+				req.Payload.OptionalByteStr = ""
 			})
 
 			query := buildQuery(originalReq)
@@ -509,8 +532,10 @@ func TestStringTypes(t *testing.T) {
 			query.Del("optionalByteStrInQuery")
 
 			return testCase{
-				path:  "/string-types/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/string-types/required-validation",
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code) {
 						t.Fatalf("unexpected response: %v", recorder.Body)
@@ -524,6 +549,12 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate empty params", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRequiredValidationRequest) {
+				req.Payload.OptionalUnformattedStr = ""
+				req.Payload.OptionalCustomFormatStr = ""
+				req.Payload.OptionalByteStr = ""
+			})
+
 			query := url.Values{}
 
 			query.Set("unformattedStrInQuery", "")
@@ -539,10 +570,13 @@ func TestStringTypes(t *testing.T) {
 			query.Set("optionalByteStrInQuery", "")
 
 			return testCase{
-				path:  "/string-types/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/string-types/required-validation",
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]fieldBindingError{
+						// query
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -554,6 +588,43 @@ func TestStringTypes(t *testing.T) {
 						{Field: "optionalDateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "optionalDateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "optionalByteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "optionalUnformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalCustomFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalByteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should ensure required params", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRequiredValidationRequest) {
+				req.Payload.UnformattedStr = ""
+				req.Payload.CustomFormatStr = ""
+				req.Payload.DateStr = time.Time{}
+				req.Payload.DateTimeStr = time.Time{}
+				req.Payload.ByteStr = ""
+			})
+
+			return testCase{
+				method: http.MethodPost,
+				path:   "/string-types/required-validation",
+				query:  url.Values{},
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						// query
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "dateStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "dateTimeStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+
+						// body
+						{Field: "unformattedStr", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "customFormatStr", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "byteStr", Location: "body", Code: "INVALID_REQUIRED"},
 					},
 				),
 			}
