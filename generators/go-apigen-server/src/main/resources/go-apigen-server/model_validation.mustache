@@ -1,0 +1,15 @@
+{{ #generatedCodeComment }}// {{.}}.
+
+{{/generatedCodeComment}}package internal
+
+{{#models}}
+import (
+	"{{invokerPackage}}/{{ package }}"
+)
+{{#model}}
+func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
+	return func(bindingCtx *BindingContext, field, location string, value *{{package}}.{{classname}}) {
+	}
+}
+{{/model}}
+{{/models}}

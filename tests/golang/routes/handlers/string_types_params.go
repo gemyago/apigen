@@ -133,8 +133,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.StringTypesParsingRequest],
-			validateValue: internal.NewSimpleFieldValidator[*models.StringTypesParsingRequest](
-			),
+			validateValue: internal.NewStringTypesParsingRequestValidator(),
 		}),
 	}
 }

@@ -32,8 +32,7 @@ func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetReque
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.Pet],
-			validateValue: internal.NewSimpleFieldValidator[*models.Pet](
-			),
+			validateValue: internal.NewPetValidator(),
 		}),
 	}
 }

@@ -4,17 +4,9 @@
 
 {{#models}}
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"reflect"
 	"time"
 )
 
 // Unused imports workaround.
-var _ = json.Marshal
-var _ = errors.New
-var _ = fmt.Errorf
-var _ = reflect.TypeOf
 var _ = time.Time{}
 {{#model}}{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#isEnum}}{{>enums/model}}{{/isEnum}}{{^isEnum}}{{>model_simple}}{{/isEnum}}{{/oneOf}}{{/model}}{{/models}}

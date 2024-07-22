@@ -82,6 +82,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     modelTemplateFiles.put(
         "model.mustache", // the template to use
         ".go"); // the extension for each file to write
+    modelTemplateFiles.put(
+        "model_validation.mustache", // the template to use
+        "_validation.go"); // the extension for each file to write
+    templateOutputDirs.put("model_validation.mustache", "internal");
 
     /**
      * Api classes. You can write classes for each Api file with the

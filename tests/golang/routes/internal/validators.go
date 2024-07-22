@@ -76,8 +76,6 @@ type OptionalVal[TVal any] struct {
 
 type ValueValidator[TTargetVal any] func(TTargetVal) error
 
-type ModelValidator[TTargetVal any] func(validationCtx *BindingContext, val TTargetVal)
-
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,
