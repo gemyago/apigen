@@ -22,7 +22,7 @@ type paramsParserStringTypesStringTypesParsing struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
-	bindPayload requestParamBinder[*http.Request, models.StringTypesParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesParsingRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesParsingRequest, error) {
@@ -128,11 +128,11 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 				internal.ValidateNonEmpty,
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.StringTypesParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesParsingRequest]{
 			field: "payload",
 			location: "body",
-			parseValue: parseJSONPayload[models.StringTypesParsingRequest],
-			validateValue: internal.NewCompositeValidator[*http.Request, models.StringTypesParsingRequest](
+			parseValue: parseJSONPayload[*models.StringTypesParsingRequest],
+			validateValue: internal.NewCompositeValidator[*http.Request, *models.StringTypesParsingRequest](
 				internal.ValidateNonEmpty,
 			),
 		}),

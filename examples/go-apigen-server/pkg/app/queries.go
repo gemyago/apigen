@@ -32,6 +32,8 @@ func (q *queriesImpl) ListPets(_ context.Context, req *handlers.PetsListPetsRequ
 		limit = allPetsLen - offset
 	}
 	result := q.Storage.allPets[offset:limit]
+
+	// TODO: Generate array object as slices
 	return &models.PetsResponse{Data: result}, nil
 }
 

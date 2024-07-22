@@ -14,7 +14,7 @@ import (
 var _ = time.Time{}
 
 type paramsParserPetsCreatePet struct {
-	bindPayload requestParamBinder[*http.Request, models.Pet]
+	bindPayload requestParamBinder[*http.Request, *models.Pet]
 }
 
 func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) (*PetsCreatePetRequest, error) {
@@ -27,11 +27,11 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 
 func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetRequest] {
 	return &paramsParserPetsCreatePet{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, models.Pet]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.Pet]{
 			field: "payload",
 			location: "body",
-			parseValue: parseJSONPayload[models.Pet],
-			validateValue: internal.NewCompositeValidator[*http.Request, models.Pet](
+			parseValue: parseJSONPayload[*models.Pet],
+			validateValue: internal.NewCompositeValidator[*http.Request, *models.Pet](
 				internal.ValidateNonEmpty,
 			),
 		}),

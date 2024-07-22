@@ -53,7 +53,7 @@ func TestStringTypes(t *testing.T) {
 				ByteStrInQuery:         fake.BinaryString().BinaryString(10),
 
 				// body
-				Payload: models.StringTypesParsingRequest{
+				Payload: &models.StringTypesParsingRequest{
 					UnformattedStr:  fake.Lorem().Word(),
 					CustomFormatStr: fake.Lorem().Word(),
 					DateStr:         fake.Time().Time(time.Now()),

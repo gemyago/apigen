@@ -20,7 +20,7 @@ type StringTypesStringTypesParsingRequest struct {
 	DateStrInQuery time.Time
 	DateTimeStrInQuery time.Time
 	ByteStrInQuery string
-	Payload models.StringTypesParsingRequest
+	Payload *models.StringTypesParsingRequest
 }
 
 type StringTypesStringTypesPatternValidationRequest struct {
