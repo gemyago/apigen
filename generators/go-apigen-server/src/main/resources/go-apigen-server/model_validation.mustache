@@ -17,7 +17,8 @@ func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	validate{{name}} := NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
 		EnsureNonDefault,{{/required}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{/isDateTime}}{{/isDate}}
+		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}
+		NewPatternValidator[{{>params/type}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
 	)
 	{{/vars}}
 	return func(bindingCtx *BindingContext, field, location string, value *{{package}}.{{classname}}) {
