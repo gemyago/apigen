@@ -1,0 +1,8 @@
+post:
+  summary: API to test responses with status
+  operationId: responsesWithStatusDefined
+  tags:
+    - responses
+  responses:
+    '202':
+      description: Request succeeded

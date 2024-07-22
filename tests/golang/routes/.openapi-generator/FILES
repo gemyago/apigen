@@ -7,6 +7,8 @@ handlers/numeric_types_controller.go
 handlers/numeric_types_params.go
 handlers/objects_controller.go
 handlers/objects_params.go
+handlers/responses_controller.go
+handlers/responses_params.go
 handlers/string_types_controller.go
 handlers/string_types_params.go
 internal/objects_nested_request_nested_object1_nested_object11_validation.go

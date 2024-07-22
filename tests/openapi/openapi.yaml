@@ -41,6 +41,12 @@ paths:
   /objects/nested:
     $ref: "./objects/nested.yaml"
 
+  # responses routes
+  /responses/with-status-defined:
+    $ref: "./responses/with-status-defined.yaml"
+  /responses/no-status-defined:
+    $ref: "./responses/no-status-defined.yaml"
+
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
     $ref: "./error-handling/parsing-errors.yaml"
