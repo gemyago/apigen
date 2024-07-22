@@ -10,47 +10,34 @@ var _ = time.Time{}
 
 func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.StringTypesRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
-		SimpleFieldValidatorOpts{},
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
-		SimpleFieldValidatorOpts{},
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalDateStr := NewSimpleFieldValidator[time.Time](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalByteStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 	)
 	validateOptionalValidatedUnformattedStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateOptionalValidatedCustomFormatStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateOptionalValidatedByteStr := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorOpts{},
 		NewMinMaxLengthValidator[string](30, true),
 	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesRequiredValidationRequest) {

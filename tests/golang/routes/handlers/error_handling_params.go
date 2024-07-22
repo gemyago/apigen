@@ -37,7 +37,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
@@ -46,7 +45,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
@@ -55,7 +53,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -64,7 +61,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 	}
@@ -93,7 +89,6 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
@@ -103,7 +98,6 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorOpts{},
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),

@@ -141,13 +141,9 @@ type FieldValidator[TValue any] func(
 	value TValue,
 )
 
-type SimpleFieldValidatorOpts struct {
-	ProhibitEmptyValue bool
-}
-
 func NewSimpleFieldValidator[
 	TValue any,
-](opts SimpleFieldValidatorOpts, validators ...ValueValidator[TValue]) FieldValidator[TValue] {
+](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
 	return func(
 		bindingCtx *BindingContext,
 		field string,

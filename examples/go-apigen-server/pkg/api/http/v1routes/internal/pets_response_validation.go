@@ -12,7 +12,6 @@ var _ = time.Time{}
 
 func NewPetsResponseValidator() FieldValidator[*models.PetsResponse] {
 	validateData := NewSimpleFieldValidator[[]Pet](
-		SimpleFieldValidatorOpts{},
 	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.PetsResponse) {
 		validateData(bindingCtx, "data", location, value.Data)
