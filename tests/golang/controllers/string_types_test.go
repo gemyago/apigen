@@ -121,7 +121,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 204, recorder.Code, "Unexpected response", recorder.Body) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 
@@ -195,10 +195,6 @@ func TestStringTypes(t *testing.T) {
 
 						// query
 						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
-
-						// body
-						// TODO
-						// {Field: "dateStr", Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
