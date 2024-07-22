@@ -376,3 +376,7 @@ issues:
       source: "func \\(p \\*paramsParser(.+)\\) parse\\(router httpRouter, req \\*http\\.Request\\)"
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
+    - path: "routes/handlers/(.+)_params\\.go"
+      source: "func newParams.+\\(app \\*HTTPApp\\)"
+      linters:
+        - revive # some params may be unused. Hard to handle this while gernerating code.

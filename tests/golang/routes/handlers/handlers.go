@@ -189,7 +189,7 @@ type actionBuilderNoParams[TControllerBuilder any, TResData any] struct {
 func (ab *actionBuilderNoParams[TControllerBuilder, TResData]) With(
 	handler func(context.Context) (TResData, error),
 ) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, tp voidValue) (TResData, error) {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (TResData, error) {
 		return handler(ctx)
 	})
 }
@@ -201,7 +201,7 @@ type actionBuilderNoParamsVoidResult[TControllerBuilder any] struct {
 func (ab *actionBuilderNoParamsVoidResult[TControllerBuilder]) With(
 	handler func(context.Context) error,
 ) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, tp voidValue) (voidValue, error) {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) {
 		return nil, handler(ctx)
 	})
 }

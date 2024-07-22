@@ -2,7 +2,6 @@ package internal
 
 import (
 	"time"
-
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -10,7 +9,8 @@ import (
 var _ = time.Time{}
 
 func NewObjectsNestedRequestValidator() FieldValidator[*models.ObjectsNestedRequest] {
-	validateSimpleRequiredField1 := NewSimpleFieldValidator[string]()
+	validateSimpleRequiredField1 := NewSimpleFieldValidator[string](
+	)
 	validateNestedObject1 := NewObjectsNestedRequestNestedObject1Validator()
 	validateNestedObject2 := NewObjectsNestedRequestNestedObject2Validator()
 	return func(bindingCtx *BindingContext, field, location string, value *models.ObjectsNestedRequest) {

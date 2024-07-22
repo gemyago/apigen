@@ -10,6 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = models.StringTypesParsingRequest{}
 
 type paramsParserStringTypesStringTypesParsing struct {
 	bindUnformattedStr requestParamBinder[string, string]

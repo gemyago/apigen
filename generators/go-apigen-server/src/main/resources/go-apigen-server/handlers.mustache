@@ -106,7 +106,7 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	return app
 }
 
-type voidResult *int
+type voidValue *int
 
 type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
@@ -173,14 +173,38 @@ func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
 }
 
 type actionBuilderVoidResult[TControllerBuilder any, TReqParams any] struct {
-	actionBuilder[TControllerBuilder, TReqParams, voidResult]
+	actionBuilder[TControllerBuilder, TReqParams, voidValue]
 }
 
 func (ab *actionBuilderVoidResult[TControllerBuilder, TReqParams]) With(
 	handler func(context.Context, TReqParams) error,
 ) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidResult, error) {
+	return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidValue, error) {
 		return nil, handler(ctx, tp)
+	})
+}
+
+type actionBuilderNoParams[TControllerBuilder any, TResData any] struct {
+	actionBuilder[TControllerBuilder, voidValue, TResData]
+}
+
+func (ab *actionBuilderNoParams[TControllerBuilder, TResData]) With(
+	handler func(context.Context) (TResData, error),
+) TControllerBuilder {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (TResData, error) {
+		return handler(ctx)
+	})
+}
+
+type actionBuilderNoParamsVoidResult[TControllerBuilder any] struct {
+	actionBuilder[TControllerBuilder, voidValue, voidValue]
+}
+
+func (ab *actionBuilderNoParamsVoidResult[TControllerBuilder]) With(
+	handler func(context.Context) error,
+) TControllerBuilder {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) {
+		return nil, handler(ctx)
 	})
 }
 

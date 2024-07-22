@@ -14,16 +14,16 @@ var _ = time.Time{}
 {{#model}}
 func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}
-	validate{{name}} := NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
+	validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
 		EnsureNonDefault,{{/required}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}
 		NewPatternValidator[{{>params/type}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
-	)
+	){{/isModel}}{{#isModel}}New{{dataType}}Validator(){{/isModel}}
 	{{/vars}}
 	return func(bindingCtx *BindingContext, field, location string, value *{{package}}.{{classname}}) {
 		{{#vars}}
-		validate{{name}}(bindingCtx, "{{baseName}}", location, value.{{name}})
+		validate{{name}}(bindingCtx, "{{baseName}}", location, {{#isModel}}&{{/isModel}}value.{{name}})
 		{{/vars}}
 	}
 }

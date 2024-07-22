@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -253,12 +254,15 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     operationsMap.put("hasImportedModel", false);
     Iterator<Map<String, String>> iterator = imports.iterator();
+    List<String> importedModels = new ArrayList<>();
     while (iterator.hasNext()) {
         String _import = iterator.next().get("import");
         if (_import.startsWith(modelPackage())) {
           operationsMap.put("hasImportedModel", true);
+          importedModels.add(_import);
         }
     }
+    operationsMap.put("importedModels", importedModels);
 
     return operationsMap;
   }

@@ -12,6 +12,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = models.Error{}
 
 type paramsParserPetsCreatePet struct {
 	bindPayload requestParamBinder[*http.Request, *models.Pet]

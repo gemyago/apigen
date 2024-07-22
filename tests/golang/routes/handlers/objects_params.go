@@ -10,6 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = models.ObjectsNestedRequest{}
 
 type paramsParserObjectsObjectsNested struct {
 	bindPayload requestParamBinder[*http.Request, *models.ObjectsNestedRequest]

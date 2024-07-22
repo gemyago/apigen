@@ -9,9 +9,17 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+
+
+
+
+
+
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	QueryParam1 string
 }
+
+
 
 type BehaviorController struct {
 	// GET /behavior/no-params-no-response
@@ -90,11 +98,11 @@ type BehaviorControllerBuilder struct {
 func (c *BehaviorControllerBuilder) Finalize() *BehaviorController {
 	// TODO: panic if any handler is null
 	return &BehaviorController{
-		BehaviorNoParamsNoResponse:    c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
-		BehaviorNoParamsWithResponse:  c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
-		BehaviorNoStatusDefined:       c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
+		BehaviorNoParamsNoResponse: c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
+		BehaviorNoParamsWithResponse: c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
+		BehaviorNoStatusDefined: c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
 		BehaviorWithParamsAndResponse: c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory,
-		BehaviorWithStatusDefined:     c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
+		BehaviorWithStatusDefined: c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
 	}
 }
 
@@ -103,7 +111,7 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 
 	// GET /behavior/no-params-no-response
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.defaultStatusCode = 202200
+	controllerBuilder.HandleBehaviorNoParamsNoResponse.defaultStatusCode = 202
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.voidResult = true
 
 	// GET /behavior/no-params-with-response
@@ -122,7 +130,7 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 
 	// POST /behavior/with-status-defined
 	controllerBuilder.HandleBehaviorWithStatusDefined.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorWithStatusDefined.defaultStatusCode = 202200
+	controllerBuilder.HandleBehaviorWithStatusDefined.defaultStatusCode = 202
 	controllerBuilder.HandleBehaviorWithStatusDefined.voidResult = true
 
 	return controllerBuilder

@@ -64,13 +64,13 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	controllerBuilder.HandleErrorHandlingParsingErrors.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleErrorHandlingParsingErrors.defaultStatusCode = 204200
+	controllerBuilder.HandleErrorHandlingParsingErrors.defaultStatusCode = 204
 	controllerBuilder.HandleErrorHandlingParsingErrors.voidResult = true
 	controllerBuilder.HandleErrorHandlingParsingErrors.paramsParserFactory = newParamsParserErrorHandlingErrorHandlingParsingErrors
 
 	// GET /error-handling/validation-errors
 	controllerBuilder.HandleErrorHandlingValidationErrors.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleErrorHandlingValidationErrors.defaultStatusCode = 204200
+	controllerBuilder.HandleErrorHandlingValidationErrors.defaultStatusCode = 204
 	controllerBuilder.HandleErrorHandlingValidationErrors.voidResult = true
 	controllerBuilder.HandleErrorHandlingValidationErrors.paramsParserFactory = newParamsParserErrorHandlingErrorHandlingValidationErrors
 

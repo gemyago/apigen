@@ -11,10 +11,8 @@ import (
 var _ = time.Time{}
 
 func NewPetResponseValidator() FieldValidator[*models.PetResponse] {
-	validateData := NewSimpleFieldValidator[Pet](
-		EnsureNonDefault,
-	)
+	validateData := NewPetValidator()
 	return func(bindingCtx *BindingContext, field, location string, value *models.PetResponse) {
-		validateData(bindingCtx, "data", location, value.Data)
+		validateData(bindingCtx, "data", location, &value.Data)
 	}
 }

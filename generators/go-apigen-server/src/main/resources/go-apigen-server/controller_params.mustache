@@ -13,10 +13,12 @@ import (
 )
 
 // Below is to workaround unused imports.
-var _ = time.Time{}
+var _ = time.Time{}{{#hasImportedModel}}
+var _ = {{importedModels.0}}{}{{/hasImportedModel}}
 
 {{#operations}}
 {{#operation}}
+{{#hasParams}}
 type paramsParser{{baseName}}{{operationId}} struct {
 	{{#allParams}}
 	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
@@ -62,5 +64,5 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 	}
 }{{^-last}}
 
-{{/-last}}{{/operation}}
+{{/-last}}{{/hasParams}}{{/operation}}
 {{/operations}}
