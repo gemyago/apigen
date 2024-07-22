@@ -12,8 +12,10 @@ var _ = time.Time{}
 
 func NewErrorValidator() FieldValidator[*models.Error] {
 	validateCode := NewSimpleFieldValidator[interface{}](
+		SimpleFieldValidatorOpts{},
 	)
 	validateMessage := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.Error) {
 		validateCode(bindingCtx, "code", location, value.Code)

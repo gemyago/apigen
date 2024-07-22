@@ -37,6 +37,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInPath,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
@@ -45,6 +46,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInPath,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -53,6 +55,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -61,6 +64,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 	}
@@ -93,6 +97,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -101,6 +106,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -109,6 +115,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: false,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -117,6 +124,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: false,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorOpts{},
 			),
 		}),
 	}

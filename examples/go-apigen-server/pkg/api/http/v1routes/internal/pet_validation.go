@@ -12,10 +12,13 @@ var _ = time.Time{}
 
 func NewPetValidator() FieldValidator[*models.Pet] {
 	validateId := NewSimpleFieldValidator[int64](
+		SimpleFieldValidatorOpts{},
 	)
 	validateName := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	validateComments := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.Pet) {
 		validateId(bindingCtx, "id", location, value.Id)

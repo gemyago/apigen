@@ -10,14 +10,19 @@ var _ = time.Time{}
 
 func NewStringTypesParsingRequestValidator() FieldValidator[*models.StringTypesParsingRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
+		SimpleFieldValidatorOpts{},
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
+		SimpleFieldValidatorOpts{},
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorOpts{},
 	)
 	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesParsingRequest) {
 		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)

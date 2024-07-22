@@ -50,7 +50,8 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
 			required: {{required}},
 			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
-			validateValue: {{#isBodyParam}}internal.New{{dataType}}Validator(),{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
+			validateValue: {{#isBodyParam}}internal.New{{dataType}}Validator(),{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}](
+				internal.SimpleFieldValidatorOpts{},{{#minimum}}
 				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
 				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 				internal.NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}

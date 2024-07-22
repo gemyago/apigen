@@ -14,7 +14,8 @@ var _ = time.Time{}
 {{#model}}
 func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}
-	validate{{name}} := NewSimpleFieldValidator[{{{dataType}}}]({{^isDate}}{{^isDateTime}}{{#minLength}}
+	validate{{name}} := NewSimpleFieldValidator[{{{dataType}}}](
+		SimpleFieldValidatorOpts{},{{^isDate}}{{^isDateTime}}{{#minLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{/isDateTime}}{{/isDate}}
 	)
