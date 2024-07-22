@@ -32,7 +32,7 @@ func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetReque
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.Pet],
-			validateValue: internal.NewCompositeValidator[*models.Pet](
+			validateValue: internal.NewSimpleFieldValidator[*models.Pet](
 			),
 		}),
 	}
@@ -57,7 +57,7 @@ func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdReq
 			location: "path",
 			required: true,
 			parseValue: app.knownParsers.int64InPath,
-			validateValue: internal.NewCompositeValidator[int64](
+			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
 		}),
 	}
@@ -85,7 +85,7 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[int64](
+			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.NewMinMaxValueValidator[int64](1, false, true),
 				internal.NewMinMaxValueValidator[int64](100, false, false),
 			),
@@ -95,7 +95,7 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 			location: "query",
 			required: false,
 			parseValue: app.knownParsers.int64InQuery,
-			validateValue: internal.NewCompositeValidator[int64](
+			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.NewMinMaxValueValidator[int64](1, false, true),
 			),
 		}),

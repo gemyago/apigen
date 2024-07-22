@@ -36,7 +36,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			location: "path",
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
@@ -44,7 +44,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			location: "path",
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
@@ -52,7 +52,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -60,7 +60,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
 	}
@@ -88,7 +88,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
@@ -97,7 +97,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
-			validateValue: internal.NewCompositeValidator[float32](
+			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),

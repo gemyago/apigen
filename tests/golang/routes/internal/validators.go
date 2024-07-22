@@ -76,21 +76,7 @@ type OptionalVal[TVal any] struct {
 
 type ValueValidator[TTargetVal any] func(TTargetVal) error
 
-type ModelValidationContext struct {
-	Errors []error
-}
-
-type ModelValidator[TTargetVal any] func(validationCtx *ModelValidationContext, val TTargetVal)
-
-func NewModelParamValidator[TRawVal any, TTargetVal any](
-	validateModel ModelValidator[TTargetVal],
-) ValueValidator[TTargetVal] {
-	return func(tv TTargetVal) error {
-		validationCtx := ModelValidationContext{}
-		validateModel(&validationCtx, tv)
-		return errors.Join(validationCtx.Errors...)
-	}
-}
+type ModelValidator[TTargetVal any] func(validationCtx *BindingContext, val TTargetVal)
 
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
@@ -148,15 +134,34 @@ func NewPatternValidator[TTargetValue string](patternStr string) ValueValidator[
 	}
 }
 
-func NewCompositeValidator[
-	TTargetVal any,
-](validators ...ValueValidator[TTargetVal]) ValueValidator[TTargetVal] {
-	return func(tv TTargetVal) error {
+type FieldValidator[TValue any] func(
+	bindingCtx *BindingContext,
+	field string,
+	location string,
+	value TValue,
+)
+
+func NewSimpleFieldValidator[
+	TValue any,
+](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
+	return func(
+		bindingCtx *BindingContext,
+		field string,
+		location string,
+		value TValue,
+	) {
 		for _, v := range validators {
-			if err := v(tv); err != nil {
-				return err
+			if err := v(value); err != nil {
+				errCode := ErrInvalidValue
+				errors.As(err, &errCode)
+				bindingCtx.AppendFieldError(FieldBindingError{
+					Field:    field,
+					Location: location,
+					Code:     errCode.Error(),
+					Err:      err,
+				})
+				return
 			}
 		}
-		return nil
 	}
 }

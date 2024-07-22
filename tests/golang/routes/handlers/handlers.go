@@ -360,7 +360,7 @@ type binderParams[TRawVal any, TTargetVal any] struct {
 	location      string
 	required      bool
 	parseValue    rawValueParser[TRawVal, TTargetVal]
-	validateValue internal.ValueValidator[TTargetVal]
+	validateValue internal.FieldValidator[TTargetVal]
 }
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
@@ -390,15 +390,6 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			})
 			return
 		}
-		if err := params.validateValue(*receiver); err != nil {
-			errCode := internal.ErrInvalidValue
-			errors.As(err, &errCode)
-			bindingCtx.AppendFieldError(internal.FieldBindingError{
-				Field:    params.field,
-				Location: params.location,
-				Code:     errCode.Error(),
-				Err:      err,
-			})
-		}
+		params.validateValue(bindingCtx, params.field, params.location, *receiver)
 	}
 }
