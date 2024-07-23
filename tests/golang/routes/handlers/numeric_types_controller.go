@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -20,6 +22,7 @@ type NumericTypesNumericTypesParsingRequest struct {
 	NumberIntInQuery int32
 	NumberInt32InQuery int32
 	NumberInt64InQuery int64
+	Payload *models.NumericTypesParsingRequest
 }
 
 type NumericTypesNumericTypesRangeValidationRequest struct {
@@ -68,7 +71,7 @@ type NumericTypesNumericTypesRequiredValidationRequest struct {
 }
 
 type NumericTypesController struct {
-	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
@@ -98,7 +101,7 @@ type NumericTypesController struct {
 }
 
 type NumericTypesControllerBuilder struct {
-	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
@@ -140,7 +143,7 @@ func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder := &NumericTypesControllerBuilder{}
 
-	// GET /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesParsing.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesParsing.voidResult = true
@@ -168,7 +171,7 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 }
 
 func RegisterNumericTypesRoutes(controller *NumericTypesController, app *HTTPApp) {
-	app.router.HandleRoute("GET", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
+	app.router.HandleRoute("POST", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
 	app.router.HandleRoute("GET", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
 	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(app))

@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to simulate and test parsing errors
   operationId: numericTypesParsing
   tags:
@@ -75,6 +75,36 @@ get:
       schema:
         type: integer
         format: int64
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - numberAny
+            - numberFloat
+            - numberDouble
+            - numberInt
+            - numberInt32
+            - numberInt64
+          properties: 
+            numberAny:
+                type: number
+            numberFloat:
+                type: number
+                format: float
+            numberDouble:
+                type: number
+                format: double
+            numberInt:
+                type: integer
+            numberInt32:
+                type: integer
+                format: int32
+            numberInt64:
+                type: integer
+                format: int64
   responses:
     '204':
       description: Request succeeded

@@ -3,11 +3,14 @@ package handlers
 import (
 	"net/http"
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = models.NumericTypesParsingRequest{}
 
 type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberAny requestParamBinder[string, float32]
@@ -22,6 +25,7 @@ type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesParsingRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
@@ -42,6 +46,8 @@ func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, r
 	p.bindNumberIntInQuery(&bindingCtx, readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
 	p.bindNumberInt32InQuery(&bindingCtx, readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
 	p.bindNumberInt64InQuery(&bindingCtx, readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -142,6 +148,13 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			parseValue: app.knownParsers.int64InQuery,
 			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesParsingRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.NumericTypesParsingRequest],
+			validateValue: internal.NewNumericTypesParsingRequestValidator(),
 		}),
 	}
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -9,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
@@ -46,6 +48,16 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    fake.Int32(),
 				NumberInt32InQuery:  fake.Int32(),
 				NumberInt64InQuery:  fake.Int64(),
+
+				// body
+				Payload: &models.NumericTypesParsingRequest{
+					NumberAny:    fake.Float32(10, 1, 100),
+					NumberFloat:  fake.Float32(10, 1, 100),
+					NumberDouble: fake.Float64(10, 1, 100),
+					NumberInt:    fake.Int32(),
+					NumberInt32:  fake.Int32(),
+					NumberInt64:  fake.Int64(),
+				},
 			}
 		}
 		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
@@ -60,10 +72,12 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberInt64InQuery", strconv.FormatInt(wantReq.NumberInt64InQuery, 10))
 
 				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
 					path: fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v",
 						wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
 						wantReq.NumberInt32, wantReq.NumberInt64),
 					query: query,
+					body:  marshalJSONDataAsReader(t, wantReq.Payload),
 					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 						assert.Equal(t, 204, recorder.Code)
 						assert.Equal(t, wantReq, testActions.numericTypesParsing.calls[0].params)
@@ -81,10 +95,14 @@ func TestNumericTypes(t *testing.T) {
 				query.Add("numberInt64InQuery", fake.Lorem().Word())
 
 				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
 					path: fmt.Sprintf("/numeric-types/parsing/%v/%v/%v/%v/%v/%v",
 						fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word(),
 						fake.Lorem().Word(), fake.Lorem().Word()),
 					query: query,
+					body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+						"numberAny": %v
+					}`, fake.Lorem().Word()))),
 					expect: expectBindingErrors[*numericTypesControllerTestActions](
 						[]fieldBindingError{
 							// path
@@ -102,6 +120,9 @@ func TestNumericTypes(t *testing.T) {
 							{Field: "numberIntInQuery", Location: "query", Code: "BAD_FORMAT"},
 							{Field: "numberInt32InQuery", Location: "query", Code: "BAD_FORMAT"},
 							{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
+
+							// body
+							{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
 						},
 					),
 				}
