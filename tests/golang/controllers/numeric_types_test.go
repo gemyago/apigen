@@ -158,13 +158,24 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    fake.Int32Between(40, 400),
 				NumberInt32InQuery:  fake.Int32Between(50, 500),
 				NumberInt64InQuery:  fake.Int64Between(60, 600),
+
+				Payload: &models.NumericTypesRangeValidationRequest{
+					NumberAny:    fake.Float32(5, 10, 100),
+					NumberFloat:  fake.Float32(5, 20, 200),
+					NumberDouble: fake.Float64(5, 30, 300),
+					NumberInt:    fake.Int32Between(40, 400),
+					NumberInt32:  fake.Int32Between(50, 500),
+					NumberInt64:  fake.Int64Between(60, 600),
+				},
 			}
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -182,6 +193,14 @@ func TestNumericTypes(t *testing.T) {
 						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "numberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -203,14 +222,25 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    400,
 				NumberInt32InQuery:  500,
 				NumberInt64InQuery:  600,
+
+				Payload: &models.NumericTypesRangeValidationRequest{
+					NumberAny:    100.01,
+					NumberFloat:  200.02,
+					NumberDouble: 300.03,
+					NumberInt:    400,
+					NumberInt32:  500,
+					NumberInt64:  600,
+				},
 			}
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
 					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation.calls[0].params)
@@ -235,13 +265,25 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    fake.Int32Between(500, 1000),
 				NumberInt32InQuery:  fake.Int32Between(600, 1000),
 				NumberInt64InQuery:  fake.Int64Between(700, 1000),
+
+				// body
+				Payload: &models.NumericTypesRangeValidationRequest{
+					NumberAny:    fake.Float32(5, 201, 1000),
+					NumberFloat:  fake.Float32(5, 302, 1000),
+					NumberDouble: fake.Float64(5, 403, 1000),
+					NumberInt:    fake.Int32Between(500, 1000),
+					NumberInt32:  fake.Int32Between(600, 1000),
+					NumberInt64:  fake.Int64Between(700, 1000),
+				},
 			}
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -259,6 +301,14 @@ func TestNumericTypes(t *testing.T) {
 						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "numberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -280,14 +330,25 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    500,
 				NumberInt32InQuery:  600,
 				NumberInt64InQuery:  700,
+
+				Payload: &models.NumericTypesRangeValidationRequest{
+					NumberAny:    200.02,
+					NumberFloat:  300.03,
+					NumberDouble: 400.04,
+					NumberInt:    500,
+					NumberInt32:  600,
+					NumberInt64:  700,
+				},
 			}
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf(
 					"/numeric-types/range-validation/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt, wantReq.NumberInt32,
 					wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 					assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body)
 					assert.Equal(t, wantReq, testActions.numericTypesRangeValidation.calls[0].params)
@@ -325,13 +386,25 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    400,
 				NumberInt32InQuery:  500,
 				NumberInt64InQuery:  600,
+
+				// body
+				Payload: &models.NumericTypesRangeValidationExclusiveRequest{
+					NumberAny:    100.01,
+					NumberFloat:  200.02,
+					NumberDouble: 300.03,
+					NumberInt:    400,
+					NumberInt32:  500,
+					NumberInt64:  600,
+				},
 			}
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -349,6 +422,14 @@ func TestNumericTypes(t *testing.T) {
 						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "numberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
@@ -370,13 +451,24 @@ func TestNumericTypes(t *testing.T) {
 				NumberIntInQuery:    500,
 				NumberInt32InQuery:  600,
 				NumberInt64InQuery:  700,
+
+				Payload: &models.NumericTypesRangeValidationExclusiveRequest{
+					NumberAny:    200.02,
+					NumberFloat:  300.03,
+					NumberDouble: 400.04,
+					NumberInt:    500,
+					NumberInt32:  600,
+					NumberInt64:  700,
+				},
 			}
 
 			return testCase{
+				method: http.MethodPost,
 				path: fmt.Sprintf("/numeric-types/range-validation-exclusive/%v/%v/%v/%v/%v/%v",
 					wantReq.NumberAny, wantReq.NumberFloat, wantReq.NumberDouble, wantReq.NumberInt,
 					wantReq.NumberInt32, wantReq.NumberInt64),
 				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
 					[]fieldBindingError{
 						// path
@@ -394,6 +486,14 @@ func TestNumericTypes(t *testing.T) {
 						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "numberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}

@@ -172,6 +172,7 @@ type paramsParserNumericTypesNumericTypesRangeValidation struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesRangeValidationRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
@@ -192,6 +193,8 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpR
 	p.bindNumberIntInQuery(&bindingCtx, readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
 	p.bindNumberInt32InQuery(&bindingCtx, readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
 	p.bindNumberInt64InQuery(&bindingCtx, readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -317,6 +320,13 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.NumericTypesRangeValidationRequest],
+			validateValue: internal.NewNumericTypesRangeValidationRequestValidator(),
+		}),
 	}
 }
 
@@ -333,6 +343,7 @@ type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesRangeValidationExclusiveRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
@@ -353,6 +364,8 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(rou
 	p.bindNumberIntInQuery(&bindingCtx, readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
 	p.bindNumberInt32InQuery(&bindingCtx, readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
 	p.bindNumberInt64InQuery(&bindingCtx, readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -477,6 +490,13 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int64](600, true, true),
 				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationExclusiveRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.NumericTypesRangeValidationExclusiveRequest],
+			validateValue: internal.NewNumericTypesRangeValidationExclusiveRequestValidator(),
 		}),
 	}
 }

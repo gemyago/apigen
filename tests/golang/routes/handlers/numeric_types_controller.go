@@ -38,6 +38,7 @@ type NumericTypesNumericTypesRangeValidationRequest struct {
 	NumberIntInQuery int32
 	NumberInt32InQuery int32
 	NumberInt64InQuery int64
+	Payload *models.NumericTypesRangeValidationRequest
 }
 
 type NumericTypesNumericTypesRangeValidationExclusiveRequest struct {
@@ -53,6 +54,7 @@ type NumericTypesNumericTypesRangeValidationExclusiveRequest struct {
 	NumberIntInQuery int32
 	NumberInt32InQuery int32
 	NumberInt64InQuery int64
+	Payload *models.NumericTypesRangeValidationExclusiveRequest
 }
 
 type NumericTypesNumericTypesRequiredValidationRequest struct {
@@ -78,14 +80,14 @@ type NumericTypesController struct {
 	// Response type: none
 	NumericTypesParsing httpHandlerFactory
 
-	// GET /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationRequest,
 	//
 	// Response type: none
 	NumericTypesRangeValidation httpHandlerFactory
 
-	// GET /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
 	//
@@ -108,14 +110,14 @@ type NumericTypesControllerBuilder struct {
 	// Response type: none
 	HandleNumericTypesParsing actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesParsingRequest]
 
-	// GET /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationRequest,
 	//
 	// Response type: none
 	HandleNumericTypesRangeValidation actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesRangeValidationRequest]
 
-	// GET /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
 	//
@@ -149,13 +151,13 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder.HandleNumericTypesParsing.voidResult = true
 	controllerBuilder.HandleNumericTypesParsing.paramsParserFactory = newParamsParserNumericTypesNumericTypesParsing
 
-	// GET /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesRangeValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesRangeValidation.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesRangeValidation.voidResult = true
 	controllerBuilder.HandleNumericTypesRangeValidation.paramsParserFactory = newParamsParserNumericTypesNumericTypesRangeValidation
 
-	// GET /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.defaultStatusCode = 204
 	controllerBuilder.HandleNumericTypesRangeValidationExclusive.voidResult = true
@@ -172,7 +174,7 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 
 func RegisterNumericTypesRoutes(controller *NumericTypesController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
-	app.router.HandleRoute("GET", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
-	app.router.HandleRoute("GET", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
+	app.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
+	app.router.HandleRoute("POST", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
 	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(app))
 }
