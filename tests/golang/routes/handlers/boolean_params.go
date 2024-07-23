@@ -3,17 +3,21 @@ package handlers
 import (
 	"net/http"
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = models.BooleanParsingRequest{}
 
 type paramsParserBooleanBooleanParsing struct {
 	bindBoolParam1 requestParamBinder[string, bool]
 	bindBoolParam2 requestParamBinder[string, bool]
 	bindBoolParam1InQuery requestParamBinder[[]string, bool]
 	bindBoolParam2InQuery requestParamBinder[[]string, bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanParsingRequest]
 }
 
 func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.Request) (*BooleanBooleanParsingRequest, error) {
@@ -26,6 +30,8 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 	query := req.URL.Query()
 	p.bindBoolParam1InQuery(&bindingCtx, readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
 	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -63,12 +69,20 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanParsingRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.BooleanParsingRequest],
+			validateValue: internal.NewBooleanParsingRequestValidator(),
+		}),
 	}
 }
 
 type paramsParserBooleanBooleanRequiredValidation struct {
 	bindBoolParam1InQuery requestParamBinder[[]string, bool]
 	bindBoolParam2InQuery requestParamBinder[[]string, bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanRequiredValidationRequest]
 	bindOptionalBoolParam1InQuery requestParamBinder[[]string, bool]
 	bindOptionalBoolParam2InQuery requestParamBinder[[]string, bool]
 }
@@ -82,6 +96,8 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
 	p.bindOptionalBoolParam1InQuery(&bindingCtx, readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
 	p.bindOptionalBoolParam2InQuery(&bindingCtx, readQueryValue("optionalBoolParam2InQuery", query), &reqParams.OptionalBoolParam2InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -102,6 +118,13 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanRequiredValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.BooleanRequiredValidationRequest],
+			validateValue: internal.NewBooleanRequiredValidationRequestValidator(),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam1InQuery",

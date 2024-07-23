@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"time"
+
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -12,24 +14,26 @@ type BooleanBooleanParsingRequest struct {
 	BoolParam2 bool
 	BoolParam1InQuery bool
 	BoolParam2InQuery bool
+	Payload *models.BooleanParsingRequest
 }
 
 type BooleanBooleanRequiredValidationRequest struct {
 	BoolParam1InQuery bool
 	BoolParam2InQuery bool
+	Payload *models.BooleanRequiredValidationRequest
 	OptionalBoolParam1InQuery bool
 	OptionalBoolParam2InQuery bool
 }
 
 type BooleanController struct {
-	// GET /boolean/parsing/{boolParam1}/{boolParam2}
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
 	//
 	// Response type: none
 	BooleanParsing httpHandlerFactory
 
-	// GET /boolean/required-validation
+	// POST /boolean/required-validation
 	//
 	// Request type: BooleanBooleanRequiredValidationRequest,
 	//
@@ -38,14 +42,14 @@ type BooleanController struct {
 }
 
 type BooleanControllerBuilder struct {
-	// GET /boolean/parsing/{boolParam1}/{boolParam2}
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
 	//
 	// Response type: none
 	HandleBooleanParsing actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanParsingRequest]
 
-	// GET /boolean/required-validation
+	// POST /boolean/required-validation
 	//
 	// Request type: BooleanBooleanRequiredValidationRequest,
 	//
@@ -64,13 +68,13 @@ func (c *BooleanControllerBuilder) Finalize() *BooleanController {
 func BuildBooleanController() *BooleanControllerBuilder {
 	controllerBuilder := &BooleanControllerBuilder{}
 
-	// GET /boolean/parsing/{boolParam1}/{boolParam2}
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	controllerBuilder.HandleBooleanParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBooleanParsing.defaultStatusCode = 204
 	controllerBuilder.HandleBooleanParsing.voidResult = true
 	controllerBuilder.HandleBooleanParsing.paramsParserFactory = newParamsParserBooleanBooleanParsing
 
-	// GET /boolean/required-validation
+	// POST /boolean/required-validation
 	controllerBuilder.HandleBooleanRequiredValidation.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBooleanRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleBooleanRequiredValidation.voidResult = true
@@ -80,6 +84,6 @@ func BuildBooleanController() *BooleanControllerBuilder {
 }
 
 func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
-	app.router.HandleRoute("GET", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
-	app.router.HandleRoute("GET", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
+	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
+	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
 }
