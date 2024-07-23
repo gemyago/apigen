@@ -40,6 +40,8 @@ paths:
   # objects routes
   /objects/nested:
     $ref: "./objects/nested.yaml"
+  /objects/arrays-parsing:
+    $ref: "./objects/arrays-parsing.yaml"
 
   # responses routes
   /behavior/no-params-no-response:

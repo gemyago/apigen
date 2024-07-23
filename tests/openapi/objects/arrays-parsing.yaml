@@ -1,0 +1,68 @@
+post:
+  summary: API to test parsing of array of objects directly in body
+  operationId: objectsArrayParsingBodyDirect
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/ObjectArraysSimpleObject"
+put:
+  summary: API to test parsing nested arrays of objects
+  operationId: objectsArrayParsingBodyDirect
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - nestedArray1
+            - nestedArray2
+            - nestedArrayContainer1
+            - nestedArrayContainer2
+          properties:
+            nestedArray1:
+              type: array
+              items:
+                $ref: "#/components/schemas/ObjectArraysSimpleObject"
+            nestedArray2:
+              type: array
+              items:
+                $ref: "#/components/schemas/ObjectArraysSimpleObject"
+            nestedArrayContainer1:
+              type: array
+              items:
+                $ref: "#/components/schemas/ObjectArraysSimpleObjectsContainer"
+            nestedArrayContainer2:
+              type: array
+              items:
+                $ref: "#/components/schemas/ObjectArraysSimpleObjectsContainer"
+components:
+  schemas:
+    ObjectArraysSimpleObjectsContainer:
+      type: object
+      required:
+        - simpleObjects1
+      properties:
+        simpleObjects1:
+          type: array
+          items: 
+            $ref: "#/components/schemas/ObjectArraysSimpleObject"
+        simpleObjects2:
+          type: array
+          items: 
+            $ref: "#/components/schemas/ObjectArraysSimpleObject"
+    ObjectArraysSimpleObject:
+      type: object
+      required:
+        - simpleField1
+      properties:
+        simpleField1:
+          type: string
