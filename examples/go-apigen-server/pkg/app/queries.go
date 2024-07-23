@@ -26,7 +26,7 @@ func (q *queriesImpl) ListPets(_ context.Context, req *handlers.PetsListPetsRequ
 	limit := req.Limit
 	offset := req.Offset
 	if offset >= allPetsLen {
-		return &models.PetsResponse{Data: []models.Pet{}}, nil
+		return &models.PetsResponse{Data: []*models.Pet{}}, nil
 	}
 	if offset+limit > allPetsLen {
 		limit = allPetsLen - offset
@@ -42,7 +42,7 @@ func (q *queriesImpl) GetPetByID(_ context.Context, req *handlers.PetsGetPetById
 	if !ok {
 		return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)
 	}
-	return &models.PetResponse{Data: pet}, nil
+	return &models.PetResponse{Data: *pet}, nil
 }
 
 func NewQueries(deps QueriesDeps) Queries {

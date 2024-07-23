@@ -24,8 +24,8 @@ func (c *commandsImpl) CreatePet(_ context.Context, req *handlers.PetsCreatePetR
 		return fmt.Errorf("pet %d already exists: %w", req.Payload.Id, ErrConflict)
 	}
 
-	c.Storage.allPets = append(c.Storage.allPets, *req.Payload)
-	c.Storage.petsByID[req.Payload.Id] = *req.Payload
+	c.Storage.allPets = append(c.Storage.allPets, req.Payload)
+	c.Storage.petsByID[req.Payload.Id] = req.Payload
 
 	return nil
 }
