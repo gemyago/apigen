@@ -9,19 +9,19 @@ import (
 var _ = time.Time{}
 
 func NewStringTypesNullableParsingRequestValidator() FieldValidator[*models.StringTypesNullableParsingRequest] {
-	validateUnformattedStr := NewSimpleFieldValidator[string](
+	validateUnformattedStr := NewSimpleFieldValidator[*string](
 		EnsureNonDefault,
 	)
-	validateCustomFormatStr := NewSimpleFieldValidator[string](
+	validateCustomFormatStr := NewSimpleFieldValidator[*string](
 		EnsureNonDefault,
 	)
-	validateDateStr := NewSimpleFieldValidator[time.Time](
+	validateDateStr := NewSimpleFieldValidator[*time.Time](
 		EnsureNonDefault,
 	)
-	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
+	validateDateTimeStr := NewSimpleFieldValidator[*time.Time](
 		EnsureNonDefault,
 	)
-	validateByteStr := NewSimpleFieldValidator[string](
+	validateByteStr := NewSimpleFieldValidator[*string](
 		EnsureNonDefault,
 	)
 	

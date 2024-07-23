@@ -324,6 +324,24 @@ func parseBoolInQuery(ov []string, s *bool) error {
 	return parseBoolInPath(ov[0], s)
 }
 
+func parseNullableInPath[TTargetVal any](targetParser rawValueParser[string, TTargetVal]) rawValueParser[string, *TTargetVal] {
+	return func(s string, tv **TTargetVal) error {
+		if s == "" || s == "null" {
+			return nil
+		}
+		return targetParser(s, *tv)
+	}
+}
+
+func parseNullableInQuery[TTargetVal any](targetParser rawValueParser[[]string, TTargetVal]) rawValueParser[[]string, *TTargetVal] {
+	return func(s []string, tv **TTargetVal) error {
+		if s[0] == "" || s[0] == "null" {
+			return nil
+		}
+		return targetParser(s, *tv)
+	}
+}
+
 type knownParsersDef struct {
 	// path
 	stringInPath  rawValueParser[string, string]

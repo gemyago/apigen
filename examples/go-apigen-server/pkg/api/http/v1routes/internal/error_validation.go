@@ -11,7 +11,7 @@ import (
 var _ = time.Time{}
 
 func NewErrorValidator() FieldValidator[*models.Error] {
-	validateCode := NewSimpleFieldValidator[interface{}](
+	validateCode := NewSimpleFieldValidator[*interface{}](
 		EnsureNonDefault,
 	)
 	validateMessage := NewSimpleFieldValidator[string](

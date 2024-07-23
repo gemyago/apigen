@@ -1,1 +1,1 @@
-{{#isArray}}[]{{#mostInnerItems}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/mostInnerItems}}{{/isArray}}{{^isArray}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/isArray}}
+{{#isArray}}[]{{#mostInnerItems}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/mostInnerItems}}{{/isArray}}{{^isArray}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/isArray}}

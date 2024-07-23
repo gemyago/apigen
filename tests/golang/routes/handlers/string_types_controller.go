@@ -10,16 +10,16 @@ import (
 var _ = time.Time{}
 
 type StringTypesStringTypesNullableParsingRequest struct {
-	UnformattedStr string
-	CustomFormatStr string
-	DateStr time.Time
-	DateTimeStr time.Time
-	ByteStr string
-	UnformattedStrInQuery string
-	CustomFormatStrInQuery string
-	DateStrInQuery time.Time
-	DateTimeStrInQuery time.Time
-	ByteStrInQuery string
+	UnformattedStr *string
+	CustomFormatStr *string
+	DateStr *time.Time
+	DateTimeStr *time.Time
+	ByteStr *string
+	UnformattedStrInQuery *string
+	CustomFormatStrInQuery *string
+	DateStrInQuery *time.Time
+	DateTimeStrInQuery *time.Time
+	ByteStrInQuery *string
 	Payload *models.StringTypesNullableParsingRequest
 }
 
