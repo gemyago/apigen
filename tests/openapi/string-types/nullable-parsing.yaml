@@ -1,0 +1,112 @@
+post:
+  summary: API to test nullable string types parsing
+  operationId: stringTypesNullableParsing
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: vendor-specific
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: date
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: date-time
+    - name: byteStr
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: byte
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: vendor-specific
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: date
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: date-time
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        format: byte
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
+          properties: 
+            unformattedStr:
+              type: string
+              nullable: true
+            customFormatStr:
+              type: string
+              nullable: true
+              format: vendor-specific
+            dateStr:
+              type: string
+              nullable: true
+              format: date
+            dateTimeStr:
+              type: string
+              nullable: true
+              format: date-time
+            byteStr:
+              type: string
+              nullable: true
+              format: byte
+  responses:
+    '204':
+      description: Request succeeded
