@@ -1,1 +1,1 @@
-actionBuilder{{^returnType}}VoidResult{{/returnType}}[*{{baseName}}ControllerBuilder, *{{baseName}}{{operationId}}Request{{#returnType}}, {{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{>response-type}}{{/returnType}}]
+actionBuilder{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}VoidResult{{/returnType}}[*{{baseName}}ControllerBuilder{{#hasParams}}, *{{baseName}}{{operationId}}Request{{/hasParams}}{{#returnType}}, {{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{>response-type}}{{/returnType}}]

@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to test string types parsing
   operationId: stringTypesParsing
   tags:
@@ -65,7 +65,33 @@ get:
       schema:
         type: string
         format: byte
-    
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
+          properties: 
+            unformattedStr:
+              type: string
+            customFormatStr:
+              type: string
+              format: vendor-specific
+            dateStr:
+              type: string
+              format: date
+            dateTimeStr:
+              type: string
+              format: date-time
+            byteStr:
+              type: string
+              format: byte
   responses:
     '204':
       description: Request succeeded

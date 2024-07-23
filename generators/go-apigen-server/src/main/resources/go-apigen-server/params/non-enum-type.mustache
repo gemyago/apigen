@@ -1,1 +1,1 @@
-{{#isBodyParam}}models.{{/isBodyParam}}{{#isEnumRef}}{{^isEnum}}models.{{/isEnum}}{{/isEnumRef}}{{{dataType}}}
+{{#isArray}}[]{{#mostInnerItems}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/mostInnerItems}}{{/isArray}}{{^isArray}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/isArray}}

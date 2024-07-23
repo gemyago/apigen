@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -9,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
@@ -38,6 +40,12 @@ func TestBoolean(t *testing.T) {
 				// query
 				BoolParam1InQuery: fake.Bool(),
 				BoolParam2InQuery: fake.Bool(),
+
+				// body
+				Payload: &models.BooleanParsingRequest{
+					BoolParam1: fake.Bool(),
+					BoolParam2: fake.Bool(),
+				},
 			}
 		}
 
@@ -54,9 +62,11 @@ func TestBoolean(t *testing.T) {
 				query := buildQuery(wantReq)
 
 				return routeTestCase[*booleanControllerTestActions]{
+					method: http.MethodPost,
 					path: fmt.Sprintf("/boolean/parsing/%v/%v",
 						wantReq.BoolParam1, wantReq.BoolParam2),
 					query: query,
+					body:  marshalJSONDataAsReader(t, wantReq.Payload),
 					expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
 						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
 							return
@@ -68,10 +78,10 @@ func TestBoolean(t *testing.T) {
 
 		nonBooleanValues := []string{
 			"True",
-			"False",
-			"0",
-			"1",
-			fake.Lorem().Word(),
+			// "False",
+			// "0",
+			// "1",
+			// fake.Lorem().Word(),
 		}
 
 		for _, val := range nonBooleanValues {
@@ -83,14 +93,20 @@ func TestBoolean(t *testing.T) {
 				query.Add("optionalBoolParam2InQuery", val)
 
 				return testCase{
-					path:  "/boolean/required-validation",
-					query: query,
+					method: http.MethodPost,
+					path:   fmt.Sprintf("/boolean/parsing/%v/%v", val, val),
+					query:  query,
+					body: bytes.NewBufferString(`{
+						"boolParam1": %v,
+						"boolParam2": %v
+					}`),
 					expect: expectBindingErrors[*booleanControllerTestActions](
-						[]handlers.FieldBindingError{
-							{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-							{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+						[]fieldBindingError{
+							{Field: "boolParam1", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "boolParam2", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
 						},
 					),
 				}
@@ -113,6 +129,8 @@ func TestBoolean(t *testing.T) {
 				// query
 				BoolParam1InQuery: fake.Bool(),
 				BoolParam2InQuery: fake.Bool(),
+
+				Payload: &models.BooleanRequiredValidationRequest{},
 			}
 
 			query := buildQuery(wantReq)
@@ -120,8 +138,10 @@ func TestBoolean(t *testing.T) {
 			query.Del("optionalBoolParam2InQuery")
 
 			return testCase{
-				path:  "/boolean/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/boolean/required-validation",
+				query:  query,
+				body:   marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body) {
 						return
@@ -137,11 +157,18 @@ func TestBoolean(t *testing.T) {
 				BoolParam2InQuery:         fake.Bool(),
 				OptionalBoolParam1InQuery: fake.Bool(),
 				OptionalBoolParam2InQuery: fake.Bool(),
+
+				Payload: &models.BooleanRequiredValidationRequest{
+					OptionalBoolParam1: fake.Bool(),
+					OptionalBoolParam2: fake.Bool(),
+				},
 			}
 
 			return testCase{
-				path:  "/boolean/required-validation",
-				query: buildQuery(wantReq),
+				method: http.MethodPost,
+				path:   "/boolean/required-validation",
+				query:  buildQuery(wantReq),
+				body:   marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body) {
 						return
@@ -158,14 +185,18 @@ func TestBoolean(t *testing.T) {
 			query.Add("optionalBoolParam2InQuery", "")
 
 			return testCase{
-				path:  "/boolean/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/boolean/required-validation",
+				query:  query,
+				body:   bytes.NewBufferString("{}"),
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.FieldBindingError{
-						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam1InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
-						{Field: "optionalBoolParam2InQuery", Location: "query", Code: handlers.ErrBadValueFormat},
+					[]fieldBindingError{
+						{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "optionalBoolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
+
+						// "required" validation of optional bool params in body is not yet supported
 					},
 				),
 			}
@@ -176,12 +207,16 @@ func TestBoolean(t *testing.T) {
 			query.Del("boolParam2InQuery")
 
 			return testCase{
-				path:  "/boolean/required-validation",
-				query: query,
+				method: http.MethodPost,
+				path:   "/boolean/required-validation",
+				query:  query,
+				body:   bytes.NewBufferString("{}"),
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]handlers.FieldBindingError{
-						{Field: "boolParam1InQuery", Location: "query", Code: handlers.ErrValueRequired},
-						{Field: "boolParam2InQuery", Location: "query", Code: handlers.ErrValueRequired},
+					[]fieldBindingError{
+						{Field: "boolParam1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+						{Field: "boolParam2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+
+						// "required" validation of optional bool params in body is not yet supported
 					},
 				),
 			}

@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to simulate and test range validation of numeric types
   operationId: numericTypesRangeValidation
   tags:
@@ -99,6 +99,48 @@ get:
         format: int64
         minimum: 600
         maximum: 700
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - numberAny
+            - numberFloat
+            - numberDouble
+            - numberInt
+            - numberInt32
+            - numberInt64
+          properties:
+            numberAny:
+              type: number
+              minimum: 100.01
+              maximum: 200.02
+            numberFloat:
+              type: number
+              format: float
+              minimum: 200.02
+              maximum: 300.03
+            numberDouble:
+              type: number
+              format: double
+              minimum: 300.03
+              maximum: 400.04
+            numberInt:
+              type: integer
+              minimum: 400
+              maximum: 500
+            numberInt32:
+              type: integer
+              format: int32
+              minimum: 500
+              maximum: 600
+            numberInt64:
+              type: integer
+              format: int64
+              minimum: 600
+              maximum: 700
   responses:
-    '204':
+    "204":
       description: Request succeeded

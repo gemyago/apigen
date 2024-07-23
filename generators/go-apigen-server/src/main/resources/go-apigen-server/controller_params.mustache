@@ -5,17 +5,20 @@
 import (
 	"net/http"
 	"time"
-	{{#hasModel}}
+	{{#hasImportedModel}}
 
 	"{{invokerPackage}}/models"
-{{/hasModel}}
+{{/hasImportedModel}}
+	"{{invokerPackage}}/internal"
 )
 
 // Below is to workaround unused imports.
-var _ = time.Time{}
+var _ = time.Time{}{{#hasImportedModel}}
+var _ = {{importedModels.0}}{}{{/hasImportedModel}}
 
 {{#operations}}
 {{#operation}}
+{{#hasParams}}
 type paramsParser{{baseName}}{{operationId}} struct {
 	{{#allParams}}
 	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
@@ -23,7 +26,7 @@ type paramsParser{{baseName}}{{operationId}} struct {
 }
 
 func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *http.Request) (*{{>request-type}}, error) {
-	bindingCtx := bindingContext{}
+	bindingCtx := internal.BindingContext{}
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
@@ -36,7 +39,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, optionalVal[*http.Request]{value: req, assigned: true}, &reqParams.Payload)
+	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -47,19 +50,21 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
+			required: {{required}},
 			parseValue: {{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}},
-			validateValue: newCompositeValidator[{{>params/binder-types}}]({{#required}}
-				validateNonEmpty,{{/required}}{{#minimum}}
-				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
-				newMinMaxValueValidator[{{>params/binder-types}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
-				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-				newMinMaxLengthValidator[{{>params/binder-types}}]({{.}}, false),{{/maxLength}}{{#pattern}}
-				newPatternValidator[{{>params/binder-types}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
-			),
+			validateValue: {{#isArray}}internal.NewArrayValidator(
+        internal.New{{#mostInnerItems}}{{{dataType}}}{{/mostInnerItems}}Validator(),
+      ),{{/isArray}}{{^isArray}}{{#isBodyParam}}internal.New{{dataType}}Validator(),{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
+				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
+				internal.NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
+				internal.NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
+				internal.NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}
+				internal.NewPatternValidator[{{>params/type}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
+			),{{/isBodyParam}}{{/isArray}}
 		}),
 		{{/allParams}}
 	}
 }{{^-last}}
 
-{{/-last}}{{/operation}}
+{{/-last}}{{/hasParams}}{{/operation}}
 {{/operations}}

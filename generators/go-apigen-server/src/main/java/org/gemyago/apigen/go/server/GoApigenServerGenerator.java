@@ -5,7 +5,10 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +16,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
 
 import com.google.common.collect.ImmutableMap;
@@ -78,6 +83,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     modelTemplateFiles.put(
         "model.mustache", // the template to use
         ".go"); // the extension for each file to write
+    modelTemplateFiles.put(
+        "model_validation.mustache", // the template to use
+        "_validation.go"); // the extension for each file to write
+    templateOutputDirs.put("model_validation.mustache", "internal");
 
     /**
      * Api classes. You can write classes for each Api file with the
@@ -128,6 +137,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "handlers.mustache",
         apiPackage,
         "handlers.go"));
+
+    supportingFiles.add(new SupportingFile(
+        "validators.mustache",
+        "internal",
+        "validators.go"));
 
     typeMapping.put("date", "time.Time");
   }
@@ -229,5 +243,27 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
     // Pattern is considered platform specific, so we're using as it (escaping only)
     return pattern.replace("\\", "\\\\");
+  }
+
+  @Override
+  public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> allModels) {
+    OperationsMap operationsMap = super.postProcessOperationsWithModels(objs, allModels);
+    List<Map<String, String>> imports = objs.getImports();
+    if (imports == null)
+        return objs;
+
+    operationsMap.put("hasImportedModel", false);
+    Iterator<Map<String, String>> iterator = imports.iterator();
+    List<String> importedModels = new ArrayList<>();
+    while (iterator.hasNext()) {
+        String _import = iterator.next().get("import");
+        if (_import.startsWith(modelPackage())) {
+          operationsMap.put("hasImportedModel", true);
+          importedModels.add(_import);
+        }
+    }
+    operationsMap.put("importedModels", importedModels);
+
+    return operationsMap;
   }
 }

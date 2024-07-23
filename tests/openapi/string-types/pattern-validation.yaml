@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to test string types pattern validation
   operationId: stringTypesPatternValidation
   tags:
@@ -61,6 +61,33 @@ get:
         type: string
         format: date-time
         pattern: '^\d{1000}$' # should not be used
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+          properties: 
+            unformattedStr:
+              type: string
+              pattern: '^\d{10}$'
+            customFormatStr:
+              type: string
+              format: vendor-specific
+              pattern: '^\d{20}$'
+            dateStr:
+              type: string
+              format: date
+              pattern: '^\d{1000}$' # should not be used
+            dateTimeStr:
+              type: string
+              format: date-time
+              pattern: '^\d{1000}$' # should not be used
   responses:
     '204':
       description: Request succeeded

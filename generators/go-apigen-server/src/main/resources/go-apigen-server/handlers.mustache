@@ -10,10 +10,10 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strconv"
 	"time"
 
+	"{{invokerPackage}}/internal"
 	"golang.org/x/exp/constraints"
 )
 
@@ -92,7 +92,7 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 		w.Header().Add("content-type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusBadRequest)
 		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
-		var aggregatedErr AggregatedBindingError
+		var aggregatedErr internal.AggregatedBindingError
 		if ok := errors.As(err, &aggregatedErr); ok {
 			if writeErr := json.NewEncoder(w).Encode(aggregatedErr); writeErr != nil {
 				app.handleResponseErrors(r, writeErr)
@@ -106,7 +106,7 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	return app
 }
 
-type voidResult *int
+type voidValue *int
 
 type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
@@ -173,37 +173,63 @@ func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
 }
 
 type actionBuilderVoidResult[TControllerBuilder any, TReqParams any] struct {
-	actionBuilder[TControllerBuilder, TReqParams, voidResult]
+	actionBuilder[TControllerBuilder, TReqParams, voidValue]
 }
 
 func (ab *actionBuilderVoidResult[TControllerBuilder, TReqParams]) With(
 	handler func(context.Context, TReqParams) error,
 ) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidResult, error) {
+	return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidValue, error) {
 		return nil, handler(ctx, tp)
 	})
 }
 
-type optionalVal[TVal any] struct {
-	value    TVal
-	assigned bool
+type actionBuilderNoParams[TControllerBuilder any, TResData any] struct {
+	actionBuilder[TControllerBuilder, voidValue, TResData]
 }
 
-func readPathValue(key string, router httpRouter, req *http.Request) optionalVal[string] {
-	return optionalVal[string]{value: router.PathValue(req, key), assigned: true}
+func (ab *actionBuilderNoParams[TControllerBuilder, TResData]) With(
+	handler func(context.Context) (TResData, error),
+) TControllerBuilder {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (TResData, error) {
+		return handler(ctx)
+	})
 }
 
-func readQueryValue(key string, values url.Values) optionalVal[[]string] {
+type actionBuilderNoParamsVoidResult[TControllerBuilder any] struct {
+	actionBuilder[TControllerBuilder, voidValue, voidValue]
+}
+
+func (ab *actionBuilderNoParamsVoidResult[TControllerBuilder]) With(
+	handler func(context.Context) error,
+) TControllerBuilder {
+	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) {
+		return nil, handler(ctx)
+	})
+}
+
+func readPathValue(key string, router httpRouter, req *http.Request) internal.OptionalVal[string] {
+	return internal.OptionalVal[string]{Value: router.PathValue(req, key), Assigned: true}
+}
+
+func readQueryValue(key string, values url.Values) internal.OptionalVal[[]string] {
 	if values.Has(key) {
-		return optionalVal[[]string]{value: values[key], assigned: true}
+		return internal.OptionalVal[[]string]{Value: values[key], Assigned: true}
 	}
-	return optionalVal[[]string]{}
+	return internal.OptionalVal[[]string]{}
 }
 
-type rawValueParser[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], *TTargetVal) error
+func readRequestBodyValue(req *http.Request) internal.OptionalVal[*http.Request] {
+	if req.ContentLength != 0 {
+		return internal.OptionalVal[*http.Request]{Value: req, Assigned: true}
+	}
+	return internal.OptionalVal[*http.Request]{}
+}
 
-func parseJSONPayload[TTargetVal any](req optionalVal[*http.Request], target *TTargetVal) error {
-	return json.NewDecoder(req.value.Body).Decode(target)
+type rawValueParser[TRawVal any, TTargetVal any] func(TRawVal, *TTargetVal) error
+
+func parseJSONPayload[TTargetVal any](req *http.Request, target *TTargetVal) error {
+	return json.NewDecoder(req.Body).Decode(target)
 }
 
 var _ rawValueParser[*http.Request, string] = parseJSONPayload
@@ -211,11 +237,8 @@ var _ rawValueParser[*http.Request, string] = parseJSONPayload
 func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
 	bitSize int, parseFn func(string, int) (TTargetVal, error),
 ) rawValueParser[string, TTargetVal] {
-	return func(ov optionalVal[string], target *TTargetVal) error {
-		if !ov.assigned {
-			return nil
-		}
-		val, err := parseFn(ov.value, bitSize)
+	return func(ov string, target *TTargetVal) error {
+		val, err := parseFn(ov, bitSize)
 		if err != nil {
 			return err
 		}
@@ -227,11 +250,8 @@ func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float]
 func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.Float](
 	bitSize int, parseFn func(string, int) (TTargetVal, error),
 ) rawValueParser[[]string, TTargetVal] {
-	return func(ov optionalVal[[]string], target *TTargetVal) error {
-		if !ov.assigned {
-			return nil
-		}
-		val, err := parseFn(ov.value[0], bitSize)
+	return func(ov []string, target *TTargetVal) error {
+		val, err := parseFn(ov[0], bitSize)
 		if err != nil {
 			return err
 		}
@@ -241,15 +261,12 @@ func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.F
 }
 
 func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] {
-	return func(ov optionalVal[string], t *time.Time) error {
-		if !ov.assigned {
-			return nil
-		}
+	return func(ov string, t *time.Time) error {
 		format := time.RFC3339Nano
 		if isDateOnly {
 			format = time.DateOnly
 		}
-		val, err := time.Parse(format, ov.value)
+		val, err := time.Parse(format, ov)
 		if err != nil {
 			return err
 		}
@@ -259,15 +276,12 @@ func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time
 }
 
 func newStringSliceToDateTimeParser(isDateOnly bool) rawValueParser[[]string, time.Time] {
-	return func(ov optionalVal[[]string], t *time.Time) error {
-		if !ov.assigned {
-			return nil
-		}
+	return func(ov []string, t *time.Time) error {
 		format := time.RFC3339Nano
 		if isDateOnly {
 			format = time.DateOnly
 		}
-		val, err := time.Parse(format, ov.value[0])
+		val, err := time.Parse(format, ov[0])
 		if err != nil {
 			return err
 		}
@@ -286,42 +300,30 @@ func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, erro
 	return (TFloat)(res), err
 }
 
-func parseStringInPath(ov optionalVal[string], s *string) error {
-	if !ov.assigned {
-		return nil
-	}
-	*s = ov.value
+func parseStringInPath(ov string, s *string) error {
+	*s = ov
 	return nil
 }
 
-func parseStringInQuery(ov optionalVal[[]string], s *string) error {
-	if !ov.assigned {
-		return nil
-	}
-	*s = ov.value[0]
+func parseStringInQuery(ov []string, s *string) error {
+	*s = ov[0]
 	return nil
 }
 
-func parseBoolInPath(ov optionalVal[string], s *bool) error {
-	if !ov.assigned {
-		return nil
-	}
-	switch ov.value {
+func parseBoolInPath(ov string, s *bool) error {
+	switch ov {
 	case "true":
 		*s = true
 	case "false":
 		*s = false
 	default:
-		return fmt.Errorf("unexpected boolean format %v", ov.value)
+		return fmt.Errorf("unexpected boolean format %v", ov)
 	}
 	return nil
 }
 
-func parseBoolInQuery(ov optionalVal[[]string], s *bool) error {
-	if !ov.assigned {
-		return nil
-	}
-	return parseBoolInPath(optionalVal[string]{value: ov.value[0], assigned: true}, s)
+func parseBoolInQuery(ov []string, s *bool) error {
+	return parseBoolInPath(ov[0], s)
 }
 
 type knownParsersDef struct {
@@ -373,193 +375,47 @@ func newKnownParsers() *knownParsersDef {
 	}
 }
 
-type BindingError string
-
-const (
-	// ErrBadValueFormat error means data provided can not be parsed to a target type.
-	ErrBadValueFormat BindingError = "BAD_FORMAT"
-
-	// ErrValueRequired error code indicates that the required value has not been provided.
-	ErrValueRequired BindingError = "INVALID_REQUIRED"
-
-	// ErrInvalidValueOutOfRange error code indicates that the value is out of range of allowable values
-	// this is usually when number is out of min/max range, or string is outside of limits.
-	ErrInvalidValueOutOfRange BindingError = "INVALID_OUT_OF_RANGE"
-
-	// ErrInvalidValue error code a generic validation error.
-	ErrInvalidValue BindingError = "INVALID"
-)
-
-func (c BindingError) Error() string {
-	return string(c)
-}
-
-// FieldBindingError occurs at parsing/validation stage and holds
-// context on field that the error is related to.
-type FieldBindingError struct {
-	Field    string       `json:"field"`
-	Location string       `json:"location"`
-	Err      error        `json:"-"`
-	Code     BindingError `json:"code"`
-}
-
-func (be FieldBindingError) Error() string {
-	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
-}
-
-type AggregatedBindingError struct {
-	Errors []FieldBindingError `json:"errors"`
-}
-
-func (c AggregatedBindingError) Error() string {
-	errs := make([]error, len(c.Errors))
-	for i, err := range c.Errors {
-		errs[i] = err
-	}
-	return errors.Join(errs...).Error()
-}
-
-type bindingContext struct {
-	errors []FieldBindingError
-}
-
-func (c bindingContext) AggregatedError() error {
-	if len(c.errors) == 0 {
-		return nil
-	}
-	return AggregatedBindingError{Errors: c.errors}
-}
-
 type requestParamBinder[TRawVal any, TTargetVal any] func(
-	bindingCtx *bindingContext,
-	rawVal optionalVal[TRawVal],
+	bindingCtx *internal.BindingContext,
+	rawVal internal.OptionalVal[TRawVal],
 	receiver *TTargetVal,
 )
-
-type valueValidator[TRawVal any, TTargetVal any] func(optionalVal[TRawVal], TTargetVal) error
-
-func validateNonEmpty[TRawVal any, TTargetVal any](rawVal optionalVal[TRawVal], _ TTargetVal) error {
-	if !rawVal.assigned {
-		return ErrValueRequired
-	}
-	return nil
-}
-
-var _ valueValidator[string, string] = validateNonEmpty
-
-func newMinMaxValueValidator[TRawVal any, TTargetVal constraints.Ordered](
-	threshold TTargetVal,
-	exclusive bool,
-	isMin bool,
-) valueValidator[TRawVal, TTargetVal] {
-	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.assigned {
-			return nil
-		}
-
-		// From OpenAPI spec:
-		// exclusiveMinimum: false or not included	value ≥ minimum
-		// exclusiveMinimum: true	value > minimum
-		// exclusiveMaximum: false or not included	value ≤ maximum
-		// exclusiveMaximum: true	value < maximum
-
-		if isMin && ((exclusive && tv <= threshold) || (!exclusive && tv < threshold)) {
-			return fmt.Errorf("value %v is less than minimum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
-		}
-		if !isMin && ((exclusive && tv >= threshold) || (!exclusive && tv > threshold)) {
-			return fmt.Errorf("value %v is greater than maximum %v: %w", tv, threshold, ErrInvalidValueOutOfRange)
-		}
-
-		return nil
-	}
-}
-
-func newMinMaxLengthValidator[TRawVal any, TTargetVal string](
-	threshold int,
-	isMin bool,
-) valueValidator[TRawVal, TTargetVal] {
-	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
-		if !ov.assigned {
-			return nil
-		}
-
-		targetLen := len(tv)
-		if isMin && targetLen < threshold {
-			return fmt.Errorf(
-				"value %v has length (%d) less than minimum %v: %w",
-				tv, targetLen, threshold, ErrInvalidValueOutOfRange,
-			)
-		}
-		if !isMin && targetLen > threshold {
-			return fmt.Errorf(
-				"value %v has length (%d) more than maximum %v: %w", tv,
-				targetLen, threshold, ErrInvalidValueOutOfRange,
-			)
-		}
-
-		return nil
-	}
-}
-
-func newPatternValidator[TRawVal any, TTargetValue string](patternStr string) valueValidator[TRawVal, string] {
-	pattern := regexp.MustCompile(patternStr)
-	return func(ov optionalVal[TRawVal], tv string) error {
-		if !ov.assigned {
-			return nil
-		}
-		if !pattern.MatchString(tv) {
-			return fmt.Errorf("value %v does not match pattern %v: %w", tv, patternStr, ErrInvalidValue)
-		}
-		return nil
-	}
-}
-
-func newCompositeValidator[
-	TRawVal any, TTargetVal any,
-](validators ...valueValidator[TRawVal, TTargetVal]) valueValidator[TRawVal, TTargetVal] {
-	return func(ov optionalVal[TRawVal], tv TTargetVal) error {
-		for _, v := range validators {
-			if err := v(ov, tv); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-}
 
 type binderParams[TRawVal any, TTargetVal any] struct {
 	field         string
 	location      string
+	required      bool
 	parseValue    rawValueParser[TRawVal, TTargetVal]
-	validateValue valueValidator[TRawVal, TTargetVal]
+	validateValue internal.FieldValidator[TTargetVal]
 }
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
 	params binderParams[TRawVal, TTargetVal],
 ) requestParamBinder[TRawVal, TTargetVal] {
 	return func(
-		bindingCtx *bindingContext,
-		rawVal optionalVal[TRawVal],
+		bindingCtx *internal.BindingContext,
+		rawVal internal.OptionalVal[TRawVal],
 		receiver *TTargetVal,
 	) {
-		if err := params.parseValue(rawVal, receiver); err != nil {
-			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
+		if !rawVal.Assigned {
+			if params.required {
+				bindingCtx.AppendFieldError(internal.FieldBindingError{
+					Field:    params.field,
+					Location: params.location,
+					Code:     internal.ErrValueRequired.Error(),
+				})
+			}
+			return
+		}
+		if err := params.parseValue(rawVal.Value, receiver); err != nil {
+			bindingCtx.AppendFieldError(internal.FieldBindingError{
 				Field:    params.field,
 				Location: params.location,
-				Code:     ErrBadValueFormat,
+				Code:     internal.ErrBadValueFormat.Error(),
 				Err:      err,
 			})
 			return
 		}
-		if err := params.validateValue(rawVal, *receiver); err != nil {
-			errCode := ErrInvalidValue
-			errors.As(err, &errCode)
-			bindingCtx.errors = append(bindingCtx.errors, FieldBindingError{
-				Field:    params.field,
-				Location: params.location,
-				Code:     errCode,
-				Err:      err,
-			})
-		}
+		params.validateValue(bindingCtx, params.field, params.location, *receiver)
 	}
 }

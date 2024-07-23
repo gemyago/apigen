@@ -37,6 +37,24 @@ paths:
   /boolean/required-validation:
     $ref: "./boolean/required-validation.yaml"
 
+  # objects routes
+  /objects/nested:
+    $ref: "./objects/nested.yaml"
+  /objects/arrays-parsing:
+    $ref: "./objects/arrays-parsing.yaml"
+
+  # responses routes
+  /behavior/no-params-no-response:
+    $ref: "./behavior/no-params-no-response.yaml"
+  /behavior/no-params-with-response:
+    $ref: "./behavior/no-params-with-response.yaml"
+  /behavior/with-params-and-response:
+    $ref: "./behavior/with-params-and-response.yaml"
+  /behavior/no-status-defined:
+    $ref: "./behavior/no-status-defined.yaml"
+  /behavior/with-status-defined:
+    $ref: "./behavior/with-status-defined.yaml"
+
   # error-handling routes
   /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
     $ref: "./error-handling/parsing-errors.yaml"

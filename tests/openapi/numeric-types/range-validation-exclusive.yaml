@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to simulate and test range validation of numeric types exclusive range
   operationId: numericTypesRangeValidationExclusive
   tags:
@@ -123,6 +123,60 @@ get:
         maximum: 700
         exclusiveMinimum: true
         exclusiveMaximum: true
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - numberAny
+            - numberFloat
+            - numberDouble
+            - numberInt
+            - numberInt32
+            - numberInt64
+          properties:
+            numberAny:
+              type: number
+              minimum: 100.01
+              maximum: 200.02
+              exclusiveMinimum: true
+              exclusiveMaximum: true
+            numberFloat:
+              type: number
+              format: float
+              minimum: 200.02
+              maximum: 300.03
+              exclusiveMinimum: true
+              exclusiveMaximum: true
+            numberDouble:
+              type: number
+              format: double
+              minimum: 300.03
+              maximum: 400.04
+              exclusiveMinimum: true
+              exclusiveMaximum: true
+            numberInt:
+              type: integer
+              minimum: 400
+              maximum: 500
+              exclusiveMinimum: true
+              exclusiveMaximum: true
+            numberInt32:
+              type: integer
+              format: int32
+              minimum: 500
+              maximum: 600
+              exclusiveMinimum: true
+              exclusiveMaximum: true
+            numberInt64:
+              type: integer
+              format: int64
+              minimum: 600
+              maximum: 700
+              exclusiveMinimum: true
+              exclusiveMaximum: true
   responses:
-    '204':
+    "204":
       description: Request succeeded

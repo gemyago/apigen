@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
@@ -14,7 +15,6 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -55,8 +55,10 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
+	method string
 	path   string
 	query  url.Values
+	body   io.Reader
 	expect routeTestCaseExpectFn[TActions]
 }
 
@@ -71,10 +73,18 @@ func runRouteTestCase[TActions any](
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
 		testActions, router := setupFn()
+		method := tc.method
+		if method == "" {
+			method = http.MethodGet
+		}
+		body := tc.body
+		if body == nil {
+			body = http.NoBody
+		}
 		testReq := httptest.NewRequest(
-			http.MethodGet,
+			method,
 			tc.path,
-			http.NoBody,
+			body,
 		)
 		if len(tc.query) != 0 {
 			testReq.URL.RawQuery = tc.query.Encode()
@@ -85,9 +95,28 @@ func runRouteTestCase[TActions any](
 	})
 }
 
+func marshalJSONDataAsReader(t *testing.T, data any) io.Reader {
+	body, err := json.Marshal(data)
+	if err != nil {
+		t.Errorf("failed to marshal body: %v", err)
+		t.FailNow()
+	}
+	return bytes.NewBuffer(body)
+}
+
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
 
-func expectBindingErrors[TActions any](wantErrors []handlers.FieldBindingError) routeTestCaseExpectFn[TActions] {
+type fieldBindingError struct {
+	Field    string `json:"field"`
+	Location string `json:"location"`
+	Code     string `json:"code"`
+}
+
+type aggregatedBindingError struct {
+	Errors []fieldBindingError `json:"errors"`
+}
+
+func expectBindingErrors[TActions any](wantErrors []fieldBindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
 		_ TActions,
@@ -110,8 +139,8 @@ func expectBindingErrors[TActions any](wantErrors []handlers.FieldBindingError) 
 func unmarshalBindingErrors(
 	t *testing.T,
 	body *bytes.Buffer,
-) *handlers.AggregatedBindingError {
-	var gotErrors handlers.AggregatedBindingError
+) *aggregatedBindingError {
+	var gotErrors aggregatedBindingError
 	if err := json.Unmarshal(body.Bytes(), &gotErrors); !assert.NoError(t, err) {
 		t.FailNow()
 		return nil
@@ -121,10 +150,10 @@ func unmarshalBindingErrors(
 
 func assertFieldError(
 	t *testing.T,
-	err *handlers.AggregatedBindingError,
+	err *aggregatedBindingError,
 	location string,
 	field string,
-	code handlers.BindingError,
+	code string,
 ) {
 	for _, fieldErr := range err.Errors {
 		if fieldErr.Location == location && fieldErr.Field == field {
@@ -132,7 +161,7 @@ func assertFieldError(
 			return
 		}
 	}
-	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
+	assert.FailNow(t, fmt.Sprintf("no error found for field %s, code %s. Errors: %v", field, code, err.Errors))
 }
 
 type mockActionCall[TParams any] struct {

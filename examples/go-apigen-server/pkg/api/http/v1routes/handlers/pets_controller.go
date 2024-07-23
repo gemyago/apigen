@@ -12,7 +12,7 @@ import (
 var _ = time.Time{}
 
 type PetsCreatePetRequest struct {
-	Payload models.Pet
+	Payload *models.Pet
 }
 
 type PetsGetPetByIdRequest struct {

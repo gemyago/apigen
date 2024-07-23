@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to test string types required validation
   operationId: stringTypesRequiredValidation
   tags:
@@ -69,6 +69,60 @@ get:
       schema:
         type: string
         minLength: 30
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
+          properties: 
+            unformattedStr:
+              type: string
+              minLength: 10
+            customFormatStr:
+              type: string
+              format: vendor-specific
+              minLength: 20
+            dateStr:
+              type: string
+              format: date
+            dateTimeStr:
+              type: string
+              format: date-time
+            byteStr:
+              type: string
+              format: byte
+            optionalUnformattedStr:
+              type: string
+            optionalCustomFormatStr:
+              type: string
+              format: vendor-specific
+            optionalDateStr:
+              type: string
+              format: date
+            optionalDateTimeStr:
+              type: string
+              format: date-time
+            optionalByteStr:
+              type: string
+              format: byte
+            optionalValidatedUnformattedStr:
+              type: string
+              minLength: 10
+            optionalValidatedCustomFormatStr:
+              type: string
+              format: vendor-specific
+              minLength: 20
+            optionalValidatedByteStr:
+              type: string
+              format: byte
+              minLength: 30
   responses:
     '204':
       description: Request succeeded

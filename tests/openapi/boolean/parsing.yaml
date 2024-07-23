@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to simulate and test parsing boolean type
   operationId: booleanParsing
   tags:
@@ -27,6 +27,20 @@ get:
       required: true
       schema:
         type: boolean
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - boolParam1
+            - boolParam2
+          properties:
+            boolParam1:
+              type: boolean
+            boolParam2:
+              type: boolean
   responses:
     '204':
       description: Request succeeded

@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to simulate and test required validation of boolean type
   operationId: booleanRequiredValidation
   tags:
@@ -27,6 +27,26 @@ get:
       required: false
       schema:
         type: boolean
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - boolParam1
+            - boolParam2
+            - optionalBoolParam1
+            - optionalBoolParam2
+          properties:
+            boolParam1:
+              type: boolean
+            boolParam2:
+              type: boolean
+            optionalBoolParam1:
+              type: boolean
+            optionalBoolParam2:
+              type: boolean
   responses:
-    '204':
+    "204":
       description: Request succeeded

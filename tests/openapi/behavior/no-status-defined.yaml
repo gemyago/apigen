@@ -1,0 +1,5 @@
+get:
+  summary: API to test if no response with status defined
+  operationId: behaviorNoStatusDefined
+  tags:
+    - behavior

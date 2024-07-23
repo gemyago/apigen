@@ -3,21 +3,12 @@
 package models
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"reflect"
 	"time"
 )
 
-// Unused imports workaround
-var _ = json.Marshal
-var _ = errors.New
-var _ = fmt.Errorf
-var _ = reflect.TypeOf
+// Unused imports workaround.
 var _ = time.Time{}
 
 type PetsResponse struct { 
-	Data []Pet `json:"data"`
+	Data []*Pet `json:"data"`
 }
-

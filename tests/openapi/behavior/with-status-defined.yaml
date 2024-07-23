@@ -1,0 +1,8 @@
+post:
+  summary: API to test responses with status
+  operationId: behaviorWithStatusDefined
+  tags:
+    - behavior
+  responses:
+    '202':
+      description: Request succeeded

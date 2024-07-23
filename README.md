@@ -24,13 +24,25 @@ Set of features compatible with golang
 
 ## Supported OpenAPI features
 
+Some language specific features may be challenging (if possible) to implement correctly. The [Language specific caveats](#language-specific-caveats) summarises various implementation details.
+
+###  Data types
+
+All types
+|type|required|nullable|
+|----|----|----|
+|string|&check;|TODO|
+|number/integer|&check;|TODO|
+|boolean|&check;|TODO|
+|object|&check;|TODO|
+
 Strings
 |format|in|minLength|maxLength|pattern|
 |----|----|----|----|----|
-|none or custom|query,path|&check;|&check;|&check;|
-|date|query,path|-|-|-|
-|date-time|query,path|-|-|-|
-|byte|query,path|&check;|&check;|-|
+|none or custom|query,path,body|&check;|&check;|&check;|
+|date|query,path,body|-|-|-|
+|date-time|query,path,body|-|-|-|
+|byte|query,path,body|&check;|&check;|-|
 
 Numeric data types
 |type|format|in|minimum|maximum|
@@ -46,6 +58,13 @@ Boolean
 |type|in|supported?|
 |----|----|----|
 |boolean|query,path|&check;|
+
+### Language specific caveats
+
+Golang:
+* `date` type in request body is parsed as time.Time RFC3339Nano
+* `required` in request body will validate if the field is non default
+  * the `required` check on booleans in request body is not performed
 
 ## Contributing
 
