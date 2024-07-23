@@ -11,9 +11,11 @@ import (
 var _ = time.Time{}
 
 func NewPetsResponseValidator() FieldValidator[*models.PetsResponse] {
-	validateData := NewSimpleFieldValidator[[]Pet](
-		EnsureNonDefault,
+	
+	validateData := NewArrayValidator[*models.Pet](
+		NewPetValidator(),
 	)
+	
 	return func(bindingCtx *BindingContext, field, location string, value *models.PetsResponse) {
 		validateData(bindingCtx, "data", location, value.Data)
 	}

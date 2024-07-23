@@ -11,11 +11,14 @@ import (
 var _ = time.Time{}
 
 func NewErrorValidator() FieldValidator[*models.Error] {
+	
 	validateCode := NewSimpleFieldValidator[interface{}](
 		EnsureNonDefault,
 	)
+	
 	validateMessage := NewSimpleFieldValidator[string](
 	)
+	
 	return func(bindingCtx *BindingContext, field, location string, value *models.Error) {
 		validateCode(bindingCtx, "code", location, value.Code)
 		validateMessage(bindingCtx, "message", location, value.Message)

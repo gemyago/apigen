@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/internal"
 	"github.com/gemyago/apigen/tests/golang/routes/models"
+	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
@@ -27,11 +27,13 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyDirect) parse(router httpRout
 func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyDirectRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyDirect{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*models.ObjectArraysSimpleObject]{
-			field:         "payload",
-			location:      "body",
-			required:      true,
-			parseValue:    parseJSONPayload[[]*models.ObjectArraysSimpleObject],
-			validateValue: internal.NewArrayValidator(internal.NewObjectArraysSimpleObjectValidator()),
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[[]*models.ObjectArraysSimpleObject],
+			validateValue: internal.NewArrayValidator(
+        internal.NewObjectArraysSimpleObjectValidator(),
+      ),
 		}),
 	}
 }
@@ -51,10 +53,10 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyNested) parse(router httpRout
 func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyNestedRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsArrayParsingBodyNestedRequest]{
-			field:         "payload",
-			location:      "body",
-			required:      true,
-			parseValue:    parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
 			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(),
 		}),
 	}
@@ -75,10 +77,10 @@ func (p *paramsParserObjectsObjectsNested) parse(router httpRouter, req *http.Re
 func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObjectsNestedRequest] {
 	return &paramsParserObjectsObjectsNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsNestedRequest]{
-			field:         "payload",
-			location:      "body",
-			required:      true,
-			parseValue:    parseJSONPayload[*models.ObjectsNestedRequest],
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.ObjectsNestedRequest],
 			validateValue: internal.NewObjectsNestedRequestValidator(),
 		}),
 	}
