@@ -9,21 +9,17 @@ import (
 var _ = time.Time{}
 
 func NewStringTypesPatternValidationRequestValidator() FieldValidator[*models.StringTypesPatternValidationRequest] {
-	
 	validateUnformattedStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 		NewPatternValidator[string]("^\\d{10}$"),
 	)
-	
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 		NewPatternValidator[string]("^\\d{20}$"),
 	)
-	
 	validateDateStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
 	)
-	
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
 	)

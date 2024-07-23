@@ -9,23 +9,18 @@ import (
 var _ = time.Time{}
 
 func NewStringTypesParsingRequestValidator() FieldValidator[*models.StringTypesParsingRequest] {
-	
 	validateUnformattedStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)
-	
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)
-	
 	validateDateStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
 	)
-	
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault,
 	)
-	
 	validateByteStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)

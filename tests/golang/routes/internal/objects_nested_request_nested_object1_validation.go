@@ -9,13 +9,10 @@ import (
 var _ = time.Time{}
 
 func NewObjectsNestedRequestNestedObject1Validator() FieldValidator[*models.ObjectsNestedRequestNestedObject1] {
-	
 	validateSimpleRequiredField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)
-	
 	validateNestedObject11 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()
-	
 	validateNestedObject12 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.ObjectsNestedRequestNestedObject1) {

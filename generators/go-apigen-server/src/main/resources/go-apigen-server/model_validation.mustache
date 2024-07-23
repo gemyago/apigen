@@ -13,12 +13,10 @@ var _ = time.Time{}
 
 {{#model}}
 func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
-	{{#vars}}{{#isArray}}
-	validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
+	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
 		{{#mostInnerItems}}New{{{dataType}}}Validator(),{{/mostInnerItems}}
 	)
-	{{/isArray}}{{^isArray}}
-	validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
+	{{/isArray}}{{^isArray}}validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
 		EnsureNonDefault,{{/required}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}

@@ -179,12 +179,12 @@ func NewSimpleFieldValidator[
 
 func NewArrayValidator[
 	TValue any,
-](arrayItemValidator FieldValidator[TValue]) FieldValidator[[]TValue] {
+](_ FieldValidator[TValue]) FieldValidator[[]TValue] {
 	return func(
-		bindingCtx *BindingContext,
-		field string,
-		location string,
-		value []TValue,
+		_ *BindingContext,
+		_ string,
+		_ string,
+		_ []TValue,
 	) {
 		// TODO: Implement me
 	}

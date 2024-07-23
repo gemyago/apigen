@@ -9,7 +9,6 @@ import (
 var _ = time.Time{}
 
 func NewObjectArraysSimpleObjectValidator() FieldValidator[*models.ObjectArraysSimpleObject] {
-	
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault,
 	)

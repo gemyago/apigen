@@ -9,19 +9,15 @@ import (
 var _ = time.Time{}
 
 func NewObjectsArrayParsingBodyNestedRequestValidator() FieldValidator[*models.ObjectsArrayParsingBodyNestedRequest] {
-	
 	validateNestedArray1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
 		NewObjectArraysSimpleObjectValidator(),
 	)
-	
 	validateNestedArray2 := NewArrayValidator[*models.ObjectArraysSimpleObject](
 		NewObjectArraysSimpleObjectValidator(),
 	)
-	
 	validateNestedArrayContainer1 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
 		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
-	
 	validateNestedArrayContainer2 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
 		NewObjectArraysSimpleObjectsContainerValidator(),
 	)

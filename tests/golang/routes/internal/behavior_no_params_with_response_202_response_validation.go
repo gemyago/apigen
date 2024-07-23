@@ -9,7 +9,6 @@ import (
 var _ = time.Time{}
 
 func NewBehaviorNoParamsWithResponse202ResponseValidator() FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
-	
 	validateField1 := NewSimpleFieldValidator[string](
 	)
 	

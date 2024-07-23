@@ -11,7 +11,6 @@ import (
 var _ = time.Time{}
 
 func NewPetsResponseValidator() FieldValidator[*models.PetsResponse] {
-	
 	validateData := NewArrayValidator[*models.Pet](
 		NewPetValidator(),
 	)
