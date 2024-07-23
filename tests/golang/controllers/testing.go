@@ -161,7 +161,7 @@ func assertFieldError(
 			return
 		}
 	}
-	assert.Fail(t, fmt.Sprintf("no error found for field %s, code %s", field, code))
+	assert.FailNow(t, fmt.Sprintf("no error found for field %s, code %s. Errors: %v", field, code, err.Errors))
 }
 
 type mockActionCall[TParams any] struct {

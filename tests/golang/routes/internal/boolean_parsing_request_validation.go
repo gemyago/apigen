@@ -10,10 +10,8 @@ var _ = time.Time{}
 
 func NewBooleanParsingRequestValidator() FieldValidator[*models.BooleanParsingRequest] {
 	validateBoolParam1 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	validateBoolParam2 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.BooleanParsingRequest) {

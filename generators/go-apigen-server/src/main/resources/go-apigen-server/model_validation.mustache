@@ -16,8 +16,8 @@ func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
 		{{#mostInnerItems}}New{{{dataType}}}Validator(),{{/mostInnerItems}}
 	)
-	{{/isArray}}{{^isArray}}validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{#required}}
-		EnsureNonDefault,{{/required}}{{^isDate}}{{#minimum}}
+	{{/isArray}}{{^isArray}}validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{^isBoolean}}{{#required}}
+		EnsureNonDefault,{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
 		NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
 		NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDateTime}}{{#minLength}}
 		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}

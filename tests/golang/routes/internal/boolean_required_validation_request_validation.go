@@ -10,16 +10,12 @@ var _ = time.Time{}
 
 func NewBooleanRequiredValidationRequestValidator() FieldValidator[*models.BooleanRequiredValidationRequest] {
 	validateBoolParam1 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	validateBoolParam2 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	validateOptionalBoolParam1 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	validateOptionalBoolParam2 := NewSimpleFieldValidator[bool](
-		EnsureNonDefault,
 	)
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.BooleanRequiredValidationRequest) {
