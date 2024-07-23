@@ -176,3 +176,16 @@ func NewSimpleFieldValidator[
 		}
 	}
 }
+
+func NewArrayValidator[
+	TValue any,
+](arrayItemValidator FieldValidator[TValue]) FieldValidator[[]TValue] {
+	return func(
+		bindingCtx *BindingContext,
+		field string,
+		location string,
+		value []TValue,
+	) {
+		// TODO: Implement me
+	}
+}

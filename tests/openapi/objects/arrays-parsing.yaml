@@ -13,7 +13,7 @@ post:
             $ref: "#/components/schemas/ObjectArraysSimpleObject"
 put:
   summary: API to test parsing nested arrays of objects
-  operationId: objectsArrayParsingBodyDirect
+  operationId: objectsArrayParsingBodyNested
   tags:
     - objects
   requestBody:
