@@ -81,6 +81,12 @@ post:
       application/json:
         schema:
           type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
           properties: 
             unformattedStr:
               type: string
