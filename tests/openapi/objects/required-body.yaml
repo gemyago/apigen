@@ -9,6 +9,9 @@ post:
       application/json:
         schema:
           $ref: "./components.yaml#/components/schemas/SimpleObject"
+  responses:
+    '204':
+      description: Request succeeded
 put:
   summary: API to test optional object body
   operationId: objectsOptionalBody
@@ -20,3 +23,6 @@ put:
       application/json:
         schema:
           $ref: "./components.yaml#/components/schemas/SimpleObject"
+  responses:
+    '204':
+      description: Request succeeded

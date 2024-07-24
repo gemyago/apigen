@@ -33,16 +33,12 @@ type ObjectsObjectsOptionalBodyRequest struct {
 	Payload *models.SimpleObject
 }
 
-type ObjectsObjectsOptionalNestedObjectsRequest struct {
-	Payload *models.ObjectsOptionalNestedObjectsRequest
-}
-
 type ObjectsObjectsRequiredBodyRequest struct {
 	Payload *models.SimpleObject
 }
 
 type ObjectsObjectsRequiredNestedObjectsRequest struct {
-	Payload *models.ObjectsRequiredNestedObjectsRequest
+	Payload *models.SimpleObjectsContainer
 }
 
 type ObjectsController struct {
@@ -87,13 +83,6 @@ type ObjectsController struct {
 	//
 	// Response type: none
 	ObjectsOptionalBody httpHandlerFactory
-
-	// PUT /objects/required-nested-objects
-	//
-	// Request type: ObjectsObjectsOptionalNestedObjectsRequest,
-	//
-	// Response type: none
-	ObjectsOptionalNestedObjects httpHandlerFactory
 
 	// POST /objects/required-body
 	//
@@ -153,13 +142,6 @@ type ObjectsControllerBuilder struct {
 	// Response type: none
 	HandleObjectsOptionalBody actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsOptionalBodyRequest]
 
-	// PUT /objects/required-nested-objects
-	//
-	// Request type: ObjectsObjectsOptionalNestedObjectsRequest,
-	//
-	// Response type: none
-	HandleObjectsOptionalNestedObjects actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsOptionalNestedObjectsRequest]
-
 	// POST /objects/required-body
 	//
 	// Request type: ObjectsObjectsRequiredBodyRequest,
@@ -183,7 +165,6 @@ func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
 		ObjectsNullableOptionalBody: mustInitializeAction("objectsNullableOptionalBody", c.HandleObjectsNullableOptionalBody.httpHandlerFactory),
 		ObjectsNullableRequiredBody: mustInitializeAction("objectsNullableRequiredBody", c.HandleObjectsNullableRequiredBody.httpHandlerFactory),
 		ObjectsOptionalBody: mustInitializeAction("objectsOptionalBody", c.HandleObjectsOptionalBody.httpHandlerFactory),
-		ObjectsOptionalNestedObjects: mustInitializeAction("objectsOptionalNestedObjects", c.HandleObjectsOptionalNestedObjects.httpHandlerFactory),
 		ObjectsRequiredBody: mustInitializeAction("objectsRequiredBody", c.HandleObjectsRequiredBody.httpHandlerFactory),
 		ObjectsRequiredNestedObjects: mustInitializeAction("objectsRequiredNestedObjects", c.HandleObjectsRequiredNestedObjects.httpHandlerFactory),
 	}
@@ -224,19 +205,13 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 
 	// PUT /objects/required-body
 	controllerBuilder.HandleObjectsOptionalBody.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsOptionalBody.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsOptionalBody.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsOptionalBody.voidResult = true
 	controllerBuilder.HandleObjectsOptionalBody.paramsParserFactory = newParamsParserObjectsObjectsOptionalBody
 
-	// PUT /objects/required-nested-objects
-	controllerBuilder.HandleObjectsOptionalNestedObjects.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsOptionalNestedObjects.defaultStatusCode = 200
-	controllerBuilder.HandleObjectsOptionalNestedObjects.voidResult = true
-	controllerBuilder.HandleObjectsOptionalNestedObjects.paramsParserFactory = newParamsParserObjectsObjectsOptionalNestedObjects
-
 	// POST /objects/required-body
 	controllerBuilder.HandleObjectsRequiredBody.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsRequiredBody.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsRequiredBody.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsRequiredBody.voidResult = true
 	controllerBuilder.HandleObjectsRequiredBody.paramsParserFactory = newParamsParserObjectsObjectsRequiredBody
 
@@ -256,7 +231,6 @@ func RegisterObjectsRoutes(controller *ObjectsController, app *HTTPApp) {
 	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(app))
 	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(app))
 	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(app))
-	app.router.HandleRoute("PUT", "/objects/required-nested-objects", controller.ObjectsOptionalNestedObjects(app))
 	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(app))
 	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(app))
 }

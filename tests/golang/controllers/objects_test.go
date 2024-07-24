@@ -25,6 +25,12 @@ func TestObjects(t *testing.T) {
 		return testActions, router.mux
 	}
 
+	randomSimpleObject := func() *models.SimpleObject {
+		return &models.SimpleObject{
+			SimpleField1: fake.Lorem().Word(),
+		}
+	}
+
 	randomSimpleNullableObject := func() *models.SimpleNullableObject {
 		return &models.SimpleNullableObject{
 			SimpleField1: fake.Lorem().Word(),
@@ -116,6 +122,69 @@ func TestObjects(t *testing.T) {
 							return
 						}
 						assert.Nil(t, testActions.objectsNullableOptionalBody.calls[0].params.Payload)
+					},
+				}
+			})
+		})
+	})
+
+	t.Run("required-body", func(t *testing.T) {
+		t.Run("required", func(t *testing.T) {
+			runRouteTestCase(t, "should parse required body", setupRouter, func() testCase {
+				originalReq := handlers.ObjectsObjectsRequiredBodyRequest{
+					Payload: randomSimpleObject(),
+				}
+				return testCase{
+					method: http.MethodPost,
+					path:   "/objects/required-body",
+					body:   marshalJSONDataAsReader(t, originalReq.Payload),
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, &originalReq, testActions.objectsRequiredBody.calls[0].params)
+					},
+				}
+			})
+			runRouteTestCase(t, "should fail if no body provided", setupRouter, func() testCase {
+				return testCase{
+					method: http.MethodPost,
+					path:   "/objects/required-body",
+					expect: expectBindingErrors[*objectsControllerTestActions](
+						[]fieldBindingError{
+							// body
+							{Field: "payload", Location: "body", Code: "INVALID_REQUIRED"},
+						},
+					),
+				}
+			})
+		})
+		t.Run("optional", func(t *testing.T) {
+			runRouteTestCase(t, "should parse optional body", setupRouter, func() testCase {
+				originalReq := handlers.ObjectsObjectsOptionalBodyRequest{
+					Payload: randomSimpleObject(),
+				}
+				return testCase{
+					method: http.MethodPut,
+					path:   "/objects/required-body",
+					body:   marshalJSONDataAsReader(t, originalReq.Payload),
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, &originalReq, testActions.objectsOptionalBody.calls[0].params)
+					},
+				}
+			})
+			runRouteTestCase(t, "should allow empty body", setupRouter, func() testCase {
+				return testCase{
+					method: http.MethodPut,
+					path:   "/objects/required-body",
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Nil(t, testActions.objectsOptionalBody.calls[0].params.Payload)
 					},
 				}
 			})

@@ -8,28 +8,4 @@ post:
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - simpleObject1
-            - simpleObject2
-          properties:
-            simpleObject1:
-              $ref: "./components.yaml#/components/schemas/SimpleObject"
-            simpleObject2:
-              $ref: "./components.yaml#/components/schemas/SimpleObject"
-put:
-  summary: API to test optional object body
-  operationId: objectsOptionalNestedObjects
-  tags:
-    - objects
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            simpleObject1:
-              $ref: "./components.yaml#/components/schemas/SimpleObject"
-            simpleObject2:
-              $ref: "./components.yaml#/components/schemas/SimpleObject"
+          $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"

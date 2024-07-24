@@ -164,31 +164,6 @@ func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*Objec
 	}
 }
 
-type paramsParserObjectsObjectsOptionalNestedObjects struct {
-	bindPayload requestParamBinder[*http.Request, *models.ObjectsOptionalNestedObjectsRequest]
-}
-
-func (p *paramsParserObjectsObjectsOptionalNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsObjectsOptionalNestedObjectsRequest, error) {
-	bindingCtx := internal.BindingContext{}
-	reqParams := &ObjectsObjectsOptionalNestedObjectsRequest{}
-	// body params
-	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
-	return reqParams, bindingCtx.AggregatedError()
-}
-
-func newParamsParserObjectsObjectsOptionalNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalNestedObjectsRequest] {
-	return &paramsParserObjectsObjectsOptionalNestedObjects{
-    // isNullable: false
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsOptionalNestedObjectsRequest]{
-			field: "payload",
-			location: "body",
-			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsOptionalNestedObjectsRequest],
-			validateValue: internal.NewObjectsOptionalNestedObjectsRequestValidator(),
-		}),
-	}
-}
-
 type paramsParserObjectsObjectsRequiredBody struct {
 	bindPayload requestParamBinder[*http.Request, *models.SimpleObject]
 }
@@ -215,7 +190,7 @@ func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*Objec
 }
 
 type paramsParserObjectsObjectsRequiredNestedObjects struct {
-	bindPayload requestParamBinder[*http.Request, *models.ObjectsRequiredNestedObjectsRequest]
+	bindPayload requestParamBinder[*http.Request, *models.SimpleObjectsContainer]
 }
 
 func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredNestedObjectsRequest, error) {
@@ -229,12 +204,12 @@ func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRoute
 func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
 	return &paramsParserObjectsObjectsRequiredNestedObjects{
     // isNullable: false
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsRequiredNestedObjectsRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObjectsContainer]{
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsRequiredNestedObjectsRequest],
-			validateValue: internal.NewObjectsRequiredNestedObjectsRequestValidator(),
+			parseValue: parseJSONPayload[*models.SimpleObjectsContainer],
+			validateValue: internal.NewSimpleObjectsContainerValidator(),
 		}),
 	}
 }

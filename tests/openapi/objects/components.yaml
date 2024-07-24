@@ -15,3 +15,27 @@ components:
       properties:
         simpleField1:
           type: string
+    SimpleObjectsContainer:
+      type: object
+      required:
+        - simpleObject1
+        - simpleObject2
+        - simpleNullableObject1
+        - simpleNullableObject2
+      properties:
+        simpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        simpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        simpleNullableObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        simpleNullableObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        optionalSimpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        optionalSimpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        optionalNullableSimpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        optionalNullableSimpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
