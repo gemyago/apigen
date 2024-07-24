@@ -742,5 +742,109 @@ func TestNumericTypes(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should validate invalid values", setupRouter, func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesNullableRequest{
+				// path
+				NumberAny:    lo.ToPtr(fake.Float32(5, 201, 1000)),
+				NumberFloat:  lo.ToPtr(fake.Float32(5, 302, 1000)),
+				NumberDouble: lo.ToPtr(fake.Float64(5, 403, 1000)),
+				NumberInt:    lo.ToPtr(fake.Int32Between(500, 1000)),
+				NumberInt32:  lo.ToPtr(fake.Int32Between(600, 1000)),
+				NumberInt64:  lo.ToPtr(fake.Int64Between(700, 1000)),
+
+				// query
+				NumberAnyInQuery:         lo.ToPtr(fake.Float32(5, 201, 1000)),
+				OptionalNumberAnyInQuery: lo.ToPtr(fake.Float32(5, 201, 1000)),
+				NumberFloatInQuery:       lo.ToPtr(fake.Float32(5, 302, 1000)),
+				NumberDoubleInQuery:      lo.ToPtr(fake.Float64(5, 403, 1000)),
+				NumberIntInQuery:         lo.ToPtr(fake.Int32Between(500, 1000)),
+				NumberInt32InQuery:       lo.ToPtr(fake.Int32Between(600, 1000)),
+				NumberInt64InQuery:       lo.ToPtr(fake.Int64Between(700, 1000)),
+
+				// body
+				Payload: &models.NumericTypesNullableRequest{
+					NumberAny:         lo.ToPtr(fake.Float32(5, 201, 1000)),
+					OptionalNumberAny: lo.ToPtr(fake.Float32(5, 201, 1000)),
+					NumberFloat:       lo.ToPtr(fake.Float32(5, 302, 1000)),
+					NumberDouble:      lo.ToPtr(fake.Float64(5, 403, 1000)),
+					NumberInt:         lo.ToPtr(fake.Int32Between(500, 1000)),
+					NumberInt32:       lo.ToPtr(fake.Int32Between(600, 1000)),
+					NumberInt64:       lo.ToPtr(fake.Int64Between(700, 1000)),
+				},
+			}
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/numeric-types/nullable/%v/%v/%v/%v/%v/%v",
+					*wantReq.NumberAny, *wantReq.NumberFloat, *wantReq.NumberDouble, *wantReq.NumberInt, *wantReq.NumberInt32,
+					*wantReq.NumberInt64),
+				query: buildQuery(wantReq),
+				body:  marshalJSONDataAsReader(t, wantReq.Payload),
+				expect: expectBindingErrors[*numericTypesControllerTestActions](
+					[]fieldBindingError{
+						// path
+						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberIntInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64InQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: "numberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalNumberAny", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberFloat", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberDouble", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt32", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "numberInt64", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should accept null values", setupRouter, func() testCase {
+			wantReq := &handlers.NumericTypesNumericTypesNullableRequest{
+				Payload: &models.NumericTypesNullableRequest{},
+			}
+			query := url.Values{}
+			query.Add("numberAnyInQuery", "null")
+			query.Add("optionalNumberAnyInQuery", "null")
+			query.Add("numberFloatInQuery", "null")
+			query.Add("numberDoubleInQuery", "null")
+			query.Add("numberIntInQuery", "null")
+			query.Add("numberInt32InQuery", "null")
+			query.Add("numberInt64InQuery", "null")
+			return testCase{
+				method: http.MethodPost,
+				path:   "/numeric-types/nullable/null/null/null/null/null/null",
+				query:  query,
+				body: bytes.NewBufferString(`{
+					"numberAny": null,
+					"optionalNumberAny": null,
+					"numberFloat": null,
+					"numberDouble": null,
+					"numberInt": null,
+					"numberInt32": null,
+					"numberInt64": null
+				}`),
+				expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, wantReq, testActions.numericTypesNullable.calls[0].params)
+				},
+			}
+		})
 	})
 }
