@@ -10,7 +10,7 @@ var _ = time.Time{}
 
 func NewObjectArraysSimpleObjectValidator() FieldValidator[*models.ObjectArraysSimpleObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		EnsureNonDefault[string],
 	)
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.ObjectArraysSimpleObject) {

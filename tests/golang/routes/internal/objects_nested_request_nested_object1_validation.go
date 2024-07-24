@@ -10,7 +10,7 @@ var _ = time.Time{}
 
 func NewObjectsNestedRequestNestedObject1Validator() FieldValidator[*models.ObjectsNestedRequestNestedObject1] {
 	validateSimpleRequiredField1 := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		EnsureNonDefault[string],
 	)
 	validateNestedObject11 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()
 	validateNestedObject12 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()

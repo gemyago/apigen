@@ -91,6 +91,16 @@ func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
 	return nil
 }
 
+func SkipNullValidator[TTargetVal any](target ValueValidator[TTargetVal]) ValueValidator[*TTargetVal] {
+	return func(tv *TTargetVal) error {
+		if tv == nil {
+			return nil
+		}
+
+		return target(*tv)
+	}
+}
+
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,

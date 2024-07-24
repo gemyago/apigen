@@ -10,21 +10,21 @@ var _ = time.Time{}
 
 func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.StringTypesRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		EnsureNonDefault[string],
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		EnsureNonDefault[string],
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		EnsureNonDefault[time.Time],
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		EnsureNonDefault[time.Time],
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		EnsureNonDefault[string],
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
 	)

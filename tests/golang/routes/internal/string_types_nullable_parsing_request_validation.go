@@ -10,19 +10,19 @@ var _ = time.Time{}
 
 func NewStringTypesNullableParsingRequestValidator() FieldValidator[*models.StringTypesNullableParsingRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[*string](
-		EnsureNonDefault,
+		SkipNullValidator(EnsureNonDefault[string]),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[*string](
-		EnsureNonDefault,
+		SkipNullValidator(EnsureNonDefault[string]),
 	)
 	validateDateStr := NewSimpleFieldValidator[*time.Time](
-		EnsureNonDefault,
+		SkipNullValidator(EnsureNonDefault[time.Time]),
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[*time.Time](
-		EnsureNonDefault,
+		SkipNullValidator(EnsureNonDefault[time.Time]),
 	)
 	validateByteStr := NewSimpleFieldValidator[*string](
-		EnsureNonDefault,
+		SkipNullValidator(EnsureNonDefault[string]),
 	)
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesNullableParsingRequest) {

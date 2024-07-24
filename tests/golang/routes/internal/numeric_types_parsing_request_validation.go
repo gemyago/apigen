@@ -10,22 +10,22 @@ var _ = time.Time{}
 
 func NewNumericTypesParsingRequestValidator() FieldValidator[*models.NumericTypesParsingRequest] {
 	validateNumberAny := NewSimpleFieldValidator[float32](
-		EnsureNonDefault,
+		EnsureNonDefault[float32],
 	)
 	validateNumberFloat := NewSimpleFieldValidator[float32](
-		EnsureNonDefault,
+		EnsureNonDefault[float32],
 	)
 	validateNumberDouble := NewSimpleFieldValidator[float64](
-		EnsureNonDefault,
+		EnsureNonDefault[float64],
 	)
 	validateNumberInt := NewSimpleFieldValidator[int32](
-		EnsureNonDefault,
+		EnsureNonDefault[int32],
 	)
 	validateNumberInt32 := NewSimpleFieldValidator[int32](
-		EnsureNonDefault,
+		EnsureNonDefault[int32],
 	)
 	validateNumberInt64 := NewSimpleFieldValidator[int64](
-		EnsureNonDefault,
+		EnsureNonDefault[int64],
 	)
 	
 	return func(bindingCtx *BindingContext, field, location string, value *models.NumericTypesParsingRequest) {

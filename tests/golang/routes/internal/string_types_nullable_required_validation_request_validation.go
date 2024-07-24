@@ -2,7 +2,6 @@ package internal
 
 import (
 	"time"
-
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
@@ -21,7 +20,7 @@ func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*
 		SkipNullValidator(NewMinMaxLengthValidator[string](100, false)),
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
-
+	
 	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesNullableRequiredValidationRequest) {
 		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
 		validateOptionalUnformattedStr(bindingCtx, "optionalUnformattedStr", location, value.OptionalUnformattedStr)
