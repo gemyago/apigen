@@ -274,6 +274,36 @@ func TestStringTypes(t *testing.T) {
 				},
 			}
 		})
+		runRouteTestCase(t, "should parse and bind null values", setupRouter, func() testCase {
+			originalReq := &handlers.StringTypesStringTypesNullableParsingRequest{
+				Payload: &models.StringTypesNullableParsingRequest{},
+			}
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", "null")
+			query.Add("customFormatStrInQuery", "null")
+			query.Add("dateStrInQuery", "null")
+			query.Add("dateTimeStrInQuery", "null")
+			query.Add("byteStrInQuery", "null")
+
+			return testCase{
+				method: http.MethodPost,
+				path:   "/string-types/nullable-parsing/null/null/null/null/null",
+				query:  query,
+				body: bytes.NewBufferString(`{
+					"unformattedStr": null,
+					"customFormatStr": null,
+					"dateStr": null,
+					"dateTimeStr": null,
+					"byteStr": null
+				}`),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, originalReq, testActions.stringTypesNullableParsing.calls[0].params)
+				},
+			}
+		})
 		runRouteTestCase(t, "should parse time with locale", setupRouter, func() testCase {
 			location := time.FixedZone("", int((time.Duration(fake.IntBetween(2, 30)) * time.Minute).Seconds()))
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableParsingRequest) {
