@@ -29,7 +29,7 @@ func newBehaviorController() *handlers.BehaviorController {
 			panic("not implemented")
 		}).
 		HandleBehaviorWithStatusDefined.With(
-		func(ctx context.Context) error {
+		func(context.Context) error {
 			panic("not implemented")
 		}).
 		Finalize()

@@ -331,7 +331,9 @@ func parseBoolInQuery(ov []string, s *bool) error {
 	return parseBoolInPath(ov[0], s)
 }
 
-func parseNullableInPath[TTargetVal any](targetParser rawValueParser[string, TTargetVal]) rawValueParser[string, *TTargetVal] {
+func parseNullableInPath[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[string, *TTargetVal] {
 	return func(s string, tv **TTargetVal) error {
 		if s == "" || s == "null" {
 			return nil
@@ -340,7 +342,9 @@ func parseNullableInPath[TTargetVal any](targetParser rawValueParser[string, TTa
 	}
 }
 
-func parseNullableInQuery[TTargetVal any](targetParser rawValueParser[[]string, TTargetVal]) rawValueParser[[]string, *TTargetVal] {
+func parseNullableInQuery[TTargetVal any](
+	targetParser rawValueParser[[]string, TTargetVal],
+) rawValueParser[[]string, *TTargetVal] {
 	return func(s []string, tv **TTargetVal) error {
 		if s[0] == "" || s[0] == "null" {
 			return nil
