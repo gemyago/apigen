@@ -12,6 +12,7 @@ handlers/objects_params.go
 handlers/string_types_controller.go
 handlers/string_types_params.go
 internal/behavior_no_params_with_response_202_response_validation.go
+internal/boolean_nullable_request_validation.go
 internal/boolean_parsing_request_validation.go
 internal/boolean_required_validation_request_validation.go
 internal/numeric_types_nullable_request_validation.go
@@ -33,6 +34,7 @@ internal/string_types_range_validation_request_validation.go
 internal/string_types_required_validation_request_validation.go
 internal/validators.go
 models/behavior_no_params_with_response_202_response.go
+models/boolean_nullable_request.go
 models/boolean_parsing_request.go
 models/boolean_required_validation_request.go
 models/numeric_types_nullable_request.go

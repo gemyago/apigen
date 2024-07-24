@@ -1,0 +1,60 @@
+post:
+  summary: API to simulate and test nullable support of boolean types
+  operationId: booleanNullable
+  tags:
+    - boolean
+  parameters:
+    # params in path
+    - name: boolParam1
+      in: path
+      required: true
+      schema:
+        type: boolean
+        nullable: true
+    - name: boolParam2
+      in: path
+      required: true
+      schema:
+        type: boolean
+        nullable: true
+
+    # params in query
+    - name: boolParam1InQuery
+      in: query
+      required: true
+      schema:
+        type: boolean
+        nullable: true
+    - name: boolParam2InQuery
+      in: query
+      required: true
+      schema:
+        type: boolean
+        nullable: true
+    - name: optionalBoolParam1InQuery
+      in: query
+      schema:
+        type: boolean
+        nullable: true
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - boolParam1
+            - boolParam2
+          properties:
+            boolParam1:
+              type: boolean
+              nullable: true
+            boolParam2:
+              type: boolean
+              nullable: true
+            optionalBoolParam1:
+              type: boolean
+              nullable: true
+  responses:
+    '204':
+      description: Request succeeded
