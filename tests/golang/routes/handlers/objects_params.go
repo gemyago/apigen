@@ -26,6 +26,7 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyDirect) parse(router httpRout
 
 func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyDirectRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyDirect{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*models.ObjectArraysSimpleObject]{
 			field: "payload",
 			location: "body",
@@ -52,6 +53,7 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyNested) parse(router httpRout
 
 func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyNestedRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyNested{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsArrayParsingBodyNestedRequest]{
 			field: "payload",
 			location: "body",
@@ -76,6 +78,7 @@ func (p *paramsParserObjectsObjectsNested) parse(router httpRouter, req *http.Re
 
 func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObjectsNestedRequest] {
 	return &paramsParserObjectsObjectsNested{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsNestedRequest]{
 			field: "payload",
 			location: "body",
@@ -87,7 +90,7 @@ func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObje
 }
 
 type paramsParserObjectsObjectsNullableOptionalBody struct {
-	bindPayload requestParamBinder[*http.Request, *models.SimpleObject]
+	bindPayload requestParamBinder[*http.Request, *models.SimpleNullableObject]
 }
 
 func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableOptionalBodyRequest, error) {
@@ -100,18 +103,19 @@ func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter
 
 func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsNullableOptionalBody{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
+    // isNullable: true
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
 			field: "payload",
 			location: "body",
 			required: false,
-			parseValue: parseJSONPayload[*models.SimpleObject],
-			validateValue: internal.NewSimpleObjectValidator(),
+			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
 
 type paramsParserObjectsObjectsNullableRequiredBody struct {
-	bindPayload requestParamBinder[*http.Request, *models.SimpleObject]
+	bindPayload requestParamBinder[*http.Request, *models.SimpleNullableObject]
 }
 
 func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableRequiredBodyRequest, error) {
@@ -124,12 +128,13 @@ func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter
 
 func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsNullableRequiredBody{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
+    // isNullable: true
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.SimpleObject],
-			validateValue: internal.NewSimpleObjectValidator(),
+			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
@@ -148,6 +153,7 @@ func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *h
 
 func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsOptionalBody{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
 			field: "payload",
 			location: "body",
@@ -172,6 +178,7 @@ func (p *paramsParserObjectsObjectsOptionalNestedObjects) parse(router httpRoute
 
 func newParamsParserObjectsObjectsOptionalNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalNestedObjectsRequest] {
 	return &paramsParserObjectsObjectsOptionalNestedObjects{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsOptionalNestedObjectsRequest]{
 			field: "payload",
 			location: "body",
@@ -196,6 +203,7 @@ func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *h
 
 func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsRequiredBody{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
 			field: "payload",
 			location: "body",
@@ -220,6 +228,7 @@ func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRoute
 
 func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
 	return &paramsParserObjectsObjectsRequiredNestedObjects{
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsRequiredNestedObjectsRequest]{
 			field: "payload",
 			location: "body",

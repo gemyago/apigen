@@ -39,6 +39,7 @@ func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.
 
 func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBooleanNullableRequest] {
 	return &paramsParserBooleanBooleanNullable{
+    // isNullable: true
 		bindBoolParam1: newRequestParamBinder(binderParams[string, *bool]{
 			field: "boolParam1",
 			location: "path",
@@ -47,6 +48,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 			),
 		}),
+    // isNullable: true
 		bindBoolParam2: newRequestParamBinder(binderParams[string, *bool]{
 			field: "boolParam2",
 			location: "path",
@@ -55,6 +57,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 			),
 		}),
+    // isNullable: true
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			field: "boolParam1InQuery",
 			location: "query",
@@ -63,6 +66,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 			),
 		}),
+    // isNullable: true
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			field: "boolParam2InQuery",
 			location: "query",
@@ -71,6 +75,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanNullableRequest]{
 			field: "payload",
 			location: "body",
@@ -78,6 +83,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			parseValue: parseJSONPayload[*models.BooleanNullableRequest],
 			validateValue: internal.NewBooleanNullableRequestValidator(),
 		}),
+    // isNullable: true
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			field: "optionalBoolParam1InQuery",
 			location: "query",
@@ -114,6 +120,7 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 
 func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBooleanParsingRequest] {
 	return &paramsParserBooleanBooleanParsing{
+    // isNullable: false
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
 			field: "boolParam1",
 			location: "path",
@@ -122,6 +129,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
 			field: "boolParam2",
 			location: "path",
@@ -130,6 +138,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam1InQuery",
 			location: "query",
@@ -138,6 +147,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam2InQuery",
 			location: "query",
@@ -146,6 +156,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanParsingRequest]{
 			field: "payload",
 			location: "body",
@@ -180,6 +191,7 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 
 func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[*BooleanBooleanRequiredValidationRequest] {
 	return &paramsParserBooleanBooleanRequiredValidation{
+    // isNullable: false
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam1InQuery",
 			location: "query",
@@ -188,6 +200,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "boolParam2InQuery",
 			location: "query",
@@ -196,6 +209,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanRequiredValidationRequest]{
 			field: "payload",
 			location: "body",
@@ -203,6 +217,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			parseValue: parseJSONPayload[*models.BooleanRequiredValidationRequest],
 			validateValue: internal.NewBooleanRequiredValidationRequestValidator(),
 		}),
+    // isNullable: false
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam1InQuery",
 			location: "query",
@@ -211,6 +226,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			validateValue: internal.NewSimpleFieldValidator[bool](
 			),
 		}),
+    // isNullable: false
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam2InQuery",
 			location: "query",

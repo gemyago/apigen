@@ -22,11 +22,11 @@ type ObjectsObjectsNestedRequest struct {
 }
 
 type ObjectsObjectsNullableOptionalBodyRequest struct {
-	Payload *models.SimpleObject
+	Payload *models.SimpleNullableObject
 }
 
 type ObjectsObjectsNullableRequiredBodyRequest struct {
-	Payload *models.SimpleObject
+	Payload *models.SimpleNullableObject
 }
 
 type ObjectsObjectsOptionalBodyRequest struct {
@@ -212,13 +212,13 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 
 	// PUT /objects/nullable-body
 	controllerBuilder.HandleObjectsNullableOptionalBody.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsNullableOptionalBody.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsNullableOptionalBody.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsNullableOptionalBody.voidResult = true
 	controllerBuilder.HandleObjectsNullableOptionalBody.paramsParserFactory = newParamsParserObjectsObjectsNullableOptionalBody
 
 	// POST /objects/nullable-body
 	controllerBuilder.HandleObjectsNullableRequiredBody.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsNullableRequiredBody.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsNullableRequiredBody.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsNullableRequiredBody.voidResult = true
 	controllerBuilder.HandleObjectsNullableRequiredBody.paramsParserFactory = newParamsParserObjectsObjectsNullableRequiredBody
 

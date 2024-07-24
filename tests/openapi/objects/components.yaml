@@ -7,3 +7,11 @@ components:
       properties:
         simpleField1:
           type: string
+    SimpleNullableObject:
+      type: object
+      nullable: true
+      required:
+        - simpleField1
+      properties:
+        simpleField1:
+          type: string

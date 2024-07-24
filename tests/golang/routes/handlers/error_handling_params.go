@@ -31,6 +31,7 @@ func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpR
 
 func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingParsingErrors{
+    // isNullable: false
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
@@ -39,6 +40,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam2",
 			location: "path",
@@ -47,6 +49,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
@@ -55,6 +58,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
@@ -83,6 +87,7 @@ func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router ht
 
 func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingValidationErrors{
+    // isNullable: false
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
@@ -92,6 +97,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
+    // isNullable: false
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",

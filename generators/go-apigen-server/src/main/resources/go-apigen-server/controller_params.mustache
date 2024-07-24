@@ -47,6 +47,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>request-type}}] {
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
+    // isNullable: {{{isNullable}}}
 		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
@@ -54,7 +55,7 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			parseValue: {{^isBodyParam}}{{#isNullable}}parseNullableIn{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}({{/isNullable}}{{/isBodyParam}}{{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}}{{^isBodyParam}}{{#isNullable}}){{/isNullable}}{{/isBodyParam}},
 			validateValue: {{#isArray}}internal.NewArrayValidator(
         internal.New{{#mostInnerItems}}{{{dataType}}}{{/mostInnerItems}}Validator(),
-      ),{{/isArray}}{{^isArray}}{{#isBodyParam}}internal.New{{dataType}}Validator(),{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
+      ),{{/isArray}}{{^isArray}}{{#isBodyParam}}{{#isNullable}}internal.SkipNullFieldValidator({{/isNullable}}internal.New{{dataType}}Validator(){{#isNullable}}){{/isNullable}},{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
 				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
 				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}

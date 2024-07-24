@@ -55,6 +55,7 @@ func (p *paramsParserNumericTypesNumericTypesNullable) parse(router httpRouter, 
 
 func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[*NumericTypesNumericTypesNullableRequest] {
 	return &paramsParserNumericTypesNumericTypesNullable{
+    // isNullable: true
 		bindNumberAny: newRequestParamBinder(binderParams[string, *float32]{
 			field: "numberAny",
 			location: "path",
@@ -65,6 +66,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberFloat: newRequestParamBinder(binderParams[string, *float32]{
 			field: "numberFloat",
 			location: "path",
@@ -75,6 +77,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberDouble: newRequestParamBinder(binderParams[string, *float64]{
 			field: "numberDouble",
 			location: "path",
@@ -85,6 +88,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberInt: newRequestParamBinder(binderParams[string, *int32]{
 			field: "numberInt",
 			location: "path",
@@ -95,6 +99,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberInt32: newRequestParamBinder(binderParams[string, *int32]{
 			field: "numberInt32",
 			location: "path",
@@ -105,6 +110,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberInt64: newRequestParamBinder(binderParams[string, *int64]{
 			field: "numberInt64",
 			location: "path",
@@ -115,6 +121,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			field: "numberAnyInQuery",
 			location: "query",
@@ -125,6 +132,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			field: "numberFloatInQuery",
 			location: "query",
@@ -135,6 +143,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, *float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
@@ -145,6 +154,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, *int32]{
 			field: "numberIntInQuery",
 			location: "query",
@@ -155,6 +165,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, *int32]{
 			field: "numberInt32InQuery",
 			location: "query",
@@ -165,6 +176,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
 			),
 		}),
+    // isNullable: true
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, *int64]{
 			field: "numberInt64InQuery",
 			location: "query",
@@ -175,6 +187,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesNullableRequest]{
 			field: "payload",
 			location: "body",
@@ -182,6 +195,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			parseValue: parseJSONPayload[*models.NumericTypesNullableRequest],
 			validateValue: internal.NewNumericTypesNullableRequestValidator(),
 		}),
+    // isNullable: true
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			field: "optionalNumberAnyInQuery",
 			location: "query",
@@ -236,6 +250,7 @@ func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, r
 
 func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*NumericTypesNumericTypesParsingRequest] {
 	return &paramsParserNumericTypesNumericTypesParsing{
+    // isNullable: false
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -244,6 +259,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
@@ -252,6 +268,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
@@ -260,6 +277,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float64](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
@@ -268,6 +286,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
@@ -276,6 +295,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
@@ -284,6 +304,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
 		}),
+    // isNullable: false
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
@@ -292,6 +313,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
@@ -300,6 +322,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
@@ -308,6 +331,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[float64](
 			),
 		}),
+    // isNullable: false
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
@@ -316,6 +340,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
@@ -324,6 +349,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
@@ -332,6 +358,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesParsingRequest]{
 			field: "payload",
 			location: "body",
@@ -383,6 +410,7 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpR
 
 func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidation{
+    // isNullable: false
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -393,6 +421,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float32](200.02, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
@@ -403,6 +432,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float32](300.03, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
@@ -413,6 +443,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float64](400.04, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
@@ -423,6 +454,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int32](500, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
@@ -433,6 +465,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int32](600, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
@@ -443,6 +476,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
@@ -453,6 +487,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float32](200.02, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
@@ -463,6 +498,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float32](300.03, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
@@ -473,6 +509,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[float64](400.04, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
@@ -483,6 +520,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int32](500, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
@@ -493,6 +531,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int32](600, false, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
@@ -503,6 +542,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationRequest]{
 			field: "payload",
 			location: "body",
@@ -554,6 +594,7 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(rou
 
 func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationExclusiveRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidationExclusive{
+    // isNullable: false
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberAny",
 			location: "path",
@@ -564,6 +605,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float32](200.02, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			field: "numberFloat",
 			location: "path",
@@ -574,6 +616,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float32](300.03, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			field: "numberDouble",
 			location: "path",
@@ -584,6 +627,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float64](400.04, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt",
 			location: "path",
@@ -594,6 +638,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int32](500, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			field: "numberInt32",
 			location: "path",
@@ -604,6 +649,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int32](600, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			field: "numberInt64",
 			location: "path",
@@ -614,6 +660,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
@@ -624,6 +671,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float32](200.02, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
@@ -634,6 +682,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float32](300.03, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
@@ -644,6 +693,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[float64](400.04, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
@@ -654,6 +704,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int32](500, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
@@ -664,6 +715,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int32](600, true, false),
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
@@ -674,6 +726,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
 		}),
+    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationExclusiveRequest]{
 			field: "payload",
 			location: "body",
@@ -721,6 +774,7 @@ func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router ht
 
 func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRequiredValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRequiredValidation{
+    // isNullable: false
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberAnyInQuery",
 			location: "query",
@@ -729,6 +783,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "numberFloatInQuery",
 			location: "query",
@@ -737,6 +792,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[float32](
 			),
 		}),
+    // isNullable: false
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "numberDoubleInQuery",
 			location: "query",
@@ -745,6 +801,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[float64](
 			),
 		}),
+    // isNullable: false
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberIntInQuery",
 			location: "query",
@@ -753,6 +810,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "numberInt32InQuery",
 			location: "query",
@@ -761,6 +819,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[int32](
 			),
 		}),
+    // isNullable: false
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "numberInt64InQuery",
 			location: "query",
@@ -769,6 +828,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "optionalNumberAnyInQuery",
 			location: "query",
@@ -778,6 +838,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[float32](100.01, false, true),
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "optionalNumberFloatInQuery",
 			location: "query",
@@ -787,6 +848,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[float32](200.02, false, true),
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			field: "optionalNumberDoubleInQuery",
 			location: "query",
@@ -796,6 +858,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[float64](300.03, false, true),
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "optionalNumberIntInQuery",
 			location: "query",
@@ -805,6 +868,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[int32](400, false, true),
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			field: "optionalNumberInt32InQuery",
 			location: "query",
@@ -814,6 +878,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 				internal.NewMinMaxValueValidator[int32](500, false, true),
 			),
 		}),
+    // isNullable: false
 		bindOptionalNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			field: "optionalNumberInt64InQuery",
 			location: "query",
