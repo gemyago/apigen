@@ -37,6 +37,19 @@ func TestObjects(t *testing.T) {
 		}
 	}
 
+	randomSimpleObjectsContainer := func() *models.SimpleObjectsContainer {
+		return &models.SimpleObjectsContainer{
+			SimpleObject1:                 *randomSimpleObject(),
+			SimpleObject2:                 *randomSimpleObject(),
+			SimpleNullableObject1:         randomSimpleNullableObject(),
+			SimpleNullableObject2:         randomSimpleNullableObject(),
+			OptionalSimpleObject1:         *randomSimpleObject(),
+			OptionalSimpleObject2:         *randomSimpleObject(),
+			OptionalNullableSimpleObject1: randomSimpleNullableObject(),
+			OptionalNullableSimpleObject2: randomSimpleNullableObject(),
+		}
+	}
+
 	type testCase = routeTestCase[*objectsControllerTestActions]
 
 	t.Run("nullable-body", func(t *testing.T) {
@@ -188,6 +201,25 @@ func TestObjects(t *testing.T) {
 					},
 				}
 			})
+		})
+	})
+
+	t.Run("required-nested-objects", func(t *testing.T) {
+		runRouteTestCase(t, "should parse body", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsRequiredNestedObjectsRequest{
+				Payload: randomSimpleObjectsContainer(),
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/required-nested-objects",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsRequiredNestedObjects.calls[0].params)
+				},
+			}
 		})
 	})
 }

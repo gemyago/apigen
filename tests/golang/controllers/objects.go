@@ -11,7 +11,6 @@ type objectsControllerTestActions struct {
 	objectsNullableOptionalBody   mockAction[*handlers.ObjectsObjectsNullableOptionalBodyRequest]
 	objectsNullableRequiredBody   mockAction[*handlers.ObjectsObjectsNullableRequiredBodyRequest]
 	objectsOptionalBody           mockAction[*handlers.ObjectsObjectsOptionalBodyRequest]
-	objectsOptionalNestedObjects  mockAction[*handlers.ObjectsObjectsOptionalNestedObjectsRequest]
 	objectsRequiredBody           mockAction[*handlers.ObjectsObjectsRequiredBodyRequest]
 	objectsRequiredNestedObjects  mockAction[*handlers.ObjectsObjectsRequiredNestedObjectsRequest]
 }
@@ -26,7 +25,6 @@ func newObjectsController(
 		HandleObjectsNullableOptionalBody.With(testActions.objectsNullableOptionalBody.action).
 		HandleObjectsNullableRequiredBody.With(testActions.objectsNullableRequiredBody.action).
 		HandleObjectsOptionalBody.With(testActions.objectsOptionalBody.action).
-		HandleObjectsOptionalNestedObjects.With(testActions.objectsOptionalNestedObjects.action).
 		HandleObjectsRequiredBody.With(testActions.objectsRequiredBody.action).
 		HandleObjectsRequiredNestedObjects.With(testActions.objectsRequiredNestedObjects.action).
 		Finalize()
