@@ -24,9 +24,9 @@ type StringTypesStringTypesNullableParsingRequest struct {
 }
 
 type StringTypesStringTypesNullableRequiredValidationRequest struct {
-	UnformattedStrInQuery string
+	UnformattedStrInQuery *string
 	Payload *models.StringTypesNullableRequiredValidationRequest
-	OptionalUnformattedStrInQuery string
+	OptionalUnformattedStrInQuery *string
 }
 
 type StringTypesStringTypesParsingRequest struct {

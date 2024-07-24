@@ -10,17 +10,21 @@ post:
     - name: unformattedStrInQuery
       in: query
       required: true
-      nullable: true
       schema:
         type: string
+        nullable: true
         minLength: 10
+        maxLength: 100
+        pattern: '.*'
     - name: optionalUnformattedStrInQuery
       in: query
       required: false
-      nullable: true
       schema:
         type: string
+        nullable: true
         minLength: 10
+        maxLength: 100
+        pattern: '.*'
   requestBody:
     required: true
     content:
@@ -34,10 +38,14 @@ post:
               type: string
               nullable: true
               minLength: 10
+              maxLength: 100
+              pattern: '.*'
             optionalUnformattedStr:
               type: string
               nullable: true
               minLength: 10
+              maxLength: 100
+              pattern: '.*'
   responses:
     '204':
       description: Request succeeded

@@ -470,7 +470,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq := *originalReq
 					wantReq.DateStr = lo.Must(time.Parse(time.DateOnly, originalReq.DateStr.Format(time.DateOnly)))
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
-					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesRangeValidation.calls[0].params)
 				},
 			}
 		})
@@ -550,7 +550,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq := *originalReq
 					wantReq.DateStr = lo.Must(time.Parse(time.DateOnly, originalReq.DateStr.Format(time.DateOnly)))
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
-					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesRangeValidation.calls[0].params)
 				},
 			}
 		})
@@ -630,7 +630,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq := *originalReq
 					wantReq.DateStr = lo.Must(time.Parse(time.DateOnly, originalReq.DateStr.Format(time.DateOnly)))
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
-					assert.Equal(t, &wantReq, testActions.StringTypesRangeValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesRangeValidation.calls[0].params)
 				},
 			}
 		})
@@ -713,7 +713,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq.OptionalDateStrInQuery = lo.Must(
 						time.Parse(time.DateOnly, originalReq.OptionalDateStrInQuery.Format(time.DateOnly)),
 					)
-					assert.Equal(t, &wantReq, testActions.StringTypesRequiredValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesRequiredValidation.calls[0].params)
 				},
 			}
 		})
@@ -752,7 +752,7 @@ func TestStringTypes(t *testing.T) {
 
 					wantReq := *originalReq
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
-					assert.Equal(t, &wantReq, testActions.StringTypesRequiredValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesRequiredValidation.calls[0].params)
 				},
 			}
 		})
@@ -845,6 +845,70 @@ func TestStringTypes(t *testing.T) {
 		})
 	})
 
+	t.Run("nullable-required-validation", func(t *testing.T) {
+		runRouteTestCase(t, "should allow null values", setupRouter, func() testCase {
+			originalReq := &handlers.StringTypesStringTypesNullableRequiredValidationRequest{
+				Payload: &models.StringTypesNullableRequiredValidationRequest{},
+			}
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", "null")
+			query.Add("optionalUnformattedStrInQuery", "null")
+			return testCase{
+				method: http.MethodPost,
+				path:   "/string-types/nullable-required-validation",
+				query:  query,
+				body: bytes.NewBufferString(`{
+					"unformattedStr": null,
+					"optionalUnformattedStr": null
+				}`),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code) {
+						t.Fatalf("unexpected response: %v", recorder.Body)
+					}
+					assert.Equal(t, originalReq, testActions.stringTypesNullableRequiredValidation.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should require nullable values", setupRouter, func() testCase {
+			query := url.Values{}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/string-types/nullable-required-validation",
+				query:  query,
+				body:   bytes.NewBufferString(`{}`),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should validate provided values", setupRouter, func() testCase {
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", fake.RandomStringWithLength(9))
+			query.Add("optionalUnformattedStrInQuery", fake.RandomStringWithLength(9))
+			return testCase{
+				method: http.MethodPost,
+				path:   "/string-types/nullable-required-validation",
+				query:  query,
+				body: marshalJSONDataAsReader(t, models.StringTypesNullableRequiredValidationRequest{
+					UnformattedStr:         lo.ToPtr(fake.RandomStringWithLength(9)),
+					OptionalUnformattedStr: lo.ToPtr(fake.RandomStringWithLength(9)),
+				}),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalUnformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "optionalUnformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+	})
+
 	t.Run("pattern-validation", func(t *testing.T) {
 		randomReq := func(
 			opts ...func(*handlers.StringTypesStringTypesPatternValidationRequest),
@@ -904,7 +968,7 @@ func TestStringTypes(t *testing.T) {
 					wantReq := *originalReq
 					wantReq.DateStr = lo.Must(time.Parse(time.DateOnly, originalReq.DateStr.Format(time.DateOnly)))
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
-					assert.Equal(t, &wantReq, testActions.StringTypesPatternValidation.calls[0].params)
+					assert.Equal(t, &wantReq, testActions.stringTypesPatternValidation.calls[0].params)
 				},
 			}
 		})
