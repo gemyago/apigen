@@ -6,6 +6,7 @@ import (
 
 type stringTypesControllerTestActions struct {
 	stringTypesParsing            mockAction[*handlers.StringTypesStringTypesParsingRequest]
+	stringTypesNullableParsing    mockAction[*handlers.StringTypesStringTypesNullableParsingRequest]
 	StringTypesRangeValidation    mockAction[*handlers.StringTypesStringTypesRangeValidationRequest]
 	StringTypesPatternValidation  mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
 	StringTypesRequiredValidation mockAction[*handlers.StringTypesStringTypesRequiredValidationRequest]
@@ -16,6 +17,7 @@ func newStringTypesController(
 ) *handlers.StringTypesController {
 	return handlers.BuildStringTypesController().
 		HandleStringTypesParsing.With(testActions.stringTypesParsing.action).
+		HandleStringTypesNullableParsing.With(testActions.stringTypesNullableParsing.action).
 		HandleStringTypesRangeValidation.With(testActions.StringTypesRangeValidation.action).
 		HandleStringTypesPatternValidation.With(testActions.StringTypesPatternValidation.action).
 		HandleStringTypesRequiredValidation.With(testActions.StringTypesRequiredValidation.action).
