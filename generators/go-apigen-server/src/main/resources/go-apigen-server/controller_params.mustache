@@ -51,7 +51,7 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
 			required: {{required}},
-			parseValue: {{#isNullable}}parseNullableIn{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}({{/isNullable}}{{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}}{{#isNullable}}){{/isNullable}},
+			parseValue: {{^isBodyParam}}{{#isNullable}}parseNullableIn{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}({{/isNullable}}{{/isBodyParam}}{{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}}{{^isBodyParam}}{{#isNullable}}){{/isNullable}}{{/isBodyParam}},
 			validateValue: {{#isArray}}internal.NewArrayValidator(
         internal.New{{#mostInnerItems}}{{{dataType}}}{{/mostInnerItems}}Validator(),
       ),{{/isArray}}{{^isArray}}{{#isBodyParam}}internal.New{{dataType}}Validator(),{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
