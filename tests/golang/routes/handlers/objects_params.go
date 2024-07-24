@@ -26,15 +26,14 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyDirect) parse(router httpRout
 
 func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyDirectRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyDirect{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*models.ObjectArraysSimpleObject]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[[]*models.ObjectArraysSimpleObject],
 			validateValue: internal.NewArrayValidator(
-        internal.NewObjectArraysSimpleObjectValidator(),
-      ),
+				internal.NewObjectArraysSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+			),
 		}),
 	}
 }
@@ -53,13 +52,12 @@ func (p *paramsParserObjectsObjectsArrayParsingBodyNested) parse(router httpRout
 
 func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyNestedRequest] {
 	return &paramsParserObjectsObjectsArrayParsingBodyNested{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsArrayParsingBodyNestedRequest]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
-			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(),
+			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
@@ -78,13 +76,12 @@ func (p *paramsParserObjectsObjectsNested) parse(router httpRouter, req *http.Re
 
 func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObjectsNestedRequest] {
 	return &paramsParserObjectsObjectsNested{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsNestedRequest]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.ObjectsNestedRequest],
-			validateValue: internal.NewObjectsNestedRequestValidator(),
+			validateValue: internal.NewObjectsNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
@@ -103,13 +100,12 @@ func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter
 
 func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsNullableOptionalBody{
-    // isNullable: true
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
 			field: "payload",
 			location: "body",
 			required: false,
 			parseValue: parseJSONPayload[*models.SimpleNullableObject],
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
 		}),
 	}
 }
@@ -128,13 +124,12 @@ func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter
 
 func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsNullableRequiredBody{
-    // isNullable: true
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.SimpleNullableObject],
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
 		}),
 	}
 }
@@ -153,13 +148,12 @@ func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *h
 
 func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsOptionalBody{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
 			field: "payload",
 			location: "body",
 			required: false,
 			parseValue: parseJSONPayload[*models.SimpleObject],
-			validateValue: internal.NewSimpleObjectValidator(),
+			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
@@ -178,13 +172,12 @@ func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *h
 
 func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsRequiredBody{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.SimpleObject],
-			validateValue: internal.NewSimpleObjectValidator(),
+			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
@@ -203,13 +196,12 @@ func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRoute
 
 func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
 	return &paramsParserObjectsObjectsRequiredNestedObjects{
-    // isNullable: false
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObjectsContainer]{
 			field: "payload",
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.SimpleObjectsContainer],
-			validateValue: internal.NewSimpleObjectsContainerValidator(),
+			validateValue: internal.NewSimpleObjectsContainerValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }

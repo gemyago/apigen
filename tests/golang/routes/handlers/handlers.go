@@ -448,6 +448,6 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			})
 			return
 		}
-		params.validateValue(bindingCtx, params.field, params.location, *receiver)
+		params.validateValue(bindingCtx, *receiver)
 	}
 }

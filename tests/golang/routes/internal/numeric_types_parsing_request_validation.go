@@ -8,32 +8,38 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewNumericTypesParsingRequestValidator() FieldValidator[*models.NumericTypesParsingRequest] {
+func NewNumericTypesParsingRequestValidator(params ModelValidatorParams) FieldValidator[*models.NumericTypesParsingRequest] {
 	validateNumberAny := NewSimpleFieldValidator[float32](
+		SimpleFieldValidatorParams{Field: "numberAny", Location: params.Location},
 		EnsureNonDefault[float32],
 	)
 	validateNumberFloat := NewSimpleFieldValidator[float32](
+		SimpleFieldValidatorParams{Field: "numberFloat", Location: params.Location},
 		EnsureNonDefault[float32],
 	)
 	validateNumberDouble := NewSimpleFieldValidator[float64](
+		SimpleFieldValidatorParams{Field: "numberDouble", Location: params.Location},
 		EnsureNonDefault[float64],
 	)
 	validateNumberInt := NewSimpleFieldValidator[int32](
+		SimpleFieldValidatorParams{Field: "numberInt", Location: params.Location},
 		EnsureNonDefault[int32],
 	)
 	validateNumberInt32 := NewSimpleFieldValidator[int32](
+		SimpleFieldValidatorParams{Field: "numberInt32", Location: params.Location},
 		EnsureNonDefault[int32],
 	)
 	validateNumberInt64 := NewSimpleFieldValidator[int64](
+		SimpleFieldValidatorParams{Field: "numberInt64", Location: params.Location},
 		EnsureNonDefault[int64],
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.NumericTypesParsingRequest) {
-		validateNumberAny(bindingCtx, "numberAny", location, value.NumberAny)
-		validateNumberFloat(bindingCtx, "numberFloat", location, value.NumberFloat)
-		validateNumberDouble(bindingCtx, "numberDouble", location, value.NumberDouble)
-		validateNumberInt(bindingCtx, "numberInt", location, value.NumberInt)
-		validateNumberInt32(bindingCtx, "numberInt32", location, value.NumberInt32)
-		validateNumberInt64(bindingCtx, "numberInt64", location, value.NumberInt64)
+	return func(bindingCtx *BindingContext, value *models.NumericTypesParsingRequest) {
+		validateNumberAny(bindingCtx, value.NumberAny)
+		validateNumberFloat(bindingCtx, value.NumberFloat)
+		validateNumberDouble(bindingCtx, value.NumberDouble)
+		validateNumberInt(bindingCtx, value.NumberInt)
+		validateNumberInt32(bindingCtx, value.NumberInt32)
+		validateNumberInt64(bindingCtx, value.NumberInt64)
 	}
 }

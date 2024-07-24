@@ -8,16 +8,17 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectsNestedRequestNestedObject1Validator() FieldValidator[*models.ObjectsNestedRequestNestedObject1] {
+func NewObjectsNestedRequestNestedObject1Validator(params ModelValidatorParams) FieldValidator[*models.ObjectsNestedRequestNestedObject1] {
 	validateSimpleRequiredField1 := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "simpleRequiredField1", Location: params.Location},
 		EnsureNonDefault[string],
 	)
-	validateNestedObject11 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()
-	validateNestedObject12 := NewObjectsNestedRequestNestedObject1NestedObject11Validator()
+	validateNestedObject11 := NewObjectsNestedRequestNestedObject1NestedObject11Validator(ModelValidatorParams{Location: params.Location + ".nestedObject11"})
+	validateNestedObject12 := NewObjectsNestedRequestNestedObject1NestedObject11Validator(ModelValidatorParams{Location: params.Location + ".nestedObject12"})
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.ObjectsNestedRequestNestedObject1) {
-		validateSimpleRequiredField1(bindingCtx, "simpleRequiredField1", location, value.SimpleRequiredField1)
-		validateNestedObject11(bindingCtx, "nestedObject11", location, &value.NestedObject11)
-		validateNestedObject12(bindingCtx, "nestedObject12", location, &value.NestedObject12)
+	return func(bindingCtx *BindingContext, value *models.ObjectsNestedRequestNestedObject1) {
+		validateSimpleRequiredField1(bindingCtx, value.SimpleRequiredField1)
+		validateNestedObject11(bindingCtx, &value.NestedObject11)
+		validateNestedObject12(bindingCtx, &value.NestedObject12)
 	}
 }

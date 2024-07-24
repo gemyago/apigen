@@ -8,21 +8,23 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
+func NewStringTypesNullableRequiredValidationRequestValidator(params ModelValidatorParams) FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[*string](
+		SimpleFieldValidatorParams{Field: "unformattedStr", Location: params.Location},
 		SkipNullValidator(EnsureNonDefault[string]),
 		SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
 		SkipNullValidator(NewMinMaxLengthValidator[string](100, false)),
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[*string](
+		SimpleFieldValidatorParams{Field: "optionalUnformattedStr", Location: params.Location},
 		SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
 		SkipNullValidator(NewMinMaxLengthValidator[string](100, false)),
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesNullableRequiredValidationRequest) {
-		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
-		validateOptionalUnformattedStr(bindingCtx, "optionalUnformattedStr", location, value.OptionalUnformattedStr)
+	return func(bindingCtx *BindingContext, value *models.StringTypesNullableRequiredValidationRequest) {
+		validateUnformattedStr(bindingCtx, value.UnformattedStr)
+		validateOptionalUnformattedStr(bindingCtx, value.OptionalUnformattedStr)
 	}
 }

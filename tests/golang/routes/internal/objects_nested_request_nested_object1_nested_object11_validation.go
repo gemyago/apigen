@@ -8,12 +8,13 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectsNestedRequestNestedObject1NestedObject11Validator() FieldValidator[*models.ObjectsNestedRequestNestedObject1NestedObject11] {
+func NewObjectsNestedRequestNestedObject1NestedObject11Validator(params ModelValidatorParams) FieldValidator[*models.ObjectsNestedRequestNestedObject1NestedObject11] {
 	validateSimpleRequiredField1 := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "simpleRequiredField1", Location: params.Location},
 		EnsureNonDefault[string],
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.ObjectsNestedRequestNestedObject1NestedObject11) {
-		validateSimpleRequiredField1(bindingCtx, "simpleRequiredField1", location, value.SimpleRequiredField1)
+	return func(bindingCtx *BindingContext, value *models.ObjectsNestedRequestNestedObject1NestedObject11) {
+		validateSimpleRequiredField1(bindingCtx, value.SimpleRequiredField1)
 	}
 }

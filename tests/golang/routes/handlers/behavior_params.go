@@ -27,13 +27,13 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 
 func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsAndResponseRequest] {
 	return &paramsParserBehaviorBehaviorWithParamsAndResponse{
-    // isNullable: false
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			field: "queryParam1",
 			location: "query",
 			required: false,
 			parseValue: app.knownParsers.stringInQuery,
 			validateValue: internal.NewSimpleFieldValidator[string](
+				internal.SimpleFieldValidatorParams{Field: "queryParam1", Location: "query"},
 			),
 		}),
 	}

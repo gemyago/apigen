@@ -8,14 +8,16 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBooleanParsingRequestValidator() FieldValidator[*models.BooleanParsingRequest] {
+func NewBooleanParsingRequestValidator(params ModelValidatorParams) FieldValidator[*models.BooleanParsingRequest] {
 	validateBoolParam1 := NewSimpleFieldValidator[bool](
+		SimpleFieldValidatorParams{Field: "boolParam1", Location: params.Location},
 	)
 	validateBoolParam2 := NewSimpleFieldValidator[bool](
+		SimpleFieldValidatorParams{Field: "boolParam2", Location: params.Location},
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.BooleanParsingRequest) {
-		validateBoolParam1(bindingCtx, "boolParam1", location, value.BoolParam1)
-		validateBoolParam2(bindingCtx, "boolParam2", location, value.BoolParam2)
+	return func(bindingCtx *BindingContext, value *models.BooleanParsingRequest) {
+		validateBoolParam1(bindingCtx, value.BoolParam1)
+		validateBoolParam2(bindingCtx, value.BoolParam2)
 	}
 }

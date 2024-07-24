@@ -31,40 +31,40 @@ func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpR
 
 func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingParsingErrors{
-    // isNullable: false
 		bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam1",
 			location: "path",
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "pathParam1", Location: "path"},
 			),
 		}),
-    // isNullable: false
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
 			field: "pathParam2",
 			location: "path",
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "pathParam2", Location: "path"},
 			),
 		}),
-    // isNullable: false
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
 			),
 		}),
-    // isNullable: false
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
 			),
 		}),
 	}
@@ -87,24 +87,22 @@ func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router ht
 
 func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] {
 	return &paramsParserErrorHandlingErrorHandlingValidationErrors{
-    // isNullable: false
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery1",
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
-    // isNullable: false
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
 			field: "requiredQuery2",
 			location: "query",
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 	}
