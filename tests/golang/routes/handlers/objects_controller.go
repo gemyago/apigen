@@ -21,6 +21,10 @@ type ObjectsObjectsNestedRequest struct {
 	Payload *models.ObjectsNestedRequest
 }
 
+type ObjectsObjectsNullableRequest struct {
+	Payload *models.ObjectNullableSimpleObjectsContainer
+}
+
 type ObjectsController struct {
 	// POST /objects/arrays-parsing
 	//
@@ -42,6 +46,13 @@ type ObjectsController struct {
 	//
 	// Response type: none
 	ObjectsNested httpHandlerFactory
+
+	// POST /objects/nullable
+	//
+	// Request type: ObjectsObjectsNullableRequest,
+	//
+	// Response type: none
+	ObjectsNullable httpHandlerFactory
 }
 
 type ObjectsControllerBuilder struct {
@@ -65,6 +76,13 @@ type ObjectsControllerBuilder struct {
 	//
 	// Response type: none
 	HandleObjectsNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsNestedRequest]
+
+	// POST /objects/nullable
+	//
+	// Request type: ObjectsObjectsNullableRequest,
+	//
+	// Response type: none
+	HandleObjectsNullable actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsNullableRequest]
 }
 
 func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
@@ -72,6 +90,7 @@ func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
 		ObjectsArrayParsingBodyDirect: mustInitializeAction("objectsArrayParsingBodyDirect", c.HandleObjectsArrayParsingBodyDirect.httpHandlerFactory),
 		ObjectsArrayParsingBodyNested: mustInitializeAction("objectsArrayParsingBodyNested", c.HandleObjectsArrayParsingBodyNested.httpHandlerFactory),
 		ObjectsNested: mustInitializeAction("objectsNested", c.HandleObjectsNested.httpHandlerFactory),
+		ObjectsNullable: mustInitializeAction("objectsNullable", c.HandleObjectsNullable.httpHandlerFactory),
 	}
 }
 
@@ -96,6 +115,12 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 	controllerBuilder.HandleObjectsNested.voidResult = true
 	controllerBuilder.HandleObjectsNested.paramsParserFactory = newParamsParserObjectsObjectsNested
 
+	// POST /objects/nullable
+	controllerBuilder.HandleObjectsNullable.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleObjectsNullable.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsNullable.voidResult = true
+	controllerBuilder.HandleObjectsNullable.paramsParserFactory = newParamsParserObjectsObjectsNullable
+
 	return controllerBuilder
 }
 
@@ -103,4 +128,5 @@ func RegisterObjectsRoutes(controller *ObjectsController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyDirect(app))
 	app.router.HandleRoute("PUT", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyNested(app))
 	app.router.HandleRoute("POST", "/objects/nested", controller.ObjectsNested(app))
+	app.router.HandleRoute("POST", "/objects/nullable", controller.ObjectsNullable(app))
 }
