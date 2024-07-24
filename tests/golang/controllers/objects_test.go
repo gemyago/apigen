@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,6 +11,7 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,8 +40,10 @@ func TestObjects(t *testing.T) {
 		}
 	}
 
-	randomSimpleObjectsContainer := func() *models.SimpleObjectsContainer {
-		return &models.SimpleObjectsContainer{
+	randomSimpleObjectsContainer := func(
+		opts ...func(*models.SimpleObjectsContainer),
+	) *models.SimpleObjectsContainer {
+		res := &models.SimpleObjectsContainer{
 			SimpleObject1:                 *randomSimpleObject(),
 			SimpleObject2:                 *randomSimpleObject(),
 			SimpleNullableObject1:         randomSimpleNullableObject(),
@@ -48,6 +53,10 @@ func TestObjects(t *testing.T) {
 			OptionalNullableSimpleObject1: randomSimpleNullableObject(),
 			OptionalNullableSimpleObject2: randomSimpleNullableObject(),
 		}
+		for _, opt := range opts {
+			opt(res)
+		}
+		return res
 	}
 
 	type testCase = routeTestCase[*objectsControllerTestActions]
@@ -213,6 +222,39 @@ func TestObjects(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/objects/required-nested-objects",
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsRequiredNestedObjects.calls[0].params)
+				},
+			}
+		})
+		runRouteTestCase(t, "should allow optional", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsRequiredNestedObjectsRequest{
+				Payload: randomSimpleObjectsContainer(
+					func(req *models.SimpleObjectsContainer) {
+						req.OptionalSimpleObject1 = models.SimpleObject{}
+						req.OptionalSimpleObject2 = models.SimpleObject{}
+						req.OptionalNullableSimpleObject1 = nil
+						req.OptionalNullableSimpleObject2 = nil
+					},
+				),
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/required-nested-objects",
+				body: bytes.NewBufferString(fmt.Sprintf(`{
+					"simpleObject1": %s,
+					"simpleObject2": %s,
+					"simpleNullableObject1": %s,
+					"simpleNullableObject2": %s
+				}`,
+					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject1)),
+					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject2)),
+					lo.Must1(json.Marshal(originalReq.Payload.SimpleNullableObject1)),
+					lo.Must1(json.Marshal(originalReq.Payload.SimpleNullableObject2)),
+				)),
 				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
