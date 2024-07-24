@@ -286,9 +286,9 @@ func TestStringTypes(t *testing.T) {
 			return testCase{
 				method: http.MethodPost,
 				path: fmt.Sprintf(
-					"/string-types/parsing/%v/%v/%v/%v/%v",
-					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
-					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
+					"/string-types/nullable-parsing/%v/%v/%v/%v/%v",
+					*originalReq.UnformattedStr, *originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), *originalReq.ByteStr,
 				),
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
@@ -298,8 +298,11 @@ func TestStringTypes(t *testing.T) {
 					}
 
 					wantReq := *originalReq
-					assert.Equal(t, wantReq.DateTimeStr, testActions.stringTypesParsing.calls[0].params.DateTimeStr)
-					assert.Equal(t, wantReq.DateTimeStrInQuery, testActions.stringTypesParsing.calls[0].params.DateTimeStrInQuery)
+					assert.Equal(t, wantReq.DateTimeStr, testActions.stringTypesNullableParsing.calls[0].params.DateTimeStr)
+					assert.Equal(t,
+						wantReq.DateTimeStrInQuery,
+						testActions.stringTypesNullableParsing.calls[0].params.DateTimeStrInQuery,
+					)
 				},
 			}
 		})
@@ -312,7 +315,7 @@ func TestStringTypes(t *testing.T) {
 			return testCase{
 				method: http.MethodPost,
 				path: fmt.Sprintf(
-					"/string-types/parsing/%v/%v/%v/%v/%v",
+					"/string-types/nullable-parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
 					fake.Lorem().Word(), originalReq.ByteStr),
 				query: query,
@@ -343,7 +346,7 @@ func TestStringTypes(t *testing.T) {
 			return testCase{
 				method: http.MethodPost,
 				path: fmt.Sprintf(
-					"/string-types/parsing/%v/%v/%v/%v/%v",
+					"/string-types/nullable-parsing/%v/%v/%v/%v/%v",
 					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
 					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
 				query: query,
