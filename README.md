@@ -31,10 +31,10 @@ Some language specific features may be challenging (if possible) to implement co
 All types
 |type|required|nullable|
 |----|----|----|
-|string|&check;|TODO|
-|number/integer|&check;|TODO|
-|boolean|&check;|TODO|
-|object|&check;|TODO|
+|string|&check;|&check;|
+|number/integer|&check;|&check;|
+|boolean|&check;|&check;|
+|object|&check;|&check;|
 
 Strings
 |format|in|minLength|maxLength|pattern|
@@ -48,16 +48,16 @@ Numeric data types
 |type|format|in|minimum|maximum|
 |----|----|----|----|----|
 |number|-|query,path|&check;|&check;|
-|number|float|query,path|&check;|&check;|
-|number|double|query,path|&check;|&check;|
-|integer|-|query,path|&check;|&check;|
-|integer|int32|query,path|&check;|&check;|
-|integer|int64|query,path|&check;|&check;|
+|number|float|query,path,body|&check;|&check;|
+|number|double|query,path,body|&check;|&check;|
+|integer|-|query,path,body|&check;|&check;|
+|integer|int32|query,path,body|&check;|&check;|
+|integer|int64|query,path,body|&check;|&check;|
 
 Boolean
 |type|in|supported?|
 |----|----|----|
-|boolean|query,path|&check;|
+|boolean|query,path,body|&check;|
 
 ### Language specific caveats
 
