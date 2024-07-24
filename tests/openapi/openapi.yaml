@@ -50,8 +50,12 @@ paths:
     $ref: "./objects/nested.yaml"
   /objects/arrays-parsing:
     $ref: "./objects/arrays-parsing.yaml"
-  /objects/nullable:
-    $ref: "./objects/nullable.yaml"
+  /objects/nullable-body:
+    $ref: "./objects/nullable-body.yaml"
+  /objects/required-body:
+    $ref: "./objects/required-body.yaml"
+  /objects/required-nested-objects:
+    $ref: "./objects/required-nested-objects.yaml"
 
   # responses routes
   /behavior/no-params-no-response:

@@ -1,0 +1,22 @@
+post:
+  summary: API to test required object body
+  operationId: objectsRequiredBody
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+put:
+  summary: API to test optional object body
+  operationId: objectsOptionalBody
+  tags:
+    - objects
+  requestBody:
+    required: false
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"

@@ -1,0 +1,24 @@
+post:
+  summary: API to test nullable required body
+  operationId: objectsNullableRequiredBody
+  tags:
+    - objects
+  requestBody:
+    required: true
+    nullable: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+put:
+  summary: API to test nullable optional body
+  operationId: objectsNullableOptionalBody
+  tags:
+    - objects
+  requestBody:
+    required: false
+    nullable: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"

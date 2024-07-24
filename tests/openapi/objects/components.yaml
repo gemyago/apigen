@@ -1,0 +1,9 @@
+components:
+  schemas:
+    SimpleObject:
+      type: object
+      required:
+        - simpleField1
+      properties:
+        simpleField1:
+          type: string
