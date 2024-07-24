@@ -23,6 +23,12 @@ type StringTypesStringTypesNullableParsingRequest struct {
 	Payload *models.StringTypesNullableParsingRequest
 }
 
+type StringTypesStringTypesNullableRequiredValidationRequest struct {
+	UnformattedStrInQuery string
+	Payload *models.StringTypesNullableRequiredValidationRequest
+	OptionalUnformattedStrInQuery string
+}
+
 type StringTypesStringTypesParsingRequest struct {
 	UnformattedStr string
 	CustomFormatStr string
@@ -85,6 +91,13 @@ type StringTypesController struct {
 	// Response type: none
 	StringTypesNullableParsing httpHandlerFactory
 
+	// POST /string-types/nullable-required-validation
+	//
+	// Request type: StringTypesStringTypesNullableRequiredValidationRequest,
+	//
+	// Response type: none
+	StringTypesNullableRequiredValidation httpHandlerFactory
+
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesParsingRequest,
@@ -122,6 +135,13 @@ type StringTypesControllerBuilder struct {
 	// Response type: none
 	HandleStringTypesNullableParsing actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesNullableParsingRequest]
 
+	// POST /string-types/nullable-required-validation
+	//
+	// Request type: StringTypesStringTypesNullableRequiredValidationRequest,
+	//
+	// Response type: none
+	HandleStringTypesNullableRequiredValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesNullableRequiredValidationRequest]
+
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesParsingRequest,
@@ -154,6 +174,7 @@ type StringTypesControllerBuilder struct {
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	return &StringTypesController{
 		StringTypesNullableParsing: mustInitializeAction("stringTypesNullableParsing", c.HandleStringTypesNullableParsing.httpHandlerFactory),
+		StringTypesNullableRequiredValidation: mustInitializeAction("stringTypesNullableRequiredValidation", c.HandleStringTypesNullableRequiredValidation.httpHandlerFactory),
 		StringTypesParsing: mustInitializeAction("stringTypesParsing", c.HandleStringTypesParsing.httpHandlerFactory),
 		StringTypesPatternValidation: mustInitializeAction("stringTypesPatternValidation", c.HandleStringTypesPatternValidation.httpHandlerFactory),
 		StringTypesRangeValidation: mustInitializeAction("stringTypesRangeValidation", c.HandleStringTypesRangeValidation.httpHandlerFactory),
@@ -169,6 +190,12 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleStringTypesNullableParsing.defaultStatusCode = 204
 	controllerBuilder.HandleStringTypesNullableParsing.voidResult = true
 	controllerBuilder.HandleStringTypesNullableParsing.paramsParserFactory = newParamsParserStringTypesStringTypesNullableParsing
+
+	// POST /string-types/nullable-required-validation
+	controllerBuilder.HandleStringTypesNullableRequiredValidation.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleStringTypesNullableRequiredValidation.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesNullableRequiredValidation.voidResult = true
+	controllerBuilder.HandleStringTypesNullableRequiredValidation.paramsParserFactory = newParamsParserStringTypesStringTypesNullableRequiredValidation
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesParsing.controllerBuilder = controllerBuilder
@@ -199,6 +226,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(app))
+	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(app))
 	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
 	app.router.HandleRoute("POST", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(app))
 	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(app))

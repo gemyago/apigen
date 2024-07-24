@@ -139,6 +139,54 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 	}
 }
 
+type paramsParserStringTypesStringTypesNullableRequiredValidation struct {
+	bindUnformattedStrInQuery requestParamBinder[[]string, string]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesNullableRequiredValidationRequest]
+	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, string]
+}
+
+func (p *paramsParserStringTypesStringTypesNullableRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableRequiredValidationRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &StringTypesStringTypesNullableRequiredValidationRequest{}
+	// query params
+	query := req.URL.Query()
+	p.bindUnformattedStrInQuery(&bindingCtx, readQueryValue("unformattedStrInQuery", query), &reqParams.UnformattedStrInQuery)
+	p.bindOptionalUnformattedStrInQuery(&bindingCtx, readQueryValue("optionalUnformattedStrInQuery", query), &reqParams.OptionalUnformattedStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesNullableRequiredValidationRequest] {
+	return &paramsParserStringTypesStringTypesNullableRequiredValidation{
+		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+			field: "unformattedStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: app.knownParsers.stringInQuery,
+			validateValue: internal.NewSimpleFieldValidator[string](
+				internal.NewMinMaxLengthValidator[string](10, true),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesNullableRequiredValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.StringTypesNullableRequiredValidationRequest],
+			validateValue: internal.NewStringTypesNullableRequiredValidationRequestValidator(),
+		}),
+		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
+			field: "optionalUnformattedStrInQuery",
+			location: "query",
+			required: false,
+			parseValue: app.knownParsers.stringInQuery,
+			validateValue: internal.NewSimpleFieldValidator[string](
+				internal.NewMinMaxLengthValidator[string](10, true),
+			),
+		}),
+	}
+}
+
 type paramsParserStringTypesStringTypesParsing struct {
 	bindUnformattedStr requestParamBinder[string, string]
 	bindCustomFormatStr requestParamBinder[string, string]
