@@ -77,5 +77,48 @@ func TestObjects(t *testing.T) {
 				}
 			})
 		})
+		t.Run("optional", func(t *testing.T) {
+			runRouteTestCase(t, "should parse nullable body", setupRouter, func() testCase {
+				originalReq := handlers.ObjectsObjectsNullableOptionalBodyRequest{
+					Payload: randomSimpleNullableObject(),
+				}
+				return testCase{
+					method: http.MethodPut,
+					path:   "/objects/nullable-body",
+					body:   marshalJSONDataAsReader(t, originalReq.Payload),
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, &originalReq, testActions.objectsNullableOptionalBody.calls[0].params)
+					},
+				}
+			})
+			runRouteTestCase(t, "should parse nullable body with null value", setupRouter, func() testCase {
+				return testCase{
+					method: http.MethodPut,
+					path:   "/objects/nullable-body",
+					body:   bytes.NewReader([]byte("null")),
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Nil(t, testActions.objectsNullableOptionalBody.calls[0].params.Payload)
+					},
+				}
+			})
+			runRouteTestCase(t, "should allow empty body", setupRouter, func() testCase {
+				return testCase{
+					method: http.MethodPut,
+					path:   "/objects/nullable-body",
+					expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Nil(t, testActions.objectsNullableOptionalBody.calls[0].params.Payload)
+					},
+				}
+			})
+		})
 	})
 }
