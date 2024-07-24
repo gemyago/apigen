@@ -152,13 +152,12 @@ type StringTypesControllerBuilder struct {
 }
 
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
-	// TODO: panic if any handler is null
 	return &StringTypesController{
-		StringTypesNullableParsing: c.HandleStringTypesNullableParsing.httpHandlerFactory,
-		StringTypesParsing: c.HandleStringTypesParsing.httpHandlerFactory,
-		StringTypesPatternValidation: c.HandleStringTypesPatternValidation.httpHandlerFactory,
-		StringTypesRangeValidation: c.HandleStringTypesRangeValidation.httpHandlerFactory,
-		StringTypesRequiredValidation: c.HandleStringTypesRequiredValidation.httpHandlerFactory,
+		StringTypesNullableParsing: mustInitializeAction("stringTypesNullableParsing", c.HandleStringTypesNullableParsing.httpHandlerFactory),
+		StringTypesParsing: mustInitializeAction("stringTypesParsing", c.HandleStringTypesParsing.httpHandlerFactory),
+		StringTypesPatternValidation: mustInitializeAction("stringTypesPatternValidation", c.HandleStringTypesPatternValidation.httpHandlerFactory),
+		StringTypesRangeValidation: mustInitializeAction("stringTypesRangeValidation", c.HandleStringTypesRangeValidation.httpHandlerFactory),
+		StringTypesRequiredValidation: mustInitializeAction("stringTypesRequiredValidation", c.HandleStringTypesRequiredValidation.httpHandlerFactory),
 	}
 }
 

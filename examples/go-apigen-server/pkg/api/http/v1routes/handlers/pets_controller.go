@@ -71,11 +71,10 @@ type PetsControllerBuilder struct {
 }
 
 func (c *PetsControllerBuilder) Finalize() *PetsController {
-	// TODO: panic if any handler is null
 	return &PetsController{
-		CreatePet: c.HandleCreatePet.httpHandlerFactory,
-		GetPetById: c.HandleGetPetById.httpHandlerFactory,
-		ListPets: c.HandleListPets.httpHandlerFactory,
+		CreatePet: mustInitializeAction("createPet", c.HandleCreatePet.httpHandlerFactory),
+		GetPetById: mustInitializeAction("getPetById", c.HandleGetPetById.httpHandlerFactory),
+		ListPets: mustInitializeAction("listPets", c.HandleListPets.httpHandlerFactory),
 	}
 }
 

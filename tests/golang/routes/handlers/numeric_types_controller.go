@@ -133,12 +133,11 @@ type NumericTypesControllerBuilder struct {
 }
 
 func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
-	// TODO: panic if any handler is null
 	return &NumericTypesController{
-		NumericTypesParsing: c.HandleNumericTypesParsing.httpHandlerFactory,
-		NumericTypesRangeValidation: c.HandleNumericTypesRangeValidation.httpHandlerFactory,
-		NumericTypesRangeValidationExclusive: c.HandleNumericTypesRangeValidationExclusive.httpHandlerFactory,
-		NumericTypesRequiredValidation: c.HandleNumericTypesRequiredValidation.httpHandlerFactory,
+		NumericTypesParsing: mustInitializeAction("numericTypesParsing", c.HandleNumericTypesParsing.httpHandlerFactory),
+		NumericTypesRangeValidation: mustInitializeAction("numericTypesRangeValidation", c.HandleNumericTypesRangeValidation.httpHandlerFactory),
+		NumericTypesRangeValidationExclusive: mustInitializeAction("numericTypesRangeValidationExclusive", c.HandleNumericTypesRangeValidationExclusive.httpHandlerFactory),
+		NumericTypesRequiredValidation: mustInitializeAction("numericTypesRequiredValidation", c.HandleNumericTypesRequiredValidation.httpHandlerFactory),
 	}
 }
 

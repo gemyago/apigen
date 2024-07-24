@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
@@ -10,9 +9,17 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+
+
+
+
+
+
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	QueryParam1 string
 }
+
+
 
 type BehaviorController struct {
 	// GET /behavior/no-params-no-response
@@ -89,15 +96,12 @@ type BehaviorControllerBuilder struct {
 }
 
 func (c *BehaviorControllerBuilder) Finalize() *BehaviorController {
-	if c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory == nil {
-		panic(errors.New("HandleBehaviorNoParamsNoResponse action has not been initialized"))
-	}
 	return &BehaviorController{
-		BehaviorNoParamsNoResponse:    c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
-		BehaviorNoParamsWithResponse:  c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
-		BehaviorNoStatusDefined:       c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
-		BehaviorWithParamsAndResponse: c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory,
-		BehaviorWithStatusDefined:     c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
+		BehaviorNoParamsNoResponse: mustInitializeAction("behaviorNoParamsNoResponse", c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory),
+		BehaviorNoParamsWithResponse: mustInitializeAction("behaviorNoParamsWithResponse", c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory),
+		BehaviorNoStatusDefined: mustInitializeAction("behaviorNoStatusDefined", c.HandleBehaviorNoStatusDefined.httpHandlerFactory),
+		BehaviorWithParamsAndResponse: mustInitializeAction("behaviorWithParamsAndResponse", c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory),
+		BehaviorWithStatusDefined: mustInitializeAction("behaviorWithStatusDefined", c.HandleBehaviorWithStatusDefined.httpHandlerFactory),
 	}
 }
 

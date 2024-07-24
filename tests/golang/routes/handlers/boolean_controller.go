@@ -58,10 +58,9 @@ type BooleanControllerBuilder struct {
 }
 
 func (c *BooleanControllerBuilder) Finalize() *BooleanController {
-	// TODO: panic if any handler is null
 	return &BooleanController{
-		BooleanParsing: c.HandleBooleanParsing.httpHandlerFactory,
-		BooleanRequiredValidation: c.HandleBooleanRequiredValidation.httpHandlerFactory,
+		BooleanParsing: mustInitializeAction("booleanParsing", c.HandleBooleanParsing.httpHandlerFactory),
+		BooleanRequiredValidation: mustInitializeAction("booleanRequiredValidation", c.HandleBooleanRequiredValidation.httpHandlerFactory),
 	}
 }
 

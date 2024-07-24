@@ -52,10 +52,9 @@ type ErrorHandlingControllerBuilder struct {
 }
 
 func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
-	// TODO: panic if any handler is null
 	return &ErrorHandlingController{
-		ErrorHandlingParsingErrors: c.HandleErrorHandlingParsingErrors.httpHandlerFactory,
-		ErrorHandlingValidationErrors: c.HandleErrorHandlingValidationErrors.httpHandlerFactory,
+		ErrorHandlingParsingErrors: mustInitializeAction("errorHandlingParsingErrors", c.HandleErrorHandlingParsingErrors.httpHandlerFactory),
+		ErrorHandlingValidationErrors: mustInitializeAction("errorHandlingValidationErrors", c.HandleErrorHandlingValidationErrors.httpHandlerFactory),
 	}
 }
 

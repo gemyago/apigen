@@ -68,11 +68,10 @@ type ObjectsControllerBuilder struct {
 }
 
 func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
-	// TODO: panic if any handler is null
 	return &ObjectsController{
-		ObjectsArrayParsingBodyDirect: c.HandleObjectsArrayParsingBodyDirect.httpHandlerFactory,
-		ObjectsArrayParsingBodyNested: c.HandleObjectsArrayParsingBodyNested.httpHandlerFactory,
-		ObjectsNested: c.HandleObjectsNested.httpHandlerFactory,
+		ObjectsArrayParsingBodyDirect: mustInitializeAction("objectsArrayParsingBodyDirect", c.HandleObjectsArrayParsingBodyDirect.httpHandlerFactory),
+		ObjectsArrayParsingBodyNested: mustInitializeAction("objectsArrayParsingBodyNested", c.HandleObjectsArrayParsingBodyNested.httpHandlerFactory),
+		ObjectsNested: mustInitializeAction("objectsNested", c.HandleObjectsNested.httpHandlerFactory),
 	}
 }
 

@@ -121,6 +121,13 @@ type handlerFactoryParams[TReqParams any, TResData any] struct {
 	handler             func(context.Context, TReqParams) (TResData, error)
 }
 
+func mustInitializeAction(actionName string, handlerFactory httpHandlerFactory) httpHandlerFactory {
+	if handlerFactory == nil {
+		panic(fmt.Errorf("%s action has not been initialized", actionName))
+	}
+	return handlerFactory
+}
+
 func createHandlerFactory[TReqParams any, TResData any](
 	factoryParams handlerFactoryParams[TReqParams, TResData],
 ) httpHandlerFactory {
