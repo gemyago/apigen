@@ -12,6 +12,7 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -221,5 +222,82 @@ func TestBoolean(t *testing.T) {
 				),
 			}
 		})
+	})
+
+	t.Run("nullable", func(t *testing.T) {
+		randomReq := func() *handlers.BooleanBooleanNullableRequest {
+			return &handlers.BooleanBooleanNullableRequest{
+				// path
+				BoolParam1: lo.ToPtr(fake.Bool()),
+				BoolParam2: lo.ToPtr(fake.Bool()),
+
+				// query
+				BoolParam1InQuery:         lo.ToPtr(fake.Bool()),
+				BoolParam2InQuery:         lo.ToPtr(fake.Bool()),
+				OptionalBoolParam1InQuery: lo.ToPtr(fake.Bool()),
+
+				// body
+				Payload: &models.BooleanNullableRequest{
+					BoolParam1:         lo.ToPtr(fake.Bool()),
+					BoolParam2:         lo.ToPtr(fake.Bool()),
+					OptionalBoolParam1: lo.ToPtr(fake.Bool()),
+				},
+			}
+		}
+
+		buildQuery := func(wantReq *handlers.BooleanBooleanNullableRequest) url.Values {
+			query := url.Values{}
+			query.Add("boolParam1InQuery", strconv.FormatBool(lo.FromPtr(wantReq.BoolParam1InQuery)))
+			query.Add("boolParam2InQuery", strconv.FormatBool(lo.FromPtr(wantReq.BoolParam2InQuery)))
+			query.Add("optionalBoolParam1InQuery", strconv.FormatBool(lo.FromPtr(wantReq.OptionalBoolParam1InQuery)))
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
+			func() routeTestCase[*booleanControllerTestActions] {
+				wantReq := randomReq()
+				query := buildQuery(wantReq)
+
+				return routeTestCase[*booleanControllerTestActions]{
+					method: http.MethodPost,
+					path: fmt.Sprintf("/boolean/nullable/%v/%v",
+						*wantReq.BoolParam1, *wantReq.BoolParam2),
+					query: query,
+					body:  marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, wantReq, testActions.booleanNullable.calls[0].params)
+					},
+				}
+			})
+
+		runRouteTestCase(t, "should accept null values", setupRouter,
+			func() routeTestCase[*booleanControllerTestActions] {
+				wantReq := &handlers.BooleanBooleanNullableRequest{
+					Payload: &models.BooleanNullableRequest{},
+				}
+				query := url.Values{}
+				query.Add("boolParam1InQuery", "null")
+				query.Add("boolParam2InQuery", "null")
+				query.Add("optionalBoolParam1InQuery", "null")
+				return routeTestCase[*booleanControllerTestActions]{
+					method: http.MethodPost,
+					path:   "/boolean/nullable/null/null",
+					query:  query,
+					body: bytes.NewBufferString(`{
+						"boolParam1": null,
+						"boolParam2": null,
+						"optionalBoolParam1": null
+					}`),
+					expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, wantReq, testActions.booleanNullable.calls[0].params)
+					},
+				}
+			})
 	})
 }
