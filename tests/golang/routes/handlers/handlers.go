@@ -338,7 +338,13 @@ func parseNullableInPath[TTargetVal any](
 		if s == "" || s == "null" {
 			return nil
 		}
-		return targetParser(s, *tv)
+		var val TTargetVal
+		err := targetParser(s, &val)
+		if err != nil {
+			return err
+		}
+		*tv = &val
+		return nil
 	}
 }
 
@@ -349,7 +355,13 @@ func parseNullableInQuery[TTargetVal any](
 		if s[0] == "" || s[0] == "null" {
 			return nil
 		}
-		return targetParser(s, *tv)
+		var val TTargetVal
+		err := targetParser(s, &val)
+		if err != nil {
+			return err
+		}
+		*tv = &val
+		return nil
 	}
 }
 

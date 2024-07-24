@@ -201,6 +201,178 @@ func TestStringTypes(t *testing.T) {
 		})
 	})
 
+	t.Run("nullable-parsing", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesNullableParsingRequest),
+		) *handlers.StringTypesStringTypesNullableParsingRequest {
+			req := &handlers.StringTypesStringTypesNullableParsingRequest{
+				// path
+				UnformattedStr:  lo.ToPtr(fake.Lorem().Word()),
+				CustomFormatStr: lo.ToPtr(fake.Lorem().Word()),
+				DateStr:         lo.ToPtr(fake.Time().Time(time.Now())),
+				DateTimeStr:     lo.ToPtr(fake.Time().Time(time.Now())),
+				ByteStr:         lo.ToPtr(fake.BinaryString().BinaryString(10)),
+
+				// query
+				UnformattedStrInQuery:  lo.ToPtr(fake.Lorem().Word()),
+				CustomFormatStrInQuery: lo.ToPtr(fake.Lorem().Word()),
+				DateStrInQuery:         lo.ToPtr(fake.Time().Time(time.Now())),
+				DateTimeStrInQuery:     lo.ToPtr(fake.Time().Time(time.Now())),
+				ByteStrInQuery:         lo.ToPtr(fake.BinaryString().BinaryString(10)),
+
+				// body
+				Payload: &models.StringTypesNullableParsingRequest{
+					UnformattedStr:  lo.ToPtr(fake.Lorem().Word()),
+					CustomFormatStr: lo.ToPtr(fake.Lorem().Word()),
+					DateStr:         lo.ToPtr(fake.Time().Time(time.Now())),
+					DateTimeStr:     lo.ToPtr(fake.Time().Time(time.Now())),
+					ByteStr:         lo.ToPtr(fake.BinaryString().BinaryString(10)),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesNullableParsingRequest) url.Values {
+			query := url.Values{}
+			query.Add("unformattedStrInQuery", lo.FromPtrOr(req.UnformattedStrInQuery, "null"))
+			query.Add("customFormatStrInQuery", lo.FromPtrOr(req.CustomFormatStrInQuery, "null"))
+			query.Add("dateStrInQuery", req.DateStrInQuery.Format(time.DateOnly))
+			query.Add("dateTimeStrInQuery", req.DateTimeStrInQuery.Format(time.RFC3339Nano))
+			query.Add("byteStrInQuery", lo.FromPtrOr(req.ByteStrInQuery, "null"))
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/nullable-parsing/%v/%v/%v/%v/%v",
+					*originalReq.UnformattedStr, *originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), *originalReq.ByteStr,
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = lo.ToPtr(
+						lo.Must(time.Parse(time.DateOnly, lo.FromPtr(wantReq.DateStr).Format(time.DateOnly))),
+					)
+					wantReq.DateStrInQuery = lo.ToPtr(
+						lo.Must(time.Parse(time.DateOnly, lo.FromPtr(wantReq.DateStrInQuery).Format(time.DateOnly))),
+					)
+					assert.Equal(t, &wantReq, testActions.stringTypesNullableParsing.calls[0].params)
+				},
+			}
+		})
+		runRouteTestCase(t, "should parse time with locale", setupRouter, func() testCase {
+			location := time.FixedZone("", int((time.Duration(fake.IntBetween(2, 30)) * time.Minute).Seconds()))
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableParsingRequest) {
+				req.DateTimeStr = lo.ToPtr(lo.FromPtr(req.DateTimeStr).In(location))
+				req.DateTimeStrInQuery = lo.ToPtr(lo.FromPtr(req.DateTimeStrInQuery).In(location))
+				req.Payload.DateTimeStr = lo.ToPtr(lo.FromPtr(req.Payload.DateTimeStr).In(location))
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStr.Format(time.DateOnly),
+					originalReq.DateTimeStr.Format(time.RFC3339Nano), originalReq.ByteStr,
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					assert.Equal(t, wantReq.DateTimeStr, testActions.stringTypesParsing.calls[0].params.DateTimeStr)
+					assert.Equal(t, wantReq.DateTimeStrInQuery, testActions.stringTypesParsing.calls[0].params.DateTimeStrInQuery)
+				},
+			}
+		})
+		runRouteTestCase(t, "should fail if bad values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+			query.Set("dateStrInQuery", fake.Lorem().Word())
+			query.Set("dateTimeStrInQuery", fake.Lorem().Word())
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, fake.Lorem().Word(),
+					fake.Lorem().Word(), originalReq.ByteStr),
+				query: query,
+				body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+					"unformattedStr": %v
+				}`, fake.IntBetween(10, 100)))),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						// path
+						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
+
+						// query
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+
+						// body
+						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+					},
+				),
+			}
+		})
+		runRouteTestCase(t, "should fail if date formatted with time", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+			query.Set("dateStrInQuery", originalReq.DateStrInQuery.Format(time.RFC3339))
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/parsing/%v/%v/%v/%v/%v",
+					originalReq.UnformattedStr, originalReq.CustomFormatStr, originalReq.DateStrInQuery.Format(time.RFC3339),
+					originalReq.DateTimeStrInQuery.Format(time.RFC3339Nano), originalReq.ByteStr),
+				query: query,
+				body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+					"unformattedStr": "%v",
+					"customFormatStr": "%v",
+					"dateStr": "%v",
+					"dateTimeStr": "%v",
+					"byteStr": "%v"
+				}`,
+					originalReq.Payload.UnformattedStr,
+					originalReq.Payload.CustomFormatStr,
+					originalReq.Payload.DateStr.Format(time.RFC3339),
+					originalReq.Payload.DateTimeStr.Format(time.RFC3339),
+					originalReq.Payload.ByteStr,
+				))),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						// path
+						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
+
+						// query
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+					},
+				),
+			}
+		})
+	})
+
 	t.Run("range-validation", func(t *testing.T) {
 		randomReq := func(
 			opts ...func(*handlers.StringTypesStringTypesRangeValidationRequest),
