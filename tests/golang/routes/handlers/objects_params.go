@@ -62,26 +62,26 @@ func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsPar
 	}
 }
 
-type paramsParserObjectsObjectsNested struct {
-	bindPayload requestParamBinder[*http.Request, *models.ObjectsNestedRequest]
+type paramsParserObjectsObjectsDeeplyNested struct {
+	bindPayload requestParamBinder[*http.Request, *models.ObjectsDeeplyNestedRequest]
 }
 
-func (p *paramsParserObjectsObjectsNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNestedRequest, error) {
+func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsDeeplyNestedRequest, error) {
 	bindingCtx := internal.BindingContext{}
-	reqParams := &ObjectsObjectsNestedRequest{}
+	reqParams := &ObjectsObjectsDeeplyNestedRequest{}
 	// body params
 	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObjectsNestedRequest] {
-	return &paramsParserObjectsObjectsNested{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsNestedRequest]{
+func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*ObjectsObjectsDeeplyNestedRequest] {
+	return &paramsParserObjectsObjectsDeeplyNested{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsDeeplyNestedRequest]{
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsNestedRequest],
-			validateValue: internal.NewObjectsNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			parseValue: parseJSONPayload[*models.ObjectsDeeplyNestedRequest],
+			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }

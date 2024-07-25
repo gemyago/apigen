@@ -17,8 +17,8 @@ type ObjectsObjectsArrayParsingBodyNestedRequest struct {
 	Payload *models.ObjectsArrayParsingBodyNestedRequest
 }
 
-type ObjectsObjectsNestedRequest struct {
-	Payload *models.ObjectsNestedRequest
+type ObjectsObjectsDeeplyNestedRequest struct {
+	Payload *models.ObjectsDeeplyNestedRequest
 }
 
 type ObjectsObjectsNullableOptionalBodyRequest struct {
@@ -56,12 +56,12 @@ type ObjectsController struct {
 	// Response type: none
 	ObjectsArrayParsingBodyNested httpHandlerFactory
 
-	// POST /objects/nested
+	// POST /objects/deeply-nested
 	//
-	// Request type: ObjectsObjectsNestedRequest,
+	// Request type: ObjectsObjectsDeeplyNestedRequest,
 	//
 	// Response type: none
-	ObjectsNested httpHandlerFactory
+	ObjectsDeeplyNested httpHandlerFactory
 
 	// PUT /objects/nullable-body
 	//
@@ -114,12 +114,12 @@ type ObjectsControllerBuilder struct {
 	// Response type: none
 	HandleObjectsArrayParsingBodyNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsArrayParsingBodyNestedRequest]
 
-	// POST /objects/nested
+	// POST /objects/deeply-nested
 	//
-	// Request type: ObjectsObjectsNestedRequest,
+	// Request type: ObjectsObjectsDeeplyNestedRequest,
 	//
 	// Response type: none
-	HandleObjectsNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsNestedRequest]
+	HandleObjectsDeeplyNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsDeeplyNestedRequest]
 
 	// PUT /objects/nullable-body
 	//
@@ -161,7 +161,7 @@ func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
 	return &ObjectsController{
 		ObjectsArrayParsingBodyDirect: mustInitializeAction("objectsArrayParsingBodyDirect", c.HandleObjectsArrayParsingBodyDirect.httpHandlerFactory),
 		ObjectsArrayParsingBodyNested: mustInitializeAction("objectsArrayParsingBodyNested", c.HandleObjectsArrayParsingBodyNested.httpHandlerFactory),
-		ObjectsNested: mustInitializeAction("objectsNested", c.HandleObjectsNested.httpHandlerFactory),
+		ObjectsDeeplyNested: mustInitializeAction("objectsDeeplyNested", c.HandleObjectsDeeplyNested.httpHandlerFactory),
 		ObjectsNullableOptionalBody: mustInitializeAction("objectsNullableOptionalBody", c.HandleObjectsNullableOptionalBody.httpHandlerFactory),
 		ObjectsNullableRequiredBody: mustInitializeAction("objectsNullableRequiredBody", c.HandleObjectsNullableRequiredBody.httpHandlerFactory),
 		ObjectsOptionalBody: mustInitializeAction("objectsOptionalBody", c.HandleObjectsOptionalBody.httpHandlerFactory),
@@ -185,11 +185,11 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 	controllerBuilder.HandleObjectsArrayParsingBodyNested.voidResult = true
 	controllerBuilder.HandleObjectsArrayParsingBodyNested.paramsParserFactory = newParamsParserObjectsObjectsArrayParsingBodyNested
 
-	// POST /objects/nested
-	controllerBuilder.HandleObjectsNested.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsNested.defaultStatusCode = 200
-	controllerBuilder.HandleObjectsNested.voidResult = true
-	controllerBuilder.HandleObjectsNested.paramsParserFactory = newParamsParserObjectsObjectsNested
+	// POST /objects/deeply-nested
+	controllerBuilder.HandleObjectsDeeplyNested.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleObjectsDeeplyNested.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsDeeplyNested.voidResult = true
+	controllerBuilder.HandleObjectsDeeplyNested.paramsParserFactory = newParamsParserObjectsObjectsDeeplyNested
 
 	// PUT /objects/nullable-body
 	controllerBuilder.HandleObjectsNullableOptionalBody.controllerBuilder = controllerBuilder
@@ -227,7 +227,7 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 func RegisterObjectsRoutes(controller *ObjectsController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyDirect(app))
 	app.router.HandleRoute("PUT", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyNested(app))
-	app.router.HandleRoute("POST", "/objects/nested", controller.ObjectsNested(app))
+	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(app))
 	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(app))
 	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(app))
 	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(app))

@@ -46,8 +46,8 @@ paths:
     $ref: "./boolean/nullable.yaml"
 
   # objects routes
-  /objects/nested:
-    $ref: "./objects/nested.yaml"
+  /objects/deeply-nested:
+    $ref: "./objects/deeply-nested.yaml"
   /objects/arrays-parsing:
     $ref: "./objects/arrays-parsing.yaml"
   /objects/nullable-body:

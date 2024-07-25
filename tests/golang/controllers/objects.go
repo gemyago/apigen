@@ -7,7 +7,7 @@ import (
 type objectsControllerTestActions struct {
 	objectsArrayParsingBodyDirect mockAction[*handlers.ObjectsObjectsArrayParsingBodyDirectRequest]
 	objectsArrayParsingBodyNested mockAction[*handlers.ObjectsObjectsArrayParsingBodyNestedRequest]
-	objectsNested                 mockAction[*handlers.ObjectsObjectsNestedRequest]
+	objectsDeeplyNested           mockAction[*handlers.ObjectsObjectsDeeplyNestedRequest]
 	objectsNullableOptionalBody   mockAction[*handlers.ObjectsObjectsNullableOptionalBodyRequest]
 	objectsNullableRequiredBody   mockAction[*handlers.ObjectsObjectsNullableRequiredBodyRequest]
 	objectsOptionalBody           mockAction[*handlers.ObjectsObjectsOptionalBodyRequest]
@@ -21,7 +21,7 @@ func newObjectsController(
 	return handlers.BuildObjectsController().
 		HandleObjectsArrayParsingBodyDirect.With(testActions.objectsArrayParsingBodyDirect.action).
 		HandleObjectsArrayParsingBodyNested.With(testActions.objectsArrayParsingBodyNested.action).
-		HandleObjectsNested.With(testActions.objectsNested.action).
+		HandleObjectsDeeplyNested.With(testActions.objectsDeeplyNested.action).
 		HandleObjectsNullableOptionalBody.With(testActions.objectsNullableOptionalBody.action).
 		HandleObjectsNullableRequiredBody.With(testActions.objectsNullableRequiredBody.action).
 		HandleObjectsOptionalBody.With(testActions.objectsOptionalBody.action).
