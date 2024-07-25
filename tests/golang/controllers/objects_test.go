@@ -296,5 +296,19 @@ func TestObjects(t *testing.T) {
 				},
 			}
 		})
+		runRouteTestCase(t, "should ensure required objects", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/required-nested-objects",
+				body:   bytes.NewBufferString(`{}`),
+				expect: expectBindingErrors[*objectsControllerTestActions](
+					[]fieldBindingError{
+						// body
+						{Field: "simpleObject1", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "simpleObject2", Location: "body", Code: "INVALID_REQUIRED"},
+					},
+				),
+			}
+		})
 	})
 }

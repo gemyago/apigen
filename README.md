@@ -66,7 +66,7 @@ Golang:
 * `required` in request **body** has the following constraints:
   * The `required` check on booleans in request body is not performed
   * For simple data types - will validate if the field is non default
-  * For objects - optional and nullable are synonyms
+  * For objects - optional and nullable are synonyms. This means that required validation will only work for non nullable required fields.
 
 ## Contributing
 
