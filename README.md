@@ -64,8 +64,9 @@ Boolean
 Golang:
 * `date` type in request **body** is parsed as time.Time RFC3339Nano
 * `required` in request **body** has the following constraints:
-  * will validate if the field is non default
-  * the `required` check on booleans in request body is not performed
+  * The `required` check on booleans in request body is not performed
+  * For simple data types - will validate if the field is non default
+  * For objects - optional and nullable are synonyms
 
 ## Contributing
 
