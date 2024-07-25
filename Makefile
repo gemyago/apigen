@@ -19,6 +19,10 @@ maven_url=https://dlcdn.apache.org/maven/maven-3/$(maven_version)/binaries/$(mav
 maven_archive=$(tmp)/$(maven_dir_name)-bin.tar.gz
 mvn=$(bin)/apache-maven/bin/mvn
 
+golang_tests_cover_dir=tests/golang/.cover
+golang_tests_cover_profile=${golang_tests_cover_dir}/profile.out
+golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
+
 $(bin):
 	mkdir -p $@
 
@@ -106,9 +110,14 @@ lint/golang: bin/golangci-lint
 .PHONY: lint
 lint: lint/golang
 
+${golang_tests_cover_dir}:
+	mkdir -p ${golang_tests_cover_dir}
+
 .PHONY: tests/golang
-tests/golang:
-	TZ=US/Alaska go test ./tests/golang/...
+tests/golang: ${golang_tests_cover_dir}
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./... -coverprofile=${golang_tests_cover_profile} -covermode=atomic ./tests/golang/...
+	go tool cover -html=${golang_tests_cover_profile} -o ${golang_tests_cover_html}
+	@echo "Test coverage report: $(shell realpath ${golang_tests_cover_html})"
 
 .PHONY: tests
 tests: tests/golang

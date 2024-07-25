@@ -4,3 +4,5 @@ tmp
 .DS_Store
 generators/*/target
 *-test.log
+
+tests/golang/.cover
