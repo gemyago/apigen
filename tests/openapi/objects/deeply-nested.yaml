@@ -33,3 +33,6 @@ post:
                   $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
                 container22:
                   $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+  responses:
+    '204':
+      description: Request succeeded

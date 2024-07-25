@@ -323,4 +323,32 @@ func TestObjects(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("deeply-nested-objects", func(t *testing.T) {
+		runRouteTestCase(t, "should parse body", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsDeeplyNestedRequest{
+				Payload: &models.ObjectsDeeplyNestedRequest{
+					Container1: &models.ObjectsDeeplyNestedRequestContainer1{
+						Container11: randomSimpleObjectsContainer(),
+						Container12: randomSimpleObjectsContainer(),
+					},
+					Container2: &models.ObjectsDeeplyNestedRequestContainer2{
+						Container21: randomSimpleObjectsContainer(),
+						Container22: randomSimpleObjectsContainer(),
+					},
+				},
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/deeply-nested",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsDeeplyNested.calls[0].params)
+				},
+			}
+		})
+	})
 }

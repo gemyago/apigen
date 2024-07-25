@@ -187,7 +187,7 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 
 	// POST /objects/deeply-nested
 	controllerBuilder.HandleObjectsDeeplyNested.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsDeeplyNested.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsDeeplyNested.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsDeeplyNested.voidResult = true
 	controllerBuilder.HandleObjectsDeeplyNested.paramsParserFactory = newParamsParserObjectsObjectsDeeplyNested
 
