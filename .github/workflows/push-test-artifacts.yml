@@ -3,7 +3,7 @@ name: Push Test Artifacts
 on:
   pull_request:
     # to test this flow: add labeled for testing and comment job condition
-    types: [closed]
+    types: [closed, labeled]
 
     # Target branch for the PR
     branches:
