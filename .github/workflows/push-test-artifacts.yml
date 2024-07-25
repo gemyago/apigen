@@ -1,0 +1,32 @@
+name: Push Test Artifacts
+
+on:
+  pull_request:
+    # to test this flow: add labeled for testing and comment job condition
+    types: [closed]
+
+    # Target branch for the PR
+    branches:
+      - "main"
+
+jobs:
+  push-test-artifacts:
+    # if: github.event.pull_request.merged == true
+    name: Publish Test Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.work'
+          cache-dependency-path: 'go.work.sum'
+
+      - name: Get Test Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-artifacts-pr-${{ github.event.pull_request.node_id }}
+
+      - run: tests/golang/push-test-artifacts
+
