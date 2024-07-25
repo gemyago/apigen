@@ -110,14 +110,25 @@ lint/golang: bin/golangci-lint
 .PHONY: lint
 lint: lint/golang
 
-${golang_tests_cover_dir}:
-	mkdir -p ${golang_tests_cover_dir}
+go_path=$(shell go env GOPATH)
+go-test-coverage=$(go_path)/bin/go-test-coverage
+
+$(go-test-coverage):
+	go install github.com/vladopajic/go-test-coverage/v2@latest
+
+$(golang_tests_cover_dir):
+	mkdir -p $(golang_tests_cover_dir)
 
 .PHONY: tests/golang
-tests/golang: ${golang_tests_cover_dir}
-	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./... -coverprofile=${golang_tests_cover_profile} -covermode=atomic ./tests/golang/...
-	go tool cover -html=${golang_tests_cover_profile} -o ${golang_tests_cover_html}
-	@echo "Test coverage report: $(shell realpath ${golang_tests_cover_html})"
+tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./tests/golang/... -coverprofile=$(golang_tests_cover_profile) -covermode=atomic ./tests/golang/...
+	go tool cover -html=$(golang_tests_cover_profile) -o $(golang_tests_cover_html)
+	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
+	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
+
+.PHONY: badges/golang/set
+badges/golang/set: $(golang_tests_cover_dir)/coverage.svg
+	gh gist edit https://gist.github.com/gemyago/8956c487c5da310c29b41a1dffa9c947 --add $(golang_tests_cover_dir)/coverage.svg
 
 .PHONY: tests
 tests: tests/golang
