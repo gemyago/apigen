@@ -1,6 +1,7 @@
 # apigen
 
 [![Test](https://github.com/gemyago/apigen/actions/workflows/test.yml/badge.svg)](https://github.com/gemyago/apigen/actions/workflows/test.yml)
+[![Golang Coverage](https://raw.githubusercontent.com/gemyago/apigen/badges/.badges/golang-coverage.svg)](https://raw.githubusercontent.com/gemyago/apigen/badges/.badges/golang-coverage.svg)
 
 API Layer Generator from the OpenAPI specification.
 
