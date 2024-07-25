@@ -28,7 +28,7 @@ Some language specific features may be challenging (if possible) to implement co
 
 ###  Data types
 
-All types
+#### All types
 |type|required|nullable|
 |----|----|----|
 |string|&check;|&check;|
@@ -36,7 +36,7 @@ All types
 |boolean|&check;|&check;|
 |object|&check;|&check;|
 
-Strings
+#### Strings
 |format|in|minLength|maxLength|pattern|
 |----|----|----|----|----|
 |none or custom|query,path,body|&check;|&check;|&check;|
@@ -44,7 +44,7 @@ Strings
 |date-time|query,path,body|-|-|-|
 |byte|query,path,body|&check;|&check;|-|
 
-Numeric data types
+#### Numeric data types
 |type|format|in|minimum|maximum|
 |----|----|----|----|----|
 |number|-|query,path|&check;|&check;|
@@ -54,10 +54,14 @@ Numeric data types
 |integer|int32|query,path,body|&check;|&check;|
 |integer|int64|query,path,body|&check;|&check;|
 
-Boolean
+#### Boolean
 |type|in|supported?|
 |----|----|----|
 |boolean|query,path,body|&check;|
+
+#### Object
+
+Objects are only supported in request body of `application/json` content type.
 
 ### Language specific caveats
 
