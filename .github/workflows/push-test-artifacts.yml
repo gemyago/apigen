@@ -24,9 +24,8 @@ jobs:
           cache-dependency-path: 'go.work.sum'
 
       - name: Get Test Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: test-artifacts-pr-${{ github.event.pull_request.node_id }}
+        run: |
+          gh run download -n test-artifacts-pr-${{ github.event.pull_request.node_id }}
 
       - run: tests/golang/push-test-artifacts
 
