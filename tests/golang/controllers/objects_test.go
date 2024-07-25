@@ -350,5 +350,45 @@ func TestObjects(t *testing.T) {
 				},
 			}
 		})
+		runRouteTestCase(t, "should validate nested objects", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsDeeplyNestedRequest{
+				Payload: &models.ObjectsDeeplyNestedRequest{
+					Container1: &models.ObjectsDeeplyNestedRequestContainer1{
+						Container11: randomSimpleObjectsContainer(),
+						Container12: randomSimpleObjectsContainer(),
+					},
+					Container2: &models.ObjectsDeeplyNestedRequestContainer2{
+						Container21: randomSimpleObjectsContainer(),
+						Container22: randomSimpleObjectsContainer(),
+					},
+				},
+			}
+			originalReq.Payload.Container1.Container11.SimpleObject1.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container1.Container11.SimpleObject2.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container1.Container12.SimpleObject1.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container1.Container12.SimpleObject2.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container2.Container21.SimpleObject1.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container2.Container21.SimpleObject2.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container2.Container22.SimpleObject1.SimpleField1 = fake.RandomLetter()
+			originalReq.Payload.Container2.Container22.SimpleObject2.SimpleField1 = fake.RandomLetter()
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/deeply-nested",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*objectsControllerTestActions](
+					[]fieldBindingError{
+						// body
+						{Field: "simpleField1", Location: "body.container1.container11.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container1.container11.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container1.container12.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container1.container12.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container2.container21.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container2.container21.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container2.container22.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "simpleField1", Location: "body.container2.container22.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
 	})
 }
