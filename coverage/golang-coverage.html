@@ -1590,9 +1590,9 @@ func parseStringInQuery(ov []string, s *string) error <span class="cov5" title="
 
 func parseBoolInPath(ov string, s *bool) error <span class="cov4" title="23">{
         switch ov </span>{
-        case "true":<span class="cov3" title="12">
+        case "true":<span class="cov3" title="9">
                 *s = true</span>
-        case "false":<span class="cov2" title="3">
+        case "false":<span class="cov3" title="6">
                 *s = false</span>
         default:<span class="cov3" title="8">
                 return fmt.Errorf("unexpected boolean format %v", ov)</span>
