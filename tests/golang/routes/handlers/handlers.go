@@ -119,6 +119,13 @@ type handlerFactoryParams[TReqParams any, TResData any] struct {
 	handler             func(context.Context, TReqParams) (TResData, error)
 }
 
+func mustInitializeAction(actionName string, handlerFactory httpHandlerFactory) httpHandlerFactory {
+	if handlerFactory == nil {
+		panic(fmt.Errorf("%s action has not been initialized", actionName))
+	}
+	return handlerFactory
+}
+
 func createHandlerFactory[TReqParams any, TResData any](
 	factoryParams handlerFactoryParams[TReqParams, TResData],
 ) httpHandlerFactory {
@@ -218,7 +225,10 @@ func readQueryValue(key string, values url.Values) internal.OptionalVal[[]string
 }
 
 func readRequestBodyValue(req *http.Request) internal.OptionalVal[*http.Request] {
-	if req.ContentLength != 0 {
+	// We may need a different method to check if the body is empty
+	// if content length approach will be causing issues. For this case
+	// best would be to read the body to buffer and check its length. It will be fully consumed anyway.
+	if req.ContentLength > 0 {
 		return internal.OptionalVal[*http.Request]{Value: req, Assigned: true}
 	}
 	return internal.OptionalVal[*http.Request]{}
@@ -324,6 +334,30 @@ func parseBoolInQuery(ov []string, s *bool) error {
 	return parseBoolInPath(ov[0], s)
 }
 
+func parseNullableInPath[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[string, *TTargetVal] {
+	return func(s string, tv **TTargetVal) error {
+		if s == "" || s == "null" {
+			return nil
+		}
+		*tv = new(TTargetVal)
+		return targetParser(s, *tv)
+	}
+}
+
+func parseNullableInQuery[TTargetVal any](
+	targetParser rawValueParser[[]string, TTargetVal],
+) rawValueParser[[]string, *TTargetVal] {
+	return func(s []string, tv **TTargetVal) error {
+		if s[0] == "" || s[0] == "null" {
+			return nil
+		}
+		*tv = new(TTargetVal)
+		return targetParser(s, *tv)
+	}
+}
+
 type knownParsersDef struct {
 	// path
 	stringInPath  rawValueParser[string, string]
@@ -414,6 +448,6 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			})
 			return
 		}
-		params.validateValue(bindingCtx, params.field, params.location, *receiver)
+		params.validateValue(bindingCtx, *receiver)
 	}
 }

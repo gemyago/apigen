@@ -9,6 +9,7 @@ type numericTypesControllerTestActions struct {
 	numericTypesRangeValidation          mockAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
 	numericTypesRangeValidationExclusive mockAction[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest]
 	numericTypesRequiredValidation       mockAction[*handlers.NumericTypesNumericTypesRequiredValidationRequest]
+	numericTypesNullable                 mockAction[*handlers.NumericTypesNumericTypesNullableRequest]
 }
 
 func newNumericTypesController(
@@ -19,5 +20,6 @@ func newNumericTypesController(
 		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
 		HandleNumericTypesRangeValidationExclusive.With(testActions.numericTypesRangeValidationExclusive.action).
 		HandleNumericTypesRequiredValidation.With(testActions.numericTypesRequiredValidation.action).
+		HandleNumericTypesNullable.With(testActions.numericTypesNullable.action).
 		Finalize()
 }

@@ -32,8 +32,8 @@ func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsPar
 			required: true,
 			parseValue: parseJSONPayload[[]*models.ObjectArraysSimpleObject],
 			validateValue: internal.NewArrayValidator(
-        internal.NewObjectArraysSimpleObjectValidator(),
-      ),
+				internal.NewObjectArraysSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+			),
 		}),
 	}
 }
@@ -57,31 +57,151 @@ func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsPar
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
-			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(),
+			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
 
-type paramsParserObjectsObjectsNested struct {
-	bindPayload requestParamBinder[*http.Request, *models.ObjectsNestedRequest]
+type paramsParserObjectsObjectsDeeplyNested struct {
+	bindPayload requestParamBinder[*http.Request, *models.ObjectsDeeplyNestedRequest]
 }
 
-func (p *paramsParserObjectsObjectsNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNestedRequest, error) {
+func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsDeeplyNestedRequest, error) {
 	bindingCtx := internal.BindingContext{}
-	reqParams := &ObjectsObjectsNestedRequest{}
+	reqParams := &ObjectsObjectsDeeplyNestedRequest{}
 	// body params
 	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNested(app *HTTPApp) paramsParser[*ObjectsObjectsNestedRequest] {
-	return &paramsParserObjectsObjectsNested{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsNestedRequest]{
+func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*ObjectsObjectsDeeplyNestedRequest] {
+	return &paramsParserObjectsObjectsDeeplyNested{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsDeeplyNestedRequest]{
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsNestedRequest],
-			validateValue: internal.NewObjectsNestedRequestValidator(),
+			parseValue: parseJSONPayload[*models.ObjectsDeeplyNestedRequest],
+			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+		}),
+	}
+}
+
+type paramsParserObjectsObjectsNullableOptionalBody struct {
+	bindPayload requestParamBinder[*http.Request, *models.SimpleNullableObject]
+}
+
+func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableOptionalBodyRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &ObjectsObjectsNullableOptionalBodyRequest{}
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableOptionalBodyRequest] {
+	return &paramsParserObjectsObjectsNullableOptionalBody{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
+			field: "payload",
+			location: "body",
+			required: false,
+			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
+		}),
+	}
+}
+
+type paramsParserObjectsObjectsNullableRequiredBody struct {
+	bindPayload requestParamBinder[*http.Request, *models.SimpleNullableObject]
+}
+
+func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableRequiredBodyRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &ObjectsObjectsNullableRequiredBodyRequest{}
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableRequiredBodyRequest] {
+	return &paramsParserObjectsObjectsNullableRequiredBody{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleNullableObject]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
+		}),
+	}
+}
+
+type paramsParserObjectsObjectsOptionalBody struct {
+	bindPayload requestParamBinder[*http.Request, *models.SimpleObject]
+}
+
+func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsOptionalBodyRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &ObjectsObjectsOptionalBodyRequest{}
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalBodyRequest] {
+	return &paramsParserObjectsObjectsOptionalBody{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
+			field: "payload",
+			location: "body",
+			required: false,
+			parseValue: parseJSONPayload[*models.SimpleObject],
+			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+		}),
+	}
+}
+
+type paramsParserObjectsObjectsRequiredBody struct {
+	bindPayload requestParamBinder[*http.Request, *models.SimpleObject]
+}
+
+func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredBodyRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &ObjectsObjectsRequiredBodyRequest{}
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredBodyRequest] {
+	return &paramsParserObjectsObjectsRequiredBody{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObject]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.SimpleObject],
+			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+		}),
+	}
+}
+
+type paramsParserObjectsObjectsRequiredNestedObjects struct {
+	bindPayload requestParamBinder[*http.Request, *models.SimpleObjectsContainer]
+}
+
+func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredNestedObjectsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &ObjectsObjectsRequiredNestedObjectsRequest{}
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
+	return &paramsParserObjectsObjectsRequiredNestedObjects{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.SimpleObjectsContainer]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.SimpleObjectsContainer],
+			validateValue: internal.NewSimpleObjectsContainerValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }

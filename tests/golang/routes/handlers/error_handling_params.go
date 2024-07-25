@@ -37,6 +37,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "pathParam1", Location: "path"},
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
@@ -45,6 +46,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InPath,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "pathParam2", Location: "path"},
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
@@ -53,6 +55,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -61,6 +64,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
 			),
 		}),
 	}
@@ -89,7 +93,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -98,7 +102,7 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			required: true,
 			parseValue: app.knownParsers.float32InQuery,
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 	}

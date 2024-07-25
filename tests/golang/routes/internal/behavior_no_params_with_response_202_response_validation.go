@@ -8,11 +8,12 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBehaviorNoParamsWithResponse202ResponseValidator() FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
+func NewBehaviorNoParamsWithResponse202ResponseValidator(params ModelValidatorParams) FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
 	validateField1 := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "field1", Location: params.Location},
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.BehaviorNoParamsWithResponse202Response) {
-		validateField1(bindingCtx, "field1", location, value.Field1)
+	return func(bindingCtx *BindingContext, value *models.BehaviorNoParamsWithResponse202Response) {
+		validateField1(bindingCtx, value.Field1)
 	}
 }

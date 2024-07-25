@@ -5,10 +5,12 @@ import (
 )
 
 type stringTypesControllerTestActions struct {
-	stringTypesParsing            mockAction[*handlers.StringTypesStringTypesParsingRequest]
-	StringTypesRangeValidation    mockAction[*handlers.StringTypesStringTypesRangeValidationRequest]
-	StringTypesPatternValidation  mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
-	StringTypesRequiredValidation mockAction[*handlers.StringTypesStringTypesRequiredValidationRequest]
+	stringTypesParsing                    mockAction[*handlers.StringTypesStringTypesParsingRequest]
+	stringTypesNullableParsing            mockAction[*handlers.StringTypesStringTypesNullableParsingRequest]
+	stringTypesRangeValidation            mockAction[*handlers.StringTypesStringTypesRangeValidationRequest]
+	stringTypesPatternValidation          mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
+	stringTypesRequiredValidation         mockAction[*handlers.StringTypesStringTypesRequiredValidationRequest]
+	stringTypesNullableRequiredValidation mockAction[*handlers.StringTypesStringTypesNullableRequiredValidationRequest]
 }
 
 func newStringTypesController(
@@ -16,8 +18,10 @@ func newStringTypesController(
 ) *handlers.StringTypesController {
 	return handlers.BuildStringTypesController().
 		HandleStringTypesParsing.With(testActions.stringTypesParsing.action).
-		HandleStringTypesRangeValidation.With(testActions.StringTypesRangeValidation.action).
-		HandleStringTypesPatternValidation.With(testActions.StringTypesPatternValidation.action).
-		HandleStringTypesRequiredValidation.With(testActions.StringTypesRequiredValidation.action).
+		HandleStringTypesNullableParsing.With(testActions.stringTypesNullableParsing.action).
+		HandleStringTypesRangeValidation.With(testActions.stringTypesRangeValidation.action).
+		HandleStringTypesPatternValidation.With(testActions.stringTypesPatternValidation.action).
+		HandleStringTypesRequiredValidation.With(testActions.stringTypesRequiredValidation.action).
+		HandleStringTypesNullableRequiredValidation.With(testActions.stringTypesNullableRequiredValidation.action).
 		Finalize()
 }

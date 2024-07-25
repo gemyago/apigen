@@ -49,11 +49,10 @@ type {{baseName}}ControllerBuilder struct {
 }
 
 func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
-	// TODO: panic if any handler is null
 	return &{{baseName}}Controller{
 		{{#operations}}
 		{{#operation}}
-		{{operationId}}: c.Handle{{operationId}}.httpHandlerFactory,
+		{{operationId}}: mustInitializeAction("{{operationIdOriginal}}", c.Handle{{operationId}}.httpHandlerFactory),
 		{{/operation}}
 		{{/operations}}
 	}

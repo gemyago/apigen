@@ -1,0 +1,51 @@
+post:
+  summary: API to test string types required validation
+  operationId: stringTypesNullableRequiredValidation
+  tags:
+    - string-types
+  parameters:
+    # path params are always required
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        minLength: 10
+        maxLength: 100
+        pattern: '.*'
+    - name: optionalUnformattedStrInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        nullable: true
+        minLength: 10
+        maxLength: 100
+        pattern: '.*'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+          properties: 
+            unformattedStr:
+              type: string
+              nullable: true
+              minLength: 10
+              maxLength: 100
+              pattern: '.*'
+            optionalUnformattedStr:
+              type: string
+              nullable: true
+              minLength: 10
+              maxLength: 100
+              pattern: '.*'
+  responses:
+    '204':
+      description: Request succeeded

@@ -8,57 +8,70 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesRequiredValidationRequestValidator() FieldValidator[*models.StringTypesRequiredValidationRequest] {
+func NewStringTypesRequiredValidationRequestValidator(params ModelValidatorParams) FieldValidator[*models.StringTypesRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "unformattedStr", Location: params.Location},
+		EnsureNonDefault[string],
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "customFormatStr", Location: params.Location},
+		EnsureNonDefault[string],
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "dateStr", Location: params.Location},
+		EnsureNonDefault[time.Time],
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "dateTimeStr", Location: params.Location},
+		EnsureNonDefault[time.Time],
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "byteStr", Location: params.Location},
+		EnsureNonDefault[string],
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalUnformattedStr", Location: params.Location},
 	)
 	validateOptionalCustomFormatStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalCustomFormatStr", Location: params.Location},
 	)
 	validateOptionalDateStr := NewSimpleFieldValidator[time.Time](
+		SimpleFieldValidatorParams{Field: "optionalDateStr", Location: params.Location},
 	)
 	validateOptionalDateTimeStr := NewSimpleFieldValidator[time.Time](
+		SimpleFieldValidatorParams{Field: "optionalDateTimeStr", Location: params.Location},
 	)
 	validateOptionalByteStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalByteStr", Location: params.Location},
 	)
 	validateOptionalValidatedUnformattedStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalValidatedUnformattedStr", Location: params.Location},
 		NewMinMaxLengthValidator[string](10, true),
 	)
 	validateOptionalValidatedCustomFormatStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalValidatedCustomFormatStr", Location: params.Location},
 		NewMinMaxLengthValidator[string](20, true),
 	)
 	validateOptionalValidatedByteStr := NewSimpleFieldValidator[string](
+		SimpleFieldValidatorParams{Field: "optionalValidatedByteStr", Location: params.Location},
 		NewMinMaxLengthValidator[string](30, true),
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesRequiredValidationRequest) {
-		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
-		validateCustomFormatStr(bindingCtx, "customFormatStr", location, value.CustomFormatStr)
-		validateDateStr(bindingCtx, "dateStr", location, value.DateStr)
-		validateDateTimeStr(bindingCtx, "dateTimeStr", location, value.DateTimeStr)
-		validateByteStr(bindingCtx, "byteStr", location, value.ByteStr)
-		validateOptionalUnformattedStr(bindingCtx, "optionalUnformattedStr", location, value.OptionalUnformattedStr)
-		validateOptionalCustomFormatStr(bindingCtx, "optionalCustomFormatStr", location, value.OptionalCustomFormatStr)
-		validateOptionalDateStr(bindingCtx, "optionalDateStr", location, value.OptionalDateStr)
-		validateOptionalDateTimeStr(bindingCtx, "optionalDateTimeStr", location, value.OptionalDateTimeStr)
-		validateOptionalByteStr(bindingCtx, "optionalByteStr", location, value.OptionalByteStr)
-		validateOptionalValidatedUnformattedStr(bindingCtx, "optionalValidatedUnformattedStr", location, value.OptionalValidatedUnformattedStr)
-		validateOptionalValidatedCustomFormatStr(bindingCtx, "optionalValidatedCustomFormatStr", location, value.OptionalValidatedCustomFormatStr)
-		validateOptionalValidatedByteStr(bindingCtx, "optionalValidatedByteStr", location, value.OptionalValidatedByteStr)
+	return func(bindingCtx *BindingContext, value *models.StringTypesRequiredValidationRequest) {
+		validateUnformattedStr(bindingCtx, value.UnformattedStr)
+		validateCustomFormatStr(bindingCtx, value.CustomFormatStr)
+		validateDateStr(bindingCtx, value.DateStr)
+		validateDateTimeStr(bindingCtx, value.DateTimeStr)
+		validateByteStr(bindingCtx, value.ByteStr)
+		validateOptionalUnformattedStr(bindingCtx, value.OptionalUnformattedStr)
+		validateOptionalCustomFormatStr(bindingCtx, value.OptionalCustomFormatStr)
+		validateOptionalDateStr(bindingCtx, value.OptionalDateStr)
+		validateOptionalDateTimeStr(bindingCtx, value.OptionalDateTimeStr)
+		validateOptionalByteStr(bindingCtx, value.OptionalByteStr)
+		validateOptionalValidatedUnformattedStr(bindingCtx, value.OptionalValidatedUnformattedStr)
+		validateOptionalValidatedCustomFormatStr(bindingCtx, value.OptionalValidatedCustomFormatStr)
+		validateOptionalValidatedByteStr(bindingCtx, value.OptionalValidatedByteStr)
 	}
 }

@@ -10,7 +10,89 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.BooleanParsingRequest{}
+var _ = models.BooleanNullableRequest{}
+
+type paramsParserBooleanBooleanNullable struct {
+	bindBoolParam1 requestParamBinder[string, *bool]
+	bindBoolParam2 requestParamBinder[string, *bool]
+	bindBoolParam1InQuery requestParamBinder[[]string, *bool]
+	bindBoolParam2InQuery requestParamBinder[[]string, *bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanNullableRequest]
+	bindOptionalBoolParam1InQuery requestParamBinder[[]string, *bool]
+}
+
+func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &BooleanBooleanNullableRequest{}
+	// path params
+	p.bindBoolParam1(&bindingCtx, readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(&bindingCtx, readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	// query params
+	query := req.URL.Query()
+	p.bindBoolParam1InQuery(&bindingCtx, readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	p.bindOptionalBoolParam1InQuery(&bindingCtx, readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBooleanNullableRequest] {
+	return &paramsParserBooleanBooleanNullable{
+		bindBoolParam1: newRequestParamBinder(binderParams[string, *bool]{
+			field: "boolParam1",
+			location: "path",
+			required: true,
+			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
+			),
+		}),
+		bindBoolParam2: newRequestParamBinder(binderParams[string, *bool]{
+			field: "boolParam2",
+			location: "path",
+			required: true,
+			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
+			),
+		}),
+		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
+			field: "boolParam1InQuery",
+			location: "query",
+			required: true,
+			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
+			),
+		}),
+		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
+			field: "boolParam2InQuery",
+			location: "query",
+			required: true,
+			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanNullableRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseJSONPayload[*models.BooleanNullableRequest],
+			validateValue: internal.NewBooleanNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+		}),
+		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
+			field: "optionalBoolParam1InQuery",
+			location: "query",
+			required: false,
+			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
+			),
+		}),
+	}
+}
 
 type paramsParserBooleanBooleanParsing struct {
 	bindBoolParam1 requestParamBinder[string, bool]
@@ -43,6 +125,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInPath,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
 			),
 		}),
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
@@ -51,6 +134,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInPath,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
 			),
 		}),
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -59,6 +143,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -67,6 +152,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanParsingRequest]{
@@ -74,7 +160,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.BooleanParsingRequest],
-			validateValue: internal.NewBooleanParsingRequestValidator(),
+			validateValue: internal.NewBooleanParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
 }
@@ -109,6 +195,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -117,6 +204,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: true,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanRequiredValidationRequest]{
@@ -124,7 +212,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			location: "body",
 			required: true,
 			parseValue: parseJSONPayload[*models.BooleanRequiredValidationRequest],
-			validateValue: internal.NewBooleanRequiredValidationRequestValidator(),
+			validateValue: internal.NewBooleanRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam1InQuery",
@@ -132,6 +220,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: false,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
@@ -140,6 +229,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			required: false,
 			parseValue: app.knownParsers.boolInQuery,
 			validateValue: internal.NewSimpleFieldValidator[bool](
+				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam2InQuery", Location: "query"},
 			),
 		}),
 	}

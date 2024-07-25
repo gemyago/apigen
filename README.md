@@ -28,15 +28,15 @@ Some language specific features may be challenging (if possible) to implement co
 
 ###  Data types
 
-All types
+#### All types
 |type|required|nullable|
 |----|----|----|
-|string|&check;|TODO|
-|number/integer|&check;|TODO|
-|boolean|&check;|TODO|
-|object|&check;|TODO|
+|string|&check;|&check;|
+|number/integer|&check;|&check;|
+|boolean|&check;|&check;|
+|object|&check;|&check;|
 
-Strings
+#### Strings
 |format|in|minLength|maxLength|pattern|
 |----|----|----|----|----|
 |none or custom|query,path,body|&check;|&check;|&check;|
@@ -44,27 +44,33 @@ Strings
 |date-time|query,path,body|-|-|-|
 |byte|query,path,body|&check;|&check;|-|
 
-Numeric data types
+#### Numeric data types
 |type|format|in|minimum|maximum|
 |----|----|----|----|----|
 |number|-|query,path|&check;|&check;|
-|number|float|query,path|&check;|&check;|
-|number|double|query,path|&check;|&check;|
-|integer|-|query,path|&check;|&check;|
-|integer|int32|query,path|&check;|&check;|
-|integer|int64|query,path|&check;|&check;|
+|number|float|query,path,body|&check;|&check;|
+|number|double|query,path,body|&check;|&check;|
+|integer|-|query,path,body|&check;|&check;|
+|integer|int32|query,path,body|&check;|&check;|
+|integer|int64|query,path,body|&check;|&check;|
 
-Boolean
+#### Boolean
 |type|in|supported?|
 |----|----|----|
-|boolean|query,path|&check;|
+|boolean|query,path,body|&check;|
+
+#### Object
+
+Objects are only supported in request body of `application/json` content type.
 
 ### Language specific caveats
 
 Golang:
-* `date` type in request body is parsed as time.Time RFC3339Nano
-* `required` in request body will validate if the field is non default
-  * the `required` check on booleans in request body is not performed
+* `date` type in request **body** is parsed as time.Time RFC3339Nano
+* `required` in request **body** has the following constraints:
+  * The `required` check on booleans in request body is not performed
+  * For simple data types - will validate if the field is non default
+  * For objects - optional and nullable are synonyms. This means that required validation will only work for non nullable fields.
 
 ## Contributing
 

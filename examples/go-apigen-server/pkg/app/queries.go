@@ -42,7 +42,7 @@ func (q *queriesImpl) GetPetByID(_ context.Context, req *handlers.PetsGetPetById
 	if !ok {
 		return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)
 	}
-	return &models.PetResponse{Data: *pet}, nil
+	return &models.PetResponse{Data: pet}, nil
 }
 
 func NewQueries(deps QueriesDeps) Queries {

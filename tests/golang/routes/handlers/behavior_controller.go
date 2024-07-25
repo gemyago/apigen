@@ -96,13 +96,12 @@ type BehaviorControllerBuilder struct {
 }
 
 func (c *BehaviorControllerBuilder) Finalize() *BehaviorController {
-	// TODO: panic if any handler is null
 	return &BehaviorController{
-		BehaviorNoParamsNoResponse: c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory,
-		BehaviorNoParamsWithResponse: c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory,
-		BehaviorNoStatusDefined: c.HandleBehaviorNoStatusDefined.httpHandlerFactory,
-		BehaviorWithParamsAndResponse: c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory,
-		BehaviorWithStatusDefined: c.HandleBehaviorWithStatusDefined.httpHandlerFactory,
+		BehaviorNoParamsNoResponse: mustInitializeAction("behaviorNoParamsNoResponse", c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory),
+		BehaviorNoParamsWithResponse: mustInitializeAction("behaviorNoParamsWithResponse", c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory),
+		BehaviorNoStatusDefined: mustInitializeAction("behaviorNoStatusDefined", c.HandleBehaviorNoStatusDefined.httpHandlerFactory),
+		BehaviorWithParamsAndResponse: mustInitializeAction("behaviorWithParamsAndResponse", c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory),
+		BehaviorWithStatusDefined: mustInitializeAction("behaviorWithStatusDefined", c.HandleBehaviorWithStatusDefined.httpHandlerFactory),
 	}
 }
 

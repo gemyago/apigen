@@ -14,12 +14,16 @@ paths:
   # string-types routes
   /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/parsing.yaml"
+  /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/nullable-parsing.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
   /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}:
     $ref: "./string-types/pattern-validation.yaml"
   /string-types/required-validation:
     $ref: "./string-types/required-validation.yaml"
+  /string-types/nullable-required-validation:
+    $ref: "./string-types/nullable-required-validation.yaml"
 
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
@@ -30,18 +34,28 @@ paths:
     $ref: "./numeric-types/range-validation-exclusive.yaml"
   /numeric-types/required-validation:
     $ref: "./numeric-types/required-validation.yaml"
+  /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/nullable.yaml"
 
   # boolean routes
   /boolean/parsing/{boolParam1}/{boolParam2}:
     $ref: "./boolean/parsing.yaml"
   /boolean/required-validation:
     $ref: "./boolean/required-validation.yaml"
+  /boolean/nullable/{boolParam1}/{boolParam2}:
+    $ref: "./boolean/nullable.yaml"
 
   # objects routes
-  /objects/nested:
-    $ref: "./objects/nested.yaml"
+  /objects/deeply-nested:
+    $ref: "./objects/deeply-nested.yaml"
   /objects/arrays-parsing:
     $ref: "./objects/arrays-parsing.yaml"
+  /objects/nullable-body:
+    $ref: "./objects/nullable-body.yaml"
+  /objects/required-body:
+    $ref: "./objects/required-body.yaml"
+  /objects/required-nested-objects:
+    $ref: "./objects/required-nested-objects.yaml"
 
   # responses routes
   /behavior/no-params-no-response:

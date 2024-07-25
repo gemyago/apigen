@@ -12,22 +12,26 @@ import (
 var _ = time.Time{}
 
 {{#model}}
-func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
+func New{{classname}}Validator(params ModelValidatorParams) FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
-		{{#mostInnerItems}}New{{{dataType}}}Validator(),{{/mostInnerItems}}
+		{{#mostInnerItems}}New{{{dataType}}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),{{/mostInnerItems}}
 	)
-	{{/isArray}}{{^isArray}}validate{{name}} := {{^isModel}}NewSimpleFieldValidator[{{{dataType}}}]({{^isBoolean}}{{#required}}
-		EnsureNonDefault,{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
-		NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMinimum}}, true),{{/minimum}}{{#maximum}}
-		NewMinMaxValueValidator[{{>params/type}}]({{.}}, {{exclusiveMaximum}}, false),{{/maximum}}{{^isDateTime}}{{#minLength}}
-		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, true),{{/minLength}}{{#maxLength}}
-		NewMinMaxLengthValidator[{{>params/type}}]({{.}}, false),{{/maxLength}}{{#pattern}}
-		NewPatternValidator[{{>params/type}}]("{{.}}"),{{/pattern}}{{/isDateTime}}{{/isDate}}
-	){{/isModel}}{{#isModel}}New{{dataType}}Validator(){{/isModel}}
+	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}](
+		SimpleFieldValidatorParams{Field: "{{baseName}}", Location: params.Location},{{^isBoolean}}{{#required}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{{dataType}}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDateTime}}{{#minLength}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, false){{#isNullable}}){{/isNullable}},{{/maxLength}}{{#pattern}}
+		{{#isNullable}}SkipNullValidator({{/isNullable}}NewPatternValidator[{{{dataType}}}]("{{.}}"){{#isNullable}}){{/isNullable}},{{/pattern}}{{/isDateTime}}{{/isDate}}
+	){{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
+		ObjectFieldValidatorParams{Field: "{{baseName}}", Location: params.Location, Required: {{{required}}}, Nullable: {{{isNullable}}}},
+		New{{dataType}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),
+	){{/isModel}}
 	{{/isArray}}{{/vars}}
-	return func(bindingCtx *BindingContext, field, location string, value *{{package}}.{{classname}}) {
+	return func(bindingCtx *BindingContext, value *{{package}}.{{classname}}) {
 		{{#vars}}
-		validate{{name}}(bindingCtx, "{{baseName}}", location, {{#isModel}}&{{/isModel}}value.{{name}})
+		validate{{name}}(bindingCtx, value.{{name}})
 		{{/vars}}
 	}
 }

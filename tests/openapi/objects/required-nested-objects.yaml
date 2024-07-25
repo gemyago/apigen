@@ -1,0 +1,14 @@
+post:
+  summary: API to test required nested objects
+  operationId: objectsRequiredNestedObjects
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+  responses:
+    '204':
+      description: Request succeeded

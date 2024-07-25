@@ -9,6 +9,15 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+type BooleanBooleanNullableRequest struct {
+	BoolParam1 *bool
+	BoolParam2 *bool
+	BoolParam1InQuery *bool
+	BoolParam2InQuery *bool
+	Payload *models.BooleanNullableRequest
+	OptionalBoolParam1InQuery *bool
+}
+
 type BooleanBooleanParsingRequest struct {
 	BoolParam1 bool
 	BoolParam2 bool
@@ -26,6 +35,13 @@ type BooleanBooleanRequiredValidationRequest struct {
 }
 
 type BooleanController struct {
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableRequest,
+	//
+	// Response type: none
+	BooleanNullable httpHandlerFactory
+
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
@@ -42,6 +58,13 @@ type BooleanController struct {
 }
 
 type BooleanControllerBuilder struct {
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableRequest,
+	//
+	// Response type: none
+	HandleBooleanNullable actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanNullableRequest]
+
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
@@ -58,15 +81,21 @@ type BooleanControllerBuilder struct {
 }
 
 func (c *BooleanControllerBuilder) Finalize() *BooleanController {
-	// TODO: panic if any handler is null
 	return &BooleanController{
-		BooleanParsing: c.HandleBooleanParsing.httpHandlerFactory,
-		BooleanRequiredValidation: c.HandleBooleanRequiredValidation.httpHandlerFactory,
+		BooleanNullable: mustInitializeAction("booleanNullable", c.HandleBooleanNullable.httpHandlerFactory),
+		BooleanParsing: mustInitializeAction("booleanParsing", c.HandleBooleanParsing.httpHandlerFactory),
+		BooleanRequiredValidation: mustInitializeAction("booleanRequiredValidation", c.HandleBooleanRequiredValidation.httpHandlerFactory),
 	}
 }
 
 func BuildBooleanController() *BooleanControllerBuilder {
 	controllerBuilder := &BooleanControllerBuilder{}
+
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	controllerBuilder.HandleBooleanNullable.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleBooleanNullable.defaultStatusCode = 204
+	controllerBuilder.HandleBooleanNullable.voidResult = true
+	controllerBuilder.HandleBooleanNullable.paramsParserFactory = newParamsParserBooleanBooleanNullable
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	controllerBuilder.HandleBooleanParsing.controllerBuilder = controllerBuilder
@@ -84,6 +113,7 @@ func BuildBooleanController() *BooleanControllerBuilder {
 }
 
 func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
+	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(app))
 	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
 	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
 }

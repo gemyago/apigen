@@ -1,0 +1,48 @@
+components:
+  schemas:
+    SimpleObject:
+      type: object
+      required:
+        - simpleField1
+      properties:
+        simpleField1:
+          type: string
+          minLength: 2
+    SimpleNullableObject:
+      type: object
+      nullable: true
+      required:
+        - simpleField1
+      properties:
+        simpleField1:
+          type: string
+    SimpleObjectsContainer:
+      type: object
+      required:
+        - simpleField1
+        - simpleField2
+        - simpleObject1
+        - simpleObject2
+        - simpleNullableObject1
+        - simpleNullableObject2
+      properties:
+        simpleField1:
+          type: string
+        simpleField2:
+          type: string
+        simpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        simpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        simpleNullableObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        simpleNullableObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        optionalSimpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        optionalSimpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleObject"
+        optionalNullableSimpleObject1:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"
+        optionalNullableSimpleObject2:
+          $ref: "./components.yaml#/components/schemas/SimpleNullableObject"

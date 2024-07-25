@@ -91,6 +91,26 @@ func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
 	return nil
 }
 
+func SkipNullValidator[TTargetVal any](target ValueValidator[TTargetVal]) ValueValidator[*TTargetVal] {
+	return func(tv *TTargetVal) error {
+		if tv == nil {
+			return nil
+		}
+
+		return target(*tv)
+	}
+}
+
+func SkipNullFieldValidator[TTargetVal any](target FieldValidator[*TTargetVal]) FieldValidator[*TTargetVal] {
+	return func(bindingCtx *BindingContext, value *TTargetVal) {
+		if value == nil {
+			return
+		}
+
+		target(bindingCtx, value)
+	}
+}
+
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,
@@ -149,18 +169,23 @@ func NewPatternValidator[TTargetValue string](patternStr string) ValueValidator[
 
 type FieldValidator[TValue any] func(
 	bindingCtx *BindingContext,
-	field string,
-	location string,
 	value TValue,
 )
 
+type ModelValidatorParams struct {
+	Location string
+}
+
+type SimpleFieldValidatorParams struct {
+	Field    string
+	Location string
+}
+
 func NewSimpleFieldValidator[
 	TValue any,
-](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
+](params SimpleFieldValidatorParams, validators ...ValueValidator[TValue]) FieldValidator[TValue] {
 	return func(
 		bindingCtx *BindingContext,
-		field string,
-		location string,
 		value TValue,
 	) {
 		for _, v := range validators {
@@ -168,8 +193,8 @@ func NewSimpleFieldValidator[
 				errCode := ErrInvalidValue
 				errors.As(err, &errCode)
 				bindingCtx.AppendFieldError(FieldBindingError{
-					Field:    field,
-					Location: location,
+					Field:    params.Field,
+					Location: params.Location,
 					Code:     errCode.Error(),
 					Err:      err,
 				})
@@ -179,13 +204,38 @@ func NewSimpleFieldValidator[
 	}
 }
 
+type ObjectFieldValidatorParams struct {
+	Nullable bool
+	Required bool
+	Field    string
+	Location string
+}
+
+func NewObjectFieldValidator[TTargetVal any](
+	params ObjectFieldValidatorParams,
+	modelValidator FieldValidator[*TTargetVal],
+) FieldValidator[*TTargetVal] {
+	return func(bindingCtx *BindingContext, value *TTargetVal) {
+		if value == nil {
+			if params.Required && !params.Nullable {
+				bindingCtx.AppendFieldError(FieldBindingError{
+					Field:    params.Field,
+					Location: params.Location,
+					Code:     ErrValueRequired.Error(),
+				})
+			}
+			return
+		}
+
+		modelValidator(bindingCtx, value)
+	}
+}
+
 func NewArrayValidator[
 	TValue any,
 ](_ FieldValidator[TValue]) FieldValidator[[]TValue] {
 	return func(
 		_ *BindingContext,
-		_ string,
-		_ string,
 		_ []TValue,
 	) {
 		// TODO: Implement me

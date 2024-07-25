@@ -8,28 +8,33 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesParsingRequestValidator() FieldValidator[*models.StringTypesParsingRequest] {
+func NewStringTypesParsingRequestValidator(params ModelValidatorParams) FieldValidator[*models.StringTypesParsingRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "unformattedStr", Location: params.Location},
+		EnsureNonDefault[string],
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "customFormatStr", Location: params.Location},
+		EnsureNonDefault[string],
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "dateStr", Location: params.Location},
+		EnsureNonDefault[time.Time],
 	)
 	validateDateTimeStr := NewSimpleFieldValidator[time.Time](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "dateTimeStr", Location: params.Location},
+		EnsureNonDefault[time.Time],
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
-		EnsureNonDefault,
+		SimpleFieldValidatorParams{Field: "byteStr", Location: params.Location},
+		EnsureNonDefault[string],
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.StringTypesParsingRequest) {
-		validateUnformattedStr(bindingCtx, "unformattedStr", location, value.UnformattedStr)
-		validateCustomFormatStr(bindingCtx, "customFormatStr", location, value.CustomFormatStr)
-		validateDateStr(bindingCtx, "dateStr", location, value.DateStr)
-		validateDateTimeStr(bindingCtx, "dateTimeStr", location, value.DateTimeStr)
-		validateByteStr(bindingCtx, "byteStr", location, value.ByteStr)
+	return func(bindingCtx *BindingContext, value *models.StringTypesParsingRequest) {
+		validateUnformattedStr(bindingCtx, value.UnformattedStr)
+		validateCustomFormatStr(bindingCtx, value.CustomFormatStr)
+		validateDateStr(bindingCtx, value.DateStr)
+		validateDateTimeStr(bindingCtx, value.DateTimeStr)
+		validateByteStr(bindingCtx, value.ByteStr)
 	}
 }

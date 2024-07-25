@@ -1,0 +1,38 @@
+post:
+  summary: API to test deeply nested objects
+  operationId: objectsDeeplyNested
+  tags:
+    - objects
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - container1
+            - container2
+          properties:
+            container1:
+              type: object
+              required:
+                - container11
+                - container12
+              properties:
+                container11:
+                  $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+                container12:
+                  $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+            container2:
+              type: object
+              required:
+                - container21
+                - container22
+              properties:
+                container21:
+                  $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+                container22:
+                  $ref: "./components.yaml#/components/schemas/SimpleObjectsContainer"
+  responses:
+    '204':
+      description: Request succeeded

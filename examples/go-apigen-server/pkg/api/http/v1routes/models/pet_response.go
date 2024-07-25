@@ -10,5 +10,5 @@ import (
 var _ = time.Time{}
 
 type PetResponse struct { 
-	Data Pet `json:"data"`
+	Data *Pet `json:"data"`
 }
