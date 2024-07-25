@@ -22,3 +22,13 @@ jobs:
 
     - run: make lint
     - run: make tests
+
+    - name: Store Test Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-artifacts-pr-${{ github.event.pull_request.node_id }}
+        path: |
+          tests/golang/.cover/coverage.svg
+          tests/golang/.cover/coverage.html
+        retention-days: 10
+        overwrite: true
