@@ -7,6 +7,7 @@ components:
       properties:
         simpleField1:
           type: string
+          minLength: 2
     SimpleNullableObject:
       type: object
       nullable: true

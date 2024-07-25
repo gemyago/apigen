@@ -12,6 +12,7 @@ func NewSimpleObjectValidator(params ModelValidatorParams) FieldValidator[*model
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		SimpleFieldValidatorParams{Field: "simpleField1", Location: params.Location},
 		EnsureNonDefault[string],
+		NewMinMaxLengthValidator[string](2, true),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleObject) {
