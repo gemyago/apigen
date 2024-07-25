@@ -109,24 +109,6 @@ func SkipNullFieldValidator[TTargetVal any](target FieldValidator[*TTargetVal]) 
 	}
 }
 
-func RequiredModelFieldValidator[TTargetVal any](
-	params SimpleFieldValidatorParams,
-	next FieldValidator[*TTargetVal],
-) FieldValidator[*TTargetVal] {
-	return func(bindingCtx *BindingContext, value *TTargetVal) {
-		if value == nil {
-			bindingCtx.AppendFieldError(FieldBindingError{
-				Field:    params.Field,
-				Location: params.Location,
-				Code:     ErrValueRequired.Error(),
-			})
-			return
-		}
-
-		next(bindingCtx, value)
-	}
-}
-
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,
@@ -217,6 +199,33 @@ func NewSimpleFieldValidator[
 				return
 			}
 		}
+	}
+}
+
+type ObjectFieldValidatorParams struct {
+	Nullable bool
+	Required bool
+	Field    string
+	Location string
+}
+
+func NewObjectFieldValidator[TTargetVal any](
+	params ObjectFieldValidatorParams,
+	modelValidator FieldValidator[*TTargetVal],
+) FieldValidator[*TTargetVal] {
+	return func(bindingCtx *BindingContext, value *TTargetVal) {
+		if value == nil {
+			if !params.Nullable || params.Required {
+				bindingCtx.AppendFieldError(FieldBindingError{
+					Field:    params.Field,
+					Location: params.Location,
+					Code:     ErrValueRequired.Error(),
+				})
+			}
+			return
+		}
+
+		modelValidator(bindingCtx, value)
 	}
 }
 

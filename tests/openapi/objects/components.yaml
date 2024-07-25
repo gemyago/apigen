@@ -18,11 +18,17 @@ components:
     SimpleObjectsContainer:
       type: object
       required:
+        - simpleField1
+        - simpleField2
         - simpleObject1
         - simpleObject2
         - simpleNullableObject1
         - simpleNullableObject2
       properties:
+        simpleField1:
+          type: string
+        simpleField2:
+          type: string
         simpleObject1:
           $ref: "./components.yaml#/components/schemas/SimpleObject"
         simpleObject2:
