@@ -127,14 +127,21 @@ tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
 	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
 
 .PHONY: tests/golang/push-coverage
-badges/golang/push-coverage: $(golang_tests_cover_dir)/coverage.svg
+tests/golang/push-coverage: $(golang_tests_cover_dir)/coverage.svg $(golang_tests_cover_html)
 	gh api \
 		--method PUT \
 		-H "Accept: application/vnd.github+json" \
 		-H "X-GitHub-Api-Version: 2022-11-28" \
-		/repos/gemyago/apigen/contents/.badges/golang-coverage.svg \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.svg \
 		-f "branch=badges" \
-		-f "message=Updating golang coverage badge" -f "content=$(shell base64 -i $<)"
+		-f "message=Updating golang coverage badge" -f "content=$(shell base64 -i $(golang_tests_cover_dir)/coverage.svg)"
+	gh api \
+		--method PUT \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.html \
+		-f "branch=badges" \
+		-f "message=Updating golang coverage report" -f "content=$(shell base64 -i $(golang_tests_cover_dir)/coverage.html)"
 
 .PHONY: tests
 tests: tests/golang
