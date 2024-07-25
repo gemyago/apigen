@@ -109,6 +109,24 @@ func SkipNullFieldValidator[TTargetVal any](target FieldValidator[*TTargetVal]) 
 	}
 }
 
+func RequiredModelFieldValidator[TTargetVal any](
+	params SimpleFieldValidatorParams,
+	next FieldValidator[*TTargetVal],
+) FieldValidator[*TTargetVal] {
+	return func(bindingCtx *BindingContext, value *TTargetVal) {
+		if value == nil {
+			bindingCtx.AppendFieldError(FieldBindingError{
+				Field:    params.Field,
+				Location: params.Location,
+				Code:     ErrValueRequired.Error(),
+			})
+			return
+		}
+
+		next(bindingCtx, value)
+	}
+}
+
 func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	threshold TTargetVal,
 	exclusive bool,
