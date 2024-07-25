@@ -227,7 +227,10 @@ func readQueryValue(key string, values url.Values) internal.OptionalVal[[]string
 }
 
 func readRequestBodyValue(req *http.Request) internal.OptionalVal[*http.Request] {
-	if req.ContentLength != 0 {
+	// We may need a different method to check if the body is empty
+	// if content length approach will be causing issues. For this case
+	// best would be to read the body to buffer and check its length. It will be fully consumed anyway.
+	if req.ContentLength > 0 {
 		return internal.OptionalVal[*http.Request]{Value: req, Assigned: true}
 	}
 	return internal.OptionalVal[*http.Request]{}
@@ -333,20 +336,26 @@ func parseBoolInQuery(ov []string, s *bool) error {
 	return parseBoolInPath(ov[0], s)
 }
 
-func parseNullableInPath[TTargetVal any](targetParser rawValueParser[string, TTargetVal]) rawValueParser[string, *TTargetVal] {
+func parseNullableInPath[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[string, *TTargetVal] {
 	return func(s string, tv **TTargetVal) error {
 		if s == "" || s == "null" {
 			return nil
 		}
+		*tv = new(TTargetVal)
 		return targetParser(s, *tv)
 	}
 }
 
-func parseNullableInQuery[TTargetVal any](targetParser rawValueParser[[]string, TTargetVal]) rawValueParser[[]string, *TTargetVal] {
+func parseNullableInQuery[TTargetVal any](
+	targetParser rawValueParser[[]string, TTargetVal],
+) rawValueParser[[]string, *TTargetVal] {
 	return func(s []string, tv **TTargetVal) error {
 		if s[0] == "" || s[0] == "null" {
 			return nil
 		}
+		*tv = new(TTargetVal)
 		return targetParser(s, *tv)
 	}
 }
@@ -441,6 +450,6 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 			})
 			return
 		}
-		params.validateValue(bindingCtx, params.field, params.location, *receiver)
+		params.validateValue(bindingCtx, *receiver)
 	}
 }

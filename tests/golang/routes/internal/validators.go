@@ -215,7 +215,7 @@ func NewObjectFieldValidator[TTargetVal any](
 ) FieldValidator[*TTargetVal] {
 	return func(bindingCtx *BindingContext, value *TTargetVal) {
 		if value == nil {
-			if !params.Nullable || params.Required {
+			if params.Required && !params.Nullable {
 				bindingCtx.AppendFieldError(FieldBindingError{
 					Field:    params.Field,
 					Location: params.Location,

@@ -10,12 +10,12 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewPetsResponseValidator() FieldValidator[*models.PetsResponse] {
+func NewPetsResponseValidator(params ModelValidatorParams) FieldValidator[*models.PetsResponse] {
 	validateData := NewArrayValidator[*models.Pet](
-		NewPetValidator(),
+		NewPetValidator(ModelValidatorParams{Location: params.Location + ".Data"}),
 	)
 	
-	return func(bindingCtx *BindingContext, field, location string, value *models.PetsResponse) {
-		validateData(bindingCtx, "data", location, value.Data)
+	return func(bindingCtx *BindingContext, value *models.PetsResponse) {
+		validateData(bindingCtx, value.Data)
 	}
 }

@@ -44,6 +44,8 @@ func TestObjects(t *testing.T) {
 		opts ...func(*models.SimpleObjectsContainer),
 	) *models.SimpleObjectsContainer {
 		res := &models.SimpleObjectsContainer{
+			SimpleField1:                  fake.Lorem().Word(),
+			SimpleField2:                  fake.Lorem().Word(),
 			SimpleObject1:                 randomSimpleObject(),
 			SimpleObject2:                 randomSimpleObject(),
 			SimpleNullableObject1:         randomSimpleNullableObject(),
@@ -245,11 +247,15 @@ func TestObjects(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/objects/required-nested-objects",
 				body: bytes.NewBufferString(fmt.Sprintf(`{
+					"simpleField1": "%s",
+					"simpleField2": "%s",
 					"simpleObject1": %s,
 					"simpleObject2": %s,
 					"simpleNullableObject1": %s,
 					"simpleNullableObject2": %s
 				}`,
+					originalReq.Payload.SimpleField1,
+					originalReq.Payload.SimpleField2,
 					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject1)),
 					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject2)),
 					lo.Must1(json.Marshal(originalReq.Payload.SimpleNullableObject1)),
@@ -280,11 +286,15 @@ func TestObjects(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/objects/required-nested-objects",
 				body: bytes.NewBufferString(fmt.Sprintf(`{
+					"simpleField1": "%s",
+					"simpleField2": "%s",
 					"simpleObject1": %s,
 					"simpleObject2": %s,
 					"simpleNullableObject1": null,
 					"simpleNullableObject2": null
 				}`,
+					originalReq.Payload.SimpleField1,
+					originalReq.Payload.SimpleField2,
 					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject1)),
 					lo.Must1(json.Marshal(originalReq.Payload.SimpleObject2)),
 				)),
@@ -304,6 +314,8 @@ func TestObjects(t *testing.T) {
 				expect: expectBindingErrors[*objectsControllerTestActions](
 					[]fieldBindingError{
 						// body
+						{Field: "simpleField1", Location: "body", Code: "INVALID_REQUIRED"},
+						{Field: "simpleField2", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "simpleObject1", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "simpleObject2", Location: "body", Code: "INVALID_REQUIRED"},
 					},
