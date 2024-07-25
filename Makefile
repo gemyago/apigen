@@ -126,9 +126,5 @@ tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
 	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
 	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
 
-.PHONY: badges/golang/set
-badges/golang/set: $(golang_tests_cover_dir)/coverage.svg
-	gh gist edit https://gist.github.com/gemyago/8956c487c5da310c29b41a1dffa9c947 --add $(golang_tests_cover_dir)/coverage.svg
-
 .PHONY: tests
 tests: tests/golang
