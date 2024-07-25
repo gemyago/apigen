@@ -26,6 +26,9 @@ jobs:
       - name: Get Test Artifacts
         run: |
           gh run download -n test-artifacts-pr-${{ github.event.pull_request.node_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: tests/golang/push-test-artifacts
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
