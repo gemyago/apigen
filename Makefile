@@ -126,22 +126,31 @@ tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
 	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
 	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
 
+$(golang_tests_cover_dir)/coverage.%.blob-sha:
+	@gh api \
+		--method GET \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.$*?ref=test-artifacts \
+		| jq -r '.sha' > $@
+
+$(golang_tests_cover_dir)/coverage.%.gh-cli-body.json: $(golang_tests_cover_dir)/coverage.% $(golang_tests_cover_dir)/coverage.%.blob-sha
+	@echo "{\"branch\": \"test-artifacts\", \"sha\": \"$(shell cat $(golang_tests_cover_dir)/coverage.$*.blob-sha)\", \"message\": \"Updating golang coverage.$*\", \"content\": \"$(shell base64 -i $<)\"}" > $@
+
 .PHONY: tests/golang/push-test-artifacts
-tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg $(golang_tests_cover_html)
-	gh api \
+tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-body.json $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
+	@gh api \
 		--method PUT \
 		-H "Accept: application/vnd.github+json" \
 		-H "X-GitHub-Api-Version: 2022-11-28" \
 		/repos/gemyago/apigen/contents/coverage/golang-coverage.svg \
-		-f "branch=test-artifacts" \
-		-f "message=Updating golang coverage badge" -f "content=$(shell base64 -i $(golang_tests_cover_dir)/coverage.svg)"
-	gh api \
+		--input $(golang_tests_cover_dir)/coverage.svg.gh-cli-body.json
+	@gh api \
 		--method PUT \
 		-H "Accept: application/vnd.github+json" \
 		-H "X-GitHub-Api-Version: 2022-11-28" \
 		/repos/gemyago/apigen/contents/coverage/golang-coverage.html \
-		-f "branch=test-artifacts" \
-		-f "message=Updating golang coverage report" -f "content=$(shell base64 -i $(golang_tests_cover_dir)/coverage.html)"
+		--input $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
 
 .PHONY: tests
 tests: tests/golang
