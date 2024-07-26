@@ -1,0 +1,127 @@
+post:
+  summary: API to test string arrays parsing
+  operationId: stringTypesArraysParsing
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: vendor-specific
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: date
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: date-time
+    - name: byteStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: byte
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: vendor-specific
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: date
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: date-time
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: byte
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
+          properties: 
+            unformattedStr:
+              type: array
+              items:
+                type: string
+            customFormatStr:
+              type: array
+              items:
+                type: string
+                format: vendor-specific
+            dateStr:
+              type: array
+              items:
+                type: string
+                format: date
+            dateTimeStr:
+              type: array
+              items:
+                type: string
+                format: date-time
+            byteStr:
+              type: array
+              items:
+                type: string
+                format: byte
+  responses:
+    '204':
+      description: Request succeeded
