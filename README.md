@@ -29,6 +29,16 @@ Set of features compatible with golang
 
 Some language specific features may be challenging (if possible) to implement correctly. The [Language specific caveats](#language-specific-caveats) summarises various implementation details.
 
+### Parameter Serialization
+
+[OpenAPI Spec Reference](https://swagger.io/docs/specification/serialization/)
+
+Supported serialization styles:
+|parameter location|style|explode|example primitive type|example array type|object support|
+|----|----|----|----|----|----|
+|path|simple|false|`/users/5`|`/users/3,4,5`|-|
+|query|form|true|`/users?id=5`|`/users?id=3&id=4&id=5`|-|
+
 ###  Data types
 
 #### All types
@@ -62,7 +72,7 @@ Some language specific features may be challenging (if possible) to implement co
 |----|----|----|
 |boolean|query,path,body|&check;|
 
-#### Object
+#### Objects
 
 Objects are only supported in request body of `application/json` content type.
 
