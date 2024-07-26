@@ -17,6 +17,8 @@ Project status: **pre-alpha**.
 
 ### Golang
 * enums
+* simple types directly in body
+* array types directly in body
 * allow handling as plain http handler
 * authentication
 * per route middleware
