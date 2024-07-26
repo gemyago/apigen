@@ -1,6 +1,7 @@
 # apigen
 
 [![Test](https://github.com/gemyago/apigen/actions/workflows/test.yml/badge.svg)](https://github.com/gemyago/apigen/actions/workflows/test.yml)
+[![Golang Coverage](https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.svg)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.html)
 
 API Layer Generator from the OpenAPI specification.
 
@@ -87,7 +88,7 @@ Build particular generator:
 mvn -f generators/go-apigen-server/ package
 ```
 
-Generate particular generator (will build if needed):
+Generate code using a particular generator (will build if needed):
 ```
 make generate/golang
 ```

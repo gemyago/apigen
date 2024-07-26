@@ -126,5 +126,39 @@ tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
 	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
 	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
 
+$(golang_tests_cover_dir)/coverage.%.blob-sha:
+	@gh api \
+		--method GET \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.$*?ref=test-artifacts \
+		| jq -jr '.sha' > $@
+
+$(golang_tests_cover_dir)/coverage.%.gh-cli-body.json: $(golang_tests_cover_dir)/coverage.% $(golang_tests_cover_dir)/coverage.%.blob-sha
+	@echo "{" > $@
+	@echo "\"branch\": \"test-artifacts\"," >> $@
+	@printf "\"sha\": \"">> $@
+	@cat $(golang_tests_cover_dir)/coverage.$*.blob-sha >> $@
+	@printf "\",\n">> $@
+	@echo "\"message\": \"Updating golang coverage.$*\",">> $@
+	@printf "\"content\": \"">> $@
+	@base64 -i $< | tr -d '\n' >> $@
+	@printf "\"\n}">> $@
+
+.PHONY: tests/golang/push-test-artifacts
+tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-body.json $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
+	@gh api \
+		--method PUT \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.svg \
+		--input $(golang_tests_cover_dir)/coverage.svg.gh-cli-body.json
+	@gh api \
+		--method PUT \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		/repos/gemyago/apigen/contents/coverage/golang-coverage.html \
+		--input $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
+
 .PHONY: tests
 tests: tests/golang

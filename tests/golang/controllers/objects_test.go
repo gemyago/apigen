@@ -30,7 +30,7 @@ func TestObjects(t *testing.T) {
 
 	randomSimpleObject := func() *models.SimpleObject {
 		return &models.SimpleObject{
-			SimpleField1: fake.Lorem().Word(),
+			SimpleField1: fake.RandomStringWithLength(fake.IntBetween(5, 10)),
 		}
 	}
 
