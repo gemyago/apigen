@@ -12,15 +12,15 @@ Project status: **pre-alpha**.
 ## TODOs
 
 ### General
-* Installation instructions
+* Installation and usage instructions
 * Documentation on generated code structure and suggested patterns
 
 ### Golang
+* enums
+* allow handling as plain http handler
 * authentication
 * per route middleware
-* allow handling as plain http handler
 * polymorphic models
-* enums
 
 ### Typescript
 Set of features compatible with golang
