@@ -1,0 +1,7 @@
+internal.NewSimpleFieldValidator[{{>params/type}}](
+	internal.SimpleFieldValidatorParams{Field: "{{baseName}}", Location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}}},{{#minimum}}{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
+	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
+	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}
+	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, false){{#isNullable}}){{/isNullable}},{{/maxLength}}{{#pattern}}
+	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewPatternValidator[{{{dataType}}}]("{{.}}"){{#isNullable}}){{/isNullable}},{{/pattern}}{{/isDateTime}}{{/isDate}}
+)

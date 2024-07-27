@@ -219,6 +219,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   protected ImmutableMap.Builder<String, Mustache.Lambda> addMustacheLambdas() {
     ImmutableMap.Builder<String, Mustache.Lambda> lambdas = super.addMustacheLambdas();
     lambdas.put("tab_indented_2", new IndentedLambda(1, "\t", "", false, false));
+    lambdas.put("tab_indented_3", new IndentedLambda(3, "\t", "", false, false));
     return lambdas;
   }
 

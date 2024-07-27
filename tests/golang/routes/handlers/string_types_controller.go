@@ -9,6 +9,20 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+type StringTypesStringTypesArraysParsingRequest struct {
+	UnformattedStr []string
+	CustomFormatStr []string
+	DateStr []time.Time
+	DateTimeStr []time.Time
+	ByteStr []string
+	UnformattedStrInQuery []string
+	CustomFormatStrInQuery []string
+	DateStrInQuery []time.Time
+	DateTimeStrInQuery []time.Time
+	ByteStrInQuery []string
+	Payload *models.StringTypesArraysParsingRequest
+}
+
 type StringTypesStringTypesNullableParsingRequest struct {
 	UnformattedStr *string
 	CustomFormatStr *string
@@ -84,6 +98,13 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 }
 
 type StringTypesController struct {
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArraysParsingRequest,
+	//
+	// Response type: none
+	StringTypesArraysParsing httpHandlerFactory
+
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableParsingRequest,
@@ -128,6 +149,13 @@ type StringTypesController struct {
 }
 
 type StringTypesControllerBuilder struct {
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArraysParsingRequest,
+	//
+	// Response type: none
+	HandleStringTypesArraysParsing actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesArraysParsingRequest]
+
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableParsingRequest,
@@ -173,6 +201,7 @@ type StringTypesControllerBuilder struct {
 
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	return &StringTypesController{
+		StringTypesArraysParsing: mustInitializeAction("stringTypesArraysParsing", c.HandleStringTypesArraysParsing.httpHandlerFactory),
 		StringTypesNullableParsing: mustInitializeAction("stringTypesNullableParsing", c.HandleStringTypesNullableParsing.httpHandlerFactory),
 		StringTypesNullableRequiredValidation: mustInitializeAction("stringTypesNullableRequiredValidation", c.HandleStringTypesNullableRequiredValidation.httpHandlerFactory),
 		StringTypesParsing: mustInitializeAction("stringTypesParsing", c.HandleStringTypesParsing.httpHandlerFactory),
@@ -184,6 +213,12 @@ func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 
 func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder := &StringTypesControllerBuilder{}
+
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	controllerBuilder.HandleStringTypesArraysParsing.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleStringTypesArraysParsing.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesArraysParsing.voidResult = true
+	controllerBuilder.HandleStringTypesArraysParsing.paramsParserFactory = newParamsParserStringTypesStringTypesArraysParsing
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesNullableParsing.controllerBuilder = controllerBuilder
@@ -225,6 +260,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 }
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
+	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(app))
 	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(app))
 	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(app))
 	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))
