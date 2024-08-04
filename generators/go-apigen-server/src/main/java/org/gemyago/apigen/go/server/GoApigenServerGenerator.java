@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -20,12 +21,15 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
-import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
-import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+
+import static org.openapitools.codegen.utils.StringUtils.*;
+import static org.openapitools.codegen.utils.CamelizeOption.LOWERCASE_FIRST_LETTER;
 
 public class GoApigenServerGenerator extends AbstractGoCodegen {
 
@@ -205,9 +209,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     additionalProperties.put(
         CodegenConstants.INVOKER_PACKAGE,
         moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString());
-    
-    if(additionalProperties.containsKey("generatedCodeComment")) {
-      if(StringUtils.isEmpty(additionalProperties.get("generatedCodeComment").toString())) {
+
+    if (additionalProperties.containsKey("generatedCodeComment")) {
+      if (StringUtils.isEmpty(additionalProperties.get("generatedCodeComment").toString())) {
         additionalProperties.remove("generatedCodeComment");
       }
     } else {
@@ -221,13 +225,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     lambdas.put("tab_indented_2", new IndentedLambda(1, "\t", "", false, false));
     lambdas.put("tab_indented_3", new IndentedLambda(3, "\t", "", false, false));
     return lambdas;
-  }
-
-  @Override
-  public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
-    // TODO: Make sure this is customizable, just default is set
-    operation.addExtension("x-codegen-request-body-name", "payload");
-    return super.fromOperation(path, httpMethod, operation, servers);
   }
 
   @Override
@@ -251,20 +248,34 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     OperationsMap operationsMap = super.postProcessOperationsWithModels(objs, allModels);
     List<Map<String, String>> imports = objs.getImports();
     if (imports == null)
-        return objs;
+      return objs;
 
     operationsMap.put("hasImportedModel", false);
     Iterator<Map<String, String>> iterator = imports.iterator();
     List<String> importedModels = new ArrayList<>();
     while (iterator.hasNext()) {
-        String _import = iterator.next().get("import");
-        if (_import.startsWith(modelPackage())) {
-          operationsMap.put("hasImportedModel", true);
-          importedModels.add(_import);
-        }
+      String _import = iterator.next().get("import");
+      if (_import.startsWith(modelPackage())) {
+        operationsMap.put("hasImportedModel", true);
+        importedModels.add(_import);
+      }
     }
     operationsMap.put("importedModels", importedModels);
 
     return operationsMap;
+  }
+
+  @Override
+  public CodegenParameter fromRequestBody(RequestBody body, Set<String> imports, String bodyParameterName) {
+    if (StringUtils.isEmpty(bodyParameterName)) {
+      bodyParameterName = "payload";
+    }
+    CodegenParameter codegenParameter = super.fromRequestBody(body, imports, bodyParameterName);
+    codegenParameter.nameInCamelCase = camelize(codegenParameter.paramName, LOWERCASE_FIRST_LETTER);
+    codegenParameter.nameInPascalCase = camelize(codegenParameter.paramName);
+    codegenParameter.nameInSnakeCase = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+        codegenParameter.nameInPascalCase);
+    codegenParameter.nameInLowerCase = codegenParameter.paramName.toLowerCase(Locale.ROOT);
+    return codegenParameter;
   }
 }

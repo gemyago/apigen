@@ -21,7 +21,7 @@ var _ = {{importedModels.0}}{}{{/hasImportedModel}}
 {{#hasParams}}
 type paramsParser{{baseName}}{{operationId}} struct {
 	{{#allParams}}
-	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
+	bind{{nameInPascalCase}} requestParamBinder[{{>params/binder-types}}]
 	{{/allParams}}
 }
 
@@ -30,16 +30,16 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}})
+	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{nameInPascalCase}})
 	{{/pathParams}}
 	{{#queryParams}}
 	{{#-first}}// query params
 	query := req.URL.Query()
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{>params/name}})
+	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{nameInPascalCase}})
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -47,7 +47,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>request-type}}] {
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
-		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
+		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
 			required: {{required}},
