@@ -230,7 +230,24 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenParameter fromParameter(Parameter parameter, Set<String> imports) {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
-    codegenParameter.vendorExtensions.put("x-codegen-param-in", parameter.getIn());
+    appendParamVendorExtensions(codegenParameter, parameter.getIn());
+    return codegenParameter;
+  }
+
+  @Override
+  public CodegenParameter fromRequestBody(RequestBody body, Set<String> imports, String bodyParameterName) {
+    if (StringUtils.isEmpty(bodyParameterName)) {
+      bodyParameterName = "payload";
+    }
+
+    CodegenParameter codegenParameter = super.fromRequestBody(body, imports, bodyParameterName);
+    appendParamVendorExtensions(codegenParameter, "body");
+
+    codegenParameter.nameInCamelCase = camelize(codegenParameter.paramName, LOWERCASE_FIRST_LETTER);
+    codegenParameter.nameInPascalCase = camelize(codegenParameter.paramName);
+    codegenParameter.nameInSnakeCase = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+        codegenParameter.nameInPascalCase);
+    codegenParameter.nameInLowerCase = codegenParameter.paramName.toLowerCase(Locale.ROOT);
     return codegenParameter;
   }
 
@@ -265,17 +282,20 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     return operationsMap;
   }
 
-  @Override
-  public CodegenParameter fromRequestBody(RequestBody body, Set<String> imports, String bodyParameterName) {
-    if (StringUtils.isEmpty(bodyParameterName)) {
-      bodyParameterName = "payload";
+  private String titleCase(final String input) {
+    if (input == null || "".equals(input)) {
+      return "";
     }
-    CodegenParameter codegenParameter = super.fromRequestBody(body, imports, bodyParameterName);
-    codegenParameter.nameInCamelCase = camelize(codegenParameter.paramName, LOWERCASE_FIRST_LETTER);
-    codegenParameter.nameInPascalCase = camelize(codegenParameter.paramName);
-    codegenParameter.nameInSnakeCase = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
-        codegenParameter.nameInPascalCase);
-    codegenParameter.nameInLowerCase = codegenParameter.paramName.toLowerCase(Locale.ROOT);
-    return codegenParameter;
+
+    String firstLetter = input.substring(0, 1).toUpperCase(Locale.ROOT);
+    if (input.length() == 1) {
+      return firstLetter;
+    }
+    return firstLetter + input.substring(1);
+  }
+
+  private void appendParamVendorExtensions(CodegenParameter codegenParameter, String location) {
+    codegenParameter.vendorExtensions.put("x-apigen-param-location", location);
+    codegenParameter.vendorExtensions.put("x-apigen-param-location-tc", titleCase(location));
   }
 }
