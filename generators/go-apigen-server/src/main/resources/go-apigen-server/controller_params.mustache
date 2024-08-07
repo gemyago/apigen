@@ -51,9 +51,9 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			field: "{{baseName}}",
 			location: "{{#vendorExtensions}}{{x-apigen-param-location}}{{/vendorExtensions}}",
 			required: {{required}},
-			parseValue: {{^isBodyParam}}{{#isNullable}}parseNullableIn{{#vendorExtensions}}{{x-apigen-param-location-tc}}{{/vendorExtensions}}({{/isNullable}}{{/isBodyParam}}{{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{x-apigen-param-location-tc}}{{/vendorExtensions}}{{/isBodyParam}}{{^isBodyParam}}{{#isNullable}}){{/isNullable}}{{/isBodyParam}},
+			parseValue: {{>params/parse-non-array-value}},
 			validateValue: {{#isArray}}internal.NewArrayValidator(
-				internal.New{{#mostInnerItems}}{{{dataType}}}{{/mostInnerItems}}Validator(internal.ModelValidatorParams{Location: "body"}),
+				internal.New{{#items}}{{{dataType}}}{{/items}}Validator(internal.ModelValidatorParams{Location: "body"}),
 			),{{/isArray}}{{^isArray}}{{#isBodyParam}}{{#isNullable}}internal.SkipNullFieldValidator({{/isNullable}}internal.New{{dataType}}Validator(internal.ModelValidatorParams{Location: "body"}){{#isNullable}}){{/isNullable}},{{/isBodyParam}}{{^isBodyParam}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isBodyParam}}{{/isArray}}
 		}),
 		{{/allParams}}
