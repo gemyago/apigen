@@ -52,8 +52,9 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			location: "{{#vendorExtensions}}{{x-apigen-param-location}}{{/vendorExtensions}}",
 			required: {{required}},
 			parseValue: {{>params/parse-non-array-value}},
-			validateValue: {{#isArray}}internal.NewArrayValidator(
-				internal.New{{#items}}{{{dataType}}}{{/items}}Validator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: {{#isArray}}internal.NewArrayValidator({{#items}}{{#isModel}}
+				internal.New{{{dataType}}}Validator(internal.ModelValidatorParams{Location: "body"}),{{/isModel}}{{^isModel}}
+				{{>params/simple-validator}},{{/isModel}}{{/items}}
 			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
 		}),
 		{{/allParams}}
