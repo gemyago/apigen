@@ -13,18 +13,11 @@ var _ = time.Time{}
 
 {{#model}}
 func New{{classname}}Validator(params ModelValidatorParams) FieldValidator[*{{package}}.{{classname}}] {
-	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
-		{{#mostInnerItems}}New{{{dataType}}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),{{/mostInnerItems}}
-	)
-	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}](
-		SimpleFieldValidatorParams{Field: "{{baseName}}", Location: params.Location},{{^isBoolean}}{{#required}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{{dataType}}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDateTime}}{{#minLength}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, false){{#isNullable}}){{/isNullable}},{{/maxLength}}{{#pattern}}
-		{{#isNullable}}SkipNullValidator({{/isNullable}}NewPatternValidator[{{{dataType}}}]("{{.}}"){{#isNullable}}){{/isNullable}},{{/pattern}}{{/isDateTime}}{{/isDate}}
-	){{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
+	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}]({{#items}}{{#isModel}}
+		New{{{dataType}}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),{{/isModel}}{{^isModel}}
+		{{#lambda.tab_indented_3}}{{>models/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
+	{{/items}})
+	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>models/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
 		ObjectFieldValidatorParams{Field: "{{baseName}}", Location: params.Location, Required: {{{required}}}, Nullable: {{{isNullable}}}},
 		New{{dataType}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),
 	){{/isModel}}
