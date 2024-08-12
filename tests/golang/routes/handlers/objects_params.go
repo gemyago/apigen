@@ -30,7 +30,7 @@ func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsPar
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[[]*models.ObjectArraysSimpleObject],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[[]*models.ObjectArraysSimpleObject]),
 			validateValue: internal.NewArrayValidator(
 				internal.NewObjectArraysSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
 			),
@@ -56,7 +56,7 @@ func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsPar
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest]),
 			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -80,7 +80,7 @@ func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*Objec
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.ObjectsDeeplyNestedRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.ObjectsDeeplyNestedRequest]),
 			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -104,7 +104,7 @@ func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParse
 			field: "payload",
 			location: "body",
 			required: false,
-			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.SimpleNullableObject]),
 			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
 		}),
 	}
@@ -128,7 +128,7 @@ func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParse
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.SimpleNullableObject],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.SimpleNullableObject]),
 			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
 		}),
 	}
@@ -152,7 +152,7 @@ func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*Objec
 			field: "payload",
 			location: "body",
 			required: false,
-			parseValue: parseJSONPayload[*models.SimpleObject],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.SimpleObject]),
 			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -176,7 +176,7 @@ func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*Objec
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.SimpleObject],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.SimpleObject]),
 			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -200,7 +200,7 @@ func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsPars
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.SimpleObjectsContainer],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.SimpleObjectsContainer]),
 			validateValue: internal.NewSimpleObjectsContainerValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}

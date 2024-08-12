@@ -43,7 +43,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			field: "boolParam1",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.boolParser)),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
 			),
@@ -52,7 +52,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			field: "boolParam2",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.boolParser)),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
 			),
@@ -61,7 +61,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			field: "boolParam1InQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.boolParser)),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
@@ -70,7 +70,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			field: "boolParam2InQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.boolParser)),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
@@ -79,14 +79,14 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanNullableRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.BooleanNullableRequest]),
 			validateValue: internal.NewBooleanNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			field: "optionalBoolParam1InQuery",
 			location: "query",
 			required: false,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.boolParser)),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
 				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
 			),
@@ -123,7 +123,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			field: "boolParam1",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.boolInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
 			),
@@ -132,7 +132,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			field: "boolParam2",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.boolInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
 			),
@@ -141,7 +141,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			field: "boolParam1InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
@@ -150,7 +150,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			field: "boolParam2InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
@@ -159,7 +159,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanParsingRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.BooleanParsingRequest]),
 			validateValue: internal.NewBooleanParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -193,7 +193,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			field: "boolParam1InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
@@ -202,7 +202,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			field: "boolParam2InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
@@ -211,14 +211,14 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanRequiredValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.BooleanRequiredValidationRequest]),
 			validateValue: internal.NewBooleanRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			field: "optionalBoolParam1InQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
 			),
@@ -227,7 +227,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			field: "optionalBoolParam2InQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.boolParser),
 			validateValue: internal.NewSimpleFieldValidator[bool](
 				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam2InQuery", Location: "query"},
 			),

@@ -59,7 +59,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberAny",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.float32InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.float32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAny", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
@@ -69,7 +69,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberFloat",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.float32InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.float32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloat", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
@@ -79,7 +79,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberDouble",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.float64InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.float64Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDouble", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
@@ -89,7 +89,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberInt",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.int32InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.int32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
@@ -99,7 +99,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberInt32",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.int32InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.int32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
@@ -109,7 +109,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberInt64",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.int64InPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.int64Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64", Location: "path"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
@@ -119,7 +119,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberAnyInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.float32InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.float32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAnyInQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
@@ -129,7 +129,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberFloatInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.float32InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.float32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloatInQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
@@ -139,7 +139,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberDoubleInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.float64InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.float64Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDoubleInQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
@@ -149,7 +149,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberIntInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.int32InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.int32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int32](
 				internal.SimpleFieldValidatorParams{Field: "numberIntInQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
@@ -159,7 +159,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberInt32InQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.int32InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.int32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32InQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
@@ -169,7 +169,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "numberInt64InQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.int64InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.int64Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64InQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
@@ -179,14 +179,14 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.NumericTypesNullableRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.NumericTypesNullableRequest]),
 			validateValue: internal.NewNumericTypesNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			field: "optionalNumberAnyInQuery",
 			location: "query",
 			required: false,
-			parseValue: parseNullableInQuery(app.knownParsers.float32InQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.float32Parser)),
 			validateValue: internal.NewSimpleFieldValidator[*float32](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberAnyInQuery", Location: "query"},internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
@@ -240,7 +240,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberAny",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAny", Location: "path"},
 			),
@@ -249,7 +249,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberFloat",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloat", Location: "path"},
 			),
@@ -258,7 +258,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberDouble",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDouble", Location: "path"},
 			),
@@ -267,7 +267,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberInt",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt", Location: "path"},
 			),
@@ -276,7 +276,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberInt32",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32", Location: "path"},
 			),
@@ -285,7 +285,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberInt64",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64", Location: "path"},
 			),
@@ -294,7 +294,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberAnyInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAnyInQuery", Location: "query"},
 			),
@@ -303,7 +303,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberFloatInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloatInQuery", Location: "query"},
 			),
@@ -312,7 +312,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberDoubleInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDoubleInQuery", Location: "query"},
 			),
@@ -321,7 +321,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberIntInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberIntInQuery", Location: "query"},
 			),
@@ -330,7 +330,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberInt32InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32InQuery", Location: "query"},
 			),
@@ -339,7 +339,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "numberInt64InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64InQuery", Location: "query"},
 			),
@@ -348,7 +348,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.NumericTypesParsingRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.NumericTypesParsingRequest]),
 			validateValue: internal.NewNumericTypesParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -399,7 +399,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberAny",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAny", Location: "path"},internal.NewMinMaxValueValidator[float32](100.01, false, true),
 				internal.NewMinMaxValueValidator[float32](200.02, false, false),
@@ -409,7 +409,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberFloat",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloat", Location: "path"},internal.NewMinMaxValueValidator[float32](200.02, false, true),
 				internal.NewMinMaxValueValidator[float32](300.03, false, false),
@@ -419,7 +419,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberDouble",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDouble", Location: "path"},internal.NewMinMaxValueValidator[float64](300.03, false, true),
 				internal.NewMinMaxValueValidator[float64](400.04, false, false),
@@ -429,7 +429,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberInt",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt", Location: "path"},internal.NewMinMaxValueValidator[int32](400, false, true),
 				internal.NewMinMaxValueValidator[int32](500, false, false),
@@ -439,7 +439,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberInt32",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32", Location: "path"},internal.NewMinMaxValueValidator[int32](500, false, true),
 				internal.NewMinMaxValueValidator[int32](600, false, false),
@@ -449,7 +449,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberInt64",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64", Location: "path"},internal.NewMinMaxValueValidator[int64](600, false, true),
 				internal.NewMinMaxValueValidator[int64](700, false, false),
@@ -459,7 +459,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberAnyInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAnyInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](100.01, false, true),
 				internal.NewMinMaxValueValidator[float32](200.02, false, false),
@@ -469,7 +469,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberFloatInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloatInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](200.02, false, true),
 				internal.NewMinMaxValueValidator[float32](300.03, false, false),
@@ -479,7 +479,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberDoubleInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDoubleInQuery", Location: "query"},internal.NewMinMaxValueValidator[float64](300.03, false, true),
 				internal.NewMinMaxValueValidator[float64](400.04, false, false),
@@ -489,7 +489,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberIntInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberIntInQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](400, false, true),
 				internal.NewMinMaxValueValidator[int32](500, false, false),
@@ -499,7 +499,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberInt32InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32InQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](500, false, true),
 				internal.NewMinMaxValueValidator[int32](600, false, false),
@@ -509,7 +509,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "numberInt64InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64InQuery", Location: "query"},internal.NewMinMaxValueValidator[int64](600, false, true),
 				internal.NewMinMaxValueValidator[int64](700, false, false),
@@ -519,7 +519,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.NumericTypesRangeValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.NumericTypesRangeValidationRequest]),
 			validateValue: internal.NewNumericTypesRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -570,7 +570,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberAny",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAny", Location: "path"},internal.NewMinMaxValueValidator[float32](100.01, true, true),
 				internal.NewMinMaxValueValidator[float32](200.02, true, false),
@@ -580,7 +580,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberFloat",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloat", Location: "path"},internal.NewMinMaxValueValidator[float32](200.02, true, true),
 				internal.NewMinMaxValueValidator[float32](300.03, true, false),
@@ -590,7 +590,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberDouble",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.float64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDouble", Location: "path"},internal.NewMinMaxValueValidator[float64](300.03, true, true),
 				internal.NewMinMaxValueValidator[float64](400.04, true, false),
@@ -600,7 +600,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberInt",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt", Location: "path"},internal.NewMinMaxValueValidator[int32](400, true, true),
 				internal.NewMinMaxValueValidator[int32](500, true, false),
@@ -610,7 +610,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberInt32",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int32InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32", Location: "path"},internal.NewMinMaxValueValidator[int32](500, true, true),
 				internal.NewMinMaxValueValidator[int32](600, true, false),
@@ -620,7 +620,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberInt64",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int64InPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64", Location: "path"},internal.NewMinMaxValueValidator[int64](600, true, true),
 				internal.NewMinMaxValueValidator[int64](700, true, false),
@@ -630,7 +630,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberAnyInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAnyInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](100.01, true, true),
 				internal.NewMinMaxValueValidator[float32](200.02, true, false),
@@ -640,7 +640,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberFloatInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloatInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](200.02, true, true),
 				internal.NewMinMaxValueValidator[float32](300.03, true, false),
@@ -650,7 +650,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberDoubleInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDoubleInQuery", Location: "query"},internal.NewMinMaxValueValidator[float64](300.03, true, true),
 				internal.NewMinMaxValueValidator[float64](400.04, true, false),
@@ -660,7 +660,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberIntInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberIntInQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](400, true, true),
 				internal.NewMinMaxValueValidator[int32](500, true, false),
@@ -670,7 +670,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberInt32InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32InQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](500, true, true),
 				internal.NewMinMaxValueValidator[int32](600, true, false),
@@ -680,7 +680,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "numberInt64InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64InQuery", Location: "query"},internal.NewMinMaxValueValidator[int64](600, true, true),
 				internal.NewMinMaxValueValidator[int64](700, true, false),
@@ -690,7 +690,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.NumericTypesRangeValidationExclusiveRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.NumericTypesRangeValidationExclusiveRequest]),
 			validateValue: internal.NewNumericTypesRangeValidationExclusiveRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -737,7 +737,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberAnyInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberAnyInQuery", Location: "query"},
 			),
@@ -746,7 +746,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberFloatInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "numberFloatInQuery", Location: "query"},
 			),
@@ -755,7 +755,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberDoubleInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.float64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "numberDoubleInQuery", Location: "query"},
 			),
@@ -764,7 +764,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberIntInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberIntInQuery", Location: "query"},
 			),
@@ -773,7 +773,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberInt32InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "numberInt32InQuery", Location: "query"},
 			),
@@ -782,7 +782,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "numberInt64InQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "numberInt64InQuery", Location: "query"},
 			),
@@ -791,7 +791,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberAnyInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberAnyInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](100.01, false, true),
 			),
@@ -800,7 +800,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberFloatInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.float32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberFloatInQuery", Location: "query"},internal.NewMinMaxValueValidator[float32](200.02, false, true),
 			),
@@ -809,7 +809,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberDoubleInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.float64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float64Parser),
 			validateValue: internal.NewSimpleFieldValidator[float64](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberDoubleInQuery", Location: "query"},internal.NewMinMaxValueValidator[float64](300.03, false, true),
 			),
@@ -818,7 +818,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberIntInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberIntInQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](400, false, true),
 			),
@@ -827,7 +827,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberInt32InQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.int32InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int32Parser),
 			validateValue: internal.NewSimpleFieldValidator[int32](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberInt32InQuery", Location: "query"},internal.NewMinMaxValueValidator[int32](500, false, true),
 			),
@@ -836,7 +836,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 			field: "optionalNumberInt64InQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.int64Parser),
 			validateValue: internal.NewSimpleFieldValidator[int64](
 				internal.SimpleFieldValidatorParams{Field: "optionalNumberInt64InQuery", Location: "query"},internal.NewMinMaxValueValidator[int64](600, false, true),
 			),

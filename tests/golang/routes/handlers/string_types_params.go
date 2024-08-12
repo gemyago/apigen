@@ -53,7 +53,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "unformattedStr",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.stringInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStr", Location: "path"},
 			),
@@ -62,7 +62,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "customFormatStr",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.stringInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStr", Location: "path"},
 			),
@@ -71,7 +71,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "dateStr",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.dateInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.dateParser)),
 			validateValue: internal.NewSimpleFieldValidator[*time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStr", Location: "path"},
 			),
@@ -80,7 +80,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "dateTimeStr",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.timeInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.timeParser)),
 			validateValue: internal.NewSimpleFieldValidator[*time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStr", Location: "path"},
 			),
@@ -89,7 +89,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "byteStr",
 			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.stringInPath),
+			parseValue: parseSingleValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "byteStr", Location: "path"},
 			),
@@ -98,7 +98,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.stringInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 			),
@@ -107,7 +107,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "customFormatStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.stringInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStrInQuery", Location: "query"},
 			),
@@ -116,7 +116,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "dateStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.dateInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.dateParser)),
 			validateValue: internal.NewSimpleFieldValidator[*time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStrInQuery", Location: "query"},
 			),
@@ -125,7 +125,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "dateTimeStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.timeInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.timeParser)),
 			validateValue: internal.NewSimpleFieldValidator[*time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStrInQuery", Location: "query"},
 			),
@@ -134,7 +134,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "byteStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.stringInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "byteStrInQuery", Location: "query"},
 			),
@@ -143,7 +143,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesNullableParsingRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesNullableParsingRequest]),
 			validateValue: internal.NewStringTypesNullableParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -173,7 +173,7 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.stringInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
@@ -185,14 +185,14 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesNullableRequiredValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesNullableRequiredValidationRequest]),
 			validateValue: internal.NewStringTypesNullableRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			field: "optionalUnformattedStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: parseNullableInQuery(app.knownParsers.stringInQuery),
+			parseValue: parseMultiValueParamAsSingleValue(parseNullableParam(app.knownParsers.stringParser)),
 			validateValue: internal.NewSimpleFieldValidator[*string](
 				internal.SimpleFieldValidatorParams{Field: "optionalUnformattedStrInQuery", Location: "query"},
 				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
@@ -244,7 +244,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "unformattedStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStr", Location: "path"},
 			),
@@ -253,7 +253,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "customFormatStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStr", Location: "path"},
 			),
@@ -262,7 +262,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "dateStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.dateInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStr", Location: "path"},
 			),
@@ -271,7 +271,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "dateTimeStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.timeInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStr", Location: "path"},
 			),
@@ -280,7 +280,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "byteStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "byteStr", Location: "path"},
 			),
@@ -289,7 +289,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 			),
@@ -298,7 +298,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "customFormatStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStrInQuery", Location: "query"},
 			),
@@ -307,7 +307,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "dateStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.dateInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStrInQuery", Location: "query"},
 			),
@@ -316,7 +316,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "dateTimeStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.timeInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStrInQuery", Location: "query"},
 			),
@@ -325,7 +325,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "byteStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "byteStrInQuery", Location: "query"},
 			),
@@ -334,7 +334,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesParsingRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesParsingRequest]),
 			validateValue: internal.NewStringTypesParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -377,7 +377,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "unformattedStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStr", Location: "path"},
 				internal.NewPatternValidator[string]("^\\d{10}$"),
@@ -387,7 +387,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "customFormatStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStr", Location: "path"},
 				internal.NewPatternValidator[string]("^\\d{20}$"),
@@ -397,7 +397,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "dateStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.dateInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStr", Location: "path"},
 			),
@@ -406,7 +406,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "dateTimeStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.timeInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStr", Location: "path"},
 			),
@@ -415,7 +415,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 				internal.NewPatternValidator[string]("^\\d{10}$"),
@@ -425,7 +425,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "customFormatStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStrInQuery", Location: "query"},
 				internal.NewPatternValidator[string]("^\\d{20}$"),
@@ -435,7 +435,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "dateStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.dateInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStrInQuery", Location: "query"},
 			),
@@ -444,7 +444,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "dateTimeStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.timeInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStrInQuery", Location: "query"},
 			),
@@ -453,7 +453,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesPatternValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesPatternValidationRequest]),
 			validateValue: internal.NewStringTypesPatternValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -500,7 +500,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "unformattedStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStr", Location: "path"},
 				internal.NewMinMaxLengthValidator[string](10, true),
@@ -511,7 +511,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "customFormatStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStr", Location: "path"},
 				internal.NewMinMaxLengthValidator[string](20, true),
@@ -522,7 +522,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "dateStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.dateInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStr", Location: "path"},
 			),
@@ -531,7 +531,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "dateTimeStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.timeInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStr", Location: "path"},
 			),
@@ -540,7 +540,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "byteStr",
 			location: "path",
 			required: true,
-			parseValue: app.knownParsers.stringInPath,
+			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "byteStr", Location: "path"},
 				internal.NewMinMaxLengthValidator[string](30, true),
@@ -551,7 +551,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](10, true),
@@ -562,7 +562,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "customFormatStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](20, true),
@@ -573,7 +573,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "dateStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.dateInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStrInQuery", Location: "query"},
 			),
@@ -582,7 +582,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "dateTimeStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.timeInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStrInQuery", Location: "query"},
 			),
@@ -591,7 +591,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "byteStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "byteStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](30, true),
@@ -602,7 +602,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesRangeValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesRangeValidationRequest]),
 			validateValue: internal.NewStringTypesRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 	}
@@ -648,7 +648,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "unformattedStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "unformattedStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](10, true),
@@ -658,7 +658,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "customFormatStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "customFormatStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](20, true),
@@ -668,7 +668,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "dateStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.dateInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateStrInQuery", Location: "query"},
 			),
@@ -677,7 +677,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "dateTimeStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.timeInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "dateTimeStrInQuery", Location: "query"},
 			),
@@ -686,7 +686,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "byteStrInQuery",
 			location: "query",
 			required: true,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "byteStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](30, true),
@@ -696,14 +696,14 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "payload",
 			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.StringTypesRequiredValidationRequest],
+			parseValue: parseSingleValueParamAsSingleValue(parseJSONPayload[*models.StringTypesRequiredValidationRequest]),
 			validateValue: internal.NewStringTypesRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
 		}),
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			field: "optionalUnformattedStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "optionalUnformattedStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](10, true),
@@ -713,7 +713,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "optionalCustomFormatStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "optionalCustomFormatStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](20, true),
@@ -723,7 +723,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "optionalDateStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.dateInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.dateParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "optionalDateStrInQuery", Location: "query"},
 			),
@@ -732,7 +732,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "optionalDateTimeStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.timeInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.timeParser),
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 				internal.SimpleFieldValidatorParams{Field: "optionalDateTimeStrInQuery", Location: "query"},
 			),
@@ -741,7 +741,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			field: "optionalByteStrInQuery",
 			location: "query",
 			required: false,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.stringParser),
 			validateValue: internal.NewSimpleFieldValidator[string](
 				internal.SimpleFieldValidatorParams{Field: "optionalByteStrInQuery", Location: "query"},
 				internal.NewMinMaxLengthValidator[string](30, true),
