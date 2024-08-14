@@ -31,6 +31,33 @@ func TestStringTypes(t *testing.T) {
 		return testActions, router.mux
 	}
 
+	randomStrings := func(n, minLength, maxLength int) []string {
+		strs := make([]string, n)
+		for i := range n {
+			length := fake.IntBetween(minLength, maxLength)
+			strs[i] = fake.RandomStringWithLength(length)
+		}
+		return strs
+	}
+
+	randomDates := func(n int) []time.Time {
+		dates := make([]time.Time, n)
+		for i := range n {
+			dates[i] = fake.Time().Time(time.Now())
+		}
+		return dates
+	}
+
+	timesToStr := func(v []time.Time, format string) []string {
+		return lo.Map(v, func(v time.Time, _ int) string { return v.Format(format) })
+	}
+
+	datePartOnly := func(v []time.Time) []time.Time {
+		return lo.Map(v, func(v time.Time, _ int) time.Time {
+			return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+		})
+	}
+
 	type testCase = routeTestCase[*stringTypesControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
@@ -412,44 +439,28 @@ func TestStringTypes(t *testing.T) {
 		) *handlers.StringTypesStringTypesArraysParsingRequest {
 			req := &handlers.StringTypesStringTypesArraysParsingRequest{
 				// path
-				UnformattedStr:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-				CustomFormatStr: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-				DateStr: []time.Time{
-					fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-				},
-				DateTimeStr: []time.Time{
-					fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-				},
-				ByteStr: []string{
-					fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10),
-				},
+				UnformattedStr:  randomStrings(3, 10, 20),
+				CustomFormatStr: randomStrings(3, 10, 20),
+				DateStr:         randomDates(3),
+				DateTimeStr:     randomDates(3),
+				ByteStr:         randomStrings(3, 10, 20),
 
 				// query
-				UnformattedStrInQuery:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-				CustomFormatStrInQuery: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-				DateStrInQuery: []time.Time{
-					fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-				},
-				DateTimeStrInQuery: []time.Time{
-					fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-				},
+				UnformattedStrInQuery:  randomStrings(3, 10, 20),
+				CustomFormatStrInQuery: randomStrings(3, 10, 20),
+				DateStrInQuery:         randomDates(3),
+				DateTimeStrInQuery:     randomDates(3),
 				ByteStrInQuery: []string{
 					fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10),
 				},
 
 				// body
 				Payload: &models.StringTypesArraysParsingRequest{
-					UnformattedStr:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-					CustomFormatStr: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
-					DateStr: []time.Time{
-						fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-					},
-					DateTimeStr: []time.Time{
-						fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now()),
-					},
-					ByteStr: []string{
-						fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10),
-					},
+					UnformattedStr:  randomStrings(3, 10, 20),
+					CustomFormatStr: randomStrings(3, 10, 20),
+					DateStr:         randomDates(3),
+					DateTimeStr:     randomDates(3),
+					ByteStr:         randomStrings(3, 10, 20),
 				},
 			}
 			for _, opt := range opts {
@@ -462,14 +473,8 @@ func TestStringTypes(t *testing.T) {
 			query := url.Values{}
 			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
 			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
-			query["dateStrInQuery"] = lo.Map(req.DateStrInQuery,
-				func(v time.Time, _ int) string {
-					return v.Format(time.DateOnly)
-				})
-			query["dateTimeStrInQuery"] = lo.Map(req.DateTimeStrInQuery,
-				func(v time.Time, _ int) string {
-					return v.Format(time.RFC3339Nano)
-				})
+			query["dateStrInQuery"] = timesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = timesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
 			query["byteStrInQuery"] = req.ByteStrInQuery
 			return query
 		}
@@ -484,12 +489,8 @@ func TestStringTypes(t *testing.T) {
 					"/string-types/arrays-parsing/%v/%v/%v/%v/%v",
 					strings.Join(originalReq.UnformattedStr, ","),
 					strings.Join(originalReq.CustomFormatStr, ","),
-					strings.Join(
-						lo.Map(originalReq.DateStr, func(v time.Time, _ int) string { return v.Format(time.DateOnly) }),
-						","),
-					strings.Join(
-						lo.Map(originalReq.DateTimeStr, func(v time.Time, _ int) string { return v.Format(time.RFC3339Nano) }),
-						","),
+					strings.Join(timesToStr(originalReq.DateStr, time.DateOnly), ","),
+					strings.Join(timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), ","),
 					strings.Join(originalReq.ByteStr, ","),
 				),
 				query: query,
@@ -500,12 +501,8 @@ func TestStringTypes(t *testing.T) {
 					}
 
 					wantReq := *originalReq
-					wantReq.DateStr = lo.Map(originalReq.DateStr, func(v time.Time, _ int) time.Time {
-						return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
-					})
-					wantReq.DateStrInQuery = lo.Map(originalReq.DateStrInQuery, func(v time.Time, _ int) time.Time {
-						return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
-					})
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
 					assert.Equal(t, &wantReq, testActions.stringTypesArraysParsing.calls[0].params)
 				},
 			}
@@ -515,15 +512,8 @@ func TestStringTypes(t *testing.T) {
 			originalReq := randomReq()
 			query := buildQuery(originalReq)
 
-			badDateStrValues := append(
-				lo.Map(originalReq.DateStr, func(v time.Time, _ int) string { return v.Format(time.DateOnly) }),
-				fake.Lorem().Word(),
-			)
-
-			badDateTimeStrValues := append(
-				lo.Map(originalReq.DateTimeStr, func(v time.Time, _ int) string { return v.Format(time.RFC3339Nano) }),
-				fake.Lorem().Word(),
-			)
+			_, badDateStrValues := injectValueRandomly(fake, timesToStr(originalReq.DateStr, time.DateOnly), fake.Lorem().Word())
+			_, badDateTimeStrValues := injectValueRandomly(fake, timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), fake.Lorem().Word())
 
 			query["dateStrInQuery"] = badDateStrValues
 			query["dateTimeStrInQuery"] = badDateTimeStrValues
@@ -791,33 +781,6 @@ func TestStringTypes(t *testing.T) {
 	})
 
 	t.Run("array-items-range-validation", func(t *testing.T) {
-		randomStrings := func(n, minLength, maxLength int) []string {
-			strs := make([]string, n)
-			for i := range n {
-				length := fake.IntBetween(minLength, maxLength)
-				strs[i] = fake.RandomStringWithLength(length)
-			}
-			return strs
-		}
-
-		randomDates := func(n int) []time.Time {
-			dates := make([]time.Time, n)
-			for i := range n {
-				dates[i] = fake.Time().Time(time.Now())
-			}
-			return dates
-		}
-
-		timesToStr := func(v []time.Time, format string) []string {
-			return lo.Map(v, func(v time.Time, _ int) string { return v.Format(format) })
-		}
-
-		datePartOnly := func(v []time.Time) []time.Time {
-			return lo.Map(v, func(v time.Time, _ int) time.Time {
-				return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
-			})
-		}
-
 		randomReq := func(
 			opts ...func(*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest),
 		) *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest {

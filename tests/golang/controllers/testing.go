@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -182,4 +183,13 @@ func (c *mockAction[TParams]) action(
 		params: params,
 	})
 	return nil
+}
+
+func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T) {
+	index := fake.IntBetween(0, len(values))
+	newValues := make([]T, len(values)+1)
+	copy(newValues[:index], values[:index])
+	newValues[index] = value
+	copy(newValues[index+1:], values[index:])
+	return index, newValues
 }
