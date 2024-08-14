@@ -28,6 +28,7 @@ internal/objects_deeply_nested_request_validation.go
 internal/simple_nullable_object_validation.go
 internal/simple_object_validation.go
 internal/simple_objects_container_validation.go
+internal/string_types_arrays_parsing_request_validation.go
 internal/string_types_nullable_parsing_request_validation.go
 internal/string_types_nullable_required_validation_request_validation.go
 internal/string_types_parsing_request_validation.go
@@ -52,6 +53,7 @@ models/objects_deeply_nested_request_container2.go
 models/simple_nullable_object.go
 models/simple_object.go
 models/simple_objects_container.go
+models/string_types_arrays_parsing_request.go
 models/string_types_nullable_parsing_request.go
 models/string_types_nullable_required_validation_request.go
 models/string_types_parsing_request.go

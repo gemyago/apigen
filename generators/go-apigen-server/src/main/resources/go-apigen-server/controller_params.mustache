@@ -50,10 +50,14 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			field: "{{baseName}}",
 			location: "{{#vendorExtensions}}{{x-apigen-param-location}}{{/vendorExtensions}}",
-			required: {{required}},
-			parseValue: parse{{#isBodyParam}}SoloValueParamAsSoloValue{{/isBodyParam}}{{^isBodyParam}}{{#isPathParam}}Solo{{/isPathParam}}{{^isPathParam}}Multi{{/isPathParam}}ValueParamAs{{#isArray}}Slice{{/isArray}}{{^isArray}}SoloValue{{/isArray}}{{/isBodyParam}}(
+			required: {{required}},{{#isBodyParam}}
+			parseValue: parseSoloValueParamAsSoloValue(
 				{{>params/parse-non-array-value}},
-			),
+			),{{/isBodyParam}}{{^isBodyParam}}
+			parseValue: parse{{#isPathParam}}Solo{{/isPathParam}}{{^isPathParam}}Multi{{/isPathParam}}ValueParamAs{{#isArray}}Slice{{/isArray}}{{^isArray}}SoloValue{{/isArray}}({{#isArray}}
+				{{#items}}{{>params/parse-non-array-value}}{{/items}},{{/isArray}}{{^isArray}}
+				{{>params/parse-non-array-value}},{{/isArray}}
+			),{{/isBodyParam}}
 			validateValue: {{#isArray}}internal.NewArrayValidator({{#items}}{{#isModel}}
 				internal.New{{{dataType}}}Validator(internal.ModelValidatorParams{Location: "body"}),{{/isModel}}{{^isModel}}
 				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
