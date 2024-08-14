@@ -280,7 +280,7 @@ func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, erro
 	return (TFloat)(res), err
 }
 
-func parseMultiValueParamAsSingleValue[TTargetVal any](
+func parseMultiValueParamAsSoloValue[TTargetVal any](
 	targetParser rawValueParser[string, TTargetVal],
 ) rawValueParser[[]string, TTargetVal] {
 	return func(s []string, tv *TTargetVal) error {
@@ -288,11 +288,27 @@ func parseMultiValueParamAsSingleValue[TTargetVal any](
 	}
 }
 
-// parseSingleValueParamAsSingleValue is noop and used just to simplify templates.
-func parseSingleValueParamAsSingleValue[TRawVal any, TTargetVal any](
+// parseSoloValueParamAsSoloValue is noop and used just to simplify templates.
+func parseSoloValueParamAsSoloValue[TRawVal any, TTargetVal any](
 	targetParser rawValueParser[TRawVal, TTargetVal],
 ) rawValueParser[TRawVal, TTargetVal] {
 	return targetParser
+}
+
+func parseSoloValueParamAsSlice[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[string, []TTargetVal] {
+	return func(s string, tv *[]TTargetVal) error {
+		panic("not implemented")
+	}
+}
+
+func parseMultiValueParamAsSlice[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[[]string, []TTargetVal] {
+	return func(s []string, tv *[]TTargetVal) error {
+		panic("not implemented")
+	}
 }
 
 func parseNullableParam[TTargetVal any](

@@ -35,7 +35,9 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			field: "pathParam1",
 			location: "path",
 			required: true,
-			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseSoloValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "pathParam1", Location: "path"},
 			),
@@ -44,7 +46,9 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			field: "pathParam2",
 			location: "path",
 			required: true,
-			parseValue: parseSingleValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseSoloValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "pathParam2", Location: "path"},
 			),
@@ -53,7 +57,9 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			field: "requiredQuery1",
 			location: "query",
 			required: true,
-			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
 			),
@@ -62,7 +68,9 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			field: "requiredQuery2",
 			location: "query",
 			required: true,
-			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
 			),
@@ -91,7 +99,9 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			field: "requiredQuery1",
 			location: "query",
 			required: true,
-			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
@@ -100,7 +110,9 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			field: "requiredQuery2",
 			location: "query",
 			required: true,
-			parseValue: parseMultiValueParamAsSingleValue(app.knownParsers.float32Parser),
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.float32Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
 				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
