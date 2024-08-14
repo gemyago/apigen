@@ -233,11 +233,13 @@ func NewObjectFieldValidator[TTargetVal any](
 
 func NewArrayValidator[
 	TValue any,
-](_ FieldValidator[TValue]) FieldValidator[[]TValue] {
+](validateField FieldValidator[TValue]) FieldValidator[[]TValue] {
 	return func(
-		_ *BindingContext,
-		_ []TValue,
+		bindingCtx *BindingContext,
+		value []TValue,
 	) {
-		// TODO: Implement me
+		for _, v := range value {
+			validateField(bindingCtx, v)
+		}
 	}
 }
