@@ -20,6 +20,8 @@ paths:
     $ref: "./string-types/arrays-parsing.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
+  /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/array-items-range-validation.yaml"
   /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}:
     $ref: "./string-types/pattern-validation.yaml"
   /string-types/required-validation:

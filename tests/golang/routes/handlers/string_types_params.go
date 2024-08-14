@@ -10,7 +10,198 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.StringTypesArraysParsingRequest{}
+var _ = models.StringTypesArrayItemsRangeValidationRequest{}
+
+type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
+	bindUnformattedStr requestParamBinder[string, []string]
+	bindCustomFormatStr requestParamBinder[string, []string]
+	bindDateStr requestParamBinder[string, []time.Time]
+	bindDateTimeStr requestParamBinder[string, []time.Time]
+	bindByteStr requestParamBinder[string, []string]
+	bindUnformattedStrInQuery requestParamBinder[[]string, []string]
+	bindCustomFormatStrInQuery requestParamBinder[[]string, []string]
+	bindDateStrInQuery requestParamBinder[[]string, []time.Time]
+	bindDateTimeStrInQuery requestParamBinder[[]string, []time.Time]
+	bindByteStrInQuery requestParamBinder[[]string, []string]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesArrayItemsRangeValidationRequest]
+}
+
+func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesArrayItemsRangeValidationRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &StringTypesStringTypesArrayItemsRangeValidationRequest{}
+	// path params
+	p.bindUnformattedStr(&bindingCtx, readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
+	p.bindCustomFormatStr(&bindingCtx, readPathValue("customFormatStr", router, req), &reqParams.CustomFormatStr)
+	p.bindDateStr(&bindingCtx, readPathValue("dateStr", router, req), &reqParams.DateStr)
+	p.bindDateTimeStr(&bindingCtx, readPathValue("dateTimeStr", router, req), &reqParams.DateTimeStr)
+	p.bindByteStr(&bindingCtx, readPathValue("byteStr", router, req), &reqParams.ByteStr)
+	// query params
+	query := req.URL.Query()
+	p.bindUnformattedStrInQuery(&bindingCtx, readQueryValue("unformattedStrInQuery", query), &reqParams.UnformattedStrInQuery)
+	p.bindCustomFormatStrInQuery(&bindingCtx, readQueryValue("customFormatStrInQuery", query), &reqParams.CustomFormatStrInQuery)
+	p.bindDateStrInQuery(&bindingCtx, readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
+	p.bindDateTimeStrInQuery(&bindingCtx, readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
+	p.bindByteStrInQuery(&bindingCtx, readQueryValue("byteStrInQuery", query), &reqParams.ByteStrInQuery)
+	// body params
+	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesArrayItemsRangeValidationRequest] {
+	return &paramsParserStringTypesStringTypesArrayItemsRangeValidation{
+		bindUnformattedStr: newRequestParamBinder(binderParams[string, []string]{
+			field: "unformattedStr",
+			location: "path",
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](10, true),
+					internal.NewMinMaxLengthValidator[string](20, false),
+				),
+			),
+		}),
+		bindCustomFormatStr: newRequestParamBinder(binderParams[string, []string]{
+			field: "customFormatStr",
+			location: "path",
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](20, true),
+					internal.NewMinMaxLengthValidator[string](30, false),
+				),
+			),
+		}),
+		bindDateStr: newRequestParamBinder(binderParams[string, []time.Time]{
+			field: "dateStr",
+			location: "path",
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.dateParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[time.Time](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+				),
+			),
+		}),
+		bindDateTimeStr: newRequestParamBinder(binderParams[string, []time.Time]{
+			field: "dateTimeStr",
+			location: "path",
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.timeParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[time.Time](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+				),
+			),
+		}),
+		bindByteStr: newRequestParamBinder(binderParams[string, []string]{
+			field: "byteStr",
+			location: "path",
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](30, true),
+					internal.NewMinMaxLengthValidator[string](40, false),
+				),
+			),
+		}),
+		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
+			field: "unformattedStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](10, true),
+					internal.NewMinMaxLengthValidator[string](20, false),
+				),
+			),
+		}),
+		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
+			field: "customFormatStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](20, true),
+					internal.NewMinMaxLengthValidator[string](30, false),
+				),
+			),
+		}),
+		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
+			field: "dateStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.dateParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[time.Time](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+				),
+			),
+		}),
+		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
+			field: "dateTimeStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.timeParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[time.Time](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+				),
+			),
+		}),
+		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
+			field: "byteStrInQuery",
+			location: "query",
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.stringParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[string](
+					internal.SimpleFieldValidatorParams{Field: "inner", Location: ""},
+					internal.NewMinMaxLengthValidator[string](30, true),
+					internal.NewMinMaxLengthValidator[string](40, false),
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesArrayItemsRangeValidationRequest]{
+			field: "payload",
+			location: "body",
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.StringTypesArrayItemsRangeValidationRequest],
+			),
+			validateValue: internal.NewStringTypesArrayItemsRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+		}),
+	}
+}
 
 type paramsParserStringTypesStringTypesArraysParsing struct {
 	bindUnformattedStr requestParamBinder[string, []string]
