@@ -406,6 +406,88 @@ func TestStringTypes(t *testing.T) {
 		})
 	})
 
+	t.Run("arrays-parsing", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesArraysParsingRequest),
+		) *handlers.StringTypesStringTypesArraysParsingRequest {
+			req := &handlers.StringTypesStringTypesArraysParsingRequest{
+				// path
+				UnformattedStr:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+				CustomFormatStr: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+				DateStr:         []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+				DateTimeStr:     []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+				ByteStr:         []string{fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10)},
+
+				// query
+				UnformattedStrInQuery:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+				CustomFormatStrInQuery: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+				DateStrInQuery:         []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+				DateTimeStrInQuery:     []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+				ByteStrInQuery:         []string{fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10)},
+
+				// body
+				Payload: &models.StringTypesArraysParsingRequest{
+					UnformattedStr:  []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+					CustomFormatStr: []string{fake.Lorem().Word(), fake.Lorem().Word(), fake.Lorem().Word()},
+					DateStr:         []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+					DateTimeStr:     []time.Time{fake.Time().Time(time.Now()), fake.Time().Time(time.Now()), fake.Time().Time(time.Now())},
+					ByteStr:         []string{fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10)},
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesArraysParsingRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
+			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
+			query["dateStrInQuery"] = lo.Map(req.DateStrInQuery, func(v time.Time, _ int) string { return v.Format(time.DateOnly) })
+			query["dateTimeStrInQuery"] = lo.Map(req.DateTimeStrInQuery, func(v time.Time, _ int) string { return v.Format(time.RFC3339Nano) })
+			query["byteStrInQuery"] = req.ByteStrInQuery
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/arrays-parsing/%v/%v/%v/%v/%v",
+					strings.Join(originalReq.UnformattedStr, ","),
+					strings.Join(originalReq.CustomFormatStr, ","),
+					strings.Join(
+						lo.Map(originalReq.DateStr, func(v time.Time, _ int) string { return v.Format(time.DateOnly) }),
+						","),
+					strings.Join(
+						lo.Map(originalReq.DateTimeStr, func(v time.Time, _ int) string { return v.Format(time.RFC3339Nano) }),
+						","),
+					strings.Join(originalReq.ByteStr, ","),
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = lo.Map(originalReq.DateStr, func(v time.Time, _ int) time.Time {
+						return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+					})
+					wantReq.DateStrInQuery = lo.Map(originalReq.DateStrInQuery, func(v time.Time, _ int) time.Time {
+						return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+					})
+					assert.Equal(t, &wantReq, testActions.stringTypesArraysParsing.calls[0].params)
+				},
+			}
+		})
+	})
+
 	t.Run("range-validation", func(t *testing.T) {
 		randomReq := func(
 			opts ...func(*handlers.StringTypesStringTypesRangeValidationRequest),

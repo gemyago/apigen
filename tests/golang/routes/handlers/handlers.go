@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
@@ -295,19 +296,40 @@ func parseSoloValueParamAsSoloValue[TRawVal any, TTargetVal any](
 	return targetParser
 }
 
+// parseSoloValueParamAsSlice will always parse the input as csv string.
 func parseSoloValueParamAsSlice[TTargetVal any](
 	targetParser rawValueParser[string, TTargetVal],
 ) rawValueParser[string, []TTargetVal] {
 	return func(s string, tv *[]TTargetVal) error {
-		panic("not implemented")
+		items := strings.Split(s, ",")
+		resultingSlice := make([]TTargetVal, 0, len(items))
+		for _, item := range items {
+			var val TTargetVal
+			if err := targetParser(item, &val); err != nil {
+				return err
+			}
+			resultingSlice = append(resultingSlice, val)
+		}
+		*tv = resultingSlice
+		return nil
 	}
 }
 
+// parseMultiValueParamAsSlice will parse each value in the input slice separately.
 func parseMultiValueParamAsSlice[TTargetVal any](
 	targetParser rawValueParser[string, TTargetVal],
 ) rawValueParser[[]string, []TTargetVal] {
 	return func(s []string, tv *[]TTargetVal) error {
-		panic("not implemented")
+		resultingSlice := make([]TTargetVal, 0, len(s))
+		for _, item := range s {
+			var val TTargetVal
+			if err := targetParser(item, &val); err != nil {
+				return err
+			}
+			resultingSlice = append(resultingSlice, val)
+		}
+		*tv = resultingSlice
+		return nil
 	}
 }
 
