@@ -303,10 +303,10 @@ func parseSoloValueParamAsSlice[TTargetVal any](
 	return func(s string, tv *[]TTargetVal) error {
 		items := strings.Split(s, ",")
 		resultingSlice := make([]TTargetVal, 0, len(items))
-		for _, item := range items {
+		for i, item := range items {
 			var val TTargetVal
 			if err := targetParser(item, &val); err != nil {
-				return err
+				return fmt.Errorf("failed to parse value at index %d: %w", i, err)
 			}
 			resultingSlice = append(resultingSlice, val)
 		}
@@ -321,10 +321,10 @@ func parseMultiValueParamAsSlice[TTargetVal any](
 ) rawValueParser[[]string, []TTargetVal] {
 	return func(s []string, tv *[]TTargetVal) error {
 		resultingSlice := make([]TTargetVal, 0, len(s))
-		for _, item := range s {
+		for i, item := range s {
 			var val TTargetVal
 			if err := targetParser(item, &val); err != nil {
-				return err
+				return fmt.Errorf("failed to parse value at index %d: %w", i, err)
 			}
 			resultingSlice = append(resultingSlice, val)
 		}
