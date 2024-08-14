@@ -513,7 +513,9 @@ func TestStringTypes(t *testing.T) {
 			query := buildQuery(originalReq)
 
 			_, badDateStrValues := injectValueRandomly(fake, timesToStr(originalReq.DateStr, time.DateOnly), fake.Lorem().Word())
-			_, badDateTimeStrValues := injectValueRandomly(fake, timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), fake.Lorem().Word())
+			_, badDateTimeStrValues := injectValueRandomly(
+				fake, timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), fake.Lorem().Word(),
+			)
 
 			query["dateStrInQuery"] = badDateStrValues
 			query["dateTimeStrInQuery"] = badDateTimeStrValues
@@ -850,6 +852,65 @@ func TestStringTypes(t *testing.T) {
 					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
 					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
 				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
+				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
+				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
+
+				_, req.UnformattedStrInQuery = injectValueRandomly(fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(9))
+				_, req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(19),
+				)
+				_, req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, fake.RandomStringWithLength(29),
+				)
+
+				_, req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(9),
+				)
+				_, req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(19),
+				)
+				_, req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, fake.RandomStringWithLength(29),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/array-items-range-validation/%v/%v/%v/%v/%v",
+					strings.Join(originalReq.UnformattedStr, ","),
+					strings.Join(originalReq.CustomFormatStr, ","),
+					strings.Join(timesToStr(originalReq.DateStr, time.DateOnly), ","),
+					strings.Join(timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), ","),
+					strings.Join(originalReq.ByteStr, ","),
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]fieldBindingError{
+						// path
+						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "customFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: "byteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
 			}
 		})
 	})
