@@ -790,6 +790,107 @@ func TestStringTypes(t *testing.T) {
 		})
 	})
 
+	t.Run("array-items-range-validation", func(t *testing.T) {
+		randomStrings := func(n, minLength, maxLength int) []string {
+			strs := make([]string, n)
+			for i := range n {
+				length := fake.IntBetween(minLength, maxLength)
+				strs[i] = fake.RandomStringWithLength(length)
+			}
+			return strs
+		}
+
+		randomDates := func(n int) []time.Time {
+			dates := make([]time.Time, n)
+			for i := range n {
+				dates[i] = fake.Time().Time(time.Now())
+			}
+			return dates
+		}
+
+		timesToStr := func(v []time.Time, format string) []string {
+			return lo.Map(v, func(v time.Time, _ int) string { return v.Format(format) })
+		}
+
+		datePartOnly := func(v []time.Time) []time.Time {
+			return lo.Map(v, func(v time.Time, _ int) time.Time {
+				return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+			})
+		}
+
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest),
+		) *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest {
+			req := &handlers.StringTypesStringTypesArrayItemsRangeValidationRequest{
+				// path
+				UnformattedStr:  randomStrings(3, 10, 20),
+				CustomFormatStr: randomStrings(3, 20, 30),
+				DateStr:         randomDates(3),
+				DateTimeStr:     randomDates(3),
+				ByteStr:         randomStrings(3, 30, 40),
+
+				// query
+				UnformattedStrInQuery:  randomStrings(3, 10, 20),
+				CustomFormatStrInQuery: randomStrings(3, 20, 30),
+				DateStrInQuery:         randomDates(3),
+				DateTimeStrInQuery:     randomDates(3),
+				ByteStrInQuery:         randomStrings(3, 30, 40),
+
+				// body
+				Payload: &models.StringTypesArrayItemsRangeValidationRequest{
+					UnformattedStr:  randomStrings(3, 10, 20),
+					CustomFormatStr: randomStrings(3, 20, 30),
+					DateStr:         randomDates(3),
+					DateTimeStr:     randomDates(3),
+					ByteStr:         randomStrings(3, 30, 40),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
+			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
+			query["dateStrInQuery"] = timesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = timesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
+			query["byteStrInQuery"] = req.ByteStrInQuery
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/array-items-range-validation/%v/%v/%v/%v/%v",
+					strings.Join(originalReq.UnformattedStr, ","),
+					strings.Join(originalReq.CustomFormatStr, ","),
+					strings.Join(timesToStr(originalReq.DateStr, time.DateOnly), ","),
+					strings.Join(timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), ","),
+					strings.Join(originalReq.ByteStr, ","),
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
+				},
+			}
+		})
+	})
+
 	t.Run("required-validation", func(t *testing.T) {
 		randomReq := func(
 			opts ...func(*handlers.StringTypesStringTypesRequiredValidationRequest),
