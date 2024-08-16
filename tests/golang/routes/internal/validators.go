@@ -268,6 +268,7 @@ func NewArrayValidator[
 		value []TValue,
 	) {
 		for i, v := range value {
+			// TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
 			validateField(bindingCtx.Fork(strconv.Itoa(i)), v)
 		}
 	}
