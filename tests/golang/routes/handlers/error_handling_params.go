@@ -103,7 +103,8 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
+				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -114,7 +115,8 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},internal.NewMinMaxValueValidator[float32](10, false, true),
+				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
+				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 	}
