@@ -51,15 +51,15 @@ func NewSimpleObjectsContainerValidator(params ModelValidatorParams) FieldValida
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleObjectsContainer) {
-		validateSimpleField1(bindingCtx, value.SimpleField1)
-		validateSimpleField2(bindingCtx, value.SimpleField2)
-		validateSimpleObject1(bindingCtx, value.SimpleObject1)
-		validateSimpleObject2(bindingCtx, value.SimpleObject2)
-		validateSimpleNullableObject1(bindingCtx, value.SimpleNullableObject1)
-		validateSimpleNullableObject2(bindingCtx, value.SimpleNullableObject2)
-		validateOptionalSimpleObject1(bindingCtx, value.OptionalSimpleObject1)
-		validateOptionalSimpleObject2(bindingCtx, value.OptionalSimpleObject2)
-		validateOptionalNullableSimpleObject1(bindingCtx, value.OptionalNullableSimpleObject1)
-		validateOptionalNullableSimpleObject2(bindingCtx, value.OptionalNullableSimpleObject2)
+		validateSimpleField1(bindingCtx.Fork("simpleField1"), value.SimpleField1)
+		validateSimpleField2(bindingCtx.Fork("simpleField2"), value.SimpleField2)
+		validateSimpleObject1(bindingCtx.Fork("simpleObject1"), value.SimpleObject1)
+		validateSimpleObject2(bindingCtx.Fork("simpleObject2"), value.SimpleObject2)
+		validateSimpleNullableObject1(bindingCtx.Fork("simpleNullableObject1"), value.SimpleNullableObject1)
+		validateSimpleNullableObject2(bindingCtx.Fork("simpleNullableObject2"), value.SimpleNullableObject2)
+		validateOptionalSimpleObject1(bindingCtx.Fork("optionalSimpleObject1"), value.OptionalSimpleObject1)
+		validateOptionalSimpleObject2(bindingCtx.Fork("optionalSimpleObject2"), value.OptionalSimpleObject2)
+		validateOptionalNullableSimpleObject1(bindingCtx.Fork("optionalNullableSimpleObject1"), value.OptionalNullableSimpleObject1)
+		validateOptionalNullableSimpleObject2(bindingCtx.Fork("optionalNullableSimpleObject2"), value.OptionalNullableSimpleObject2)
 	}
 }

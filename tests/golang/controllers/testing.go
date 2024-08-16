@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	"github.com/jaswdr/faker"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -107,8 +108,13 @@ func marshalJSONDataAsReader(t *testing.T, data any) io.Reader {
 
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
 
+type expectedBindingError struct {
+	Field    string
+	Location string
+	Code     string
+}
+
 type fieldBindingError struct {
-	Field    string `json:"field"`
 	Location string `json:"location"`
 	Code     string `json:"code"`
 }
@@ -117,7 +123,7 @@ type aggregatedBindingError struct {
 	Errors []fieldBindingError `json:"errors"`
 }
 
-func expectBindingErrors[TActions any](wantErrors []fieldBindingError) routeTestCaseExpectFn[TActions] {
+func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
 		_ TActions,
@@ -156,9 +162,10 @@ func assertFieldError(
 	field string,
 	code string,
 ) {
+	fieldPath := lo.If(field == "", location).Else(location + "." + field)
 	for _, fieldErr := range err.Errors {
-		if fieldErr.Location == location && fieldErr.Field == field {
-			assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", field)
+		if fieldErr.Location == fieldPath {
+			assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", fieldPath)
 			return
 		}
 	}

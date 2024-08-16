@@ -23,9 +23,9 @@ func NewObjectsArrayParsingBodyNestedRequestValidator(params ModelValidatorParam
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectsArrayParsingBodyNestedRequest) {
-		validateNestedArray1(bindingCtx, value.NestedArray1)
-		validateNestedArray2(bindingCtx, value.NestedArray2)
-		validateNestedArrayContainer1(bindingCtx, value.NestedArrayContainer1)
-		validateNestedArrayContainer2(bindingCtx, value.NestedArrayContainer2)
+		validateNestedArray1(bindingCtx.Fork("nestedArray1"), value.NestedArray1)
+		validateNestedArray2(bindingCtx.Fork("nestedArray2"), value.NestedArray2)
+		validateNestedArrayContainer1(bindingCtx.Fork("nestedArrayContainer1"), value.NestedArrayContainer1)
+		validateNestedArrayContainer2(bindingCtx.Fork("nestedArrayContainer2"), value.NestedArrayContainer2)
 	}
 }

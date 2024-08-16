@@ -105,7 +105,7 @@ func TestNumericTypes(t *testing.T) {
 						"numberAny": %v
 					}`, fake.Lorem().Word()))),
 					expect: expectBindingErrors[*numericTypesControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							// path
 							{Field: "numberAny", Location: "path", Code: "BAD_FORMAT"},
 							{Field: "numberFloat", Location: "path", Code: "BAD_FORMAT"},
@@ -123,7 +123,7 @@ func TestNumericTypes(t *testing.T) {
 							{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
 
 							// body
-							{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+							{Location: "body", Code: "BAD_FORMAT"},
 						},
 					),
 				}
@@ -178,7 +178,7 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -286,7 +286,7 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -407,7 +407,7 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -471,7 +471,7 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -616,7 +616,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(wantReq),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "optionalNumberAnyInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalNumberFloatInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalNumberDoubleInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
@@ -649,7 +649,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: buildQuery(),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "numberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "numberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -671,7 +671,7 @@ func TestNumericTypes(t *testing.T) {
 				path:  "/numeric-types/required-validation",
 				query: url.Values{},
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "numberAnyInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "numberFloatInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "numberDoubleInQuery", Location: "query", Code: "INVALID_REQUIRED"},
@@ -782,7 +782,7 @@ func TestNumericTypes(t *testing.T) {
 				query: buildQuery(wantReq),
 				body:  marshalJSONDataAsReader(t, wantReq.Payload),
 				expect: expectBindingErrors[*numericTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "numberAny", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "numberFloat", Location: "path", Code: "INVALID_OUT_OF_RANGE"},

@@ -24,7 +24,7 @@ func New{{classname}}Validator(params ModelValidatorParams) FieldValidator[*{{pa
 	{{/isArray}}{{/vars}}
 	return func(bindingCtx *BindingContext, value *{{package}}.{{classname}}) {
 		{{#vars}}
-		validate{{name}}(bindingCtx, value.{{name}})
+		validate{{name}}(bindingCtx.Fork("{{baseName}}"), value.{{name}})
 		{{/vars}}
 	}
 }

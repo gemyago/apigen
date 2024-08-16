@@ -52,12 +52,12 @@ func NewNumericTypesNullableRequestValidator(params ModelValidatorParams) FieldV
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.NumericTypesNullableRequest) {
-		validateNumberAny(bindingCtx, value.NumberAny)
-		validateOptionalNumberAny(bindingCtx, value.OptionalNumberAny)
-		validateNumberFloat(bindingCtx, value.NumberFloat)
-		validateNumberDouble(bindingCtx, value.NumberDouble)
-		validateNumberInt(bindingCtx, value.NumberInt)
-		validateNumberInt32(bindingCtx, value.NumberInt32)
-		validateNumberInt64(bindingCtx, value.NumberInt64)
+		validateNumberAny(bindingCtx.Fork("numberAny"), value.NumberAny)
+		validateOptionalNumberAny(bindingCtx.Fork("optionalNumberAny"), value.OptionalNumberAny)
+		validateNumberFloat(bindingCtx.Fork("numberFloat"), value.NumberFloat)
+		validateNumberDouble(bindingCtx.Fork("numberDouble"), value.NumberDouble)
+		validateNumberInt(bindingCtx.Fork("numberInt"), value.NumberInt)
+		validateNumberInt32(bindingCtx.Fork("numberInt32"), value.NumberInt32)
+		validateNumberInt64(bindingCtx.Fork("numberInt64"), value.NumberInt64)
 	}
 }

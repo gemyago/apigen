@@ -19,7 +19,7 @@ func NewObjectsDeeplyNestedRequestContainer1Validator(params ModelValidatorParam
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectsDeeplyNestedRequestContainer1) {
-		validateContainer11(bindingCtx, value.Container11)
-		validateContainer12(bindingCtx, value.Container12)
+		validateContainer11(bindingCtx.Fork("container11"), value.Container11)
+		validateContainer12(bindingCtx.Fork("container12"), value.Container12)
 	}
 }

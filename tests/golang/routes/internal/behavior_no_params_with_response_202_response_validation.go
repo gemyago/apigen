@@ -14,6 +14,6 @@ func NewBehaviorNoParamsWithResponse202ResponseValidator(params ModelValidatorPa
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.BehaviorNoParamsWithResponse202Response) {
-		validateField1(bindingCtx, value.Field1)
+		validateField1(bindingCtx.Fork("field1"), value.Field1)
 	}
 }

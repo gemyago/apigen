@@ -29,9 +29,9 @@ func NewStringTypesPatternValidationRequestValidator(params ModelValidatorParams
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.StringTypesPatternValidationRequest) {
-		validateUnformattedStr(bindingCtx, value.UnformattedStr)
-		validateCustomFormatStr(bindingCtx, value.CustomFormatStr)
-		validateDateStr(bindingCtx, value.DateStr)
-		validateDateTimeStr(bindingCtx, value.DateTimeStr)
+		validateUnformattedStr(bindingCtx.Fork("unformattedStr"), value.UnformattedStr)
+		validateCustomFormatStr(bindingCtx.Fork("customFormatStr"), value.CustomFormatStr)
+		validateDateStr(bindingCtx.Fork("dateStr"), value.DateStr)
+		validateDateTimeStr(bindingCtx.Fork("dateTimeStr"), value.DateTimeStr)
 	}
 }

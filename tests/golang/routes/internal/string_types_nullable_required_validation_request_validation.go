@@ -24,7 +24,7 @@ func NewStringTypesNullableRequiredValidationRequestValidator(params ModelValida
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.StringTypesNullableRequiredValidationRequest) {
-		validateUnformattedStr(bindingCtx, value.UnformattedStr)
-		validateOptionalUnformattedStr(bindingCtx, value.OptionalUnformattedStr)
+		validateUnformattedStr(bindingCtx.Fork("unformattedStr"), value.UnformattedStr)
+		validateOptionalUnformattedStr(bindingCtx.Fork("optionalUnformattedStr"), value.OptionalUnformattedStr)
 	}
 }

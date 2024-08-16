@@ -15,6 +15,6 @@ func NewSimpleNullableObjectValidator(params ModelValidatorParams) FieldValidato
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleNullableObject) {
-		validateSimpleField1(bindingCtx, value.SimpleField1)
+		validateSimpleField1(bindingCtx.Fork("simpleField1"), value.SimpleField1)
 	}
 }

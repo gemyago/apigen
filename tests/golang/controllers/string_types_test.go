@@ -175,7 +175,7 @@ func TestStringTypes(t *testing.T) {
 					"unformattedStr": %v
 				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
@@ -185,7 +185,7 @@ func TestStringTypes(t *testing.T) {
 						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -216,7 +216,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.Payload.ByteStr,
 				))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 
@@ -380,7 +380,7 @@ func TestStringTypes(t *testing.T) {
 					"unformattedStr": %v
 				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
@@ -390,7 +390,7 @@ func TestStringTypes(t *testing.T) {
 						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -421,7 +421,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.Payload.ByteStr,
 				))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 
@@ -535,7 +535,7 @@ func TestStringTypes(t *testing.T) {
 					"unformattedStr": [%v]
 				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
@@ -545,7 +545,7 @@ func TestStringTypes(t *testing.T) {
 						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -645,7 +645,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -725,7 +725,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -895,7 +895,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -1067,7 +1067,7 @@ func TestStringTypes(t *testing.T) {
 				query:  query,
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// query
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
@@ -1105,7 +1105,7 @@ func TestStringTypes(t *testing.T) {
 				query:  url.Values{},
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// query
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
@@ -1158,7 +1158,7 @@ func TestStringTypes(t *testing.T) {
 				query:  query,
 				body:   bytes.NewBufferString(`{}`),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 					},
 				),
@@ -1178,7 +1178,7 @@ func TestStringTypes(t *testing.T) {
 					OptionalUnformattedStr: lo.ToPtr(fake.RandomStringWithLength(9)),
 				}),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalUnformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
@@ -1277,7 +1277,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStr", Location: "path", Code: "INVALID"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID"},
 

@@ -29,7 +29,7 @@ func TestErrorHandling(t *testing.T) {
 		name       string
 		path       string
 		query      url.Values
-		wantErrors []fieldBindingError
+		wantErrors []expectedBindingError
 	}
 
 	runTestCase := func(t *testing.T, tc testCase) {
@@ -63,7 +63,7 @@ func TestErrorHandling(t *testing.T) {
 				"/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s",
 				fake.Lorem().Word(),
 			),
-			wantErrors: []fieldBindingError{
+			wantErrors: []expectedBindingError{
 				{Field: "pathParam1", Location: "path", Code: "BAD_FORMAT"},
 				{Field: "pathParam2", Location: "path", Code: "BAD_FORMAT"},
 				{Field: "requiredQuery1", Location: "query", Code: "BAD_FORMAT"},
@@ -76,7 +76,7 @@ func TestErrorHandling(t *testing.T) {
 		runTestCase(t, testCase{
 			name: "respond with 400 if validation fails",
 			path: "/error-handling/validation-errors?requiredQuery1=1&requiredQuery2=2",
-			wantErrors: []fieldBindingError{
+			wantErrors: []expectedBindingError{
 				{Field: "requiredQuery1", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 				{Field: "requiredQuery2", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 			},

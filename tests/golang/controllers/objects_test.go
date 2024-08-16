@@ -99,9 +99,9 @@ func TestObjects(t *testing.T) {
 					method: http.MethodPost,
 					path:   "/objects/nullable-body",
 					expect: expectBindingErrors[*objectsControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							// body
-							{Field: "payload", Location: "body", Code: "INVALID_REQUIRED"},
+							{Location: "body", Code: "INVALID_REQUIRED"},
 						},
 					),
 				}
@@ -175,9 +175,9 @@ func TestObjects(t *testing.T) {
 					method: http.MethodPost,
 					path:   "/objects/required-body",
 					expect: expectBindingErrors[*objectsControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							// body
-							{Field: "payload", Location: "body", Code: "INVALID_REQUIRED"},
+							{Location: "body", Code: "INVALID_REQUIRED"},
 						},
 					),
 				}
@@ -312,7 +312,7 @@ func TestObjects(t *testing.T) {
 				path:   "/objects/required-nested-objects",
 				body:   bytes.NewBufferString(`{}`),
 				expect: expectBindingErrors[*objectsControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// body
 						{Field: "simpleField1", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "simpleField2", Location: "body", Code: "INVALID_REQUIRED"},
@@ -376,7 +376,7 @@ func TestObjects(t *testing.T) {
 				path:   "/objects/deeply-nested",
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*objectsControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// body
 						{Field: "simpleField1", Location: "body.container1.container11.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "simpleField1", Location: "body.container1.container11.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},

@@ -17,7 +17,7 @@ func NewBooleanParsingRequestValidator(params ModelValidatorParams) FieldValidat
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.BooleanParsingRequest) {
-		validateBoolParam1(bindingCtx, value.BoolParam1)
-		validateBoolParam2(bindingCtx, value.BoolParam2)
+		validateBoolParam1(bindingCtx.Fork("boolParam1"), value.BoolParam1)
+		validateBoolParam2(bindingCtx.Fork("boolParam2"), value.BoolParam2)
 	}
 }

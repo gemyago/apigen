@@ -20,8 +20,8 @@ func NewBooleanNullableRequestValidator(params ModelValidatorParams) FieldValida
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.BooleanNullableRequest) {
-		validateBoolParam1(bindingCtx, value.BoolParam1)
-		validateBoolParam2(bindingCtx, value.BoolParam2)
-		validateOptionalBoolParam1(bindingCtx, value.OptionalBoolParam1)
+		validateBoolParam1(bindingCtx.Fork("boolParam1"), value.BoolParam1)
+		validateBoolParam2(bindingCtx.Fork("boolParam2"), value.BoolParam2)
+		validateOptionalBoolParam1(bindingCtx.Fork("optionalBoolParam1"), value.OptionalBoolParam1)
 	}
 }

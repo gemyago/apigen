@@ -30,16 +30,18 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
-	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{nameInPascalCase}})
+	pathParamsCtx := bindingCtx.Fork("path")
+	{{/-first}}p.bind{{nameInPascalCase}}(pathParamsCtx.Fork("{{baseName}}"), readPathValue("{{baseName}}", router, req), &reqParams.{{nameInPascalCase}})
 	{{/pathParams}}
 	{{#queryParams}}
 	{{#-first}}// query params
 	query := req.URL.Query()
-	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{nameInPascalCase}})
+	queryParamsCtx := bindingCtx.Fork("query")
+	{{/-first}}p.bind{{nameInPascalCase}}(queryParamsCtx.Fork("{{baseName}}"), readQueryValue("{{baseName}}", query), &reqParams.{{nameInPascalCase}})
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{nameInPascalCase}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	{{/-first}}p.bind{{nameInPascalCase}}(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -48,8 +50,6 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
 		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
-			field: "{{baseName}}",
-			location: "{{#vendorExtensions}}{{x-apigen-param-location}}{{/vendorExtensions}}",
 			required: {{required}},{{#isBodyParam}}
 			parseValue: parseSoloValueParamAsSoloValue(
 				{{>params/parse-non-array-value}},

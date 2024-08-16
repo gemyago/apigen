@@ -16,6 +16,6 @@ func NewSimpleObjectValidator(params ModelValidatorParams) FieldValidator[*model
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleObject) {
-		validateSimpleField1(bindingCtx, value.SimpleField1)
+		validateSimpleField1(bindingCtx.Fork("simpleField1"), value.SimpleField1)
 	}
 }

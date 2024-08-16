@@ -102,12 +102,12 @@ func TestBoolean(t *testing.T) {
 						"boolParam2": %v
 					}`),
 					expect: expectBindingErrors[*booleanControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							{Field: "boolParam1", Location: "path", Code: "BAD_FORMAT"},
 							{Field: "boolParam2", Location: "path", Code: "BAD_FORMAT"},
 							{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
 							{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
-							{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+							{Location: "body", Code: "BAD_FORMAT"},
 						},
 					),
 				}
@@ -191,7 +191,7 @@ func TestBoolean(t *testing.T) {
 				query:  query,
 				body:   bytes.NewBufferString("{}"),
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "boolParam2InQuery", Location: "query", Code: "BAD_FORMAT"},
 						{Field: "optionalBoolParam1InQuery", Location: "query", Code: "BAD_FORMAT"},
@@ -213,7 +213,7 @@ func TestBoolean(t *testing.T) {
 				query:  query,
 				body:   bytes.NewBufferString("{}"),
 				expect: expectBindingErrors[*booleanControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "boolParam1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "boolParam2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
 
