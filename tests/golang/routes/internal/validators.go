@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strconv"
 
 	"golang.org/x/exp/constraints"
 )
@@ -266,8 +267,8 @@ func NewArrayValidator[
 		bindingCtx *BindingContext,
 		value []TValue,
 	) {
-		for _, v := range value {
-			validateField(bindingCtx, v)
+		for i, v := range value {
+			validateField(bindingCtx.Fork(strconv.Itoa(i)), v)
 		}
 	}
 }

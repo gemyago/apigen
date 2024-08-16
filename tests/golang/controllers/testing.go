@@ -170,8 +170,8 @@ func assertFieldError(
 		}
 	}
 	assert.FailNow(t,
-		fmt.Sprintf("no error found for field %s, location %s, code %s. Got Errors: %v",
-			field, location, code, err.Errors,
+		fmt.Sprintf("no error found for field %s, code %s. Got Errors: %v",
+			fieldPath, code, err.Errors,
 		))
 }
 

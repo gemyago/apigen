@@ -855,28 +855,30 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 
-		// TODO: need to rework path resolution first
-		/*runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
+		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
+			badIndices := make([]int, 9)
 			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
-				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
-				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
-				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
+				badIndices[0], req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
+				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
+				badIndices[2], req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
 
-				_, req.UnformattedStrInQuery = injectValueRandomly(fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(9))
-				_, req.CustomFormatStrInQuery = injectValueRandomly(
+				badIndices[3], req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(9),
+				)
+				badIndices[4], req.CustomFormatStrInQuery = injectValueRandomly(
 					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(19),
 				)
-				_, req.ByteStrInQuery = injectValueRandomly(
+				badIndices[5], req.ByteStrInQuery = injectValueRandomly(
 					fake, req.ByteStrInQuery, fake.RandomStringWithLength(29),
 				)
 
-				_, req.Payload.UnformattedStr = injectValueRandomly(
+				badIndices[6], req.Payload.UnformattedStr = injectValueRandomly(
 					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(9),
 				)
-				_, req.Payload.CustomFormatStr = injectValueRandomly(
+				badIndices[7], req.Payload.CustomFormatStr = injectValueRandomly(
 					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(19),
 				)
-				_, req.Payload.ByteStr = injectValueRandomly(
+				badIndices[8], req.Payload.ByteStr = injectValueRandomly(
 					fake, req.Payload.ByteStr, fake.RandomStringWithLength(29),
 				)
 			})
@@ -897,23 +899,23 @@ func TestStringTypes(t *testing.T) {
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
 					[]expectedBindingError{
 						// path
-						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "byteStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[0]), Location: "path.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[1]), Location: "path.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[2]), Location: "path.byteStr", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "byteStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[3]), Location: "query.unformattedStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[4]), Location: "query.customFormatStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[5]), Location: "query.byteStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
 
 						// query
-						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "customFormatStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
-						{Field: "byteStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[6]), Location: "body.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[7]), Location: "body.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[8]), Location: "body.byteStr", Code: "INVALID_OUT_OF_RANGE"},
 					},
 				),
 			}
-		})*/
+		})
 	})
 
 	t.Run("required-validation", func(t *testing.T) {
