@@ -78,7 +78,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.BooleanNullableRequest],
 			),
-			validateValue: internal.NewBooleanNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewBooleanNullableRequestValidator(),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			required: false,
@@ -155,7 +155,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.BooleanParsingRequest],
 			),
-			validateValue: internal.NewBooleanParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewBooleanParsingRequestValidator(),
 		}),
 	}
 }
@@ -206,7 +206,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.BooleanRequiredValidationRequest],
 			),
-			validateValue: internal.NewBooleanRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewBooleanRequiredValidationRequestValidator(),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: false,

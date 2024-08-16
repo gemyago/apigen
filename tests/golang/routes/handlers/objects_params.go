@@ -32,7 +32,7 @@ func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsPar
 				parseJSONPayload[[]*models.ObjectArraysSimpleObject],
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewObjectArraysSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+				internal.NewObjectArraysSimpleObjectValidator(),
 			),
 		}),
 	}
@@ -57,7 +57,7 @@ func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsPar
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
 			),
-			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(),
 		}),
 	}
 }
@@ -81,7 +81,7 @@ func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.ObjectsDeeplyNestedRequest],
 			),
-			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(),
 		}),
 	}
 }
@@ -105,7 +105,7 @@ func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParse
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.SimpleNullableObject],
 			),
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
@@ -129,7 +129,7 @@ func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParse
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.SimpleNullableObject],
 			),
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator(internal.ModelValidatorParams{Location: "body"})),
+			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
@@ -153,7 +153,7 @@ func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.SimpleObject],
 			),
-			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewSimpleObjectValidator(),
 		}),
 	}
 }
@@ -177,7 +177,7 @@ func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.SimpleObject],
 			),
-			validateValue: internal.NewSimpleObjectValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewSimpleObjectValidator(),
 		}),
 	}
 }
@@ -201,7 +201,7 @@ func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsPars
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.SimpleObjectsContainer],
 			),
-			validateValue: internal.NewSimpleObjectsContainerValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewSimpleObjectsContainerValidator(),
 		}),
 	}
 }

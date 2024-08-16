@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBehaviorNoParamsWithResponse202ResponseValidator(params ModelValidatorParams) FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
+func NewBehaviorNoParamsWithResponse202ResponseValidator() FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
 	validateField1 := NewSimpleFieldValidator[string](
 	)
 	

@@ -203,10 +203,6 @@ type FieldValidator[TValue any] func(
 	value TValue,
 )
 
-type ModelValidatorParams struct {
-	Location string
-}
-
 func NewSimpleFieldValidator[
 	TValue any,
 ](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
@@ -232,8 +228,6 @@ func NewSimpleFieldValidator[
 type ObjectFieldValidatorParams struct {
 	Nullable bool
 	Required bool
-	Field    string
-	Location string
 }
 
 func NewObjectFieldValidator[TTargetVal any](

@@ -8,12 +8,12 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectArraysSimpleObjectsContainerValidator(params ModelValidatorParams) FieldValidator[*models.ObjectArraysSimpleObjectsContainer] {
+func NewObjectArraysSimpleObjectsContainerValidator() FieldValidator[*models.ObjectArraysSimpleObjectsContainer] {
 	validateSimpleObjects1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewObjectArraysSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".SimpleObjects1"}),
+		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateSimpleObjects2 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewObjectArraysSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".SimpleObjects2"}),
+		NewObjectArraysSimpleObjectValidator(),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectArraysSimpleObjectsContainer) {

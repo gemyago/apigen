@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesPatternValidationRequestValidator(params ModelValidatorParams) FieldValidator[*models.StringTypesPatternValidationRequest] {
+func NewStringTypesPatternValidationRequestValidator() FieldValidator[*models.StringTypesPatternValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 		NewPatternValidator[string]("^\\d{10}$"),

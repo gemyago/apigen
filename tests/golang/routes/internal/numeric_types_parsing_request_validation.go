@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewNumericTypesParsingRequestValidator(params ModelValidatorParams) FieldValidator[*models.NumericTypesParsingRequest] {
+func NewNumericTypesParsingRequestValidator() FieldValidator[*models.NumericTypesParsingRequest] {
 	validateNumberAny := NewSimpleFieldValidator[float32](
 		EnsureNonDefault[float32],
 	)

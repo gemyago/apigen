@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewSimpleNullableObjectValidator(params ModelValidatorParams) FieldValidator[*models.SimpleNullableObject] {
+func NewSimpleNullableObjectValidator() FieldValidator[*models.SimpleNullableObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)

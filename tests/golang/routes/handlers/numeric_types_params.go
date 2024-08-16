@@ -182,7 +182,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.NumericTypesNullableRequest],
 			),
-			validateValue: internal.NewNumericTypesNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewNumericTypesNullableRequestValidator(),
 		}),
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			required: false,
@@ -341,7 +341,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.NumericTypesParsingRequest],
 			),
-			validateValue: internal.NewNumericTypesParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewNumericTypesParsingRequestValidator(),
 		}),
 	}
 }
@@ -514,7 +514,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.NumericTypesRangeValidationRequest],
 			),
-			validateValue: internal.NewNumericTypesRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewNumericTypesRangeValidationRequestValidator(),
 		}),
 	}
 }
@@ -687,7 +687,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.NumericTypesRangeValidationExclusiveRequest],
 			),
-			validateValue: internal.NewNumericTypesRangeValidationExclusiveRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewNumericTypesRangeValidationExclusiveRequestValidator(),
 		}),
 	}
 }

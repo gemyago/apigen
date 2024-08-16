@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBooleanParsingRequestValidator(params ModelValidatorParams) FieldValidator[*models.BooleanParsingRequest] {
+func NewBooleanParsingRequestValidator() FieldValidator[*models.BooleanParsingRequest] {
 	validateBoolParam1 := NewSimpleFieldValidator[bool](
 	)
 	validateBoolParam2 := NewSimpleFieldValidator[bool](

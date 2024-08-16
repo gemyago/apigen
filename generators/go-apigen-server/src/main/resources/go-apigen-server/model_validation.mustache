@@ -12,14 +12,14 @@ import (
 var _ = time.Time{}
 
 {{#model}}
-func New{{classname}}Validator(params ModelValidatorParams) FieldValidator[*{{package}}.{{classname}}] {
+func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}]({{#items}}{{#isModel}}
-		New{{{dataType}}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),{{/isModel}}{{^isModel}}
+		New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
 		{{#lambda.tab_indented_3}}{{>models/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
 	{{/items}})
 	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>models/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "{{baseName}}", Location: params.Location, Required: {{{required}}}, Nullable: {{{isNullable}}}},
-		New{{dataType}}Validator(ModelValidatorParams{Location: params.Location + ".{{baseName}}"}),
+		ObjectFieldValidatorParams{Required: {{{required}}}, Nullable: {{{isNullable}}}},
+		New{{dataType}}Validator(),
 	){{/isModel}}
 	{{/isArray}}{{/vars}}
 	return func(bindingCtx *BindingContext, value *{{package}}.{{classname}}) {

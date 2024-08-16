@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesNullableRequiredValidationRequestValidator(params ModelValidatorParams) FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
+func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[*string](
 		SkipNullValidator(EnsureNonDefault[string]),
 		SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),

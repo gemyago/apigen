@@ -8,18 +8,18 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectsArrayParsingBodyNestedRequestValidator(params ModelValidatorParams) FieldValidator[*models.ObjectsArrayParsingBodyNestedRequest] {
+func NewObjectsArrayParsingBodyNestedRequestValidator() FieldValidator[*models.ObjectsArrayParsingBodyNestedRequest] {
 	validateNestedArray1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewObjectArraysSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".NestedArray1"}),
+		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateNestedArray2 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewObjectArraysSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".NestedArray2"}),
+		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateNestedArrayContainer1 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
-		NewObjectArraysSimpleObjectsContainerValidator(ModelValidatorParams{Location: params.Location + ".NestedArrayContainer1"}),
+		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
 	validateNestedArrayContainer2 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
-		NewObjectArraysSimpleObjectsContainerValidator(ModelValidatorParams{Location: params.Location + ".NestedArrayContainer2"}),
+		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectsArrayParsingBodyNestedRequest) {

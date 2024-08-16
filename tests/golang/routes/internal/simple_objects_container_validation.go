@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewSimpleObjectsContainerValidator(params ModelValidatorParams) FieldValidator[*models.SimpleObjectsContainer] {
+func NewSimpleObjectsContainerValidator() FieldValidator[*models.SimpleObjectsContainer] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
@@ -16,36 +16,36 @@ func NewSimpleObjectsContainerValidator(params ModelValidatorParams) FieldValida
 		EnsureNonDefault[string],
 	)
 	validateSimpleObject1 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "simpleObject1", Location: params.Location, Required: true, Nullable: false},
-		NewSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".simpleObject1"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: false},
+		NewSimpleObjectValidator(),
 	)
 	validateSimpleObject2 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "simpleObject2", Location: params.Location, Required: true, Nullable: false},
-		NewSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".simpleObject2"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: false},
+		NewSimpleObjectValidator(),
 	)
 	validateSimpleNullableObject1 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "simpleNullableObject1", Location: params.Location, Required: true, Nullable: true},
-		NewSimpleNullableObjectValidator(ModelValidatorParams{Location: params.Location + ".simpleNullableObject1"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: true},
+		NewSimpleNullableObjectValidator(),
 	)
 	validateSimpleNullableObject2 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "simpleNullableObject2", Location: params.Location, Required: true, Nullable: true},
-		NewSimpleNullableObjectValidator(ModelValidatorParams{Location: params.Location + ".simpleNullableObject2"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: true},
+		NewSimpleNullableObjectValidator(),
 	)
 	validateOptionalSimpleObject1 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "optionalSimpleObject1", Location: params.Location, Required: false, Nullable: false},
-		NewSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".optionalSimpleObject1"}),
+		ObjectFieldValidatorParams{Required: false, Nullable: false},
+		NewSimpleObjectValidator(),
 	)
 	validateOptionalSimpleObject2 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "optionalSimpleObject2", Location: params.Location, Required: false, Nullable: false},
-		NewSimpleObjectValidator(ModelValidatorParams{Location: params.Location + ".optionalSimpleObject2"}),
+		ObjectFieldValidatorParams{Required: false, Nullable: false},
+		NewSimpleObjectValidator(),
 	)
 	validateOptionalNullableSimpleObject1 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "optionalNullableSimpleObject1", Location: params.Location, Required: false, Nullable: true},
-		NewSimpleNullableObjectValidator(ModelValidatorParams{Location: params.Location + ".optionalNullableSimpleObject1"}),
+		ObjectFieldValidatorParams{Required: false, Nullable: true},
+		NewSimpleNullableObjectValidator(),
 	)
 	validateOptionalNullableSimpleObject2 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "optionalNullableSimpleObject2", Location: params.Location, Required: false, Nullable: true},
-		NewSimpleNullableObjectValidator(ModelValidatorParams{Location: params.Location + ".optionalNullableSimpleObject2"}),
+		ObjectFieldValidatorParams{Required: false, Nullable: true},
+		NewSimpleNullableObjectValidator(),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleObjectsContainer) {

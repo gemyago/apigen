@@ -168,7 +168,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesArrayItemsRangeValidationRequest],
 			),
-			validateValue: internal.NewStringTypesArrayItemsRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesArrayItemsRangeValidationRequestValidator(),
 		}),
 	}
 }
@@ -317,7 +317,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesArraysParsingRequest],
 			),
-			validateValue: internal.NewStringTypesArraysParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesArraysParsingRequestValidator(),
 		}),
 	}
 }
@@ -446,7 +446,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesNullableParsingRequest],
 			),
-			validateValue: internal.NewStringTypesNullableParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesNullableParsingRequestValidator(),
 		}),
 	}
 }
@@ -488,7 +488,7 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesNullableRequiredValidationRequest],
 			),
-			validateValue: internal.NewStringTypesNullableRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesNullableRequiredValidationRequestValidator(),
 		}),
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: false,
@@ -628,7 +628,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesParsingRequest],
 			),
-			validateValue: internal.NewStringTypesParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesParsingRequestValidator(),
 		}),
 	}
 }
@@ -741,7 +741,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesPatternValidationRequest],
 			),
-			validateValue: internal.NewStringTypesPatternValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesPatternValidationRequestValidator(),
 		}),
 	}
 }
@@ -882,7 +882,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesRangeValidationRequest],
 			),
-			validateValue: internal.NewStringTypesRangeValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesRangeValidationRequestValidator(),
 		}),
 	}
 }
@@ -972,7 +972,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*models.StringTypesRequiredValidationRequest],
 			),
-			validateValue: internal.NewStringTypesRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			validateValue: internal.NewStringTypesRequiredValidationRequestValidator(),
 		}),
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,

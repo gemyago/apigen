@@ -8,14 +8,14 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectsDeeplyNestedRequestValidator(params ModelValidatorParams) FieldValidator[*models.ObjectsDeeplyNestedRequest] {
+func NewObjectsDeeplyNestedRequestValidator() FieldValidator[*models.ObjectsDeeplyNestedRequest] {
 	validateContainer1 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "container1", Location: params.Location, Required: true, Nullable: false},
-		NewObjectsDeeplyNestedRequestContainer1Validator(ModelValidatorParams{Location: params.Location + ".container1"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: false},
+		NewObjectsDeeplyNestedRequestContainer1Validator(),
 	)
 	validateContainer2 := NewObjectFieldValidator(
-		ObjectFieldValidatorParams{Field: "container2", Location: params.Location, Required: true, Nullable: false},
-		NewObjectsDeeplyNestedRequestContainer2Validator(ModelValidatorParams{Location: params.Location + ".container2"}),
+		ObjectFieldValidatorParams{Required: true, Nullable: false},
+		NewObjectsDeeplyNestedRequestContainer2Validator(),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectsDeeplyNestedRequest) {
