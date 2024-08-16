@@ -212,6 +212,9 @@ linters-settings:
     # Default: false
     all: true
 
+  dupl:
+    # 150 by default is not enough and leads to false positives
+    threshold: 200
 
 linters:
   disable-all: true
