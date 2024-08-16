@@ -10,7 +10,6 @@ var _ = time.Time{}
 
 func NewBehaviorNoParamsWithResponse202ResponseValidator(params ModelValidatorParams) FieldValidator[*models.BehaviorNoParamsWithResponse202Response] {
 	validateField1 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "field1", Location: params.Location},
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.BehaviorNoParamsWithResponse202Response) {

@@ -10,7 +10,6 @@ var _ = time.Time{}
 
 func NewSimpleNullableObjectValidator(params ModelValidatorParams) FieldValidator[*models.SimpleNullableObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "simpleField1", Location: params.Location},
 		EnsureNonDefault[string],
 	)
 	

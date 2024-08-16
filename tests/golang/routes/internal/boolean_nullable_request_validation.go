@@ -10,13 +10,10 @@ var _ = time.Time{}
 
 func NewBooleanNullableRequestValidator(params ModelValidatorParams) FieldValidator[*models.BooleanNullableRequest] {
 	validateBoolParam1 := NewSimpleFieldValidator[*bool](
-		SimpleFieldValidatorParams{Field: "boolParam1", Location: params.Location},
 	)
 	validateBoolParam2 := NewSimpleFieldValidator[*bool](
-		SimpleFieldValidatorParams{Field: "boolParam2", Location: params.Location},
 	)
 	validateOptionalBoolParam1 := NewSimpleFieldValidator[*bool](
-		SimpleFieldValidatorParams{Field: "optionalBoolParam1", Location: params.Location},
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.BooleanNullableRequest) {

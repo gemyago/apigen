@@ -39,7 +39,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "pathParam1", Location: "path"},
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
@@ -48,7 +47,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "pathParam2", Location: "path"},
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
@@ -57,7 +55,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -66,7 +63,6 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
 			),
 		}),
 	}
@@ -96,7 +92,6 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery1", Location: "query"},
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
@@ -106,7 +101,6 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.SimpleFieldValidatorParams{Field: "requiredQuery2", Location: "query"},
 				internal.NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),

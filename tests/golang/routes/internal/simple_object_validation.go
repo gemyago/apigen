@@ -10,7 +10,6 @@ var _ = time.Time{}
 
 func NewSimpleObjectValidator(params ModelValidatorParams) FieldValidator[*models.SimpleObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "simpleField1", Location: params.Location},
 		EnsureNonDefault[string],
 		NewMinMaxLengthValidator[string](2, true),
 	)

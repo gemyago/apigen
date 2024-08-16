@@ -34,7 +34,6 @@ func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.SimpleFieldValidatorParams{Field: "queryParam1", Location: "query"},
 			),
 		}),
 	}

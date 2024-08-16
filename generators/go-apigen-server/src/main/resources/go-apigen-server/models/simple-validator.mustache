@@ -1,5 +1,4 @@
-NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}](
-	SimpleFieldValidatorParams{Field: "{{baseName}}", Location: params.Location},{{^isBoolean}}{{#required}}
+NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}]({{^isBoolean}}{{#required}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{{dataType}}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDateTime}}{{#minLength}}

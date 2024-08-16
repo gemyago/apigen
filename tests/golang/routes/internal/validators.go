@@ -207,14 +207,9 @@ type ModelValidatorParams struct {
 	Location string
 }
 
-type SimpleFieldValidatorParams struct {
-	Field    string
-	Location string
-}
-
 func NewSimpleFieldValidator[
 	TValue any,
-](params SimpleFieldValidatorParams, validators ...ValueValidator[TValue]) FieldValidator[TValue] {
+](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
 	return func(
 		bindingCtx *BindingContext,
 		value TValue,

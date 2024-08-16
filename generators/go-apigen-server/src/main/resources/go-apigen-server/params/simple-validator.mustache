@@ -1,5 +1,4 @@
-internal.NewSimpleFieldValidator[{{>params/type}}](
-	internal.SimpleFieldValidatorParams{Field: "{{baseName}}", Location: "{{#vendorExtensions}}{{x-apigen-param-location}}{{/vendorExtensions}}"},{{#minimum}}
+internal.NewSimpleFieldValidator[{{>params/type}}]({{#minimum}}
 	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
 	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
 	{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}

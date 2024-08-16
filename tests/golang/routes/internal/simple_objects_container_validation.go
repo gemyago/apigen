@@ -10,11 +10,9 @@ var _ = time.Time{}
 
 func NewSimpleObjectsContainerValidator(params ModelValidatorParams) FieldValidator[*models.SimpleObjectsContainer] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "simpleField1", Location: params.Location},
 		EnsureNonDefault[string],
 	)
 	validateSimpleField2 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "simpleField2", Location: params.Location},
 		EnsureNonDefault[string],
 	)
 	validateSimpleObject1 := NewObjectFieldValidator(
