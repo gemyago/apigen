@@ -322,6 +322,171 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 	}
 }
 
+type paramsParserStringTypesStringTypesNullableArrayItems struct {
+	bindUnformattedStr requestParamBinder[string, []*string]
+	bindCustomFormatStr requestParamBinder[string, []*string]
+	bindDateStr requestParamBinder[string, []*time.Time]
+	bindDateTimeStr requestParamBinder[string, []*time.Time]
+	bindByteStr requestParamBinder[string, []*string]
+	bindUnformattedStrInQuery requestParamBinder[[]string, []*string]
+	bindCustomFormatStrInQuery requestParamBinder[[]string, []*string]
+	bindDateStrInQuery requestParamBinder[[]string, []*time.Time]
+	bindDateTimeStrInQuery requestParamBinder[[]string, []*time.Time]
+	bindByteStrInQuery requestParamBinder[[]string, []*string]
+	bindPayload requestParamBinder[*http.Request, *models.StringTypesNullableArrayItemsRequest]
+}
+
+func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableArrayItemsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &StringTypesStringTypesNullableArrayItemsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
+	p.bindCustomFormatStr(pathParamsCtx.Fork("customFormatStr"), readPathValue("customFormatStr", router, req), &reqParams.CustomFormatStr)
+	p.bindDateStr(pathParamsCtx.Fork("dateStr"), readPathValue("dateStr", router, req), &reqParams.DateStr)
+	p.bindDateTimeStr(pathParamsCtx.Fork("dateTimeStr"), readPathValue("dateTimeStr", router, req), &reqParams.DateTimeStr)
+	p.bindByteStr(pathParamsCtx.Fork("byteStr"), readPathValue("byteStr", router, req), &reqParams.ByteStr)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindUnformattedStrInQuery(queryParamsCtx.Fork("unformattedStrInQuery"), readQueryValue("unformattedStrInQuery", query), &reqParams.UnformattedStrInQuery)
+	p.bindCustomFormatStrInQuery(queryParamsCtx.Fork("customFormatStrInQuery"), readQueryValue("customFormatStrInQuery", query), &reqParams.CustomFormatStrInQuery)
+	p.bindDateStrInQuery(queryParamsCtx.Fork("dateStrInQuery"), readQueryValue("dateStrInQuery", query), &reqParams.DateStrInQuery)
+	p.bindDateTimeStrInQuery(queryParamsCtx.Fork("dateTimeStrInQuery"), readQueryValue("dateTimeStrInQuery", query), &reqParams.DateTimeStrInQuery)
+	p.bindByteStrInQuery(queryParamsCtx.Fork("byteStrInQuery"), readQueryValue("byteStrInQuery", query), &reqParams.ByteStrInQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) paramsParser[*StringTypesStringTypesNullableArrayItemsRequest] {
+	return &paramsParserStringTypesStringTypesNullableArrayItems{
+		bindUnformattedStr: newRequestParamBinder(binderParams[string, []*string]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
+					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
+				),
+			),
+		}),
+		bindCustomFormatStr: newRequestParamBinder(binderParams[string, []*string]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
+					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
+				),
+			),
+		}),
+		bindDateStr: newRequestParamBinder(binderParams[string, []*time.Time]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.dateParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*time.Time](
+				),
+			),
+		}),
+		bindDateTimeStr: newRequestParamBinder(binderParams[string, []*time.Time]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.timeParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*time.Time](
+				),
+			),
+		}),
+		bindByteStr: newRequestParamBinder(binderParams[string, []*string]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),
+				),
+			),
+		}),
+		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
+					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
+				),
+			),
+		}),
+		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
+					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
+				),
+			),
+		}),
+		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, []*time.Time]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.dateParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*time.Time](
+				),
+			),
+		}),
+		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, []*time.Time]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.timeParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*time.Time](
+				),
+			),
+		}),
+		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.stringParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*string](
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesNullableArrayItemsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.StringTypesNullableArrayItemsRequest],
+			),
+			validateValue: internal.NewStringTypesNullableArrayItemsRequestValidator(),
+		}),
+	}
+}
+
 type paramsParserStringTypesStringTypesNullableParsing struct {
 	bindUnformattedStr requestParamBinder[string, *string]
 	bindCustomFormatStr requestParamBinder[string, *string]

@@ -18,6 +18,8 @@ paths:
     $ref: "./string-types/nullable-parsing.yaml"
   /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/arrays-parsing.yaml"
+  /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/nullable-array-items.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
   /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:

@@ -1,0 +1,183 @@
+post:
+  summary: API to test string types nullable array items parsing and validation
+  operationId: stringTypesNullableArrayItems
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: unformattedStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          pattern: '^[A-Za-z]*$'
+          minLength: 10
+          maxLength: 20
+    - name: customFormatStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: vendor-specific
+          minLength: 20
+          maxLength: 30
+          pattern: '^[A-Za-z]*$'
+    - name: dateStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: date
+          minLength: 1000 # should not be used
+          maxLength: 10000 # should not be used
+          pattern: '^[A-Za-z]*$' # should not be used
+    - name: dateTimeStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: date-time
+          minLength: 1000 # should not be used
+          maxLength: 10000 # should not be used
+          pattern: '^[A-Za-z]*$' # should not be used
+    - name: byteStr
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: byte
+          minLength: 30
+          maxLength: 40
+
+    # params in query
+    - name: unformattedStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          minLength: 10
+          maxLength: 20
+          pattern: '^[A-Za-z]*$'
+    - name: customFormatStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: vendor-specific
+          minLength: 20
+          maxLength: 30
+          pattern: '^[A-Za-z]*$'
+    - name: dateStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: date
+          pattern: '^[A-Za-z]*$' # should not be used
+          minLength: 1000 # should not be used
+          maxLength: 10000 # should not be used
+    - name: dateTimeStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: date-time
+          pattern: '^[A-Za-z]*$' # should not be used
+          minLength: 1000 # should not be used
+          maxLength: 10000 # should not be used
+    - name: byteStrInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          nullable: true
+          format: byte
+          minLength: 30
+          maxLength: 40
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - unformattedStr
+            - customFormatStr
+            - dateStr
+            - dateTimeStr
+            - byteStr
+          properties: 
+            unformattedStr:
+              type: array
+              items:
+                type: string
+                nullable: true
+                pattern: '^[A-Za-z]*$'
+                minLength: 10
+                maxLength: 20
+            customFormatStr:
+              type: array
+              items:
+                type: string
+                nullable: true
+                format: vendor-specific
+                pattern: '^[A-Za-z]*$'
+                minLength: 20
+                maxLength: 30
+            dateStr:
+              type: array
+              items:
+                type: string
+                nullable: true
+                format: date
+                minLength: 1000 # should not be used
+                maxLength: 10000 # should not be used
+            dateTimeStr:
+              type: array
+              items:
+                type: string
+                nullable: true
+                format: date-time
+                pattern: '^[A-Za-z]*$' # should not be used
+                minLength: 1000 # should not be used
+                maxLength: 10000 # should not be used
+            byteStr:
+              type: array
+              items:
+                type: string
+                nullable: true
+                format: byte
+                minLength: 30
+                maxLength: 40
+  responses:
+    '204':
+      description: Request succeeded

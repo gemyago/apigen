@@ -1,1 +1,1 @@
-{{#items}}{{#isModel}}*{{modelPackage}}.{{/isModel}}{{{dataType}}}{{/items}}
+{{#items}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*{{modelPackage}}.{{/isModel}}{{{dataType}}}{{/items}}
