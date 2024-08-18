@@ -52,9 +52,27 @@ func TestStringTypes(t *testing.T) {
 		return lo.Map(v, func(v time.Time, _ int) string { return v.Format(format) })
 	}
 
+	nullableTimesToStr := func(v []*time.Time, format string) []string {
+		return lo.Map(v, func(v *time.Time, _ int) string {
+			if v == nil {
+				return "null"
+			}
+			return v.Format(format)
+		})
+	}
+
 	datePartOnly := func(v []time.Time) []time.Time {
 		return lo.Map(v, func(v time.Time, _ int) time.Time {
 			return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+		})
+	}
+
+	nullableDatePartOnly := func(v []*time.Time) []*time.Time {
+		return lo.Map(v, func(v *time.Time, _ int) *time.Time {
+			if v == nil {
+				return nil
+			}
+			return lo.ToPtr(lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly))))
 		})
 	}
 
@@ -1058,6 +1076,191 @@ func TestStringTypes(t *testing.T) {
 					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
 					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
 				},
+			}
+		})
+	})
+
+	t.Run("nullable-array-items", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesNullableArrayItemsRequest),
+		) *handlers.StringTypesStringTypesNullableArrayItemsRequest {
+			req := &handlers.StringTypesStringTypesNullableArrayItemsRequest{
+				// path
+				UnformattedStr:  toNullableItems(randomStrings(3, 10, 20)),
+				CustomFormatStr: toNullableItems(randomStrings(3, 20, 30)),
+				DateStr:         toNullableItems(randomDates(3)),
+				DateTimeStr:     toNullableItems(randomDates(3)),
+				ByteStr:         toNullableItems(randomStrings(3, 30, 40)),
+
+				// query
+				UnformattedStrInQuery:  toNullableItems(randomStrings(3, 10, 20)),
+				CustomFormatStrInQuery: toNullableItems(randomStrings(3, 20, 30)),
+				DateStrInQuery:         toNullableItems(randomDates(3)),
+				DateTimeStrInQuery:     toNullableItems(randomDates(3)),
+				ByteStrInQuery:         toNullableItems(randomStrings(3, 30, 40)),
+
+				// body
+				Payload: &models.StringTypesNullableArrayItemsRequest{
+					UnformattedStr:  toNullableItems(randomStrings(3, 10, 20)),
+					CustomFormatStr: toNullableItems(randomStrings(3, 20, 30)),
+					DateStr:         toNullableItems(randomDates(3)),
+					DateTimeStr:     toNullableItems(randomDates(3)),
+					ByteStr:         toNullableItems(randomStrings(3, 30, 40)),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = fromNullableItems(req.UnformattedStrInQuery)
+			query["customFormatStrInQuery"] = fromNullableItems(req.CustomFormatStrInQuery)
+			query["dateStrInQuery"] = nullableTimesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = nullableTimesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
+			query["byteStrInQuery"] = fromNullableItems(req.ByteStrInQuery)
+			return query
+		}
+
+		buildPath := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) string {
+			return fmt.Sprintf(
+				"/string-types/nullable-array-items/%v/%v/%v/%v/%v",
+				strings.Join(fromNullableItems(req.UnformattedStr), ","),
+				strings.Join(fromNullableItems(req.CustomFormatStr), ","),
+				strings.Join(nullableTimesToStr(req.DateStr, time.DateOnly), ","),
+				strings.Join(nullableTimesToStr(req.DateTimeStr, time.RFC3339Nano), ","),
+				strings.Join(fromNullableItems(req.ByteStr), ","),
+			)
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = nullableDatePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = nullableDatePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesNullableArrayItems.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should parse and bind valid null values", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, nil)
+				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, nil)
+				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, nil)
+
+				_, req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, nil,
+				)
+				_, req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, nil,
+				)
+				_, req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, nil,
+				)
+
+				_, req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, nil,
+				)
+				_, req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, nil,
+				)
+				_, req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, nil,
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = nullableDatePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = nullableDatePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesNullableArrayItems.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate bad values", setupRouter, func() testCase {
+			badIndices := make([]int, 9)
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+				badIndices[0], req.UnformattedStr = injectValueRandomly(
+					fake, req.UnformattedStr, lo.ToPtr(fake.RandomStringWithLength(9)),
+				)
+				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake,
+					req.CustomFormatStr, lo.ToPtr("!"+fake.RandomStringWithLength(21)),
+				)
+				badIndices[2], req.ByteStr = injectValueRandomly(
+					fake, req.ByteStr, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+
+				badIndices[3], req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, lo.ToPtr(fake.RandomStringWithLength(21)),
+				)
+				badIndices[4], req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, lo.ToPtr(fake.RandomStringWithLength(31)),
+				)
+				badIndices[5], req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+
+				badIndices[6], req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, lo.ToPtr(fake.RandomStringWithLength(21)),
+				)
+				badIndices[7], req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, lo.ToPtr("!"+fake.RandomStringWithLength(21)),
+				)
+				badIndices[8], req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]expectedBindingError{
+						// path
+						{Field: strconv.Itoa(badIndices[0]), Location: "path.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[1]), Location: "path.customFormatStr", Code: "INVALID"},
+						{Field: strconv.Itoa(badIndices[2]), Location: "path.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: strconv.Itoa(badIndices[3]), Location: "query.unformattedStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[4]), Location: "query.customFormatStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[5]), Location: "query.byteStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: strconv.Itoa(badIndices[6]), Location: "body.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[7]), Location: "body.customFormatStr", Code: "INVALID"},
+						{Field: strconv.Itoa(badIndices[8]), Location: "body.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
 			}
 		})
 	})

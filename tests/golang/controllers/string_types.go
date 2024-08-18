@@ -8,6 +8,7 @@ type stringTypesControllerTestActions struct {
 	stringTypesParsing                    mockAction[*handlers.StringTypesStringTypesParsingRequest]
 	stringTypesArraysParsing              mockAction[*handlers.StringTypesStringTypesArraysParsingRequest]
 	stringTypesNullableParsing            mockAction[*handlers.StringTypesStringTypesNullableParsingRequest]
+	stringTypesNullableArrayItems         mockAction[*handlers.StringTypesStringTypesNullableArrayItemsRequest]
 	stringTypesRangeValidation            mockAction[*handlers.StringTypesStringTypesRangeValidationRequest]
 	stringTypesArrayItemsRangeValidation  mockAction[*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest]
 	stringTypesPatternValidation          mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
@@ -22,6 +23,7 @@ func newStringTypesController(
 		HandleStringTypesParsing.With(testActions.stringTypesParsing.action).
 		HandleStringTypesArraysParsing.With(testActions.stringTypesArraysParsing.action).
 		HandleStringTypesNullableParsing.With(testActions.stringTypesNullableParsing.action).
+		HandleStringTypesNullableArrayItems.With(testActions.stringTypesNullableArrayItems.action).
 		HandleStringTypesRangeValidation.With(testActions.stringTypesRangeValidation.action).
 		HandleStringTypesArrayItemsRangeValidation.With(testActions.stringTypesArrayItemsRangeValidation.action).
 		HandleStringTypesPatternValidation.With(testActions.stringTypesPatternValidation.action).
