@@ -276,7 +276,9 @@ func TestNumericTypes(t *testing.T) {
 					badIndices[5], req.NumberInt64 = injectValueRandomly(fake, req.NumberInt64, fake.Int64Between(1, 600))
 
 					badIndices[6], req.NumberAnyInQuery = injectValueRandomly(fake, req.NumberAnyInQuery, fake.Float32(10, 1, 100))
-					badIndices[7], req.NumberFloatInQuery = injectValueRandomly(fake, req.NumberFloatInQuery, fake.Float32(10, 301, 500))
+					badIndices[7], req.NumberFloatInQuery = injectValueRandomly(
+						fake, req.NumberFloatInQuery, fake.Float32(10, 301, 500),
+					)
 					badIndices[8], req.NumberDoubleInQuery = injectValueRandomly(
 						fake, req.NumberDoubleInQuery, fake.Float64(10, 1, 300),
 					)
@@ -303,6 +305,227 @@ func TestNumericTypes(t *testing.T) {
 					)
 					badIndices[17], req.Payload.NumberInt64 = injectValueRandomly(
 						fake, req.Payload.NumberInt64, fake.Int64Between(1, 600),
+					)
+				})
+
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: expectBindingErrors[*numericTypesControllerTestActions](
+						[]expectedBindingError{
+							// path
+							{Field: strconv.Itoa(badIndices[0]), Location: "path.numberAny", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[1]), Location: "path.numberFloat", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[2]), Location: "path.numberDouble", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[3]), Location: "path.numberInt", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[4]), Location: "path.numberInt32", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[5]), Location: "path.numberInt64", Code: "INVALID_OUT_OF_RANGE"},
+							// query
+							{Field: strconv.Itoa(badIndices[6]), Location: "query.numberAnyInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[7]), Location: "query.numberFloatInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[8]), Location: "query.numberDoubleInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[9]), Location: "query.numberIntInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[10]), Location: "query.numberInt32InQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[11]), Location: "query.numberInt64InQuery", Code: "INVALID_OUT_OF_RANGE"},
+							// body
+							{Field: strconv.Itoa(badIndices[12]), Location: "body.numberAny", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[13]), Location: "body.numberFloat", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[14]), Location: "body.numberDouble", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[15]), Location: "body.numberInt", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[16]), Location: "body.numberInt32", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[17]), Location: "body.numberInt64", Code: "INVALID_OUT_OF_RANGE"},
+						},
+					),
+				}
+			})
+	})
+
+	t.Run("nullable-array-items", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.NumericTypesNumericTypesNullableArrayItemsRequest),
+		) *handlers.NumericTypesNumericTypesNullableArrayItemsRequest {
+			res := &handlers.NumericTypesNumericTypesNullableArrayItemsRequest{
+				// path
+				NumberAny:    lo.ToSlicePtr(randomNumbers(5, randomFloat32, 101, 200)),
+				NumberFloat:  lo.ToSlicePtr(randomNumbers(5, randomFloat32, 201, 300)),
+				NumberDouble: lo.ToSlicePtr(randomNumbers(5, randomFloat64, 301, 400)),
+				NumberInt:    lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 401, 500)),
+				NumberInt32:  lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 501, 600)),
+				NumberInt64:  lo.ToSlicePtr(randomNumbers(5, fake.Int64Between, 601, 700)),
+
+				// query
+				NumberAnyInQuery:    lo.ToSlicePtr(randomNumbers(5, randomFloat32, 101, 200)),
+				NumberFloatInQuery:  lo.ToSlicePtr(randomNumbers(5, randomFloat32, 201, 300)),
+				NumberDoubleInQuery: lo.ToSlicePtr(randomNumbers(5, randomFloat64, 301, 400)),
+				NumberIntInQuery:    lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 401, 500)),
+				NumberInt32InQuery:  lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 501, 600)),
+				NumberInt64InQuery:  lo.ToSlicePtr(randomNumbers(5, fake.Int64Between, 601, 700)),
+
+				// body
+				Payload: &models.NumericTypesNullableArrayItemsRequest{
+					NumberAny:    lo.ToSlicePtr(randomNumbers(5, randomFloat32, 101, 200)),
+					NumberFloat:  lo.ToSlicePtr(randomNumbers(5, randomFloat32, 201, 300)),
+					NumberDouble: lo.ToSlicePtr(randomNumbers(5, randomFloat64, 301, 400)),
+					NumberInt:    lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 401, 500)),
+					NumberInt32:  lo.ToSlicePtr(randomNumbers(5, fake.Int32Between, 501, 600)),
+					NumberInt64:  lo.ToSlicePtr(randomNumbers(5, fake.Int64Between, 601, 700)),
+				},
+			}
+			for _, opt := range opts {
+				opt(res)
+			}
+			return res
+		}
+
+		buildPath := func(wantReq *handlers.NumericTypesNumericTypesNullableArrayItemsRequest) string {
+			return fmt.Sprintf(
+				"/numeric-types/nullable-array-items/%v/%v/%v/%v/%v/%v",
+				strings.Join(fromNullableItems(wantReq.NumberAny), ","),
+				strings.Join(fromNullableItems(wantReq.NumberFloat), ","),
+				strings.Join(fromNullableItems(wantReq.NumberDouble), ","),
+				strings.Join(fromNullableItems(wantReq.NumberInt), ","),
+				strings.Join(fromNullableItems(wantReq.NumberInt32), ","),
+				strings.Join(fromNullableItems(wantReq.NumberInt64), ","),
+			)
+		}
+
+		buildQuery := func(wantReq *handlers.NumericTypesNumericTypesNullableArrayItemsRequest) url.Values {
+			query := url.Values{}
+			query["numberAnyInQuery"] = fromNullableItems(wantReq.NumberAnyInQuery)
+			query["numberFloatInQuery"] = fromNullableItems(wantReq.NumberFloatInQuery)
+			query["numberDoubleInQuery"] = fromNullableItems(wantReq.NumberDoubleInQuery)
+			query["numberIntInQuery"] = fromNullableItems(wantReq.NumberIntInQuery)
+			query["numberInt32InQuery"] = fromNullableItems(wantReq.NumberInt32InQuery)
+			query["numberInt64InQuery"] = fromNullableItems(wantReq.NumberInt64InQuery)
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				wantReq := randomReq()
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+						assert.Equal(t, 204, recorder.Code)
+						assert.Equal(t, wantReq, testActions.numericTypesNullableArrayItems.calls[0].params)
+					},
+				}
+			})
+
+		runRouteTestCase(t, "should parse and bind valid null values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				wantReq := randomReq(func(req *handlers.NumericTypesNumericTypesNullableArrayItemsRequest) {
+					_, req.NumberAny = injectValueRandomly(fake, req.NumberAny, nil)
+					_, req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, nil)
+					_, req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, nil)
+					_, req.NumberInt = injectValueRandomly(fake, req.NumberInt, nil)
+					_, req.NumberInt32 = injectValueRandomly(fake, req.NumberInt32, nil)
+					_, req.NumberInt64 = injectValueRandomly(fake, req.NumberInt64, nil)
+
+					_, req.NumberAnyInQuery = injectValueRandomly(
+						fake, req.NumberAnyInQuery, nil,
+					)
+					_, req.NumberFloatInQuery = injectValueRandomly(
+						fake, req.NumberFloatInQuery, nil,
+					)
+					_, req.NumberDoubleInQuery = injectValueRandomly(
+						fake, req.NumberDoubleInQuery, nil,
+					)
+					_, req.NumberIntInQuery = injectValueRandomly(
+						fake, req.NumberIntInQuery, nil,
+					)
+					_, req.NumberInt32InQuery = injectValueRandomly(
+						fake, req.NumberInt32InQuery, nil,
+					)
+					_, req.NumberInt64InQuery = injectValueRandomly(
+						fake, req.NumberInt64InQuery, nil,
+					)
+
+					_, req.Payload.NumberAny = injectValueRandomly(
+						fake, req.Payload.NumberAny, nil,
+					)
+					_, req.Payload.NumberFloat = injectValueRandomly(
+						fake, req.Payload.NumberFloat, nil,
+					)
+					_, req.Payload.NumberDouble = injectValueRandomly(
+						fake, req.Payload.NumberDouble, nil,
+					)
+					_, req.Payload.NumberInt = injectValueRandomly(
+						fake, req.Payload.NumberInt, nil,
+					)
+					_, req.Payload.NumberInt32 = injectValueRandomly(
+						fake, req.Payload.NumberInt32, nil,
+					)
+					_, req.Payload.NumberInt64 = injectValueRandomly(
+						fake, req.Payload.NumberInt64, nil,
+					)
+				})
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Got unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, wantReq, testActions.numericTypesNullableArrayItems.calls[0].params)
+					},
+				}
+			})
+
+		runRouteTestCase(t, "should fail if invalid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				badIndices := make([]int, 18)
+				wantReq := randomReq(func(req *handlers.NumericTypesNumericTypesNullableArrayItemsRequest) {
+					badIndices[0], req.NumberAny = injectValueRandomly(fake, req.NumberAny, lo.ToPtr(fake.Float32(10, 1, 100)))
+					badIndices[1], req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, lo.ToPtr(fake.Float32(10, 301, 500)))
+					badIndices[2], req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, lo.ToPtr(fake.Float64(10, 1, 300)))
+					badIndices[3], req.NumberInt = injectValueRandomly(fake, req.NumberInt, lo.ToPtr(fake.Int32Between(1, 400)))
+					badIndices[4], req.NumberInt32 = injectValueRandomly(fake, req.NumberInt32, lo.ToPtr(fake.Int32Between(1, 500)))
+					badIndices[5], req.NumberInt64 = injectValueRandomly(fake, req.NumberInt64, lo.ToPtr(fake.Int64Between(1, 600)))
+
+					badIndices[6], req.NumberAnyInQuery = injectValueRandomly(
+						fake, req.NumberAnyInQuery, lo.ToPtr(fake.Float32(10, 1, 100)),
+					)
+					badIndices[7], req.NumberFloatInQuery = injectValueRandomly(
+						fake, req.NumberFloatInQuery, lo.ToPtr(fake.Float32(10, 301, 500)),
+					)
+					badIndices[8], req.NumberDoubleInQuery = injectValueRandomly(
+						fake, req.NumberDoubleInQuery, lo.ToPtr(fake.Float64(10, 1, 300)),
+					)
+					badIndices[9], req.NumberIntInQuery = injectValueRandomly(
+						fake, req.NumberIntInQuery, lo.ToPtr(fake.Int32Between(1, 400)),
+					)
+					badIndices[10], req.NumberInt32InQuery = injectValueRandomly(
+						fake, req.NumberInt32InQuery, lo.ToPtr(fake.Int32Between(1, 500)),
+					)
+					badIndices[11], req.NumberInt64InQuery = injectValueRandomly(
+						fake, req.NumberInt64InQuery, lo.ToPtr(fake.Int64Between(1, 600)),
+					)
+
+					badIndices[12], req.Payload.NumberAny = injectValueRandomly(
+						fake, req.Payload.NumberAny, lo.ToPtr(fake.Float32(10, 1, 100)),
+					)
+					badIndices[13], req.Payload.NumberFloat = injectValueRandomly(
+						fake, req.Payload.NumberFloat, lo.ToPtr(fake.Float32(10, 301, 500)),
+					)
+					badIndices[14], req.Payload.NumberDouble = injectValueRandomly(
+						fake, req.Payload.NumberDouble, lo.ToPtr(fake.Float64(10, 1, 300)),
+					)
+					badIndices[15], req.Payload.NumberInt = injectValueRandomly(
+						fake, req.Payload.NumberInt, lo.ToPtr(fake.Int32Between(1, 400)),
+					)
+					badIndices[16], req.Payload.NumberInt32 = injectValueRandomly(
+						fake, req.Payload.NumberInt32, lo.ToPtr(fake.Int32Between(1, 500)),
+					)
+					badIndices[17], req.Payload.NumberInt64 = injectValueRandomly(
+						fake, req.Payload.NumberInt64, lo.ToPtr(fake.Int64Between(1, 600)),
 					)
 				})
 

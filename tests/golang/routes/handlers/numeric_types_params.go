@@ -394,6 +394,203 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 	}
 }
 
+type paramsParserNumericTypesNumericTypesNullableArrayItems struct {
+	bindNumberAny requestParamBinder[string, []*float32]
+	bindNumberFloat requestParamBinder[string, []*float32]
+	bindNumberDouble requestParamBinder[string, []*float64]
+	bindNumberInt requestParamBinder[string, []*int32]
+	bindNumberInt32 requestParamBinder[string, []*int32]
+	bindNumberInt64 requestParamBinder[string, []*int64]
+	bindNumberAnyInQuery requestParamBinder[[]string, []*float32]
+	bindNumberFloatInQuery requestParamBinder[[]string, []*float32]
+	bindNumberDoubleInQuery requestParamBinder[[]string, []*float64]
+	bindNumberIntInQuery requestParamBinder[[]string, []*int32]
+	bindNumberInt32InQuery requestParamBinder[[]string, []*int32]
+	bindNumberInt64InQuery requestParamBinder[[]string, []*int64]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesNullableArrayItemsRequest]
+}
+
+func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesNullableArrayItemsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &NumericTypesNumericTypesNullableArrayItemsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
+	p.bindNumberFloat(pathParamsCtx.Fork("numberFloat"), readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
+	p.bindNumberDouble(pathParamsCtx.Fork("numberDouble"), readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
+	p.bindNumberInt(pathParamsCtx.Fork("numberInt"), readPathValue("numberInt", router, req), &reqParams.NumberInt)
+	p.bindNumberInt32(pathParamsCtx.Fork("numberInt32"), readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
+	p.bindNumberInt64(pathParamsCtx.Fork("numberInt64"), readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindNumberAnyInQuery(queryParamsCtx.Fork("numberAnyInQuery"), readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
+	p.bindNumberFloatInQuery(queryParamsCtx.Fork("numberFloatInQuery"), readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
+	p.bindNumberDoubleInQuery(queryParamsCtx.Fork("numberDoubleInQuery"), readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
+	p.bindNumberIntInQuery(queryParamsCtx.Fork("numberIntInQuery"), readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
+	p.bindNumberInt32InQuery(queryParamsCtx.Fork("numberInt32InQuery"), readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
+	p.bindNumberInt64InQuery(queryParamsCtx.Fork("numberInt64InQuery"), readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) paramsParser[*NumericTypesNumericTypesNullableArrayItemsRequest] {
+	return &paramsParserNumericTypesNumericTypesNullableArrayItems{
+		bindNumberAny: newRequestParamBinder(binderParams[string, []*float32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
+				),
+			),
+		}),
+		bindNumberFloat: newRequestParamBinder(binderParams[string, []*float32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
+				),
+			),
+		}),
+		bindNumberDouble: newRequestParamBinder(binderParams[string, []*float64]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float64Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float64](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
+				),
+			),
+		}),
+		bindNumberInt: newRequestParamBinder(binderParams[string, []*int32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
+				),
+			),
+		}),
+		bindNumberInt32: newRequestParamBinder(binderParams[string, []*int32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
+				),
+			),
+		}),
+		bindNumberInt64: newRequestParamBinder(binderParams[string, []*int64]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int64Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int64](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
+				),
+			),
+		}),
+		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, []*float32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
+				),
+			),
+		}),
+		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, []*float32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
+				),
+			),
+		}),
+		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, []*float64]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.float64Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*float64](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
+				),
+			),
+		}),
+		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, []*int32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
+				),
+			),
+		}),
+		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, []*int32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int32Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int32](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
+				),
+			),
+		}),
+		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, []*int64]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.int64Parser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*int64](
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
+					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesNullableArrayItemsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.NumericTypesNullableArrayItemsRequest],
+			),
+			validateValue: internal.NewNumericTypesNullableArrayItemsRequestValidator(),
+		}),
+	}
+}
+
 type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberAny requestParamBinder[string, float32]
 	bindNumberFloat requestParamBinder[string, float32]

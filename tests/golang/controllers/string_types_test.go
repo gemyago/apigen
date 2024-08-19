@@ -1086,26 +1086,26 @@ func TestStringTypes(t *testing.T) {
 		) *handlers.StringTypesStringTypesNullableArrayItemsRequest {
 			req := &handlers.StringTypesStringTypesNullableArrayItemsRequest{
 				// path
-				UnformattedStr:  toNullableItems(randomStrings(3, 10, 20)),
-				CustomFormatStr: toNullableItems(randomStrings(3, 20, 30)),
-				DateStr:         toNullableItems(randomDates(3)),
-				DateTimeStr:     toNullableItems(randomDates(3)),
-				ByteStr:         toNullableItems(randomStrings(3, 30, 40)),
+				UnformattedStr:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+				CustomFormatStr: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+				DateStr:         lo.ToSlicePtr(randomDates(3)),
+				DateTimeStr:     lo.ToSlicePtr(randomDates(3)),
+				ByteStr:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
 
 				// query
-				UnformattedStrInQuery:  toNullableItems(randomStrings(3, 10, 20)),
-				CustomFormatStrInQuery: toNullableItems(randomStrings(3, 20, 30)),
-				DateStrInQuery:         toNullableItems(randomDates(3)),
-				DateTimeStrInQuery:     toNullableItems(randomDates(3)),
-				ByteStrInQuery:         toNullableItems(randomStrings(3, 30, 40)),
+				UnformattedStrInQuery:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+				CustomFormatStrInQuery: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+				DateStrInQuery:         lo.ToSlicePtr(randomDates(3)),
+				DateTimeStrInQuery:     lo.ToSlicePtr(randomDates(3)),
+				ByteStrInQuery:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
 
 				// body
 				Payload: &models.StringTypesNullableArrayItemsRequest{
-					UnformattedStr:  toNullableItems(randomStrings(3, 10, 20)),
-					CustomFormatStr: toNullableItems(randomStrings(3, 20, 30)),
-					DateStr:         toNullableItems(randomDates(3)),
-					DateTimeStr:     toNullableItems(randomDates(3)),
-					ByteStr:         toNullableItems(randomStrings(3, 30, 40)),
+					UnformattedStr:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+					CustomFormatStr: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+					DateStr:         lo.ToSlicePtr(randomDates(3)),
+					DateTimeStr:     lo.ToSlicePtr(randomDates(3)),
+					ByteStr:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
 				},
 			}
 			for _, opt := range opts {

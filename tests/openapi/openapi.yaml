@@ -44,6 +44,8 @@ paths:
     $ref: "./numeric-types/nullable.yaml"
   /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/array-items.yaml"
+  /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/nullable-array-items.yaml"
 
   # boolean routes
   /boolean/parsing/{boolParam1}/{boolParam2}:
