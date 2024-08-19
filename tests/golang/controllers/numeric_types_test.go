@@ -140,8 +140,10 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("arrays-parsing", func(t *testing.T) {
-		randomReq := func() *handlers.NumericTypesNumericTypesArraysParsingRequest {
-			return &handlers.NumericTypesNumericTypesArraysParsingRequest{
+		randomReq := func(
+			opts ...func(*handlers.NumericTypesNumericTypesArraysParsingRequest),
+		) *handlers.NumericTypesNumericTypesArraysParsingRequest {
+			res := &handlers.NumericTypesNumericTypesArraysParsingRequest{
 				// path
 				NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
 				NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
@@ -168,6 +170,10 @@ func TestNumericTypes(t *testing.T) {
 					NumberInt64:  randomNumbers(5, fake.Int64Between, 1, 100),
 				},
 			}
+			for _, opt := range opts {
+				opt(res)
+			}
+			return res
 		}
 
 		buildPath := func(wantReq *handlers.NumericTypesNumericTypesArraysParsingRequest) string {
@@ -205,6 +211,56 @@ func TestNumericTypes(t *testing.T) {
 						assert.Equal(t, 204, recorder.Code)
 						assert.Equal(t, wantReq, testActions.numericTypesArraysParsing.calls[0].params)
 					},
+				}
+			})
+
+		runRouteTestCase(t, "should fail if invalid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				wantReq := randomReq()
+				query := buildQuery(wantReq)
+
+				_, query["numberAnyInQuery"] = injectValueRandomly(fake, query["numberAnyInQuery"], fake.Lorem().Word())
+				_, query["numberFloatInQuery"] = injectValueRandomly(fake, query["numberFloatInQuery"], fake.Lorem().Word())
+				_, query["numberDoubleInQuery"] = injectValueRandomly(fake, query["numberDoubleInQuery"], fake.Lorem().Word())
+				_, query["numberIntInQuery"] = injectValueRandomly(fake, query["numberIntInQuery"], fake.Lorem().Word())
+				_, query["numberInt32InQuery"] = injectValueRandomly(fake, query["numberInt32InQuery"], fake.Lorem().Word())
+				_, query["numberInt64InQuery"] = injectValueRandomly(fake, query["numberInt64InQuery"], fake.Lorem().Word())
+
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path: fmt.Sprintf(
+						"/numeric-types/arrays-parsing/%v/%v/%v/%v/%v/%v",
+						strings.Join(numbersToString(wantReq.NumberAny), ",")+","+fake.Lorem().Word(),
+						strings.Join(numbersToString(wantReq.NumberFloat), ",")+","+fake.Lorem().Word(),
+						strings.Join(numbersToString(wantReq.NumberDouble), ",")+","+fake.Lorem().Word(),
+						strings.Join(numbersToString(wantReq.NumberInt), ",")+","+fake.Lorem().Word(),
+						strings.Join(numbersToString(wantReq.NumberInt32), ",")+","+fake.Lorem().Word(),
+						strings.Join(numbersToString(wantReq.NumberInt64), ",")+","+fake.Lorem().Word(),
+					),
+					query: query,
+					body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+						"numberAny": %v
+					}`, fake.Lorem().Word()))),
+					expect: expectBindingErrors[*numericTypesControllerTestActions](
+						[]expectedBindingError{
+							// path
+							{Field: "numberAny", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberFloat", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberDouble", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt32", Location: "path", Code: "BAD_FORMAT"},
+							{Field: "numberInt64", Location: "path", Code: "BAD_FORMAT"},
+							// query
+							{Field: "numberAnyInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberFloatInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberDoubleInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberIntInQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberInt32InQuery", Location: "query", Code: "BAD_FORMAT"},
+							{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
+							// body
+							{Location: "body", Code: "BAD_FORMAT"},
+						},
+					),
 				}
 			})
 	})
