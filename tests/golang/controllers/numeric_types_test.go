@@ -145,29 +145,29 @@ func TestNumericTypes(t *testing.T) {
 		) *handlers.NumericTypesNumericTypesArrayItemsRequest {
 			res := &handlers.NumericTypesNumericTypesArrayItemsRequest{
 				// path
-				NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
-				NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
-				NumberDouble: randomNumbers(5, randomFloat64, 1, 100),
-				NumberInt:    randomNumbers(5, fake.Int32Between, 1, 100),
-				NumberInt32:  randomNumbers(5, fake.Int32Between, 1, 100),
-				NumberInt64:  randomNumbers(5, fake.Int64Between, 1, 100),
+				NumberAny:    randomNumbers(5, randomFloat32, 100, 200),
+				NumberFloat:  randomNumbers(5, randomFloat32, 200, 300),
+				NumberDouble: randomNumbers(5, randomFloat64, 300, 400),
+				NumberInt:    randomNumbers(5, fake.Int32Between, 400, 500),
+				NumberInt32:  randomNumbers(5, fake.Int32Between, 500, 600),
+				NumberInt64:  randomNumbers(5, fake.Int64Between, 600, 700),
 
 				// query
-				NumberAnyInQuery:    randomNumbers(5, randomFloat32, 1, 100),
-				NumberFloatInQuery:  randomNumbers(5, randomFloat32, 1, 100),
-				NumberDoubleInQuery: randomNumbers(5, randomFloat64, 1, 100),
-				NumberIntInQuery:    randomNumbers(5, fake.Int32Between, 1, 100),
-				NumberInt32InQuery:  randomNumbers(5, fake.Int32Between, 1, 100),
-				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 1, 100),
+				NumberAnyInQuery:    randomNumbers(5, randomFloat32, 100, 200),
+				NumberFloatInQuery:  randomNumbers(5, randomFloat32, 200, 300),
+				NumberDoubleInQuery: randomNumbers(5, randomFloat64, 300, 400),
+				NumberIntInQuery:    randomNumbers(5, fake.Int32Between, 400, 500),
+				NumberInt32InQuery:  randomNumbers(5, fake.Int32Between, 500, 600),
+				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 600, 700),
 
 				// body
 				Payload: &models.NumericTypesArrayItemsRequest{
-					NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
-					NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
-					NumberDouble: randomNumbers(5, randomFloat64, 1, 100),
-					NumberInt:    randomNumbers(5, fake.Int32Between, 1, 100),
-					NumberInt32:  randomNumbers(5, fake.Int32Between, 1, 100),
-					NumberInt64:  randomNumbers(5, fake.Int64Between, 1, 100),
+					NumberAny:    randomNumbers(5, randomFloat32, 100, 200),
+					NumberFloat:  randomNumbers(5, randomFloat32, 200, 300),
+					NumberDouble: randomNumbers(5, randomFloat64, 300, 400),
+					NumberInt:    randomNumbers(5, fake.Int32Between, 400, 500),
+					NumberInt32:  randomNumbers(5, fake.Int32Between, 500, 600),
+					NumberInt64:  randomNumbers(5, fake.Int64Between, 600, 700),
 				},
 			}
 			for _, opt := range opts {

@@ -11,26 +11,38 @@ var _ = time.Time{}
 func NewNumericTypesArrayItemsRequestValidator() FieldValidator[*models.NumericTypesArrayItemsRequest] {
 	validateNumberAny := NewArrayValidator[float32](
 		NewSimpleFieldValidator[float32](
+				NewMinMaxValueValidator[float32](100.01, false, true),
+				NewMinMaxValueValidator[float32](200.02, false, false),
 			),
 	)
 	validateNumberFloat := NewArrayValidator[float32](
 		NewSimpleFieldValidator[float32](
+				NewMinMaxValueValidator[float32](200.02, false, true),
+				NewMinMaxValueValidator[float32](300.03, false, false),
 			),
 	)
 	validateNumberDouble := NewArrayValidator[float64](
 		NewSimpleFieldValidator[float64](
+				NewMinMaxValueValidator[float64](300.03, false, true),
+				NewMinMaxValueValidator[float64](400.04, false, false),
 			),
 	)
 	validateNumberInt := NewArrayValidator[int32](
 		NewSimpleFieldValidator[int32](
+				NewMinMaxValueValidator[int32](400, false, true),
+				NewMinMaxValueValidator[int32](500, false, false),
 			),
 	)
 	validateNumberInt32 := NewArrayValidator[int32](
 		NewSimpleFieldValidator[int32](
+				NewMinMaxValueValidator[int32](500, false, true),
+				NewMinMaxValueValidator[int32](600, false, false),
 			),
 	)
 	validateNumberInt64 := NewArrayValidator[int64](
 		NewSimpleFieldValidator[int64](
+				NewMinMaxValueValidator[int64](600, false, true),
+				NewMinMaxValueValidator[int64](700, false, false),
 			),
 	)
 	

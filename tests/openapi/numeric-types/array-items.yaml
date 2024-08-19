@@ -12,6 +12,8 @@ post:
         type: array
         items:
           type: number
+          minimum: 100.01
+          maximum: 200.02
     - name: numberFloat
       in: path
       required: true
@@ -20,6 +22,8 @@ post:
         items:
           type: number
           format: float
+          minimum: 200.02
+          maximum: 300.03
     - name: numberDouble
       in: path
       required: true
@@ -28,6 +32,8 @@ post:
         items:
           type: number
           format: double
+          minimum: 300.03
+          maximum: 400.04
     - name: numberInt
       in: path
       required: true
@@ -35,6 +41,8 @@ post:
         type: array
         items:
           type: integer
+          minimum: 400
+          maximum: 500
     - name: numberInt32
       in: path
       required: true
@@ -43,6 +51,8 @@ post:
         items:
           type: integer
           format: int32
+          minimum: 500
+          maximum: 600
     - name: numberInt64
       in: path
       required: true
@@ -51,6 +61,8 @@ post:
         items:
           type: integer
           format: int64
+          minimum: 600
+          maximum: 700
 
     # params in query
     - name: numberAnyInQuery
@@ -60,6 +72,8 @@ post:
         type: array
         items:
           type: number
+          minimum: 100.01
+          maximum: 200.02
     - name: numberFloatInQuery
       in: query
       required: true
@@ -68,6 +82,8 @@ post:
         items:
           type: number
           format: float
+          minimum: 200.02
+          maximum: 300.03
     - name: numberDoubleInQuery
       in: query
       required: true
@@ -76,6 +92,8 @@ post:
         items:
           type: number
           format: double
+          minimum: 300.03
+          maximum: 400.04
     - name: numberIntInQuery
       in: query
       required: true
@@ -83,6 +101,8 @@ post:
         type: array
         items:
           type: integer
+          minimum: 400
+          maximum: 500
     - name: numberInt32InQuery
       in: query
       required: true
@@ -91,6 +111,8 @@ post:
         items:
           type: integer
           format: int32
+          minimum: 500
+          maximum: 600
     - name: numberInt64InQuery
       in: query
       required: true
@@ -99,6 +121,8 @@ post:
         items:
           type: integer
           format: int64
+          minimum: 600
+          maximum: 700
   requestBody:
     required: true
     content:
@@ -117,30 +141,42 @@ post:
               type: array
               items:
                 type: number
+                minimum: 100.01
+                maximum: 200.02
             numberFloat:
               type: array
               items:
                 type: number
                 format: float
+                minimum: 200.02
+                maximum: 300.03
             numberDouble:
               type: array
               items:
                 type: number
                 format: double
+                minimum: 300.03
+                maximum: 400.04
             numberInt:
               type: array
               items:
                 type: integer
+                minimum: 400
+                maximum: 500
             numberInt32:
               type: array
               items:
                 type: integer
                 format: int32
+                minimum: 500
+                maximum: 600
             numberInt64:
               type: array
               items:
                 type: integer
                 format: int64
+                minimum: 600
+                maximum: 700
   responses:
     '204':
       description: Request succeeded
