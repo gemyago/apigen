@@ -1,6 +1,6 @@
 post:
-  summary: API to simulate and test numeric arrays parsing errors
-  operationId: numericTypesArraysParsing
+  summary: API to simulate and test numeric array items behavior
+  operationId: numericTypesArrayItems
   tags:
     - numeric-types
   parameters:

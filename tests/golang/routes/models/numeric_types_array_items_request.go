@@ -7,7 +7,7 @@ import (
 // Unused imports workaround.
 var _ = time.Time{}
 
-type NumericTypesArraysParsingRequest struct { 
+type NumericTypesArrayItemsRequest struct { 
 	NumberAny []float32 `json:"numberAny"`
 	NumberFloat []float32 `json:"numberFloat"`
 	NumberDouble []float64 `json:"numberDouble"`

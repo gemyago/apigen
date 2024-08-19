@@ -139,11 +139,11 @@ func TestNumericTypes(t *testing.T) {
 			})
 	})
 
-	t.Run("arrays-parsing", func(t *testing.T) {
+	t.Run("array-items", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.NumericTypesNumericTypesArraysParsingRequest),
-		) *handlers.NumericTypesNumericTypesArraysParsingRequest {
-			res := &handlers.NumericTypesNumericTypesArraysParsingRequest{
+			opts ...func(*handlers.NumericTypesNumericTypesArrayItemsRequest),
+		) *handlers.NumericTypesNumericTypesArrayItemsRequest {
+			res := &handlers.NumericTypesNumericTypesArrayItemsRequest{
 				// path
 				NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
 				NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
@@ -161,7 +161,7 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 1, 100),
 
 				// body
-				Payload: &models.NumericTypesArraysParsingRequest{
+				Payload: &models.NumericTypesArrayItemsRequest{
 					NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
 					NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
 					NumberDouble: randomNumbers(5, randomFloat64, 1, 100),
@@ -176,9 +176,9 @@ func TestNumericTypes(t *testing.T) {
 			return res
 		}
 
-		buildPath := func(wantReq *handlers.NumericTypesNumericTypesArraysParsingRequest) string {
+		buildPath := func(wantReq *handlers.NumericTypesNumericTypesArrayItemsRequest) string {
 			return fmt.Sprintf(
-				"/numeric-types/arrays-parsing/%v/%v/%v/%v/%v/%v",
+				"/numeric-types/array-items/%v/%v/%v/%v/%v/%v",
 				strings.Join(numbersToString(wantReq.NumberAny), ","),
 				strings.Join(numbersToString(wantReq.NumberFloat), ","),
 				strings.Join(numbersToString(wantReq.NumberDouble), ","),
@@ -188,7 +188,7 @@ func TestNumericTypes(t *testing.T) {
 			)
 		}
 
-		buildQuery := func(wantReq *handlers.NumericTypesNumericTypesArraysParsingRequest) url.Values {
+		buildQuery := func(wantReq *handlers.NumericTypesNumericTypesArrayItemsRequest) url.Values {
 			query := url.Values{}
 			query["numberAnyInQuery"] = numbersToString(wantReq.NumberAnyInQuery)
 			query["numberFloatInQuery"] = numbersToString(wantReq.NumberFloatInQuery)
@@ -209,7 +209,7 @@ func TestNumericTypes(t *testing.T) {
 					body:   marshalJSONDataAsReader(t, wantReq.Payload),
 					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
 						assert.Equal(t, 204, recorder.Code)
-						assert.Equal(t, wantReq, testActions.numericTypesArraysParsing.calls[0].params)
+						assert.Equal(t, wantReq, testActions.numericTypesArrayItems.calls[0].params)
 					},
 				}
 			})
@@ -229,7 +229,7 @@ func TestNumericTypes(t *testing.T) {
 				return routeTestCase[*numericTypesControllerTestActions]{
 					method: http.MethodPost,
 					path: fmt.Sprintf(
-						"/numeric-types/arrays-parsing/%v/%v/%v/%v/%v/%v",
+						"/numeric-types/array-items/%v/%v/%v/%v/%v/%v",
 						strings.Join(numbersToString(wantReq.NumberAny), ",")+","+fake.Lorem().Word(),
 						strings.Join(numbersToString(wantReq.NumberFloat), ",")+","+fake.Lorem().Word(),
 						strings.Join(numbersToString(wantReq.NumberDouble), ",")+","+fake.Lorem().Word(),

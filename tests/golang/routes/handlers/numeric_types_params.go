@@ -10,9 +10,9 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.NumericTypesArraysParsingRequest{}
+var _ = models.NumericTypesArrayItemsRequest{}
 
-type paramsParserNumericTypesNumericTypesArraysParsing struct {
+type paramsParserNumericTypesNumericTypesArrayItems struct {
 	bindNumberAny requestParamBinder[string, []float32]
 	bindNumberFloat requestParamBinder[string, []float32]
 	bindNumberDouble requestParamBinder[string, []float64]
@@ -25,12 +25,12 @@ type paramsParserNumericTypesNumericTypesArraysParsing struct {
 	bindNumberIntInQuery requestParamBinder[[]string, []int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, []int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, []int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesArraysParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesArrayItemsRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesArraysParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesArraysParsingRequest, error) {
+func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesArrayItemsRequest, error) {
 	bindingCtx := internal.BindingContext{}
-	reqParams := &NumericTypesNumericTypesArraysParsingRequest{}
+	reqParams := &NumericTypesNumericTypesArrayItemsRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -53,8 +53,8 @@ func (p *paramsParserNumericTypesNumericTypesArraysParsing) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesArraysParsing(app *HTTPApp) paramsParser[*NumericTypesNumericTypesArraysParsingRequest] {
-	return &paramsParserNumericTypesNumericTypesArraysParsing{
+func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParser[*NumericTypesNumericTypesArrayItemsRequest] {
+	return &paramsParserNumericTypesNumericTypesArrayItems{
 		bindNumberAny: newRequestParamBinder(binderParams[string, []float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
@@ -175,12 +175,12 @@ func newParamsParserNumericTypesNumericTypesArraysParsing(app *HTTPApp) paramsPa
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesArraysParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesArrayItemsRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesArraysParsingRequest],
+				parseJSONPayload[*models.NumericTypesArrayItemsRequest],
 			),
-			validateValue: internal.NewNumericTypesArraysParsingRequestValidator(),
+			validateValue: internal.NewNumericTypesArrayItemsRequestValidator(),
 		}),
 	}
 }

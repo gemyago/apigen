@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewNumericTypesArraysParsingRequestValidator() FieldValidator[*models.NumericTypesArraysParsingRequest] {
+func NewNumericTypesArrayItemsRequestValidator() FieldValidator[*models.NumericTypesArrayItemsRequest] {
 	validateNumberAny := NewArrayValidator[float32](
 		NewSimpleFieldValidator[float32](
 			),
@@ -34,7 +34,7 @@ func NewNumericTypesArraysParsingRequestValidator() FieldValidator[*models.Numer
 			),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.NumericTypesArraysParsingRequest) {
+	return func(bindingCtx *BindingContext, value *models.NumericTypesArrayItemsRequest) {
 		validateNumberAny(bindingCtx.Fork("numberAny"), value.NumberAny)
 		validateNumberFloat(bindingCtx.Fork("numberFloat"), value.NumberFloat)
 		validateNumberDouble(bindingCtx.Fork("numberDouble"), value.NumberDouble)

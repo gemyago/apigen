@@ -6,7 +6,7 @@ import (
 
 type numericTypesControllerTestActions struct {
 	numericTypesParsing                  mockAction[*handlers.NumericTypesNumericTypesParsingRequest]
-	numericTypesArraysParsing            mockAction[*handlers.NumericTypesNumericTypesArraysParsingRequest]
+	numericTypesArrayItems               mockAction[*handlers.NumericTypesNumericTypesArrayItemsRequest]
 	numericTypesRangeValidation          mockAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
 	numericTypesRangeValidationExclusive mockAction[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest]
 	numericTypesRequiredValidation       mockAction[*handlers.NumericTypesNumericTypesRequiredValidationRequest]
@@ -18,7 +18,7 @@ func newNumericTypesController(
 ) *handlers.NumericTypesController {
 	return handlers.BuildNumericTypesController().
 		HandleNumericTypesParsing.With(testActions.numericTypesParsing.action).
-		HandleNumericTypesArraysParsing.With(testActions.numericTypesArraysParsing.action).
+		HandleNumericTypesArrayItems.With(testActions.numericTypesArrayItems.action).
 		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
 		HandleNumericTypesRangeValidationExclusive.With(testActions.numericTypesRangeValidationExclusive.action).
 		HandleNumericTypesRequiredValidation.With(testActions.numericTypesRequiredValidation.action).
