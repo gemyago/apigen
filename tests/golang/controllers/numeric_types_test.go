@@ -145,29 +145,29 @@ func TestNumericTypes(t *testing.T) {
 		) *handlers.NumericTypesNumericTypesArrayItemsRequest {
 			res := &handlers.NumericTypesNumericTypesArrayItemsRequest{
 				// path
-				NumberAny:    randomNumbers(5, randomFloat32, 100, 200),
-				NumberFloat:  randomNumbers(5, randomFloat32, 200, 300),
-				NumberDouble: randomNumbers(5, randomFloat64, 300, 400),
-				NumberInt:    randomNumbers(5, fake.Int32Between, 400, 500),
-				NumberInt32:  randomNumbers(5, fake.Int32Between, 500, 600),
-				NumberInt64:  randomNumbers(5, fake.Int64Between, 600, 700),
+				NumberAny:    randomNumbers(5, randomFloat32, 101, 200),
+				NumberFloat:  randomNumbers(5, randomFloat32, 201, 300),
+				NumberDouble: randomNumbers(5, randomFloat64, 301, 400),
+				NumberInt:    randomNumbers(5, fake.Int32Between, 401, 500),
+				NumberInt32:  randomNumbers(5, fake.Int32Between, 501, 600),
+				NumberInt64:  randomNumbers(5, fake.Int64Between, 601, 700),
 
 				// query
-				NumberAnyInQuery:    randomNumbers(5, randomFloat32, 100, 200),
-				NumberFloatInQuery:  randomNumbers(5, randomFloat32, 200, 300),
-				NumberDoubleInQuery: randomNumbers(5, randomFloat64, 300, 400),
-				NumberIntInQuery:    randomNumbers(5, fake.Int32Between, 400, 500),
-				NumberInt32InQuery:  randomNumbers(5, fake.Int32Between, 500, 600),
-				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 600, 700),
+				NumberAnyInQuery:    randomNumbers(5, randomFloat32, 101, 200),
+				NumberFloatInQuery:  randomNumbers(5, randomFloat32, 201, 300),
+				NumberDoubleInQuery: randomNumbers(5, randomFloat64, 301, 400),
+				NumberIntInQuery:    randomNumbers(5, fake.Int32Between, 401, 500),
+				NumberInt32InQuery:  randomNumbers(5, fake.Int32Between, 501, 600),
+				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 601, 700),
 
 				// body
 				Payload: &models.NumericTypesArrayItemsRequest{
-					NumberAny:    randomNumbers(5, randomFloat32, 100, 200),
-					NumberFloat:  randomNumbers(5, randomFloat32, 200, 300),
-					NumberDouble: randomNumbers(5, randomFloat64, 300, 400),
-					NumberInt:    randomNumbers(5, fake.Int32Between, 400, 500),
-					NumberInt32:  randomNumbers(5, fake.Int32Between, 500, 600),
-					NumberInt64:  randomNumbers(5, fake.Int64Between, 600, 700),
+					NumberAny:    randomNumbers(5, randomFloat32, 101, 200),
+					NumberFloat:  randomNumbers(5, randomFloat32, 201, 300),
+					NumberDouble: randomNumbers(5, randomFloat64, 301, 400),
+					NumberInt:    randomNumbers(5, fake.Int32Between, 401, 500),
+					NumberInt32:  randomNumbers(5, fake.Int32Between, 501, 600),
+					NumberInt64:  randomNumbers(5, fake.Int64Between, 601, 700),
 				},
 			}
 			for _, opt := range opts {
@@ -214,7 +214,7 @@ func TestNumericTypes(t *testing.T) {
 				}
 			})
 
-		runRouteTestCase(t, "should fail if invalid values", setupRouter,
+		runRouteTestCase(t, "should fail if bad values", setupRouter,
 			func() routeTestCase[*numericTypesControllerTestActions] {
 				wantReq := randomReq()
 				query := buildQuery(wantReq)
@@ -259,6 +259,81 @@ func TestNumericTypes(t *testing.T) {
 							{Field: "numberInt64InQuery", Location: "query", Code: "BAD_FORMAT"},
 							// body
 							{Location: "body", Code: "BAD_FORMAT"},
+						},
+					),
+				}
+			})
+
+		runRouteTestCase(t, "should fail if invalid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				badIndices := make([]int, 18)
+				wantReq := randomReq(func(req *handlers.NumericTypesNumericTypesArrayItemsRequest) {
+					badIndices[0], req.NumberAny = injectValueRandomly(fake, req.NumberAny, fake.Float32(10, 1, 100))
+					badIndices[1], req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, fake.Float32(10, 301, 500))
+					badIndices[2], req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, fake.Float64(10, 1, 300))
+					badIndices[3], req.NumberInt = injectValueRandomly(fake, req.NumberInt, fake.Int32Between(1, 400))
+					badIndices[4], req.NumberInt32 = injectValueRandomly(fake, req.NumberInt32, fake.Int32Between(1, 500))
+					badIndices[5], req.NumberInt64 = injectValueRandomly(fake, req.NumberInt64, fake.Int64Between(1, 600))
+
+					badIndices[6], req.NumberAnyInQuery = injectValueRandomly(fake, req.NumberAnyInQuery, fake.Float32(10, 1, 100))
+					badIndices[7], req.NumberFloatInQuery = injectValueRandomly(fake, req.NumberFloatInQuery, fake.Float32(10, 301, 500))
+					badIndices[8], req.NumberDoubleInQuery = injectValueRandomly(
+						fake, req.NumberDoubleInQuery, fake.Float64(10, 1, 300),
+					)
+					badIndices[9], req.NumberIntInQuery = injectValueRandomly(fake, req.NumberIntInQuery, fake.Int32Between(1, 400))
+					badIndices[10], req.NumberInt32InQuery = injectValueRandomly(
+						fake, req.NumberInt32InQuery, fake.Int32Between(1, 500),
+					)
+					badIndices[11], req.NumberInt64InQuery = injectValueRandomly(
+						fake, req.NumberInt64InQuery, fake.Int64Between(1, 600),
+					)
+
+					badIndices[12], req.Payload.NumberAny = injectValueRandomly(
+						fake, req.Payload.NumberAny, fake.Float32(10, 1, 100),
+					)
+					badIndices[13], req.Payload.NumberFloat = injectValueRandomly(
+						fake, req.Payload.NumberFloat, fake.Float32(10, 301, 500),
+					)
+					badIndices[14], req.Payload.NumberDouble = injectValueRandomly(
+						fake, req.Payload.NumberDouble, fake.Float64(10, 1, 300),
+					)
+					badIndices[15], req.Payload.NumberInt = injectValueRandomly(fake, req.Payload.NumberInt, fake.Int32Between(1, 400))
+					badIndices[16], req.Payload.NumberInt32 = injectValueRandomly(
+						fake, req.Payload.NumberInt32, fake.Int32Between(1, 500),
+					)
+					badIndices[17], req.Payload.NumberInt64 = injectValueRandomly(
+						fake, req.Payload.NumberInt64, fake.Int64Between(1, 600),
+					)
+				})
+
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: expectBindingErrors[*numericTypesControllerTestActions](
+						[]expectedBindingError{
+							// path
+							{Field: strconv.Itoa(badIndices[0]), Location: "path.numberAny", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[1]), Location: "path.numberFloat", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[2]), Location: "path.numberDouble", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[3]), Location: "path.numberInt", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[4]), Location: "path.numberInt32", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[5]), Location: "path.numberInt64", Code: "INVALID_OUT_OF_RANGE"},
+							// query
+							{Field: strconv.Itoa(badIndices[6]), Location: "query.numberAnyInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[7]), Location: "query.numberFloatInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[8]), Location: "query.numberDoubleInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[9]), Location: "query.numberIntInQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[10]), Location: "query.numberInt32InQuery", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[11]), Location: "query.numberInt64InQuery", Code: "INVALID_OUT_OF_RANGE"},
+							// body
+							{Field: strconv.Itoa(badIndices[12]), Location: "body.numberAny", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[13]), Location: "body.numberFloat", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[14]), Location: "body.numberDouble", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[15]), Location: "body.numberInt", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[16]), Location: "body.numberInt32", Code: "INVALID_OUT_OF_RANGE"},
+							{Field: strconv.Itoa(badIndices[17]), Location: "body.numberInt64", Code: "INVALID_OUT_OF_RANGE"},
 						},
 					),
 				}
