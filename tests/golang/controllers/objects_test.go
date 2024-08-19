@@ -391,4 +391,61 @@ func TestObjects(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("arrays-parsing", func(t *testing.T) {
+		randomObjectArraysSimpleObject := func() *models.ObjectArraysSimpleObject {
+			return &models.ObjectArraysSimpleObject{
+				SimpleField1: fake.RandomStringWithLength(fake.IntBetween(5, 10)),
+			}
+		}
+		randomObjectArraysSimpleObjects := func() []*models.ObjectArraysSimpleObject {
+			return []*models.ObjectArraysSimpleObject{
+				randomObjectArraysSimpleObject(),
+				randomObjectArraysSimpleObject(),
+			}
+		}
+
+		runRouteTestCase(t, "should parse direct body array", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayParsingBodyDirectRequest{
+				Payload: randomObjectArraysSimpleObjects(),
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/arrays-parsing",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsArrayParsingBodyDirect.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should parse nested body array", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayParsingBodyNestedRequest{
+				Payload: &models.ObjectsArrayParsingBodyNestedRequest{
+					NestedArray1: randomObjectArraysSimpleObjects(),
+					NestedArray2: randomObjectArraysSimpleObjects(),
+					NestedArrayContainer1: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+				},
+			}
+			return testCase{
+				method: http.MethodPut,
+				path:   "/objects/arrays-parsing",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsArrayParsingBodyNested.calls[0].params)
+				},
+			}
+		})
+	})
 }

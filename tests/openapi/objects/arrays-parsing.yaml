@@ -11,6 +11,9 @@ post:
           type: array
           items:
             $ref: "#/components/schemas/ObjectArraysSimpleObject"
+  responses:
+    '204':
+      description: No content
 put:
   summary: API to test parsing nested arrays of objects
   operationId: objectsArrayParsingBodyNested
@@ -44,6 +47,9 @@ put:
               type: array
               items:
                 $ref: "#/components/schemas/ObjectArraysSimpleObjectsContainer"
+  responses:
+    '204':
+      description: No content
 components:
   schemas:
     ObjectArraysSimpleObjectsContainer:

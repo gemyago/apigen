@@ -175,13 +175,13 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 
 	// POST /objects/arrays-parsing
 	controllerBuilder.HandleObjectsArrayParsingBodyDirect.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsArrayParsingBodyDirect.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsArrayParsingBodyDirect.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsArrayParsingBodyDirect.voidResult = true
 	controllerBuilder.HandleObjectsArrayParsingBodyDirect.paramsParserFactory = newParamsParserObjectsObjectsArrayParsingBodyDirect
 
 	// PUT /objects/arrays-parsing
 	controllerBuilder.HandleObjectsArrayParsingBodyNested.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsArrayParsingBodyNested.defaultStatusCode = 200
+	controllerBuilder.HandleObjectsArrayParsingBodyNested.defaultStatusCode = 204
 	controllerBuilder.HandleObjectsArrayParsingBodyNested.voidResult = true
 	controllerBuilder.HandleObjectsArrayParsingBodyNested.paramsParserFactory = newParamsParserObjectsObjectsArrayParsingBodyNested
 
