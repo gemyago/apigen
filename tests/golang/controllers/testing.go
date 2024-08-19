@@ -222,12 +222,12 @@ func fromNullableItems[T any](v []*T) []string {
 	return items
 }
 
-type randFn[T constraints.Integer | constraints.Float] func(min, max T) T
+type randFn[T constraints.Integer | constraints.Float] func(minVal, maxVal T) T
 
-func randomNumbers[T constraints.Integer | constraints.Float](n int, numberBetween randFn[T], min, max T) []T {
+func randomNumbers[T constraints.Integer | constraints.Float](n int, numberBetween randFn[T], minVal, maxVal T) []T {
 	vals := make([]T, n)
 	for i := range n {
-		vals[i] = numberBetween(min, max)
+		vals[i] = numberBetween(minVal, maxVal)
 	}
 	return vals
 }

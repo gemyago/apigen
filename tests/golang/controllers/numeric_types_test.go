@@ -30,12 +30,12 @@ func TestNumericTypes(t *testing.T) {
 		return testActions, router.mux
 	}
 
-	randomFloat32 := func(min, max float32) float32 {
-		return fake.Float32(10, int(min), int(max))
+	randomFloat32 := func(minVal, maxVal float32) float32 {
+		return fake.Float32(10, int(minVal), int(maxVal))
 	}
 
-	randomFloat64 := func(min, max float64) float64 {
-		return fake.Float64(10, int(min), int(max))
+	randomFloat64 := func(minVal, maxVal float64) float64 {
+		return fake.Float64(10, int(minVal), int(maxVal))
 	}
 
 	type testCase = routeTestCase[*numericTypesControllerTestActions]
