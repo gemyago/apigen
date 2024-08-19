@@ -34,6 +34,8 @@ paths:
   # numeric-types routes
   /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/parsing.yaml"
+  /numeric-types/arrays-parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/arrays-parsing.yaml"
   /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/range-validation.yaml"
   /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:

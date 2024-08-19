@@ -10,7 +10,180 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.NumericTypesNullableRequest{}
+var _ = models.NumericTypesArraysParsingRequest{}
+
+type paramsParserNumericTypesNumericTypesArraysParsing struct {
+	bindNumberAny requestParamBinder[string, []float32]
+	bindNumberFloat requestParamBinder[string, []float32]
+	bindNumberDouble requestParamBinder[string, []float64]
+	bindNumberInt requestParamBinder[string, []int32]
+	bindNumberInt32 requestParamBinder[string, []int32]
+	bindNumberInt64 requestParamBinder[string, []int64]
+	bindNumberAnyInQuery requestParamBinder[[]string, []float32]
+	bindNumberFloatInQuery requestParamBinder[[]string, []float32]
+	bindNumberDoubleInQuery requestParamBinder[[]string, []float64]
+	bindNumberIntInQuery requestParamBinder[[]string, []int32]
+	bindNumberInt32InQuery requestParamBinder[[]string, []int32]
+	bindNumberInt64InQuery requestParamBinder[[]string, []int64]
+	bindPayload requestParamBinder[*http.Request, *models.NumericTypesArraysParsingRequest]
+}
+
+func (p *paramsParserNumericTypesNumericTypesArraysParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesArraysParsingRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &NumericTypesNumericTypesArraysParsingRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
+	p.bindNumberFloat(pathParamsCtx.Fork("numberFloat"), readPathValue("numberFloat", router, req), &reqParams.NumberFloat)
+	p.bindNumberDouble(pathParamsCtx.Fork("numberDouble"), readPathValue("numberDouble", router, req), &reqParams.NumberDouble)
+	p.bindNumberInt(pathParamsCtx.Fork("numberInt"), readPathValue("numberInt", router, req), &reqParams.NumberInt)
+	p.bindNumberInt32(pathParamsCtx.Fork("numberInt32"), readPathValue("numberInt32", router, req), &reqParams.NumberInt32)
+	p.bindNumberInt64(pathParamsCtx.Fork("numberInt64"), readPathValue("numberInt64", router, req), &reqParams.NumberInt64)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindNumberAnyInQuery(queryParamsCtx.Fork("numberAnyInQuery"), readQueryValue("numberAnyInQuery", query), &reqParams.NumberAnyInQuery)
+	p.bindNumberFloatInQuery(queryParamsCtx.Fork("numberFloatInQuery"), readQueryValue("numberFloatInQuery", query), &reqParams.NumberFloatInQuery)
+	p.bindNumberDoubleInQuery(queryParamsCtx.Fork("numberDoubleInQuery"), readQueryValue("numberDoubleInQuery", query), &reqParams.NumberDoubleInQuery)
+	p.bindNumberIntInQuery(queryParamsCtx.Fork("numberIntInQuery"), readQueryValue("numberIntInQuery", query), &reqParams.NumberIntInQuery)
+	p.bindNumberInt32InQuery(queryParamsCtx.Fork("numberInt32InQuery"), readQueryValue("numberInt32InQuery", query), &reqParams.NumberInt32InQuery)
+	p.bindNumberInt64InQuery(queryParamsCtx.Fork("numberInt64InQuery"), readQueryValue("numberInt64InQuery", query), &reqParams.NumberInt64InQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserNumericTypesNumericTypesArraysParsing(app *HTTPApp) paramsParser[*NumericTypesNumericTypesArraysParsingRequest] {
+	return &paramsParserNumericTypesNumericTypesArraysParsing{
+		bindNumberAny: newRequestParamBinder(binderParams[string, []float32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.float32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float32](
+				),
+			),
+		}),
+		bindNumberFloat: newRequestParamBinder(binderParams[string, []float32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.float32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float32](
+				),
+			),
+		}),
+		bindNumberDouble: newRequestParamBinder(binderParams[string, []float64]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.float64Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float64](
+				),
+			),
+		}),
+		bindNumberInt: newRequestParamBinder(binderParams[string, []int32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.int32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int32](
+				),
+			),
+		}),
+		bindNumberInt32: newRequestParamBinder(binderParams[string, []int32]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.int32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int32](
+				),
+			),
+		}),
+		bindNumberInt64: newRequestParamBinder(binderParams[string, []int64]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.int64Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int64](
+				),
+			),
+		}),
+		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, []float32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.float32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float32](
+				),
+			),
+		}),
+		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, []float32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.float32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float32](
+				),
+			),
+		}),
+		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, []float64]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.float64Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[float64](
+				),
+			),
+		}),
+		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, []int32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.int32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int32](
+				),
+			),
+		}),
+		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, []int32]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.int32Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int32](
+				),
+			),
+		}),
+		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, []int64]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.int64Parser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[int64](
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesArraysParsingRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.NumericTypesArraysParsingRequest],
+			),
+			validateValue: internal.NewNumericTypesArraysParsingRequestValidator(),
+		}),
+	}
+}
 
 type paramsParserNumericTypesNumericTypesNullable struct {
 	bindNumberAny requestParamBinder[string, *float32]

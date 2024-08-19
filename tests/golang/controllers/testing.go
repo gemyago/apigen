@@ -18,6 +18,7 @@ import (
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/exp/constraints"
 )
 
 type routerAdapter struct {
@@ -219,4 +220,22 @@ func fromNullableItems[T any](v []*T) []string {
 		}
 	}
 	return items
+}
+
+type randFn[T constraints.Integer | constraints.Float] func(min, max T) T
+
+func randomNumbers[T constraints.Integer | constraints.Float](n int, numberBetween randFn[T], min, max T) []T {
+	vals := make([]T, n)
+	for i := range n {
+		vals[i] = numberBetween(min, max)
+	}
+	return vals
+}
+
+func numbersToString[T constraints.Integer | constraints.Float](vals []T) []string {
+	strs := make([]string, len(vals))
+	for i := range vals {
+		strs[i] = fmt.Sprint(vals[i])
+	}
+	return strs
 }

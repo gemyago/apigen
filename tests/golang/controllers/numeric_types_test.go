@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -27,6 +28,14 @@ func TestNumericTypes(t *testing.T) {
 		}
 		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
+	}
+
+	randomFloat32 := func(min, max float32) float32 {
+		return fake.Float32(10, int(min), int(max))
+	}
+
+	randomFloat64 := func(min, max float64) float64 {
+		return fake.Float64(10, int(min), int(max))
 	}
 
 	type testCase = routeTestCase[*numericTypesControllerTestActions]
@@ -126,6 +135,76 @@ func TestNumericTypes(t *testing.T) {
 							{Location: "body", Code: "BAD_FORMAT"},
 						},
 					),
+				}
+			})
+	})
+
+	t.Run("arrays-parsing", func(t *testing.T) {
+		randomReq := func() *handlers.NumericTypesNumericTypesArraysParsingRequest {
+			return &handlers.NumericTypesNumericTypesArraysParsingRequest{
+				// path
+				NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
+				NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
+				NumberDouble: randomNumbers(5, randomFloat64, 1, 100),
+				NumberInt:    randomNumbers(5, fake.Int32Between, 1, 100),
+				NumberInt32:  randomNumbers(5, fake.Int32Between, 1, 100),
+				NumberInt64:  randomNumbers(5, fake.Int64Between, 1, 100),
+
+				// query
+				NumberAnyInQuery:    randomNumbers(5, randomFloat32, 1, 100),
+				NumberFloatInQuery:  randomNumbers(5, randomFloat32, 1, 100),
+				NumberDoubleInQuery: randomNumbers(5, randomFloat64, 1, 100),
+				NumberIntInQuery:    randomNumbers(5, fake.Int32Between, 1, 100),
+				NumberInt32InQuery:  randomNumbers(5, fake.Int32Between, 1, 100),
+				NumberInt64InQuery:  randomNumbers(5, fake.Int64Between, 1, 100),
+
+				// body
+				Payload: &models.NumericTypesArraysParsingRequest{
+					NumberAny:    randomNumbers(5, randomFloat32, 1, 100),
+					NumberFloat:  randomNumbers(5, randomFloat32, 1, 100),
+					NumberDouble: randomNumbers(5, randomFloat64, 1, 100),
+					NumberInt:    randomNumbers(5, fake.Int32Between, 1, 100),
+					NumberInt32:  randomNumbers(5, fake.Int32Between, 1, 100),
+					NumberInt64:  randomNumbers(5, fake.Int64Between, 1, 100),
+				},
+			}
+		}
+
+		buildPath := func(wantReq *handlers.NumericTypesNumericTypesArraysParsingRequest) string {
+			return fmt.Sprintf(
+				"/numeric-types/arrays-parsing/%v/%v/%v/%v/%v/%v",
+				strings.Join(numbersToString(wantReq.NumberAny), ","),
+				strings.Join(numbersToString(wantReq.NumberFloat), ","),
+				strings.Join(numbersToString(wantReq.NumberDouble), ","),
+				strings.Join(numbersToString(wantReq.NumberInt), ","),
+				strings.Join(numbersToString(wantReq.NumberInt32), ","),
+				strings.Join(numbersToString(wantReq.NumberInt64), ","),
+			)
+		}
+
+		buildQuery := func(wantReq *handlers.NumericTypesNumericTypesArraysParsingRequest) url.Values {
+			query := url.Values{}
+			query["numberAnyInQuery"] = numbersToString(wantReq.NumberAnyInQuery)
+			query["numberFloatInQuery"] = numbersToString(wantReq.NumberFloatInQuery)
+			query["numberDoubleInQuery"] = numbersToString(wantReq.NumberDoubleInQuery)
+			query["numberIntInQuery"] = numbersToString(wantReq.NumberIntInQuery)
+			query["numberInt32InQuery"] = numbersToString(wantReq.NumberInt32InQuery)
+			query["numberInt64InQuery"] = numbersToString(wantReq.NumberInt64InQuery)
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
+			func() routeTestCase[*numericTypesControllerTestActions] {
+				wantReq := randomReq()
+				return routeTestCase[*numericTypesControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *numericTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+						assert.Equal(t, 204, recorder.Code)
+						assert.Equal(t, wantReq, testActions.numericTypesArraysParsing.calls[0].params)
+					},
 				}
 			})
 	})

@@ -1,0 +1,146 @@
+post:
+  summary: API to simulate and test numeric arrays parsing errors
+  operationId: numericTypesArraysParsing
+  tags:
+    - numeric-types
+  parameters:
+    # params in path
+    - name: numberAny
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+    - name: numberFloat
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          format: float
+    - name: numberDouble
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          format: double
+    - name: numberInt
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+    - name: numberInt32
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int32
+    - name: numberInt64
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+
+    # params in query
+    - name: numberAnyInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+    - name: numberFloatInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          format: float
+    - name: numberDoubleInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          format: double
+    - name: numberIntInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+    - name: numberInt32InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int32
+    - name: numberInt64InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - numberAny
+            - numberFloat
+            - numberDouble
+            - numberInt
+            - numberInt32
+            - numberInt64
+          properties: 
+            numberAny:
+              type: array
+              items:
+                type: number
+            numberFloat:
+              type: array
+              items:
+                type: number
+                format: float
+            numberDouble:
+              type: array
+              items:
+                type: number
+                format: double
+            numberInt:
+              type: array
+              items:
+                type: integer
+            numberInt32:
+              type: array
+              items:
+                type: integer
+                format: int32
+            numberInt64:
+              type: array
+              items:
+                type: integer
+                format: int64
+  responses:
+    '204':
+      description: Request succeeded

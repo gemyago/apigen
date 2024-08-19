@@ -9,6 +9,22 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+type NumericTypesNumericTypesArraysParsingRequest struct {
+	NumberAny []float32
+	NumberFloat []float32
+	NumberDouble []float64
+	NumberInt []int32
+	NumberInt32 []int32
+	NumberInt64 []int64
+	NumberAnyInQuery []float32
+	NumberFloatInQuery []float32
+	NumberDoubleInQuery []float64
+	NumberIntInQuery []int32
+	NumberInt32InQuery []int32
+	NumberInt64InQuery []int64
+	Payload *models.NumericTypesArraysParsingRequest
+}
+
 type NumericTypesNumericTypesNullableRequest struct {
 	NumberAny *float32
 	NumberFloat *float32
@@ -90,6 +106,13 @@ type NumericTypesNumericTypesRequiredValidationRequest struct {
 }
 
 type NumericTypesController struct {
+	// POST /numeric-types/arrays-parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesArraysParsingRequest,
+	//
+	// Response type: none
+	NumericTypesArraysParsing httpHandlerFactory
+
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesNullableRequest,
@@ -127,6 +150,13 @@ type NumericTypesController struct {
 }
 
 type NumericTypesControllerBuilder struct {
+	// POST /numeric-types/arrays-parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesArraysParsingRequest,
+	//
+	// Response type: none
+	HandleNumericTypesArraysParsing actionBuilderVoidResult[*NumericTypesControllerBuilder, *NumericTypesNumericTypesArraysParsingRequest]
+
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesNullableRequest,
@@ -165,6 +195,7 @@ type NumericTypesControllerBuilder struct {
 
 func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 	return &NumericTypesController{
+		NumericTypesArraysParsing: mustInitializeAction("numericTypesArraysParsing", c.HandleNumericTypesArraysParsing.httpHandlerFactory),
 		NumericTypesNullable: mustInitializeAction("numericTypesNullable", c.HandleNumericTypesNullable.httpHandlerFactory),
 		NumericTypesParsing: mustInitializeAction("numericTypesParsing", c.HandleNumericTypesParsing.httpHandlerFactory),
 		NumericTypesRangeValidation: mustInitializeAction("numericTypesRangeValidation", c.HandleNumericTypesRangeValidation.httpHandlerFactory),
@@ -175,6 +206,12 @@ func (c *NumericTypesControllerBuilder) Finalize() *NumericTypesController {
 
 func BuildNumericTypesController() *NumericTypesControllerBuilder {
 	controllerBuilder := &NumericTypesControllerBuilder{}
+
+	// POST /numeric-types/arrays-parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	controllerBuilder.HandleNumericTypesArraysParsing.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleNumericTypesArraysParsing.defaultStatusCode = 204
+	controllerBuilder.HandleNumericTypesArraysParsing.voidResult = true
+	controllerBuilder.HandleNumericTypesArraysParsing.paramsParserFactory = newParamsParserNumericTypesNumericTypesArraysParsing
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	controllerBuilder.HandleNumericTypesNullable.controllerBuilder = controllerBuilder
@@ -210,6 +247,7 @@ func BuildNumericTypesController() *NumericTypesControllerBuilder {
 }
 
 func RegisterNumericTypesRoutes(controller *NumericTypesController, app *HTTPApp) {
+	app.router.HandleRoute("POST", "/numeric-types/arrays-parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArraysParsing(app))
 	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(app))
 	app.router.HandleRoute("POST", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(app))
 	app.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
