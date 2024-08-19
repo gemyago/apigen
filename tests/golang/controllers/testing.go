@@ -202,13 +202,18 @@ func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T
 	return index, newValues
 }
 
-func fromNullableItems[T any](v []*T) []string {
+func fromNullableItems[T any](v []*T, formatter ...func(T) string) []string {
+	if len(formatter) == 0 {
+		formatter = append(formatter, func(v T) string {
+			return fmt.Sprint(v)
+		})
+	}
 	items := make([]string, len(v))
 	for i := range v {
 		if v[i] == nil {
 			items[i] = "null"
 		} else {
-			items[i] = fmt.Sprint(*v[i])
+			items[i] = formatter[0](*v[i])
 		}
 	}
 	return items

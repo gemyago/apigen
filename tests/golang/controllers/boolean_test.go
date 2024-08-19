@@ -403,4 +403,87 @@ func TestBoolean(t *testing.T) {
 				}
 			})
 	})
+
+	t.Run("nullable-array-items", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.BooleanBooleanNullableArrayItemsRequest),
+		) *handlers.BooleanBooleanNullableArrayItemsRequest {
+			res := &handlers.BooleanBooleanNullableArrayItemsRequest{
+				// path
+				BoolParam1: lo.ToSlicePtr(randomBooleans(5)),
+				BoolParam2: lo.ToSlicePtr(randomBooleans(5)),
+
+				// query
+				BoolParam1InQuery: lo.ToSlicePtr(randomBooleans(5)),
+				BoolParam2InQuery: lo.ToSlicePtr(randomBooleans(5)),
+
+				// body
+				Payload: &models.BooleanNullableArrayItemsRequest{
+					BoolParam1: lo.ToSlicePtr(randomBooleans(5)),
+					BoolParam2: lo.ToSlicePtr(randomBooleans(5)),
+				},
+			}
+			for _, opt := range opts {
+				opt(res)
+			}
+			return res
+		}
+
+		buildQuery := func(wantReq *handlers.BooleanBooleanNullableArrayItemsRequest) url.Values {
+			query := url.Values{}
+			query["boolParam1InQuery"] = fromNullableItems(wantReq.BoolParam1InQuery, strconv.FormatBool)
+			query["boolParam2InQuery"] = fromNullableItems(wantReq.BoolParam2InQuery, strconv.FormatBool)
+			return query
+		}
+
+		buildPath := func(wantReq *handlers.BooleanBooleanNullableArrayItemsRequest) string {
+			return fmt.Sprintf("/boolean/nullable-array-items/%v/%v",
+				strings.Join(fromNullableItems(wantReq.BoolParam1, strconv.FormatBool), ","),
+				strings.Join(fromNullableItems(wantReq.BoolParam2, strconv.FormatBool), ","),
+			)
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter,
+			func() routeTestCase[*booleanControllerTestActions] {
+				wantReq := randomReq()
+
+				return routeTestCase[*booleanControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, wantReq, testActions.nullableBooleanArrayItems.calls[0].params)
+					},
+				}
+			})
+
+		runRouteTestCase(t, "should parse and bind valid null values", setupRouter,
+			func() routeTestCase[*booleanControllerTestActions] {
+				wantReq := randomReq(func(req *handlers.BooleanBooleanNullableArrayItemsRequest) {
+					_, req.BoolParam1 = injectValueRandomly(fake, req.BoolParam1, nil)
+					_, req.BoolParam2 = injectValueRandomly(fake, req.BoolParam2, nil)
+					_, req.BoolParam1InQuery = injectValueRandomly(fake, req.BoolParam1InQuery, nil)
+					_, req.BoolParam2InQuery = injectValueRandomly(fake, req.BoolParam2InQuery, nil)
+					_, req.Payload.BoolParam1 = injectValueRandomly(fake, req.Payload.BoolParam1, nil)
+					_, req.Payload.BoolParam2 = injectValueRandomly(fake, req.Payload.BoolParam2, nil)
+				})
+
+				return routeTestCase[*booleanControllerTestActions]{
+					method: http.MethodPost,
+					path:   buildPath(wantReq),
+					query:  buildQuery(wantReq),
+					body:   marshalJSONDataAsReader(t, wantReq.Payload),
+					expect: func(t *testing.T, testActions *booleanControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Equal(t, wantReq, testActions.nullableBooleanArrayItems.calls[0].params)
+					},
+				}
+			})
+	})
 }
