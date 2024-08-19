@@ -8,6 +8,7 @@ type booleanControllerTestActions struct {
 	booleanParsing            mockAction[*handlers.BooleanBooleanParsingRequest]
 	booleanRequiredValidation mockAction[*handlers.BooleanBooleanRequiredValidationRequest]
 	booleanNullable           mockAction[*handlers.BooleanBooleanNullableRequest]
+	booleanArrayItems         mockAction[*handlers.BooleanBooleanArrayItemsRequest]
 }
 
 func newBooleanController(
@@ -17,5 +18,6 @@ func newBooleanController(
 		HandleBooleanParsing.With(testActions.booleanParsing.action).
 		HandleBooleanRequiredValidation.With(testActions.booleanRequiredValidation.action).
 		HandleBooleanNullable.With(testActions.booleanNullable.action).
+		HandleBooleanArrayItems.With(testActions.booleanArrayItems.action).
 		Finalize()
 }
