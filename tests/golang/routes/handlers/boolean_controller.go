@@ -26,6 +26,14 @@ type BooleanBooleanNullableRequest struct {
 	OptionalBoolParam1InQuery *bool
 }
 
+type BooleanBooleanNullableArrayItemsRequest struct {
+	BoolParam1 []*bool
+	BoolParam2 []*bool
+	BoolParam1InQuery []*bool
+	BoolParam2InQuery []*bool
+	Payload *models.BooleanNullableArrayItemsRequest
+}
+
 type BooleanBooleanParsingRequest struct {
 	BoolParam1 bool
 	BoolParam2 bool
@@ -57,6 +65,13 @@ type BooleanController struct {
 	// Response type: none
 	BooleanNullable httpHandlerFactory
 
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanNullableArrayItems httpHandlerFactory
+
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
@@ -87,6 +102,13 @@ type BooleanControllerBuilder struct {
 	// Response type: none
 	HandleBooleanNullable actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanNullableRequest]
 
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableArrayItemsRequest,
+	//
+	// Response type: none
+	HandleBooleanNullableArrayItems actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanNullableArrayItemsRequest]
+
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
@@ -106,6 +128,7 @@ func (c *BooleanControllerBuilder) Finalize() *BooleanController {
 	return &BooleanController{
 		BooleanArrayItems: mustInitializeAction("booleanArrayItems", c.HandleBooleanArrayItems.httpHandlerFactory),
 		BooleanNullable: mustInitializeAction("booleanNullable", c.HandleBooleanNullable.httpHandlerFactory),
+		BooleanNullableArrayItems: mustInitializeAction("booleanNullableArrayItems", c.HandleBooleanNullableArrayItems.httpHandlerFactory),
 		BooleanParsing: mustInitializeAction("booleanParsing", c.HandleBooleanParsing.httpHandlerFactory),
 		BooleanRequiredValidation: mustInitializeAction("booleanRequiredValidation", c.HandleBooleanRequiredValidation.httpHandlerFactory),
 	}
@@ -126,6 +149,12 @@ func BuildBooleanController() *BooleanControllerBuilder {
 	controllerBuilder.HandleBooleanNullable.voidResult = true
 	controllerBuilder.HandleBooleanNullable.paramsParserFactory = newParamsParserBooleanBooleanNullable
 
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	controllerBuilder.HandleBooleanNullableArrayItems.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleBooleanNullableArrayItems.defaultStatusCode = 204
+	controllerBuilder.HandleBooleanNullableArrayItems.voidResult = true
+	controllerBuilder.HandleBooleanNullableArrayItems.paramsParserFactory = newParamsParserBooleanBooleanNullableArrayItems
+
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	controllerBuilder.HandleBooleanParsing.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBooleanParsing.defaultStatusCode = 204
@@ -144,6 +173,7 @@ func BuildBooleanController() *BooleanControllerBuilder {
 func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(app))
 	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(app))
+	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(app))
 	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
 	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
 }

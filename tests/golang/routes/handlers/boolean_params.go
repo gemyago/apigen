@@ -168,6 +168,83 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 	}
 }
 
+type paramsParserBooleanBooleanNullableArrayItems struct {
+	bindBoolParam1 requestParamBinder[string, []*bool]
+	bindBoolParam2 requestParamBinder[string, []*bool]
+	bindBoolParam1InQuery requestParamBinder[[]string, []*bool]
+	bindBoolParam2InQuery requestParamBinder[[]string, []*bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanNullableArrayItemsRequest]
+}
+
+func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableArrayItemsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &BooleanBooleanNullableArrayItemsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(pathParamsCtx.Fork("boolParam2"), readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[*BooleanBooleanNullableArrayItemsRequest] {
+	return &paramsParserBooleanBooleanNullableArrayItems{
+		bindBoolParam1: newRequestParamBinder(binderParams[string, []*bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam2: newRequestParamBinder(binderParams[string, []*bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanNullableArrayItemsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanNullableArrayItemsRequest],
+			),
+			validateValue: internal.NewBooleanNullableArrayItemsRequestValidator(),
+		}),
+	}
+}
+
 type paramsParserBooleanBooleanParsing struct {
 	bindBoolParam1 requestParamBinder[string, bool]
 	bindBoolParam2 requestParamBinder[string, bool]
