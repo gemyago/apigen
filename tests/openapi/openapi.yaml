@@ -54,6 +54,8 @@ paths:
     $ref: "./boolean/required-validation.yaml"
   /boolean/nullable/{boolParam1}/{boolParam2}:
     $ref: "./boolean/nullable.yaml"
+  /boolean/array-items/{boolParam1}/{boolParam2}:
+    $ref: "./boolean/array-items.yaml"
 
   # objects routes
   /objects/deeply-nested:

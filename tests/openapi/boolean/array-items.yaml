@@ -1,0 +1,58 @@
+post:
+  summary: API to simulate and test boolean array items type
+  operationId: booleanArrayItems
+  tags:
+    - boolean
+  parameters:
+    # params in path
+    - name: boolParam1
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+    - name: boolParam2
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+
+    # params in query
+    - name: boolParam1InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+    - name: boolParam2InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - boolParam1
+            - boolParam2
+          properties:
+            boolParam1:
+              type: array
+              items:
+                type: boolean
+            boolParam2:
+              type: array
+              items:
+                type: boolean
+  responses:
+    '204':
+      description: Request succeeded
