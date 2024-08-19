@@ -71,7 +71,7 @@ paths:
   /objects/required-nested-objects:
     $ref: "./objects/required-nested-objects.yaml"
 
-  # responses routes
+  # behavior routes
   /behavior/no-params-no-response:
     $ref: "./behavior/no-params-no-response.yaml"
   /behavior/no-params-with-response:
