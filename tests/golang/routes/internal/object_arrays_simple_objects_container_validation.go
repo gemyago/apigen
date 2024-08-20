@@ -10,9 +10,11 @@ var _ = time.Time{}
 
 func NewObjectArraysSimpleObjectsContainerValidator() FieldValidator[*models.ObjectArraysSimpleObjectsContainer] {
 	validateSimpleObjects1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](),
 		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateSimpleObjects2 := NewArrayValidator[*models.ObjectArraysSimpleObject](
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](),
 		NewObjectArraysSimpleObjectValidator(),
 	)
 	

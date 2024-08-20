@@ -45,6 +45,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 				app.knownParsers.boolParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](),
 				internal.NewSimpleFieldValidator[bool](
 				),
 			),
@@ -55,6 +56,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 				app.knownParsers.boolParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](),
 				internal.NewSimpleFieldValidator[bool](
 				),
 			),
@@ -65,6 +67,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 				app.knownParsers.boolParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](),
 				internal.NewSimpleFieldValidator[bool](
 				),
 			),
@@ -75,6 +78,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 				app.knownParsers.boolParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](),
 				internal.NewSimpleFieldValidator[bool](
 				),
 			),
@@ -201,6 +205,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 				parseNullableParam(app.knownParsers.boolParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](),
 				internal.NewSimpleFieldValidator[*bool](
 				),
 			),
@@ -211,6 +216,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 				parseNullableParam(app.knownParsers.boolParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](),
 				internal.NewSimpleFieldValidator[*bool](
 				),
 			),
@@ -221,6 +227,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 				parseNullableParam(app.knownParsers.boolParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](),
 				internal.NewSimpleFieldValidator[*bool](
 				),
 			),
@@ -231,6 +238,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 				parseNullableParam(app.knownParsers.boolParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](),
 				internal.NewSimpleFieldValidator[*bool](
 				),
 			),

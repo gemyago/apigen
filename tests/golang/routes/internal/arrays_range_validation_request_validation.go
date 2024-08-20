@@ -10,18 +10,22 @@ var _ = time.Time{}
 
 func NewArraysRangeValidationRequestValidator() FieldValidator[*models.ArraysRangeValidationRequest] {
 	validateSimpleItems1 := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateSimpleItems2 := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems1 := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems2 := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)

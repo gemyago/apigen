@@ -58,7 +58,8 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 				{{#items}}{{>params/parse-non-array-value}}{{/items}},{{/isArray}}{{^isArray}}
 				{{>params/parse-non-array-value}},{{/isArray}}
 			),{{/isBodyParam}}
-			validateValue: {{#isArray}}internal.NewArrayValidator({{#items}}{{#isModel}}
+			validateValue: {{#isArray}}internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[{{>params/type}}](),{{#items}}{{#isModel}}
 				internal.New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
 				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
 			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}

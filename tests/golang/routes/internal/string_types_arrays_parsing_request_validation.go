@@ -10,22 +10,27 @@ var _ = time.Time{}
 
 func NewStringTypesArraysParsingRequestValidator() FieldValidator[*models.StringTypesArraysParsingRequest] {
 	validateUnformattedStr := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateCustomFormatStr := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateDateStr := NewArrayValidator[time.Time](
+		NewSimpleFieldValidator[[]time.Time](),
 		NewSimpleFieldValidator[time.Time](
 			),
 	)
 	validateDateTimeStr := NewArrayValidator[time.Time](
+		NewSimpleFieldValidator[[]time.Time](),
 		NewSimpleFieldValidator[time.Time](
 			),
 	)
 	validateByteStr := NewArrayValidator[string](
+		NewSimpleFieldValidator[[]string](),
 		NewSimpleFieldValidator[string](
 			),
 	)

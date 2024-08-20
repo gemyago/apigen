@@ -49,6 +49,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -59,6 +60,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -69,6 +71,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -79,6 +82,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -96,6 +100,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -106,6 +111,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -150,6 +156,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -160,6 +167,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -170,6 +178,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -180,6 +189,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -197,6 +207,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -207,6 +218,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -251,6 +263,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -261,6 +274,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -271,6 +285,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -281,6 +296,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -298,6 +314,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -308,6 +325,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),

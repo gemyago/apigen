@@ -57,6 +57,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](10, true),
 					internal.NewMinMaxLengthValidator[string](20, false),
@@ -69,6 +70,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](20, true),
 					internal.NewMinMaxLengthValidator[string](30, false),
@@ -81,6 +83,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.dateParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -91,6 +94,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.timeParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -101,6 +105,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](30, true),
 					internal.NewMinMaxLengthValidator[string](40, false),
@@ -113,6 +118,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](10, true),
 					internal.NewMinMaxLengthValidator[string](20, false),
@@ -125,6 +131,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](20, true),
 					internal.NewMinMaxLengthValidator[string](30, false),
@@ -137,6 +144,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.dateParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -147,6 +155,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.timeParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -157,6 +166,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 					internal.NewMinMaxLengthValidator[string](30, true),
 					internal.NewMinMaxLengthValidator[string](40, false),
@@ -218,6 +228,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -228,6 +239,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -238,6 +250,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.dateParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -248,6 +261,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.timeParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -258,6 +272,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -268,6 +283,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -278,6 +294,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -288,6 +305,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.dateParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -298,6 +316,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.timeParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]time.Time](),
 				internal.NewSimpleFieldValidator[time.Time](
 				),
 			),
@@ -308,6 +327,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -367,6 +387,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
@@ -380,6 +401,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
@@ -393,6 +415,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.dateParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*time.Time](),
 				internal.NewSimpleFieldValidator[*time.Time](
 				),
 			),
@@ -403,6 +426,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.timeParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*time.Time](),
 				internal.NewSimpleFieldValidator[*time.Time](
 				),
 			),
@@ -413,6 +437,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),
@@ -425,6 +450,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
@@ -438,6 +464,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
@@ -451,6 +478,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.dateParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*time.Time](),
 				internal.NewSimpleFieldValidator[*time.Time](
 				),
 			),
@@ -461,6 +489,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.timeParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*time.Time](),
 				internal.NewSimpleFieldValidator[*time.Time](
 				),
 			),
@@ -471,6 +500,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
 					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),

@@ -251,14 +251,18 @@ func NewObjectFieldValidator[TTargetVal any](
 
 func NewArrayValidator[
 	TValue any,
-](validateField FieldValidator[TValue]) FieldValidator[[]TValue] {
+](
+	validateField FieldValidator[[]TValue],
+	validateItems FieldValidator[TValue],
+) FieldValidator[[]TValue] {
 	return func(
 		bindingCtx *BindingContext,
 		value []TValue,
 	) {
+		validateField(bindingCtx, value)
 		for i, v := range value {
 			// TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
-			validateField(bindingCtx.Fork(strconv.Itoa(i)), v)
+			validateItems(bindingCtx.Fork(strconv.Itoa(i)), v)
 		}
 	}
 }
