@@ -50,6 +50,7 @@ Supported serialization styles:
 |number/integer|&check;|&check;|
 |boolean|&check;|&check;|
 |object|&check;|&check;|
+|array|&check;|&check;|
 
 #### Strings
 |format|in|minLength|maxLength|pattern|
@@ -77,6 +78,16 @@ Supported serialization styles:
 #### Objects
 
 Objects are only supported in request body of `application/json` content type.
+
+#### Arrays
+|items type|in|minLength|maxLength|
+|----|----|----|----|
+|string|query,path,body|&check;|&check;|
+|number|query,path,body|&check;|&check;|
+|integer|query,path,body|&check;|&check;|
+|boolean|query,path,body|&check;|&check;|
+|object|body|&check;|&check;|
+
 
 ### Language specific caveats
 
