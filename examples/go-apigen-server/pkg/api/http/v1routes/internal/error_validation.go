@@ -10,17 +10,15 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewErrorValidator(params ModelValidatorParams) FieldValidator[*models.Error] {
+func NewErrorValidator() FieldValidator[*models.Error] {
 	validateCode := NewSimpleFieldValidator[*interface{}](
-		SimpleFieldValidatorParams{Field: "code", Location: params.Location},
 		SkipNullValidator(EnsureNonDefault[interface{}]),
 	)
 	validateMessage := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "message", Location: params.Location},
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.Error) {
-		validateCode(bindingCtx, value.Code)
-		validateMessage(bindingCtx, value.Message)
+		validateCode(bindingCtx.Fork("code"), value.Code)
+		validateMessage(bindingCtx.Fork("message"), value.Message)
 	}
 }

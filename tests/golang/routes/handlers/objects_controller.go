@@ -9,12 +9,12 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-type ObjectsObjectsArrayParsingBodyDirectRequest struct {
+type ObjectsObjectsArrayBodyDirectRequest struct {
 	Payload []*models.ObjectArraysSimpleObject
 }
 
-type ObjectsObjectsArrayParsingBodyNestedRequest struct {
-	Payload *models.ObjectsArrayParsingBodyNestedRequest
+type ObjectsObjectsArrayBodyNestedRequest struct {
+	Payload *models.ObjectsArrayBodyNestedRequest
 }
 
 type ObjectsObjectsDeeplyNestedRequest struct {
@@ -42,19 +42,19 @@ type ObjectsObjectsRequiredNestedObjectsRequest struct {
 }
 
 type ObjectsController struct {
-	// POST /objects/arrays-parsing
+	// POST /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayParsingBodyDirectRequest,
+	// Request type: ObjectsObjectsArrayBodyDirectRequest,
 	//
 	// Response type: none
-	ObjectsArrayParsingBodyDirect httpHandlerFactory
+	ObjectsArrayBodyDirect httpHandlerFactory
 
-	// PUT /objects/arrays-parsing
+	// PUT /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayParsingBodyNestedRequest,
+	// Request type: ObjectsObjectsArrayBodyNestedRequest,
 	//
 	// Response type: none
-	ObjectsArrayParsingBodyNested httpHandlerFactory
+	ObjectsArrayBodyNested httpHandlerFactory
 
 	// POST /objects/deeply-nested
 	//
@@ -100,19 +100,19 @@ type ObjectsController struct {
 }
 
 type ObjectsControllerBuilder struct {
-	// POST /objects/arrays-parsing
+	// POST /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayParsingBodyDirectRequest,
+	// Request type: ObjectsObjectsArrayBodyDirectRequest,
 	//
 	// Response type: none
-	HandleObjectsArrayParsingBodyDirect actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsArrayParsingBodyDirectRequest]
+	HandleObjectsArrayBodyDirect actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsArrayBodyDirectRequest]
 
-	// PUT /objects/arrays-parsing
+	// PUT /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayParsingBodyNestedRequest,
+	// Request type: ObjectsObjectsArrayBodyNestedRequest,
 	//
 	// Response type: none
-	HandleObjectsArrayParsingBodyNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsArrayParsingBodyNestedRequest]
+	HandleObjectsArrayBodyNested actionBuilderVoidResult[*ObjectsControllerBuilder, *ObjectsObjectsArrayBodyNestedRequest]
 
 	// POST /objects/deeply-nested
 	//
@@ -159,8 +159,8 @@ type ObjectsControllerBuilder struct {
 
 func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
 	return &ObjectsController{
-		ObjectsArrayParsingBodyDirect: mustInitializeAction("objectsArrayParsingBodyDirect", c.HandleObjectsArrayParsingBodyDirect.httpHandlerFactory),
-		ObjectsArrayParsingBodyNested: mustInitializeAction("objectsArrayParsingBodyNested", c.HandleObjectsArrayParsingBodyNested.httpHandlerFactory),
+		ObjectsArrayBodyDirect: mustInitializeAction("objectsArrayBodyDirect", c.HandleObjectsArrayBodyDirect.httpHandlerFactory),
+		ObjectsArrayBodyNested: mustInitializeAction("objectsArrayBodyNested", c.HandleObjectsArrayBodyNested.httpHandlerFactory),
 		ObjectsDeeplyNested: mustInitializeAction("objectsDeeplyNested", c.HandleObjectsDeeplyNested.httpHandlerFactory),
 		ObjectsNullableOptionalBody: mustInitializeAction("objectsNullableOptionalBody", c.HandleObjectsNullableOptionalBody.httpHandlerFactory),
 		ObjectsNullableRequiredBody: mustInitializeAction("objectsNullableRequiredBody", c.HandleObjectsNullableRequiredBody.httpHandlerFactory),
@@ -173,17 +173,17 @@ func (c *ObjectsControllerBuilder) Finalize() *ObjectsController {
 func BuildObjectsController() *ObjectsControllerBuilder {
 	controllerBuilder := &ObjectsControllerBuilder{}
 
-	// POST /objects/arrays-parsing
-	controllerBuilder.HandleObjectsArrayParsingBodyDirect.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsArrayParsingBodyDirect.defaultStatusCode = 204
-	controllerBuilder.HandleObjectsArrayParsingBodyDirect.voidResult = true
-	controllerBuilder.HandleObjectsArrayParsingBodyDirect.paramsParserFactory = newParamsParserObjectsObjectsArrayParsingBodyDirect
+	// POST /objects/arrays
+	controllerBuilder.HandleObjectsArrayBodyDirect.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleObjectsArrayBodyDirect.defaultStatusCode = 204
+	controllerBuilder.HandleObjectsArrayBodyDirect.voidResult = true
+	controllerBuilder.HandleObjectsArrayBodyDirect.paramsParserFactory = newParamsParserObjectsObjectsArrayBodyDirect
 
-	// PUT /objects/arrays-parsing
-	controllerBuilder.HandleObjectsArrayParsingBodyNested.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleObjectsArrayParsingBodyNested.defaultStatusCode = 204
-	controllerBuilder.HandleObjectsArrayParsingBodyNested.voidResult = true
-	controllerBuilder.HandleObjectsArrayParsingBodyNested.paramsParserFactory = newParamsParserObjectsObjectsArrayParsingBodyNested
+	// PUT /objects/arrays
+	controllerBuilder.HandleObjectsArrayBodyNested.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleObjectsArrayBodyNested.defaultStatusCode = 204
+	controllerBuilder.HandleObjectsArrayBodyNested.voidResult = true
+	controllerBuilder.HandleObjectsArrayBodyNested.paramsParserFactory = newParamsParserObjectsObjectsArrayBodyNested
 
 	// POST /objects/deeply-nested
 	controllerBuilder.HandleObjectsDeeplyNested.controllerBuilder = controllerBuilder
@@ -225,8 +225,8 @@ func BuildObjectsController() *ObjectsControllerBuilder {
 }
 
 func RegisterObjectsRoutes(controller *ObjectsController, app *HTTPApp) {
-	app.router.HandleRoute("POST", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyDirect(app))
-	app.router.HandleRoute("PUT", "/objects/arrays-parsing", controller.ObjectsArrayParsingBodyNested(app))
+	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(app))
+	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(app))
 	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(app))
 	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(app))
 	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(app))

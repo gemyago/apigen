@@ -12,20 +12,20 @@ import (
 var _ = time.Time{}
 var _ = models.ObjectArraysSimpleObject{}
 
-type paramsParserObjectsObjectsArrayParsingBodyDirect struct {
+type paramsParserObjectsObjectsArrayBodyDirect struct {
 	bindPayload requestParamBinder[*http.Request, []*models.ObjectArraysSimpleObject]
 }
 
-func (p *paramsParserObjectsObjectsArrayParsingBodyDirect) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayParsingBodyDirectRequest, error) {
+func (p *paramsParserObjectsObjectsArrayBodyDirect) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyDirectRequest, error) {
 	bindingCtx := internal.BindingContext{}
-	reqParams := &ObjectsObjectsArrayParsingBodyDirectRequest{}
+	reqParams := &ObjectsObjectsArrayBodyDirectRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyDirectRequest] {
-	return &paramsParserObjectsObjectsArrayParsingBodyDirect{
+func newParamsParserObjectsObjectsArrayBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayBodyDirectRequest] {
+	return &paramsParserObjectsObjectsArrayBodyDirect{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*models.ObjectArraysSimpleObject]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
@@ -38,26 +38,26 @@ func newParamsParserObjectsObjectsArrayParsingBodyDirect(app *HTTPApp) paramsPar
 	}
 }
 
-type paramsParserObjectsObjectsArrayParsingBodyNested struct {
-	bindPayload requestParamBinder[*http.Request, *models.ObjectsArrayParsingBodyNestedRequest]
+type paramsParserObjectsObjectsArrayBodyNested struct {
+	bindPayload requestParamBinder[*http.Request, *models.ObjectsArrayBodyNestedRequest]
 }
 
-func (p *paramsParserObjectsObjectsArrayParsingBodyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayParsingBodyNestedRequest, error) {
+func (p *paramsParserObjectsObjectsArrayBodyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyNestedRequest, error) {
 	bindingCtx := internal.BindingContext{}
-	reqParams := &ObjectsObjectsArrayParsingBodyNestedRequest{}
+	reqParams := &ObjectsObjectsArrayBodyNestedRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayParsingBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayParsingBodyNestedRequest] {
-	return &paramsParserObjectsObjectsArrayParsingBodyNested{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsArrayParsingBodyNestedRequest]{
+func newParamsParserObjectsObjectsArrayBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayBodyNestedRequest] {
+	return &paramsParserObjectsObjectsArrayBodyNested{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ObjectsArrayBodyNestedRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.ObjectsArrayParsingBodyNestedRequest],
+				parseJSONPayload[*models.ObjectsArrayBodyNestedRequest],
 			),
-			validateValue: internal.NewObjectsArrayParsingBodyNestedRequestValidator(),
+			validateValue: internal.NewObjectsArrayBodyNestedRequestValidator(),
 		}),
 	}
 }

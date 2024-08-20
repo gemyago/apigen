@@ -62,8 +62,8 @@ paths:
   # objects routes
   /objects/deeply-nested:
     $ref: "./objects/deeply-nested.yaml"
-  /objects/arrays-parsing:
-    $ref: "./objects/arrays-parsing.yaml"
+  /objects/arrays:
+    $ref: "./objects/arrays.yaml"
   /objects/nullable-body:
     $ref: "./objects/nullable-body.yaml"
   /objects/required-body:

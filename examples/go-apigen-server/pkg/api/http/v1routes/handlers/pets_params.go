@@ -22,18 +22,18 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 	bindingCtx := internal.BindingContext{}
 	reqParams := &PetsCreatePetRequest{}
 	// body params
-	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetRequest] {
 	return &paramsParserPetsCreatePet{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.Pet]{
-			field: "payload",
-			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.Pet],
-			validateValue: internal.NewPetValidator(internal.ModelValidatorParams{Location: "body"}),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.Pet],
+			),
+			validateValue: internal.NewPetValidator(),
 		}),
 	}
 }
@@ -46,19 +46,19 @@ func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request)
 	bindingCtx := internal.BindingContext{}
 	reqParams := &PetsGetPetByIdRequest{}
 	// path params
-	p.bindPetId(&bindingCtx, readPathValue("petId", router, req), &reqParams.PetId)
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindPetId(pathParamsCtx.Fork("petId"), readPathValue("petId", router, req), &reqParams.PetId)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdRequest] {
 	return &paramsParserPetsGetPetById{
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
-			field: "petId",
-			location: "path",
 			required: true,
-			parseValue: app.knownParsers.int64InPath,
+			parseValue: parseSoloValueParamAsSoloValue(
+				app.knownParsers.int64Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[int64](
-				internal.SimpleFieldValidatorParams{Field: "petId", Location: "path"},
 			),
 		}),
 	}
@@ -74,30 +74,31 @@ func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (
 	reqParams := &PetsListPetsRequest{}
 	// query params
 	query := req.URL.Query()
-	p.bindLimit(&bindingCtx, readQueryValue("limit", query), &reqParams.Limit)
-	p.bindOffset(&bindingCtx, readQueryValue("offset", query), &reqParams.Offset)
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindLimit(queryParamsCtx.Fork("limit"), readQueryValue("limit", query), &reqParams.Limit)
+	p.bindOffset(queryParamsCtx.Fork("offset"), readQueryValue("offset", query), &reqParams.Offset)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest] {
 	return &paramsParserPetsListPets{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "limit",
-			location: "query",
 			required: true,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.int64Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[int64](
-				internal.SimpleFieldValidatorParams{Field: "limit", Location: "query"},internal.NewMinMaxValueValidator[int64](1, false, true),
+				internal.NewMinMaxValueValidator[int64](1, false, true),
 				internal.NewMinMaxValueValidator[int64](100, false, false),
 			),
 		}),
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
-			field: "offset",
-			location: "query",
 			required: false,
-			parseValue: app.knownParsers.int64InQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.int64Parser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[int64](
-				internal.SimpleFieldValidatorParams{Field: "offset", Location: "query"},internal.NewMinMaxValueValidator[int64](1, false, true),
+				internal.NewMinMaxValueValidator[int64](1, false, true),
 			),
 		}),
 	}

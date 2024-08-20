@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewObjectsArrayParsingBodyNestedRequestValidator() FieldValidator[*models.ObjectsArrayParsingBodyNestedRequest] {
+func NewObjectsArrayBodyNestedRequestValidator() FieldValidator[*models.ObjectsArrayBodyNestedRequest] {
 	validateNestedArray1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
 		NewObjectArraysSimpleObjectValidator(),
 	)
@@ -22,7 +22,7 @@ func NewObjectsArrayParsingBodyNestedRequestValidator() FieldValidator[*models.O
 		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.ObjectsArrayParsingBodyNestedRequest) {
+	return func(bindingCtx *BindingContext, value *models.ObjectsArrayBodyNestedRequest) {
 		validateNestedArray1(bindingCtx.Fork("nestedArray1"), value.NestedArray1)
 		validateNestedArray2(bindingCtx.Fork("nestedArray2"), value.NestedArray2)
 		validateNestedArrayContainer1(bindingCtx.Fork("nestedArrayContainer1"), value.NestedArrayContainer1)

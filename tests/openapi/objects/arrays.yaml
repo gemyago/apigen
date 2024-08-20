@@ -1,6 +1,6 @@
 post:
-  summary: API to test parsing of array of objects directly in body
-  operationId: objectsArrayParsingBodyDirect
+  summary: API to test parsing and validation of array of objects directly in body
+  operationId: objectsArrayBodyDirect
   tags:
     - objects
   requestBody:
@@ -15,8 +15,8 @@ post:
     '204':
       description: No content
 put:
-  summary: API to test parsing nested arrays of objects
-  operationId: objectsArrayParsingBodyNested
+  summary: API to test parsing and validation of nested arrays of objects
+  operationId: objectsArrayBodyNested
   tags:
     - objects
   requestBody:
