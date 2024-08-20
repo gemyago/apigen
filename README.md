@@ -99,7 +99,8 @@ Golang:
   * For objects - optional and nullable are synonyms. This means that required validation will only work for non nullable fields.
 * `array` fields
   * `required` is equivalent to `minItems: 1`
-  * `nullable` array fields are only supported in request body
+  * `nullable` arrays are only supported in request body
+  * nullable and optional array fields are synonyms
 
 ## Contributing
 
