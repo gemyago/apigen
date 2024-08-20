@@ -71,6 +71,12 @@ paths:
   /objects/required-nested-objects:
     $ref: "./objects/required-nested-objects.yaml"
 
+  # arrays routes
+  /arrays/required-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/required-validation.yaml"
+  /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/nullable-required-validation.yaml"
+
   # behavior routes
   /behavior/no-params-no-response:
     $ref: "./behavior/no-params-no-response.yaml"

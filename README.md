@@ -80,7 +80,7 @@ Supported serialization styles:
 Objects are only supported in request body of `application/json` content type.
 
 #### Arrays
-|items type|in|minLength|maxLength|
+|items type|in|minItems|maxItems|
 |----|----|----|----|
 |string|query,path,body|&check;|&check;|
 |number|query,path,body|&check;|&check;|
