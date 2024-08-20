@@ -9,36 +9,6 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-type StringTypesArraysNullableRequiredValidationRequest struct {
-	SimpleItems1 []string
-	SimpleItems2 []string
-	SimpleItems1InQuery []string
-	SimpleItems2InQuery []string
-	Payload *models.ArraysNullableRequiredValidationRequest
-	OptionalSimpleItems1InQuery []string
-	OptionalSimpleItems2InQuery []string
-}
-
-type StringTypesArraysRangeValidationRequest struct {
-	SimpleItems1 []string
-	SimpleItems2 []string
-	SimpleItems1InQuery []string
-	SimpleItems2InQuery []string
-	Payload *models.ArraysRangeValidationRequest
-	OptionalSimpleItems1InQuery []string
-	OptionalSimpleItems2InQuery []string
-}
-
-type StringTypesArraysRequiredValidationRequest struct {
-	SimpleItems1 []string
-	SimpleItems2 []string
-	SimpleItems1InQuery []string
-	SimpleItems2InQuery []string
-	Payload *models.ArraysRequiredValidationRequest
-	OptionalSimpleItems1InQuery []string
-	OptionalSimpleItems2InQuery []string
-}
-
 type StringTypesStringTypesArrayItemsRangeValidationRequest struct {
 	UnformattedStr []string
 	CustomFormatStr []string
@@ -156,27 +126,6 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 }
 
 type StringTypesController struct {
-	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysNullableRequiredValidationRequest,
-	//
-	// Response type: none
-	ArraysNullableRequiredValidation httpHandlerFactory
-
-	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysRangeValidationRequest,
-	//
-	// Response type: none
-	ArraysRangeValidation httpHandlerFactory
-
-	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysRequiredValidationRequest,
-	//
-	// Response type: none
-	ArraysRequiredValidation httpHandlerFactory
-
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -242,27 +191,6 @@ type StringTypesController struct {
 }
 
 type StringTypesControllerBuilder struct {
-	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysNullableRequiredValidationRequest,
-	//
-	// Response type: none
-	HandleArraysNullableRequiredValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesArraysNullableRequiredValidationRequest]
-
-	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysRangeValidationRequest,
-	//
-	// Response type: none
-	HandleArraysRangeValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesArraysRangeValidationRequest]
-
-	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
-	//
-	// Request type: StringTypesArraysRequiredValidationRequest,
-	//
-	// Response type: none
-	HandleArraysRequiredValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesArraysRequiredValidationRequest]
-
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -329,9 +257,6 @@ type StringTypesControllerBuilder struct {
 
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	return &StringTypesController{
-		ArraysNullableRequiredValidation: mustInitializeAction("arraysNullableRequiredValidation", c.HandleArraysNullableRequiredValidation.httpHandlerFactory),
-		ArraysRangeValidation: mustInitializeAction("arraysRangeValidation", c.HandleArraysRangeValidation.httpHandlerFactory),
-		ArraysRequiredValidation: mustInitializeAction("arraysRequiredValidation", c.HandleArraysRequiredValidation.httpHandlerFactory),
 		StringTypesArrayItemsRangeValidation: mustInitializeAction("stringTypesArrayItemsRangeValidation", c.HandleStringTypesArrayItemsRangeValidation.httpHandlerFactory),
 		StringTypesArraysParsing: mustInitializeAction("stringTypesArraysParsing", c.HandleStringTypesArraysParsing.httpHandlerFactory),
 		StringTypesNullableArrayItems: mustInitializeAction("stringTypesNullableArrayItems", c.HandleStringTypesNullableArrayItems.httpHandlerFactory),
@@ -346,24 +271,6 @@ func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 
 func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder := &StringTypesControllerBuilder{}
-
-	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
-	controllerBuilder.HandleArraysNullableRequiredValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleArraysNullableRequiredValidation.defaultStatusCode = 204
-	controllerBuilder.HandleArraysNullableRequiredValidation.voidResult = true
-	controllerBuilder.HandleArraysNullableRequiredValidation.paramsParserFactory = newParamsParserStringTypesArraysNullableRequiredValidation
-
-	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
-	controllerBuilder.HandleArraysRangeValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleArraysRangeValidation.defaultStatusCode = 204
-	controllerBuilder.HandleArraysRangeValidation.voidResult = true
-	controllerBuilder.HandleArraysRangeValidation.paramsParserFactory = newParamsParserStringTypesArraysRangeValidation
-
-	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
-	controllerBuilder.HandleArraysRequiredValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleArraysRequiredValidation.defaultStatusCode = 204
-	controllerBuilder.HandleArraysRequiredValidation.voidResult = true
-	controllerBuilder.HandleArraysRequiredValidation.paramsParserFactory = newParamsParserStringTypesArraysRequiredValidation
 
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesArrayItemsRangeValidation.controllerBuilder = controllerBuilder
@@ -423,9 +330,6 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 }
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
-	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(app))
-	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(app))
-	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(app))
 	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(app))
 	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(app))
 	app.router.HandleRoute("POST", "/string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableArrayItems(app))

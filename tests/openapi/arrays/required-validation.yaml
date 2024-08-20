@@ -2,7 +2,7 @@ post:
   summary: API to test arrays required validation
   operationId: arraysRequiredValidation
   tags:
-    - string-types
+    - arrays
   parameters:
     # params in path are always required
     - name: simpleItems1

@@ -2,7 +2,7 @@ post:
   summary: API to test arrays range validation
   operationId: arraysRangeValidation
   tags:
-    - string-types
+    - arrays
   parameters:
     # params in path
     - name: simpleItems1

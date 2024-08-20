@@ -2,7 +2,7 @@ post:
   summary: API to test arrays nullable required validation
   operationId: arraysNullableRequiredValidation
   tags:
-    - string-types
+    - arrays
   parameters:
     # params in path are always required
     - name: simpleItems1
