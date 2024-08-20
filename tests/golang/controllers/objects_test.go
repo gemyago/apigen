@@ -462,6 +462,12 @@ func TestObjects(t *testing.T) {
 							SimpleObjects2: randomObjectArraysSimpleObjects(),
 						},
 					},
+					NestedArrayContainer2: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
 				},
 			}
 			return testCase{
@@ -483,6 +489,16 @@ func TestObjects(t *testing.T) {
 					NestedArray1: randomObjectArraysSimpleObjects(),
 					NestedArray2: randomObjectArraysSimpleObjects(),
 					NestedArrayContainer1: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+					NestedArrayContainer2: []*models.ObjectArraysSimpleObjectsContainer{
 						{
 							SimpleObjects1: randomObjectArraysSimpleObjects(),
 							SimpleObjects2: randomObjectArraysSimpleObjects(),

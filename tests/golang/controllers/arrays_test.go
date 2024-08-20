@@ -129,28 +129,28 @@ func TestArrays(t *testing.T) {
 			}
 		})
 
-		// runRouteTestCase(t, "should validate required params", setupRouter, func() testCase {
-		// 	originalReq := randomReq(
-		// 		func(req *handlers.ArraysArraysRequiredValidationRequest) {
-		// 			req.Payload.SimpleItems1 = nil
-		// 			req.Payload.SimpleItems2 = nil
-		// 		},
-		// 	)
-		// 	query := buildQuery(originalReq)
-		// 	query.Del("simpleItems1InQuery")
-		// 	query.Del("simpleItems2InQuery")
-		// 	return testCase{
-		// 		method: http.MethodPost,
-		// 		path:   buildPath(originalReq),
-		// 		query:  query,
-		// 		body:   marshalJSONDataAsReader(t, originalReq.Payload),
-		// 		expect: expectBindingErrors[*arraysControllerTestActions]([]expectedBindingError{
-		// 			{Field: "simpleItems1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
-		// 			{Field: "simpleItems2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
-		// 			{Field: "simpleItems1", Location: "body", Code: "INVALID_REQUIRED"},
-		// 			{Field: "simpleItems2", Location: "body", Code: "INVALID_REQUIRED"},
-		// 		}),
-		// 	}
-		// })
+		runRouteTestCase(t, "should validate required params", setupRouter, func() testCase {
+			originalReq := randomReq(
+				func(req *handlers.ArraysArraysRequiredValidationRequest) {
+					req.Payload.SimpleItems1 = nil
+					req.Payload.SimpleItems2 = nil
+				},
+			)
+			query := buildQuery(originalReq)
+			query.Del("simpleItems1InQuery")
+			query.Del("simpleItems2InQuery")
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*arraysControllerTestActions]([]expectedBindingError{
+					{Field: "simpleItems1InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+					{Field: "simpleItems2InQuery", Location: "query", Code: "INVALID_REQUIRED"},
+					{Field: "simpleItems1", Location: "body", Code: "INVALID_REQUIRED"},
+					{Field: "simpleItems2", Location: "body", Code: "INVALID_REQUIRED"},
+				}),
+			}
+		})
 	})
 }

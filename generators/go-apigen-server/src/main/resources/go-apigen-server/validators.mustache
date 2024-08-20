@@ -124,6 +124,18 @@ func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
 	return nil
 }
 
+var _ = EnsureNonDefault[int]
+
+// EnsureArrayFieldRequired will validate if given array is not empty.
+func EnsureArrayFieldRequired[TTargetVal any](val []TTargetVal) error {
+	if len(val) == 0 {
+		return fmt.Errorf("provided array is empty: %w", ErrValueRequired)
+	}
+	return nil
+}
+
+var _ = EnsureArrayFieldRequired[int]
+
 func SkipNullValidator[TTargetVal any](target ValueValidator[TTargetVal]) ValueValidator[*TTargetVal] {
 	return func(tv *TTargetVal) error {
 		if tv == nil {

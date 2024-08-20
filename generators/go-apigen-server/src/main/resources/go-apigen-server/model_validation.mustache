@@ -14,7 +14,9 @@ var _ = time.Time{}
 {{#model}}
 func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
-		NewSimpleFieldValidator[[]{{>models/array-item-full-type}}](),{{#items}}{{#isModel}}
+		NewSimpleFieldValidator[[]{{>models/array-item-full-type}}]({{#required}}
+			EnsureArrayFieldRequired,{{/required}}
+		),{{#items}}{{#isModel}}
 		New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
 		{{#lambda.tab_indented_3}}{{>models/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
 	{{/items}})

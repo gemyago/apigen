@@ -10,22 +10,28 @@ var _ = time.Time{}
 
 func NewArraysNullableRequiredValidationRequestValidator() FieldValidator[*models.ArraysNullableRequiredValidationRequest] {
 	validateSimpleItems1 := NewArrayValidator[string](
-		NewSimpleFieldValidator[[]string](),
+		NewSimpleFieldValidator[[]string](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateSimpleItems2 := NewArrayValidator[string](
-		NewSimpleFieldValidator[[]string](),
+		NewSimpleFieldValidator[[]string](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems1 := NewArrayValidator[string](
-		NewSimpleFieldValidator[[]string](),
+		NewSimpleFieldValidator[[]string](
+		),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems2 := NewArrayValidator[string](
-		NewSimpleFieldValidator[[]string](),
+		NewSimpleFieldValidator[[]string](
+		),
 		NewSimpleFieldValidator[string](
 			),
 	)

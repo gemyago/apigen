@@ -10,12 +10,16 @@ var _ = time.Time{}
 
 func NewBooleanArrayItemsRequestValidator() FieldValidator[*models.BooleanArrayItemsRequest] {
 	validateBoolParam1 := NewArrayValidator[bool](
-		NewSimpleFieldValidator[[]bool](),
+		NewSimpleFieldValidator[[]bool](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[bool](
 			),
 	)
 	validateBoolParam2 := NewArrayValidator[bool](
-		NewSimpleFieldValidator[[]bool](),
+		NewSimpleFieldValidator[[]bool](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[bool](
 			),
 	)

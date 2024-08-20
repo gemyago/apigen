@@ -10,7 +10,9 @@ var _ = time.Time{}
 
 func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.StringTypesNullableArrayItemsRequest] {
 	validateUnformattedStr := NewArrayValidator[*string](
-		NewSimpleFieldValidator[[]*string](),
+		NewSimpleFieldValidator[[]*string](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[*string](
 				SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
 				SkipNullValidator(NewMinMaxLengthValidator[string](20, false)),
@@ -18,7 +20,9 @@ func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.S
 			),
 	)
 	validateCustomFormatStr := NewArrayValidator[*string](
-		NewSimpleFieldValidator[[]*string](),
+		NewSimpleFieldValidator[[]*string](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[*string](
 				SkipNullValidator(NewMinMaxLengthValidator[string](20, true)),
 				SkipNullValidator(NewMinMaxLengthValidator[string](30, false)),
@@ -26,17 +30,23 @@ func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.S
 			),
 	)
 	validateDateStr := NewArrayValidator[*time.Time](
-		NewSimpleFieldValidator[[]*time.Time](),
+		NewSimpleFieldValidator[[]*time.Time](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[*time.Time](
 			),
 	)
 	validateDateTimeStr := NewArrayValidator[*time.Time](
-		NewSimpleFieldValidator[[]*time.Time](),
+		NewSimpleFieldValidator[[]*time.Time](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[*time.Time](
 			),
 	)
 	validateByteStr := NewArrayValidator[*string](
-		NewSimpleFieldValidator[[]*string](),
+		NewSimpleFieldValidator[[]*string](
+			EnsureArrayFieldRequired,
+		),
 		NewSimpleFieldValidator[*string](
 				SkipNullValidator(NewMinMaxLengthValidator[string](30, true)),
 				SkipNullValidator(NewMinMaxLengthValidator[string](40, false)),

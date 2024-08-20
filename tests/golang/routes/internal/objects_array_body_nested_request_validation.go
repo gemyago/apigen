@@ -10,19 +10,27 @@ var _ = time.Time{}
 
 func NewObjectsArrayBodyNestedRequestValidator() FieldValidator[*models.ObjectsArrayBodyNestedRequest] {
 	validateNestedArray1 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](),
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](
+			EnsureArrayFieldRequired,
+		),
 		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateNestedArray2 := NewArrayValidator[*models.ObjectArraysSimpleObject](
-		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](),
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](
+			EnsureArrayFieldRequired,
+		),
 		NewObjectArraysSimpleObjectValidator(),
 	)
 	validateNestedArrayContainer1 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
-		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObjectsContainer](),
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObjectsContainer](
+			EnsureArrayFieldRequired,
+		),
 		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
 	validateNestedArrayContainer2 := NewArrayValidator[*models.ObjectArraysSimpleObjectsContainer](
-		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObjectsContainer](),
+		NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObjectsContainer](
+			EnsureArrayFieldRequired,
+		),
 		NewObjectArraysSimpleObjectsContainerValidator(),
 	)
 	
