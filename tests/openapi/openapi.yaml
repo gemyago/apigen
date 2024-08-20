@@ -76,6 +76,8 @@ paths:
     $ref: "./arrays/required-validation.yaml"
   /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}:
     $ref: "./arrays/nullable-required-validation.yaml"
+  /arrays/range-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/range-validation.yaml"
 
   # behavior routes
   /behavior/no-params-no-response:

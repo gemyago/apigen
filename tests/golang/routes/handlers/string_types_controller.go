@@ -19,6 +19,16 @@ type StringTypesArraysNullableRequiredValidationRequest struct {
 	OptionalSimpleItems2InQuery []string
 }
 
+type StringTypesArraysRangeValidationRequest struct {
+	SimpleItems1 []string
+	SimpleItems2 []string
+	SimpleItems1InQuery []string
+	SimpleItems2InQuery []string
+	Payload *models.ArraysRangeValidationRequest
+	OptionalSimpleItems1InQuery []string
+	OptionalSimpleItems2InQuery []string
+}
+
 type StringTypesArraysRequiredValidationRequest struct {
 	SimpleItems1 []string
 	SimpleItems2 []string
@@ -153,6 +163,13 @@ type StringTypesController struct {
 	// Response type: none
 	ArraysNullableRequiredValidation httpHandlerFactory
 
+	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: StringTypesArraysRangeValidationRequest,
+	//
+	// Response type: none
+	ArraysRangeValidation httpHandlerFactory
+
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 	//
 	// Request type: StringTypesArraysRequiredValidationRequest,
@@ -232,6 +249,13 @@ type StringTypesControllerBuilder struct {
 	// Response type: none
 	HandleArraysNullableRequiredValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesArraysNullableRequiredValidationRequest]
 
+	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: StringTypesArraysRangeValidationRequest,
+	//
+	// Response type: none
+	HandleArraysRangeValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesArraysRangeValidationRequest]
+
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 	//
 	// Request type: StringTypesArraysRequiredValidationRequest,
@@ -306,6 +330,7 @@ type StringTypesControllerBuilder struct {
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	return &StringTypesController{
 		ArraysNullableRequiredValidation: mustInitializeAction("arraysNullableRequiredValidation", c.HandleArraysNullableRequiredValidation.httpHandlerFactory),
+		ArraysRangeValidation: mustInitializeAction("arraysRangeValidation", c.HandleArraysRangeValidation.httpHandlerFactory),
 		ArraysRequiredValidation: mustInitializeAction("arraysRequiredValidation", c.HandleArraysRequiredValidation.httpHandlerFactory),
 		StringTypesArrayItemsRangeValidation: mustInitializeAction("stringTypesArrayItemsRangeValidation", c.HandleStringTypesArrayItemsRangeValidation.httpHandlerFactory),
 		StringTypesArraysParsing: mustInitializeAction("stringTypesArraysParsing", c.HandleStringTypesArraysParsing.httpHandlerFactory),
@@ -327,6 +352,12 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder.HandleArraysNullableRequiredValidation.defaultStatusCode = 204
 	controllerBuilder.HandleArraysNullableRequiredValidation.voidResult = true
 	controllerBuilder.HandleArraysNullableRequiredValidation.paramsParserFactory = newParamsParserStringTypesArraysNullableRequiredValidation
+
+	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+	controllerBuilder.HandleArraysRangeValidation.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleArraysRangeValidation.defaultStatusCode = 204
+	controllerBuilder.HandleArraysRangeValidation.voidResult = true
+	controllerBuilder.HandleArraysRangeValidation.paramsParserFactory = newParamsParserStringTypesArraysRangeValidation
 
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 	controllerBuilder.HandleArraysRequiredValidation.controllerBuilder = controllerBuilder
@@ -393,6 +424,7 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(app))
+	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(app))
 	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(app))
 	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(app))
 	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(app))
