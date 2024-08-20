@@ -11,6 +11,7 @@ var _ = time.Time{}
 func NewObjectArraysSimpleObjectValidator() FieldValidator[*models.ObjectArraysSimpleObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
+		NewMinMaxLengthValidator[string](200, false),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.ObjectArraysSimpleObject) {

@@ -72,3 +72,4 @@ components:
       properties:
         simpleField1:
           type: string
+          maxLength: 200
