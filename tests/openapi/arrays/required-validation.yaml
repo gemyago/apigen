@@ -1,0 +1,81 @@
+post:
+  summary: API to test arrays required validation
+  operationId: arraysRequiredValidation
+  tags:
+    - arrays
+  parameters:
+    # params in path are always required
+    - name: simpleItems1
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: simpleItems2
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+
+    # params in query
+    - name: simpleItems1InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: simpleItems2InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: optionalSimpleItems1InQuery
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    - name: optionalSimpleItems2InQuery
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - simpleItems1
+            - simpleItems2
+          properties: 
+            simpleItems1:
+              type: array
+              items:
+                type: string
+            simpleItems2:
+              type: array
+              items:
+                type: string
+            optionalSimpleItems1:
+              type: array
+              items:
+                type: string
+            optionalSimpleItems2:
+              type: array
+              items:
+                type: string
+  responses:
+    '204':
+      description: Request succeeded

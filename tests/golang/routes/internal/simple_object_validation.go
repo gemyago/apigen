@@ -8,14 +8,13 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewSimpleObjectValidator(params ModelValidatorParams) FieldValidator[*models.SimpleObject] {
+func NewSimpleObjectValidator() FieldValidator[*models.SimpleObject] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "simpleField1", Location: params.Location},
 		EnsureNonDefault[string],
-		NewMinMaxLengthValidator[string](2, true),
+		NewMinMaxLengthValidator[string, string](2, true),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.SimpleObject) {
-		validateSimpleField1(bindingCtx, value.SimpleField1)
+		validateSimpleField1(bindingCtx.Fork("simpleField1"), value.SimpleField1)
 	}
 }

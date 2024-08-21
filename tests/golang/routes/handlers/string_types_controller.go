@@ -9,6 +9,48 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
+type StringTypesStringTypesArrayItemsRangeValidationRequest struct {
+	UnformattedStr []string
+	CustomFormatStr []string
+	DateStr []time.Time
+	DateTimeStr []time.Time
+	ByteStr []string
+	UnformattedStrInQuery []string
+	CustomFormatStrInQuery []string
+	DateStrInQuery []time.Time
+	DateTimeStrInQuery []time.Time
+	ByteStrInQuery []string
+	Payload *models.StringTypesArrayItemsRangeValidationRequest
+}
+
+type StringTypesStringTypesArraysParsingRequest struct {
+	UnformattedStr []string
+	CustomFormatStr []string
+	DateStr []time.Time
+	DateTimeStr []time.Time
+	ByteStr []string
+	UnformattedStrInQuery []string
+	CustomFormatStrInQuery []string
+	DateStrInQuery []time.Time
+	DateTimeStrInQuery []time.Time
+	ByteStrInQuery []string
+	Payload *models.StringTypesArraysParsingRequest
+}
+
+type StringTypesStringTypesNullableArrayItemsRequest struct {
+	UnformattedStr []*string
+	CustomFormatStr []*string
+	DateStr []*time.Time
+	DateTimeStr []*time.Time
+	ByteStr []*string
+	UnformattedStrInQuery []*string
+	CustomFormatStrInQuery []*string
+	DateStrInQuery []*time.Time
+	DateTimeStrInQuery []*time.Time
+	ByteStrInQuery []*string
+	Payload *models.StringTypesNullableArrayItemsRequest
+}
+
 type StringTypesStringTypesNullableParsingRequest struct {
 	UnformattedStr *string
 	CustomFormatStr *string
@@ -84,6 +126,27 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 }
 
 type StringTypesController struct {
+	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
+	//
+	// Response type: none
+	StringTypesArrayItemsRangeValidation httpHandlerFactory
+
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArraysParsingRequest,
+	//
+	// Response type: none
+	StringTypesArraysParsing httpHandlerFactory
+
+	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesNullableArrayItemsRequest,
+	//
+	// Response type: none
+	StringTypesNullableArrayItems httpHandlerFactory
+
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableParsingRequest,
@@ -128,6 +191,27 @@ type StringTypesController struct {
 }
 
 type StringTypesControllerBuilder struct {
+	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
+	//
+	// Response type: none
+	HandleStringTypesArrayItemsRangeValidation actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesArrayItemsRangeValidationRequest]
+
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesArraysParsingRequest,
+	//
+	// Response type: none
+	HandleStringTypesArraysParsing actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesArraysParsingRequest]
+
+	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	//
+	// Request type: StringTypesStringTypesNullableArrayItemsRequest,
+	//
+	// Response type: none
+	HandleStringTypesNullableArrayItems actionBuilderVoidResult[*StringTypesControllerBuilder, *StringTypesStringTypesNullableArrayItemsRequest]
+
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableParsingRequest,
@@ -173,6 +257,9 @@ type StringTypesControllerBuilder struct {
 
 func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 	return &StringTypesController{
+		StringTypesArrayItemsRangeValidation: mustInitializeAction("stringTypesArrayItemsRangeValidation", c.HandleStringTypesArrayItemsRangeValidation.httpHandlerFactory),
+		StringTypesArraysParsing: mustInitializeAction("stringTypesArraysParsing", c.HandleStringTypesArraysParsing.httpHandlerFactory),
+		StringTypesNullableArrayItems: mustInitializeAction("stringTypesNullableArrayItems", c.HandleStringTypesNullableArrayItems.httpHandlerFactory),
 		StringTypesNullableParsing: mustInitializeAction("stringTypesNullableParsing", c.HandleStringTypesNullableParsing.httpHandlerFactory),
 		StringTypesNullableRequiredValidation: mustInitializeAction("stringTypesNullableRequiredValidation", c.HandleStringTypesNullableRequiredValidation.httpHandlerFactory),
 		StringTypesParsing: mustInitializeAction("stringTypesParsing", c.HandleStringTypesParsing.httpHandlerFactory),
@@ -184,6 +271,24 @@ func (c *StringTypesControllerBuilder) Finalize() *StringTypesController {
 
 func BuildStringTypesController() *StringTypesControllerBuilder {
 	controllerBuilder := &StringTypesControllerBuilder{}
+
+	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	controllerBuilder.HandleStringTypesArrayItemsRangeValidation.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleStringTypesArrayItemsRangeValidation.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesArrayItemsRangeValidation.voidResult = true
+	controllerBuilder.HandleStringTypesArrayItemsRangeValidation.paramsParserFactory = newParamsParserStringTypesStringTypesArrayItemsRangeValidation
+
+	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	controllerBuilder.HandleStringTypesArraysParsing.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleStringTypesArraysParsing.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesArraysParsing.voidResult = true
+	controllerBuilder.HandleStringTypesArraysParsing.paramsParserFactory = newParamsParserStringTypesStringTypesArraysParsing
+
+	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+	controllerBuilder.HandleStringTypesNullableArrayItems.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleStringTypesNullableArrayItems.defaultStatusCode = 204
+	controllerBuilder.HandleStringTypesNullableArrayItems.voidResult = true
+	controllerBuilder.HandleStringTypesNullableArrayItems.paramsParserFactory = newParamsParserStringTypesStringTypesNullableArrayItems
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	controllerBuilder.HandleStringTypesNullableParsing.controllerBuilder = controllerBuilder
@@ -225,6 +330,9 @@ func BuildStringTypesController() *StringTypesControllerBuilder {
 }
 
 func RegisterStringTypesRoutes(controller *StringTypesController, app *HTTPApp) {
+	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(app))
+	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(app))
+	app.router.HandleRoute("POST", "/string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableArrayItems(app))
 	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(app))
 	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(app))
 	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(app))

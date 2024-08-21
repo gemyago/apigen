@@ -10,7 +10,92 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.BooleanNullableRequest{}
+var _ = models.BooleanArrayItemsRequest{}
+
+type paramsParserBooleanBooleanArrayItems struct {
+	bindBoolParam1 requestParamBinder[string, []bool]
+	bindBoolParam2 requestParamBinder[string, []bool]
+	bindBoolParam1InQuery requestParamBinder[[]string, []bool]
+	bindBoolParam2InQuery requestParamBinder[[]string, []bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanArrayItemsRequest]
+}
+
+func (p *paramsParserBooleanBooleanArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanArrayItemsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &BooleanBooleanArrayItemsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(pathParamsCtx.Fork("boolParam2"), readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*BooleanBooleanArrayItemsRequest] {
+	return &paramsParserBooleanBooleanArrayItems{
+		bindBoolParam1: newRequestParamBinder(binderParams[string, []bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.boolParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](
+				),
+				internal.NewSimpleFieldValidator[bool](
+				),
+			),
+		}),
+		bindBoolParam2: newRequestParamBinder(binderParams[string, []bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				app.knownParsers.boolParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](
+				),
+				internal.NewSimpleFieldValidator[bool](
+				),
+			),
+		}),
+		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, []bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.boolParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](
+				),
+				internal.NewSimpleFieldValidator[bool](
+				),
+			),
+		}),
+		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, []bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				app.knownParsers.boolParser,
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]bool](
+				),
+				internal.NewSimpleFieldValidator[bool](
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanArrayItemsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanArrayItemsRequest],
+			),
+			validateValue: internal.NewBooleanArrayItemsRequestValidator(),
+		}),
+	}
+}
 
 type paramsParserBooleanBooleanNullable struct {
 	bindBoolParam1 requestParamBinder[string, *bool]
@@ -25,71 +110,153 @@ func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.
 	bindingCtx := internal.BindingContext{}
 	reqParams := &BooleanBooleanNullableRequest{}
 	// path params
-	p.bindBoolParam1(&bindingCtx, readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
-	p.bindBoolParam2(&bindingCtx, readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(pathParamsCtx.Fork("boolParam2"), readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
 	// query params
 	query := req.URL.Query()
-	p.bindBoolParam1InQuery(&bindingCtx, readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
-	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
-	p.bindOptionalBoolParam1InQuery(&bindingCtx, readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	p.bindOptionalBoolParam1InQuery(queryParamsCtx.Fork("optionalBoolParam1InQuery"), readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
 	// body params
-	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBooleanNullableRequest] {
 	return &paramsParserBooleanBooleanNullable{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, *bool]{
-			field: "boolParam1",
-			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
 			),
 		}),
 		bindBoolParam2: newRequestParamBinder(binderParams[string, *bool]{
-			field: "boolParam2",
-			location: "path",
 			required: true,
-			parseValue: parseNullableInPath(app.knownParsers.boolInPath),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
 			),
 		}),
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
-			field: "boolParam1InQuery",
-			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			parseValue: parseMultiValueParamAsSoloValue(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
-			field: "boolParam2InQuery",
-			location: "query",
 			required: true,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
+			parseValue: parseMultiValueParamAsSoloValue(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
 			validateValue: internal.NewSimpleFieldValidator[*bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanNullableRequest]{
-			field: "payload",
-			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanNullableRequest],
-			validateValue: internal.NewBooleanNullableRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanNullableRequest],
+			),
+			validateValue: internal.NewBooleanNullableRequestValidator(),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
-			field: "optionalBoolParam1InQuery",
-			location: "query",
 			required: false,
-			parseValue: parseNullableInQuery(app.knownParsers.boolInQuery),
-			validateValue: internal.NewSimpleFieldValidator[*bool](
-				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
+			parseValue: parseMultiValueParamAsSoloValue(
+				parseNullableParam(app.knownParsers.boolParser),
 			),
+			validateValue: internal.NewSimpleFieldValidator[*bool](
+			),
+		}),
+	}
+}
+
+type paramsParserBooleanBooleanNullableArrayItems struct {
+	bindBoolParam1 requestParamBinder[string, []*bool]
+	bindBoolParam2 requestParamBinder[string, []*bool]
+	bindBoolParam1InQuery requestParamBinder[[]string, []*bool]
+	bindBoolParam2InQuery requestParamBinder[[]string, []*bool]
+	bindPayload requestParamBinder[*http.Request, *models.BooleanNullableArrayItemsRequest]
+}
+
+func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableArrayItemsRequest, error) {
+	bindingCtx := internal.BindingContext{}
+	reqParams := &BooleanBooleanNullableArrayItemsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(pathParamsCtx.Fork("boolParam2"), readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[*BooleanBooleanNullableArrayItemsRequest] {
+	return &paramsParserBooleanBooleanNullableArrayItems{
+		bindBoolParam1: newRequestParamBinder(binderParams[string, []*bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](
+				),
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam2: newRequestParamBinder(binderParams[string, []*bool]{
+			required: true,
+			parseValue: parseSoloValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](
+				),
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](
+				),
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
+			required: true,
+			parseValue: parseMultiValueParamAsSlice(
+				parseNullableParam(app.knownParsers.boolParser),
+			),
+			validateValue: internal.NewArrayValidator(
+				internal.NewSimpleFieldValidator[[]*bool](
+				),
+				internal.NewSimpleFieldValidator[*bool](
+				),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanNullableArrayItemsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanNullableArrayItemsRequest],
+			),
+			validateValue: internal.NewBooleanNullableArrayItemsRequestValidator(),
 		}),
 	}
 }
@@ -106,61 +273,59 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 	bindingCtx := internal.BindingContext{}
 	reqParams := &BooleanBooleanParsingRequest{}
 	// path params
-	p.bindBoolParam1(&bindingCtx, readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
-	p.bindBoolParam2(&bindingCtx, readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
+	p.bindBoolParam2(pathParamsCtx.Fork("boolParam2"), readPathValue("boolParam2", router, req), &reqParams.BoolParam2)
 	// query params
 	query := req.URL.Query()
-	p.bindBoolParam1InQuery(&bindingCtx, readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
-	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
 	// body params
-	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBooleanParsingRequest] {
 	return &paramsParserBooleanBooleanParsing{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
-			field: "boolParam1",
-			location: "path",
 			required: true,
-			parseValue: app.knownParsers.boolInPath,
+			parseValue: parseSoloValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam1", Location: "path"},
 			),
 		}),
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
-			field: "boolParam2",
-			location: "path",
 			required: true,
-			parseValue: app.knownParsers.boolInPath,
+			parseValue: parseSoloValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam2", Location: "path"},
 			),
 		}),
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "boolParam1InQuery",
-			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "boolParam2InQuery",
-			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanParsingRequest]{
-			field: "payload",
-			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanParsingRequest],
-			validateValue: internal.NewBooleanParsingRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanParsingRequest],
+			),
+			validateValue: internal.NewBooleanParsingRequestValidator(),
 		}),
 	}
 }
@@ -178,58 +343,55 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 	reqParams := &BooleanBooleanRequiredValidationRequest{}
 	// query params
 	query := req.URL.Query()
-	p.bindBoolParam1InQuery(&bindingCtx, readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
-	p.bindBoolParam2InQuery(&bindingCtx, readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
-	p.bindOptionalBoolParam1InQuery(&bindingCtx, readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
-	p.bindOptionalBoolParam2InQuery(&bindingCtx, readQueryValue("optionalBoolParam2InQuery", query), &reqParams.OptionalBoolParam2InQuery)
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindBoolParam1InQuery(queryParamsCtx.Fork("boolParam1InQuery"), readQueryValue("boolParam1InQuery", query), &reqParams.BoolParam1InQuery)
+	p.bindBoolParam2InQuery(queryParamsCtx.Fork("boolParam2InQuery"), readQueryValue("boolParam2InQuery", query), &reqParams.BoolParam2InQuery)
+	p.bindOptionalBoolParam1InQuery(queryParamsCtx.Fork("optionalBoolParam1InQuery"), readQueryValue("optionalBoolParam1InQuery", query), &reqParams.OptionalBoolParam1InQuery)
+	p.bindOptionalBoolParam2InQuery(queryParamsCtx.Fork("optionalBoolParam2InQuery"), readQueryValue("optionalBoolParam2InQuery", query), &reqParams.OptionalBoolParam2InQuery)
 	// body params
-	p.bindPayload(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[*BooleanBooleanRequiredValidationRequest] {
 	return &paramsParserBooleanBooleanRequiredValidation{
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "boolParam1InQuery",
-			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "boolParam2InQuery",
-			location: "query",
 			required: true,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "boolParam2InQuery", Location: "query"},
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.BooleanRequiredValidationRequest]{
-			field: "payload",
-			location: "body",
 			required: true,
-			parseValue: parseJSONPayload[*models.BooleanRequiredValidationRequest],
-			validateValue: internal.NewBooleanRequiredValidationRequestValidator(internal.ModelValidatorParams{Location: "body"}),
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*models.BooleanRequiredValidationRequest],
+			),
+			validateValue: internal.NewBooleanRequiredValidationRequestValidator(),
 		}),
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "optionalBoolParam1InQuery",
-			location: "query",
 			required: false,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam1InQuery", Location: "query"},
 			),
 		}),
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
-			field: "optionalBoolParam2InQuery",
-			location: "query",
 			required: false,
-			parseValue: app.knownParsers.boolInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.boolParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[bool](
-				internal.SimpleFieldValidatorParams{Field: "optionalBoolParam2InQuery", Location: "query"},
 			),
 		}),
 	}

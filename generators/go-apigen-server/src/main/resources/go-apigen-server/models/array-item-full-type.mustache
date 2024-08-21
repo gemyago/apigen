@@ -1,1 +1,1 @@
-{{#mostInnerItems}}{{#isModel}}*{{modelPackage}}.{{/isModel}}{{{dataType}}}{{/mostInnerItems}}
+{{#items}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*{{modelPackage}}.{{/isModel}}{{{dataType}}}{{/items}}

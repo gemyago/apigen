@@ -19,7 +19,7 @@ var _ = time.Time{}
 {{>enums/params/type}}
 {{/isEnum}}{{/allParams}}type {{>request-type}} struct {
 	{{#allParams}}
-	{{>params/name}} {{>params/type}}
+	{{nameInPascalCase}} {{>params/type}}
 	{{/allParams}}
 }{{/allParams.0}}{{^-last}}
 

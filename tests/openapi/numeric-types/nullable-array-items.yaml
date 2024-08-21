@@ -1,0 +1,200 @@
+post:
+  summary: API to simulate and test nullable numeric array items behavior
+  operationId: numericTypesNullableArrayItems
+  tags:
+    - numeric-types
+  parameters:
+    # params in path
+    - name: numberAny
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          minimum: 100.01
+          maximum: 200.02
+    - name: numberFloat
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          format: float
+          minimum: 200.02
+          maximum: 300.03
+    - name: numberDouble
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          format: double
+          minimum: 300.03
+          maximum: 400.04
+    - name: numberInt
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          minimum: 400
+          maximum: 500
+    - name: numberInt32
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          format: int32
+          minimum: 500
+          maximum: 600
+    - name: numberInt64
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          format: int64
+          minimum: 600
+          maximum: 700
+
+    # params in query
+    - name: numberAnyInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          minimum: 100.01
+          maximum: 200.02
+    - name: numberFloatInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          format: float
+          minimum: 200.02
+          maximum: 300.03
+    - name: numberDoubleInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+          nullable: true
+          format: double
+          minimum: 300.03
+          maximum: 400.04
+    - name: numberIntInQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          minimum: 400
+          maximum: 500
+    - name: numberInt32InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          format: int32
+          minimum: 500
+          maximum: 600
+    - name: numberInt64InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: integer
+          nullable: true
+          format: int64
+          minimum: 600
+          maximum: 700
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - numberAny
+            - numberFloat
+            - numberDouble
+            - numberInt
+            - numberInt32
+            - numberInt64
+          properties: 
+            numberAny:
+              type: array
+              items:
+                type: number
+                nullable: true
+                minimum: 100.01
+                maximum: 200.02
+            numberFloat:
+              type: array
+              items:
+                type: number
+                nullable: true
+                format: float
+                minimum: 200.02
+                maximum: 300.03
+            numberDouble:
+              type: array
+              items:
+                type: number
+                nullable: true
+                format: double
+                minimum: 300.03
+                maximum: 400.04
+            numberInt:
+              type: array
+              items:
+                type: integer
+                nullable: true
+                minimum: 400
+                maximum: 500
+            numberInt32:
+              type: array
+              items:
+                type: integer
+                nullable: true
+                format: int32
+                minimum: 500
+                maximum: 600
+            numberInt64:
+              type: array
+              items:
+                type: integer
+                nullable: true
+                format: int64
+                minimum: 600
+                maximum: 700
+  responses:
+    '204':
+      description: Request succeeded

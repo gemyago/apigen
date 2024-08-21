@@ -31,6 +31,51 @@ func TestStringTypes(t *testing.T) {
 		return testActions, router.mux
 	}
 
+	randomStrings := func(n, minLength, maxLength int) []string {
+		strs := make([]string, n)
+		for i := range n {
+			length := fake.IntBetween(minLength, maxLength)
+			strs[i] = fake.RandomStringWithLength(length)
+		}
+		return strs
+	}
+
+	randomDates := func(n int) []time.Time {
+		dates := make([]time.Time, n)
+		for i := range n {
+			dates[i] = fake.Time().Time(time.Now())
+		}
+		return dates
+	}
+
+	timesToStr := func(v []time.Time, format string) []string {
+		return lo.Map(v, func(v time.Time, _ int) string { return v.Format(format) })
+	}
+
+	nullableTimesToStr := func(v []*time.Time, format string) []string {
+		return lo.Map(v, func(v *time.Time, _ int) string {
+			if v == nil {
+				return "null"
+			}
+			return v.Format(format)
+		})
+	}
+
+	datePartOnly := func(v []time.Time) []time.Time {
+		return lo.Map(v, func(v time.Time, _ int) time.Time {
+			return lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly)))
+		})
+	}
+
+	nullableDatePartOnly := func(v []*time.Time) []*time.Time {
+		return lo.Map(v, func(v *time.Time, _ int) *time.Time {
+			if v == nil {
+				return nil
+			}
+			return lo.ToPtr(lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly))))
+		})
+	}
+
 	type testCase = routeTestCase[*stringTypesControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
@@ -148,7 +193,7 @@ func TestStringTypes(t *testing.T) {
 					"unformattedStr": %v
 				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
@@ -158,7 +203,7 @@ func TestStringTypes(t *testing.T) {
 						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -189,7 +234,7 @@ func TestStringTypes(t *testing.T) {
 					originalReq.Payload.ByteStr,
 				))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 
@@ -353,7 +398,7 @@ func TestStringTypes(t *testing.T) {
 					"unformattedStr": %v
 				}`, fake.IntBetween(10, 100)))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
@@ -363,7 +408,7 @@ func TestStringTypes(t *testing.T) {
 						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
 
 						// body
-						{Field: "payload", Location: "body", Code: "BAD_FORMAT"},
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -394,12 +439,131 @@ func TestStringTypes(t *testing.T) {
 					originalReq.Payload.ByteStr,
 				))),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
 
 						// query
 						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+					},
+				),
+			}
+		})
+	})
+
+	t.Run("arrays-parsing", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesArraysParsingRequest),
+		) *handlers.StringTypesStringTypesArraysParsingRequest {
+			req := &handlers.StringTypesStringTypesArraysParsingRequest{
+				// path
+				UnformattedStr:  randomStrings(3, 10, 20),
+				CustomFormatStr: randomStrings(3, 10, 20),
+				DateStr:         randomDates(3),
+				DateTimeStr:     randomDates(3),
+				ByteStr:         randomStrings(3, 10, 20),
+
+				// query
+				UnformattedStrInQuery:  randomStrings(3, 10, 20),
+				CustomFormatStrInQuery: randomStrings(3, 10, 20),
+				DateStrInQuery:         randomDates(3),
+				DateTimeStrInQuery:     randomDates(3),
+				ByteStrInQuery: []string{
+					fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10), fake.BinaryString().BinaryString(10),
+				},
+
+				// body
+				Payload: &models.StringTypesArraysParsingRequest{
+					UnformattedStr:  randomStrings(3, 10, 20),
+					CustomFormatStr: randomStrings(3, 10, 20),
+					DateStr:         randomDates(3),
+					DateTimeStr:     randomDates(3),
+					ByteStr:         randomStrings(3, 10, 20),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesArraysParsingRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
+			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
+			query["dateStrInQuery"] = timesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = timesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
+			query["byteStrInQuery"] = req.ByteStrInQuery
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/arrays-parsing/%v/%v/%v/%v/%v",
+					strings.Join(originalReq.UnformattedStr, ","),
+					strings.Join(originalReq.CustomFormatStr, ","),
+					strings.Join(timesToStr(originalReq.DateStr, time.DateOnly), ","),
+					strings.Join(timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), ","),
+					strings.Join(originalReq.ByteStr, ","),
+				),
+				query: query,
+				body:  marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesArraysParsing.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should fail if bad values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			_, badDateStrValues := injectValueRandomly(fake, timesToStr(originalReq.DateStr, time.DateOnly), fake.Lorem().Word())
+			_, badDateTimeStrValues := injectValueRandomly(
+				fake, timesToStr(originalReq.DateTimeStr, time.RFC3339Nano), fake.Lorem().Word(),
+			)
+
+			query["dateStrInQuery"] = badDateStrValues
+			query["dateTimeStrInQuery"] = badDateTimeStrValues
+
+			return testCase{
+				method: http.MethodPost,
+				path: fmt.Sprintf(
+					"/string-types/arrays-parsing/%v/%v/%v/%v/%v",
+					strings.Join(originalReq.UnformattedStr, ","),
+					strings.Join(originalReq.CustomFormatStr, ","),
+					strings.Join(badDateStrValues, ","),
+					strings.Join(badDateTimeStrValues, ","),
+					strings.Join(originalReq.ByteStr, ","),
+				),
+				query: query,
+				body: bytes.NewBuffer(([]byte)(fmt.Sprintf(`{
+					"unformattedStr": [%v]
+				}`, fake.IntBetween(10, 100)))),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]expectedBindingError{
+						// path
+						{Field: "dateStr", Location: "path", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStr", Location: "path", Code: "BAD_FORMAT"},
+
+						// query
+						{Field: "dateStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+						{Field: "dateTimeStrInQuery", Location: "query", Code: "BAD_FORMAT"},
+
+						// body
+						{Location: "body", Code: "BAD_FORMAT"},
 					},
 				),
 			}
@@ -499,7 +663,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -579,7 +743,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// path
 						{Field: "unformattedStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID_OUT_OF_RANGE"},
@@ -632,6 +796,471 @@ func TestStringTypes(t *testing.T) {
 					wantReq.DateStrInQuery = lo.Must(time.Parse(time.DateOnly, originalReq.DateStrInQuery.Format(time.DateOnly)))
 					assert.Equal(t, &wantReq, testActions.stringTypesRangeValidation.calls[0].params)
 				},
+			}
+		})
+	})
+
+	t.Run("array-items-range-validation", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest),
+		) *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest {
+			req := &handlers.StringTypesStringTypesArrayItemsRangeValidationRequest{
+				// path
+				UnformattedStr:  randomStrings(3, 10, 20),
+				CustomFormatStr: randomStrings(3, 20, 30),
+				DateStr:         randomDates(3),
+				DateTimeStr:     randomDates(3),
+				ByteStr:         randomStrings(3, 30, 40),
+
+				// query
+				UnformattedStrInQuery:  randomStrings(3, 10, 20),
+				CustomFormatStrInQuery: randomStrings(3, 20, 30),
+				DateStrInQuery:         randomDates(3),
+				DateTimeStrInQuery:     randomDates(3),
+				ByteStrInQuery:         randomStrings(3, 30, 40),
+
+				// body
+				Payload: &models.StringTypesArrayItemsRangeValidationRequest{
+					UnformattedStr:  randomStrings(3, 10, 20),
+					CustomFormatStr: randomStrings(3, 20, 30),
+					DateStr:         randomDates(3),
+					DateTimeStr:     randomDates(3),
+					ByteStr:         randomStrings(3, 30, 40),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
+			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
+			query["dateStrInQuery"] = timesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = timesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
+			query["byteStrInQuery"] = req.ByteStrInQuery
+			return query
+		}
+
+		buildPath := func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) string {
+			return fmt.Sprintf(
+				"/string-types/array-items-range-validation/%v/%v/%v/%v/%v",
+				strings.Join(req.UnformattedStr, ","),
+				strings.Join(req.CustomFormatStr, ","),
+				strings.Join(timesToStr(req.DateStr, time.DateOnly), ","),
+				strings.Join(timesToStr(req.DateTimeStr, time.RFC3339Nano), ","),
+				strings.Join(req.ByteStr, ","),
+			)
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
+			badIndices := make([]int, 9)
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+				badIndices[0], req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
+				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
+				badIndices[2], req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
+
+				badIndices[3], req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(9),
+				)
+				badIndices[4], req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(19),
+				)
+				badIndices[5], req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, fake.RandomStringWithLength(29),
+				)
+
+				badIndices[6], req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(9),
+				)
+				badIndices[7], req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(19),
+				)
+				badIndices[8], req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, fake.RandomStringWithLength(29),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]expectedBindingError{
+						// path
+						{Field: strconv.Itoa(badIndices[0]), Location: "path.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[1]), Location: "path.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[2]), Location: "path.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: strconv.Itoa(badIndices[3]), Location: "query.unformattedStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[4]), Location: "query.customFormatStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[5]), Location: "query.byteStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: strconv.Itoa(badIndices[6]), Location: "body.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[7]), Location: "body.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[8]), Location: "body.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should allow inclusive min length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(10))
+				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(20))
+				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(30))
+
+				_, req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(10),
+				)
+				_, req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(20),
+				)
+				_, req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, fake.RandomStringWithLength(30),
+				)
+
+				_, req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(10),
+				)
+				_, req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(20),
+				)
+				_, req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, fake.RandomStringWithLength(30),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate max length", setupRouter, func() testCase {
+			badIndices := make([]int, 9)
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+				badIndices[0], req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
+				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
+				badIndices[2], req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
+
+				badIndices[3], req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(21),
+				)
+				badIndices[4], req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(31),
+				)
+				badIndices[5], req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, fake.RandomStringWithLength(41),
+				)
+
+				badIndices[6], req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(21),
+				)
+				badIndices[7], req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(31),
+				)
+				badIndices[8], req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, fake.RandomStringWithLength(41),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]expectedBindingError{
+						// path
+						{Field: strconv.Itoa(badIndices[0]), Location: "path.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[1]), Location: "path.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[2]), Location: "path.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: strconv.Itoa(badIndices[3]), Location: "query.unformattedStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[4]), Location: "query.customFormatStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[5]), Location: "query.byteStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: strconv.Itoa(badIndices[6]), Location: "body.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[7]), Location: "body.customFormatStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[8]), Location: "body.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should allow inclusive max length", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(10))
+				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(20))
+				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(30))
+
+				_, req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, fake.RandomStringWithLength(20),
+				)
+				_, req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, fake.RandomStringWithLength(30),
+				)
+				_, req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, fake.RandomStringWithLength(40),
+				)
+
+				_, req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, fake.RandomStringWithLength(20),
+				)
+				_, req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, fake.RandomStringWithLength(30),
+				)
+				_, req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, fake.RandomStringWithLength(40),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = datePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = datePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesArrayItemsRangeValidation.calls[0].params)
+				},
+			}
+		})
+	})
+
+	t.Run("nullable-array-items", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesNullableArrayItemsRequest),
+		) *handlers.StringTypesStringTypesNullableArrayItemsRequest {
+			req := &handlers.StringTypesStringTypesNullableArrayItemsRequest{
+				// path
+				UnformattedStr:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+				CustomFormatStr: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+				DateStr:         lo.ToSlicePtr(randomDates(3)),
+				DateTimeStr:     lo.ToSlicePtr(randomDates(3)),
+				ByteStr:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
+
+				// query
+				UnformattedStrInQuery:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+				CustomFormatStrInQuery: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+				DateStrInQuery:         lo.ToSlicePtr(randomDates(3)),
+				DateTimeStrInQuery:     lo.ToSlicePtr(randomDates(3)),
+				ByteStrInQuery:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
+
+				// body
+				Payload: &models.StringTypesNullableArrayItemsRequest{
+					UnformattedStr:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
+					CustomFormatStr: lo.ToSlicePtr(randomStrings(3, 20, 30)),
+					DateStr:         lo.ToSlicePtr(randomDates(3)),
+					DateTimeStr:     lo.ToSlicePtr(randomDates(3)),
+					ByteStr:         lo.ToSlicePtr(randomStrings(3, 30, 40)),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) url.Values {
+			query := url.Values{}
+			query["unformattedStrInQuery"] = fromNullableItems(req.UnformattedStrInQuery)
+			query["customFormatStrInQuery"] = fromNullableItems(req.CustomFormatStrInQuery)
+			query["dateStrInQuery"] = nullableTimesToStr(req.DateStrInQuery, time.DateOnly)
+			query["dateTimeStrInQuery"] = nullableTimesToStr(req.DateTimeStrInQuery, time.RFC3339Nano)
+			query["byteStrInQuery"] = fromNullableItems(req.ByteStrInQuery)
+			return query
+		}
+
+		buildPath := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) string {
+			return fmt.Sprintf(
+				"/string-types/nullable-array-items/%v/%v/%v/%v/%v",
+				strings.Join(fromNullableItems(req.UnformattedStr), ","),
+				strings.Join(fromNullableItems(req.CustomFormatStr), ","),
+				strings.Join(nullableTimesToStr(req.DateStr, time.DateOnly), ","),
+				strings.Join(nullableTimesToStr(req.DateTimeStr, time.RFC3339Nano), ","),
+				strings.Join(fromNullableItems(req.ByteStr), ","),
+			)
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			originalReq := randomReq()
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = nullableDatePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = nullableDatePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesNullableArrayItems.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should parse and bind valid null values", setupRouter, func() testCase {
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, nil)
+				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, nil)
+				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, nil)
+
+				_, req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, nil,
+				)
+				_, req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, nil,
+				)
+				_, req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, nil,
+				)
+
+				_, req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, nil,
+				)
+				_, req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, nil,
+				)
+				_, req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, nil,
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					wantReq := *originalReq
+					wantReq.DateStr = nullableDatePartOnly(originalReq.DateStr)
+					wantReq.DateStrInQuery = nullableDatePartOnly(originalReq.DateStrInQuery)
+					assert.Equal(t, &wantReq, testActions.stringTypesNullableArrayItems.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate bad values", setupRouter, func() testCase {
+			badIndices := make([]int, 9)
+			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+				badIndices[0], req.UnformattedStr = injectValueRandomly(
+					fake, req.UnformattedStr, lo.ToPtr(fake.RandomStringWithLength(9)),
+				)
+				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake,
+					req.CustomFormatStr, lo.ToPtr("!"+fake.RandomStringWithLength(21)),
+				)
+				badIndices[2], req.ByteStr = injectValueRandomly(
+					fake, req.ByteStr, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+
+				badIndices[3], req.UnformattedStrInQuery = injectValueRandomly(
+					fake, req.UnformattedStrInQuery, lo.ToPtr(fake.RandomStringWithLength(21)),
+				)
+				badIndices[4], req.CustomFormatStrInQuery = injectValueRandomly(
+					fake, req.CustomFormatStrInQuery, lo.ToPtr(fake.RandomStringWithLength(31)),
+				)
+				badIndices[5], req.ByteStrInQuery = injectValueRandomly(
+					fake, req.ByteStrInQuery, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+
+				badIndices[6], req.Payload.UnformattedStr = injectValueRandomly(
+					fake, req.Payload.UnformattedStr, lo.ToPtr(fake.RandomStringWithLength(21)),
+				)
+				badIndices[7], req.Payload.CustomFormatStr = injectValueRandomly(
+					fake, req.Payload.CustomFormatStr, lo.ToPtr("!"+fake.RandomStringWithLength(21)),
+				)
+				badIndices[8], req.Payload.ByteStr = injectValueRandomly(
+					fake, req.Payload.ByteStr, lo.ToPtr(fake.RandomStringWithLength(41)),
+				)
+			})
+			query := buildQuery(originalReq)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(originalReq),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*stringTypesControllerTestActions](
+					[]expectedBindingError{
+						// path
+						{Field: strconv.Itoa(badIndices[0]), Location: "path.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[1]), Location: "path.customFormatStr", Code: "INVALID"},
+						{Field: strconv.Itoa(badIndices[2]), Location: "path.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+
+						// query
+						{Field: strconv.Itoa(badIndices[3]), Location: "query.unformattedStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[4]), Location: "query.customFormatStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[5]), Location: "query.byteStrInQuery", Code: "INVALID_OUT_OF_RANGE"},
+
+						// body
+						{Field: strconv.Itoa(badIndices[6]), Location: "body.unformattedStr", Code: "INVALID_OUT_OF_RANGE"},
+						{Field: strconv.Itoa(badIndices[7]), Location: "body.customFormatStr", Code: "INVALID"},
+						{Field: strconv.Itoa(badIndices[8]), Location: "body.byteStr", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
 			}
 		})
 	})
@@ -787,7 +1416,7 @@ func TestStringTypes(t *testing.T) {
 				query:  query,
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// query
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
@@ -825,7 +1454,7 @@ func TestStringTypes(t *testing.T) {
 				query:  url.Values{},
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// query
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 						{Field: "customFormatStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
@@ -878,7 +1507,7 @@ func TestStringTypes(t *testing.T) {
 				query:  query,
 				body:   bytes.NewBufferString(`{}`),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_REQUIRED"},
 					},
 				),
@@ -898,7 +1527,7 @@ func TestStringTypes(t *testing.T) {
 					OptionalUnformattedStr: lo.ToPtr(fake.RandomStringWithLength(9)),
 				}),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "optionalUnformattedStrInQuery", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "unformattedStr", Location: "body", Code: "INVALID_OUT_OF_RANGE"},
@@ -997,7 +1626,7 @@ func TestStringTypes(t *testing.T) {
 				query: query,
 				body:  marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*stringTypesControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						{Field: "unformattedStr", Location: "path", Code: "INVALID"},
 						{Field: "customFormatStr", Location: "path", Code: "INVALID"},
 

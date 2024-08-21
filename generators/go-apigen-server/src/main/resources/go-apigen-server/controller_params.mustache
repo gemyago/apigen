@@ -21,7 +21,7 @@ var _ = {{importedModels.0}}{}{{/hasImportedModel}}
 {{#hasParams}}
 type paramsParser{{baseName}}{{operationId}} struct {
 	{{#allParams}}
-	bind{{>params/name}} requestParamBinder[{{>params/binder-types}}]
+	bind{{nameInPascalCase}} requestParamBinder[{{>params/binder-types}}]
 	{{/allParams}}
 }
 
@@ -30,16 +30,18 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readPathValue("{{baseName}}", router, req), &reqParams.{{>params/name}})
+	pathParamsCtx := bindingCtx.Fork("path")
+	{{/-first}}p.bind{{nameInPascalCase}}(pathParamsCtx.Fork("{{baseName}}"), readPathValue("{{baseName}}", router, req), &reqParams.{{nameInPascalCase}})
 	{{/pathParams}}
 	{{#queryParams}}
 	{{#-first}}// query params
 	query := req.URL.Query()
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readQueryValue("{{baseName}}", query), &reqParams.{{>params/name}})
+	queryParamsCtx := bindingCtx.Fork("query")
+	{{/-first}}p.bind{{nameInPascalCase}}(queryParamsCtx.Fork("{{baseName}}"), readQueryValue("{{baseName}}", query), &reqParams.{{nameInPascalCase}})
 	{{/queryParams}}
 	{{#bodyParams}}
 	{{#-first}}// body params
-	{{/-first}}p.bind{{>params/name}}(&bindingCtx, readRequestBodyValue(req), &reqParams.Payload)
+	{{/-first}}p.bind{{nameInPascalCase}}(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	{{/bodyParams}}
 	return reqParams, bindingCtx.AggregatedError()
 }
@@ -47,20 +49,23 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>request-type}}] {
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
-		bind{{>params/name}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
-			field: "{{baseName}}",
-			location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}},
-			required: {{required}},
-			parseValue: {{^isBodyParam}}{{#isNullable}}parseNullableIn{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}({{/isNullable}}{{/isBodyParam}}{{#isBodyParam}}parseJSONPayload[{{>params/type}}]{{/isBodyParam}}{{^isBodyParam}}app.knownParsers.{{#isDate}}date{{/isDate}}{{#isDateTime}}time{{/isDateTime}}{{^isDate}}{{^isDateTime}}{{dataType}}{{/isDateTime}}{{/isDate}}In{{#vendorExtensions}}{{#lambda.titlecase}}{{x-codegen-param-in}}{{/lambda.titlecase}}{{/vendorExtensions}}{{/isBodyParam}}{{^isBodyParam}}{{#isNullable}}){{/isNullable}}{{/isBodyParam}},
+		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
+			required: {{required}},{{#isBodyParam}}
+			parseValue: parseSoloValueParamAsSoloValue(
+				{{>params/parse-non-array-value}},
+			),{{/isBodyParam}}{{^isBodyParam}}
+			parseValue: parse{{#isPathParam}}Solo{{/isPathParam}}{{^isPathParam}}Multi{{/isPathParam}}ValueParamAs{{#isArray}}Slice{{/isArray}}{{^isArray}}SoloValue{{/isArray}}({{#isArray}}
+				{{#items}}{{>params/parse-non-array-value}}{{/items}},{{/isArray}}{{^isArray}}
+				{{>params/parse-non-array-value}},{{/isArray}}
+			),{{/isBodyParam}}
 			validateValue: {{#isArray}}internal.NewArrayValidator(
-				internal.New{{#mostInnerItems}}{{{dataType}}}{{/mostInnerItems}}Validator(internal.ModelValidatorParams{Location: "body"}),
-			),{{/isArray}}{{^isArray}}{{#isBodyParam}}{{#isNullable}}internal.SkipNullFieldValidator({{/isNullable}}internal.New{{dataType}}Validator(internal.ModelValidatorParams{Location: "body"}){{#isNullable}}){{/isNullable}},{{/isBodyParam}}{{^isBodyParam}}internal.NewSimpleFieldValidator[{{>params/type}}](
-				internal.SimpleFieldValidatorParams{Field: "{{baseName}}", Location: {{#isBodyParam}}"body"{{/isBodyParam}}{{^isBodyParam}}"{{#vendorExtensions}}{{x-codegen-param-in}}{{/vendorExtensions}}"{{/isBodyParam}}},{{#minimum}}{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
-				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDate}}{{^isDateTime}}{{#minLength}}
-				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}
-				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewMinMaxLengthValidator[{{{dataType}}}]({{.}}, false){{#isNullable}}){{/isNullable}},{{/maxLength}}{{#pattern}}
-				{{#isNullable}}internal.SkipNullValidator({{/isNullable}}internal.NewPatternValidator[{{{dataType}}}]("{{.}}"){{#isNullable}}){{/isNullable}},{{/pattern}}{{/isDateTime}}{{/isDate}}
-			),{{/isBodyParam}}{{/isArray}}
+				internal.NewSimpleFieldValidator[{{>params/type}}]({{#minItems}}
+					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
+					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, false),{{/maxItems}}
+				),{{#items}}{{#isModel}}
+				internal.New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
+				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
+			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
 		}),
 		{{/allParams}}
 	}

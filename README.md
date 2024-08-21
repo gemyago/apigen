@@ -11,21 +11,35 @@ Project status: **pre-alpha**.
 
 ## TODOs
 
+### General
+* Installation and usage instructions
+* Documentation on generated code structure and suggested patterns
+
 ### Golang
+* enums
+* simple types directly in body
+* array types directly in body
+* allow handling as plain http handler
 * authentication
 * per route middleware
-* allow handling as plain http handler
-* nullable types
 * polymorphic models
-* enums
 
 ### Typescript
-
 Set of features compatible with golang
 
 ## Supported OpenAPI features
 
 Some language specific features may be challenging (if possible) to implement correctly. The [Language specific caveats](#language-specific-caveats) summarises various implementation details.
+
+### Parameter Serialization
+
+[OpenAPI Spec Reference](https://swagger.io/docs/specification/serialization/)
+
+Supported serialization styles:
+|parameter location|style|explode|example primitive type|example array type|object support|
+|----|----|----|----|----|----|
+|path|simple|false|`/users/5`|`/users/3,4,5`|-|
+|query|form|true|`/users?id=5`|`/users?id=3&id=4&id=5`|-|
 
 ###  Data types
 
@@ -36,6 +50,7 @@ Some language specific features may be challenging (if possible) to implement co
 |number/integer|&check;|&check;|
 |boolean|&check;|&check;|
 |object|&check;|&check;|
+|array|&check;|&check;|
 
 #### Strings
 |format|in|minLength|maxLength|pattern|
@@ -60,9 +75,19 @@ Some language specific features may be challenging (if possible) to implement co
 |----|----|----|
 |boolean|query,path,body|&check;|
 
-#### Object
+#### Objects
 
 Objects are only supported in request body of `application/json` content type.
+
+#### Arrays
+|items type|in|minItems|maxItems|
+|----|----|----|----|
+|string|query,path,body|&check;|&check;|
+|number|query,path,body|&check;|&check;|
+|integer|query,path,body|&check;|&check;|
+|boolean|query,path,body|&check;|&check;|
+|object|body|&check;|&check;|
+
 
 ### Language specific caveats
 
@@ -72,6 +97,10 @@ Golang:
   * The `required` check on booleans in request body is not performed
   * For simple data types - will validate if the field is non default
   * For objects - optional and nullable are synonyms. This means that required validation will only work for non nullable fields.
+* `array` fields
+  * `required` is equivalent to `minItems: 1`
+  * `nullable` arrays are only supported in request body
+  * nullable and optional array fields are synonyms
 
 ## Contributing
 

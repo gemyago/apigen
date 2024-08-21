@@ -21,19 +21,19 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 	reqParams := &BehaviorBehaviorWithParamsAndResponseRequest{}
 	// query params
 	query := req.URL.Query()
-	p.bindQueryParam1(&bindingCtx, readQueryValue("queryParam1", query), &reqParams.QueryParam1)
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindQueryParam1(queryParamsCtx.Fork("queryParam1"), readQueryValue("queryParam1", query), &reqParams.QueryParam1)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsAndResponseRequest] {
 	return &paramsParserBehaviorBehaviorWithParamsAndResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
-			field: "queryParam1",
-			location: "query",
 			required: false,
-			parseValue: app.knownParsers.stringInQuery,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.stringParser,
+			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.SimpleFieldValidatorParams{Field: "queryParam1", Location: "query"},
 			),
 		}),
 	}

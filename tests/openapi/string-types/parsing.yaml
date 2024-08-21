@@ -6,17 +6,20 @@ post:
   parameters:
     # params in path
     - name: unformattedStr
+      description: Regular string with no format
       in: path
       required: true
       schema:
         type: string
     - name: customFormatStr
+      description: Regular string with vendor specific format. Parsed as string
       in: path
       required: true
       schema:
         type: string
         format: vendor-specific
     - name: dateStr
+      description: Date string
       in: path
       required: true
       schema:

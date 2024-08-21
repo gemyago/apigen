@@ -15,7 +15,10 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/jaswdr/faker"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/exp/constraints"
 )
 
 type routerAdapter struct {
@@ -106,8 +109,13 @@ func marshalJSONDataAsReader(t *testing.T, data any) io.Reader {
 
 type routeTestCaseExpectFn[TActions any] func(t *testing.T, testActions TActions, recorder *httptest.ResponseRecorder)
 
+type expectedBindingError struct {
+	Field    string
+	Location string
+	Code     string
+}
+
 type fieldBindingError struct {
-	Field    string `json:"field"`
 	Location string `json:"location"`
 	Code     string `json:"code"`
 }
@@ -116,7 +124,7 @@ type aggregatedBindingError struct {
 	Errors []fieldBindingError `json:"errors"`
 }
 
-func expectBindingErrors[TActions any](wantErrors []fieldBindingError) routeTestCaseExpectFn[TActions] {
+func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeTestCaseExpectFn[TActions] {
 	return func(
 		t *testing.T,
 		_ TActions,
@@ -155,15 +163,16 @@ func assertFieldError(
 	field string,
 	code string,
 ) {
+	fieldPath := lo.If(field == "", location).Else(location + "." + field)
 	for _, fieldErr := range err.Errors {
-		if fieldErr.Location == location && fieldErr.Field == field {
-			assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", field)
+		if fieldErr.Location == fieldPath {
+			assert.Equal(t, code, fieldErr.Code, "field %s: unexpected error code for", fieldPath)
 			return
 		}
 	}
 	assert.FailNow(t,
-		fmt.Sprintf("no error found for field %s, location %s, code %s. Got Errors: %v",
-			field, location, code, err.Errors,
+		fmt.Sprintf("no error found for field %s, code %s. Got Errors: %v",
+			fieldPath, code, err.Errors,
 		))
 }
 
@@ -182,4 +191,48 @@ func (c *mockAction[TParams]) action(
 		params: params,
 	})
 	return nil
+}
+
+func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T) {
+	index := fake.IntBetween(0, len(values))
+	newValues := make([]T, len(values)+1)
+	copy(newValues[:index], values[:index])
+	newValues[index] = value
+	copy(newValues[index+1:], values[index:])
+	return index, newValues
+}
+
+func fromNullableItems[T any](v []*T, formatter ...func(T) string) []string {
+	if len(formatter) == 0 {
+		formatter = append(formatter, func(v T) string {
+			return fmt.Sprint(v)
+		})
+	}
+	items := make([]string, len(v))
+	for i := range v {
+		if v[i] == nil {
+			items[i] = "null"
+		} else {
+			items[i] = formatter[0](*v[i])
+		}
+	}
+	return items
+}
+
+type randFn[T constraints.Integer | constraints.Float] func(minVal, maxVal T) T
+
+func randomNumbers[T constraints.Integer | constraints.Float](n int, numberBetween randFn[T], minVal, maxVal T) []T {
+	vals := make([]T, n)
+	for i := range n {
+		vals[i] = numberBetween(minVal, maxVal)
+	}
+	return vals
+}
+
+func numbersToString[T constraints.Integer | constraints.Float](vals []T) []string {
+	strs := make([]string, len(vals))
+	for i := range vals {
+		strs[i] = fmt.Sprint(vals[i])
+	}
+	return strs
 }

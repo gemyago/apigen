@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"{{invokerPackage}}/internal"
@@ -257,19 +258,6 @@ func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float]
 	}
 }
 
-func newStringSliceToNumberParser[TTargetVal constraints.Integer | constraints.Float](
-	bitSize int, parseFn func(string, int) (TTargetVal, error),
-) rawValueParser[[]string, TTargetVal] {
-	return func(ov []string, target *TTargetVal) error {
-		val, err := parseFn(ov[0], bitSize)
-		if err != nil {
-			return err
-		}
-		*target = val
-		return nil
-	}
-}
-
 func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] {
 	return func(ov string, t *time.Time) error {
 		format := time.RFC3339Nano
@@ -277,21 +265,6 @@ func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time
 			format = time.DateOnly
 		}
 		val, err := time.Parse(format, ov)
-		if err != nil {
-			return err
-		}
-		*t = val
-		return nil
-	}
-}
-
-func newStringSliceToDateTimeParser(isDateOnly bool) rawValueParser[[]string, time.Time] {
-	return func(ov []string, t *time.Time) error {
-		format := time.RFC3339Nano
-		if isDateOnly {
-			format = time.DateOnly
-		}
-		val, err := time.Parse(format, ov[0])
 		if err != nil {
 			return err
 		}
@@ -310,33 +283,59 @@ func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, erro
 	return (TFloat)(res), err
 }
 
-func parseStringInPath(ov string, s *string) error {
-	*s = ov
-	return nil
-}
-
-func parseStringInQuery(ov []string, s *string) error {
-	*s = ov[0]
-	return nil
-}
-
-func parseBoolInPath(ov string, s *bool) error {
-	switch ov {
-	case "true":
-		*s = true
-	case "false":
-		*s = false
-	default:
-		return fmt.Errorf("unexpected boolean format %v", ov)
+func parseMultiValueParamAsSoloValue[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[[]string, TTargetVal] {
+	return func(s []string, tv *TTargetVal) error {
+		return targetParser(s[0], tv)
 	}
-	return nil
 }
 
-func parseBoolInQuery(ov []string, s *bool) error {
-	return parseBoolInPath(ov[0], s)
+// parseSoloValueParamAsSoloValue is noop and used just to simplify templates.
+func parseSoloValueParamAsSoloValue[TRawVal any, TTargetVal any](
+	targetParser rawValueParser[TRawVal, TTargetVal],
+) rawValueParser[TRawVal, TTargetVal] {
+	return targetParser
 }
 
-func parseNullableInPath[TTargetVal any](
+// parseSoloValueParamAsSlice will always parse the input as csv string.
+func parseSoloValueParamAsSlice[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[string, []TTargetVal] {
+	return func(s string, tv *[]TTargetVal) error {
+		items := strings.Split(s, ",")
+		resultingSlice := make([]TTargetVal, 0, len(items))
+		for i, item := range items {
+			var val TTargetVal
+			if err := targetParser(item, &val); err != nil {
+				return fmt.Errorf("failed to parse value at index %d: %w", i, err)
+			}
+			resultingSlice = append(resultingSlice, val)
+		}
+		*tv = resultingSlice
+		return nil
+	}
+}
+
+// parseMultiValueParamAsSlice will parse each value in the input slice separately.
+func parseMultiValueParamAsSlice[TTargetVal any](
+	targetParser rawValueParser[string, TTargetVal],
+) rawValueParser[[]string, []TTargetVal] {
+	return func(s []string, tv *[]TTargetVal) error {
+		resultingSlice := make([]TTargetVal, 0, len(s))
+		for i, item := range s {
+			var val TTargetVal
+			if err := targetParser(item, &val); err != nil {
+				return fmt.Errorf("failed to parse value at index %d: %w", i, err)
+			}
+			resultingSlice = append(resultingSlice, val)
+		}
+		*tv = resultingSlice
+		return nil
+	}
+}
+
+func parseNullableParam[TTargetVal any](
 	targetParser rawValueParser[string, TTargetVal],
 ) rawValueParser[string, *TTargetVal] {
 	return func(s string, tv **TTargetVal) error {
@@ -348,38 +347,15 @@ func parseNullableInPath[TTargetVal any](
 	}
 }
 
-func parseNullableInQuery[TTargetVal any](
-	targetParser rawValueParser[[]string, TTargetVal],
-) rawValueParser[[]string, *TTargetVal] {
-	return func(s []string, tv **TTargetVal) error {
-		if s[0] == "" || s[0] == "null" {
-			return nil
-		}
-		*tv = new(TTargetVal)
-		return targetParser(s, *tv)
-	}
-}
-
 type knownParsersDef struct {
-	// path
-	stringInPath  rawValueParser[string, string]
-	dateInPath    rawValueParser[string, time.Time]
-	timeInPath    rawValueParser[string, time.Time]
-	int32InPath   rawValueParser[string, int32]
-	int64InPath   rawValueParser[string, int64]
-	float32InPath rawValueParser[string, float32]
-	float64InPath rawValueParser[string, float64]
-	boolInPath    rawValueParser[string, bool]
-
-	// query
-	stringInQuery  rawValueParser[[]string, string]
-	dateInQuery    rawValueParser[[]string, time.Time]
-	timeInQuery    rawValueParser[[]string, time.Time]
-	int32InQuery   rawValueParser[[]string, int32]
-	int64InQuery   rawValueParser[[]string, int64]
-	float32InQuery rawValueParser[[]string, float32]
-	float64InQuery rawValueParser[[]string, float64]
-	boolInQuery    rawValueParser[[]string, bool]
+	stringParser  rawValueParser[string, string]
+	dateParser    rawValueParser[string, time.Time]
+	timeParser    rawValueParser[string, time.Time]
+	int32Parser   rawValueParser[string, int32]
+	int64Parser   rawValueParser[string, int64]
+	float32Parser rawValueParser[string, float32]
+	float64Parser rawValueParser[string, float64]
+	boolParser    rawValueParser[string, bool]
 }
 
 const bitSize32 = 32
@@ -387,25 +363,27 @@ const bitSize64 = 64
 
 func newKnownParsers() *knownParsersDef {
 	return &knownParsersDef{
-		// path
-		stringInPath:  parseStringInPath,
-		dateInPath:    newStringToDateTimeParser(true),
-		timeInPath:    newStringToDateTimeParser(false),
-		int32InPath:   newStringToNumberParser[int32](bitSize32, parseDecInt),
-		int64InPath:   newStringToNumberParser[int64](bitSize64, parseDecInt),
-		float32InPath: newStringToNumberParser[float32](bitSize32, parseFloat),
-		float64InPath: newStringToNumberParser(bitSize64, strconv.ParseFloat),
-		boolInPath:    parseBoolInPath,
-
-		// query
-		stringInQuery:  parseStringInQuery,
-		dateInQuery:    newStringSliceToDateTimeParser(true),
-		timeInQuery:    newStringSliceToDateTimeParser(false),
-		int32InQuery:   newStringSliceToNumberParser[int32](bitSize32, parseDecInt),
-		int64InQuery:   newStringSliceToNumberParser[int64](bitSize64, parseDecInt),
-		float32InQuery: newStringSliceToNumberParser[float32](bitSize32, parseFloat),
-		float64InQuery: newStringSliceToNumberParser(bitSize64, strconv.ParseFloat),
-		boolInQuery:    parseBoolInQuery,
+		stringParser: func(ov string, s *string) error {
+			*s = ov
+			return nil
+		},
+		dateParser:    newStringToDateTimeParser(true),
+		timeParser:    newStringToDateTimeParser(false),
+		int32Parser:   newStringToNumberParser[int32](bitSize32, parseDecInt),
+		int64Parser:   newStringToNumberParser[int64](bitSize64, parseDecInt),
+		float32Parser: newStringToNumberParser[float32](bitSize32, parseFloat),
+		float64Parser: newStringToNumberParser(bitSize64, strconv.ParseFloat),
+		boolParser: func(ov string, s *bool) error {
+			switch ov {
+			case "true":
+				*s = true
+			case "false":
+				*s = false
+			default:
+				return fmt.Errorf("unexpected boolean format %v", ov)
+			}
+			return nil
+		},
 	}
 }
 
@@ -416,8 +394,6 @@ type requestParamBinder[TRawVal any, TTargetVal any] func(
 )
 
 type binderParams[TRawVal any, TTargetVal any] struct {
-	field         string
-	location      string
 	required      bool
 	parseValue    rawValueParser[TRawVal, TTargetVal]
 	validateValue internal.FieldValidator[TTargetVal]
@@ -434,8 +410,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 		if !rawVal.Assigned {
 			if params.required {
 				bindingCtx.AppendFieldError(internal.FieldBindingError{
-					Field:    params.field,
-					Location: params.location,
+					Location: bindingCtx.BuildPath(),
 					Code:     internal.ErrValueRequired.Error(),
 				})
 			}
@@ -443,8 +418,7 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 		}
 		if err := params.parseValue(rawVal.Value, receiver); err != nil {
 			bindingCtx.AppendFieldError(internal.FieldBindingError{
-				Field:    params.field,
-				Location: params.location,
+				Location: bindingCtx.BuildPath(),
 				Code:     internal.ErrBadValueFormat.Error(),
 				Err:      err,
 			})

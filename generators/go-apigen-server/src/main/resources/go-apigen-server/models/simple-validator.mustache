@@ -1,0 +1,8 @@
+NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}]({{^isBoolean}}{{#required}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{{dataType}}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDateTime}}{{#minLength}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}, {{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}, {{{dataType}}}]({{.}}, false){{#isNullable}}){{/isNullable}},{{/maxLength}}{{#pattern}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}NewPatternValidator[{{{dataType}}}]("{{.}}"){{#isNullable}}){{/isNullable}},{{/pattern}}{{/isDateTime}}{{/isDate}}
+)

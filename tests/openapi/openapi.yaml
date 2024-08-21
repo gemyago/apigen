@@ -16,8 +16,14 @@ paths:
     $ref: "./string-types/parsing.yaml"
   /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/nullable-parsing.yaml"
+  /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/arrays-parsing.yaml"
+  /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/nullable-array-items.yaml"
   /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
     $ref: "./string-types/range-validation.yaml"
+  /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}:
+    $ref: "./string-types/array-items-range-validation.yaml"
   /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}:
     $ref: "./string-types/pattern-validation.yaml"
   /string-types/required-validation:
@@ -36,6 +42,10 @@ paths:
     $ref: "./numeric-types/required-validation.yaml"
   /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
     $ref: "./numeric-types/nullable.yaml"
+  /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/array-items.yaml"
+  /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}:
+    $ref: "./numeric-types/nullable-array-items.yaml"
 
   # boolean routes
   /boolean/parsing/{boolParam1}/{boolParam2}:
@@ -44,12 +54,16 @@ paths:
     $ref: "./boolean/required-validation.yaml"
   /boolean/nullable/{boolParam1}/{boolParam2}:
     $ref: "./boolean/nullable.yaml"
+  /boolean/array-items/{boolParam1}/{boolParam2}:
+    $ref: "./boolean/array-items.yaml"
+  /boolean/nullable-array-items/{boolParam1}/{boolParam2}:
+    $ref: "./boolean/nullable-array-items.yaml"
 
   # objects routes
   /objects/deeply-nested:
     $ref: "./objects/deeply-nested.yaml"
-  /objects/arrays-parsing:
-    $ref: "./objects/arrays-parsing.yaml"
+  /objects/arrays:
+    $ref: "./objects/arrays.yaml"
   /objects/nullable-body:
     $ref: "./objects/nullable-body.yaml"
   /objects/required-body:
@@ -57,7 +71,15 @@ paths:
   /objects/required-nested-objects:
     $ref: "./objects/required-nested-objects.yaml"
 
-  # responses routes
+  # arrays routes
+  /arrays/required-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/required-validation.yaml"
+  /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/nullable-required-validation.yaml"
+  /arrays/range-validation/{simpleItems1}/{simpleItems2}:
+    $ref: "./arrays/range-validation.yaml"
+
+  # behavior routes
   /behavior/no-params-no-response:
     $ref: "./behavior/no-params-no-response.yaml"
   /behavior/no-params-with-response:

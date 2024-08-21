@@ -99,9 +99,9 @@ func TestObjects(t *testing.T) {
 					method: http.MethodPost,
 					path:   "/objects/nullable-body",
 					expect: expectBindingErrors[*objectsControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							// body
-							{Field: "payload", Location: "body", Code: "INVALID_REQUIRED"},
+							{Location: "body", Code: "INVALID_REQUIRED"},
 						},
 					),
 				}
@@ -175,9 +175,9 @@ func TestObjects(t *testing.T) {
 					method: http.MethodPost,
 					path:   "/objects/required-body",
 					expect: expectBindingErrors[*objectsControllerTestActions](
-						[]fieldBindingError{
+						[]expectedBindingError{
 							// body
-							{Field: "payload", Location: "body", Code: "INVALID_REQUIRED"},
+							{Location: "body", Code: "INVALID_REQUIRED"},
 						},
 					),
 				}
@@ -312,7 +312,7 @@ func TestObjects(t *testing.T) {
 				path:   "/objects/required-nested-objects",
 				body:   bytes.NewBufferString(`{}`),
 				expect: expectBindingErrors[*objectsControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// body
 						{Field: "simpleField1", Location: "body", Code: "INVALID_REQUIRED"},
 						{Field: "simpleField2", Location: "body", Code: "INVALID_REQUIRED"},
@@ -376,7 +376,7 @@ func TestObjects(t *testing.T) {
 				path:   "/objects/deeply-nested",
 				body:   marshalJSONDataAsReader(t, originalReq.Payload),
 				expect: expectBindingErrors[*objectsControllerTestActions](
-					[]fieldBindingError{
+					[]expectedBindingError{
 						// body
 						{Field: "simpleField1", Location: "body.container1.container11.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "simpleField1", Location: "body.container1.container11.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
@@ -386,6 +386,151 @@ func TestObjects(t *testing.T) {
 						{Field: "simpleField1", Location: "body.container2.container21.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "simpleField1", Location: "body.container2.container22.simpleObject1", Code: "INVALID_OUT_OF_RANGE"},
 						{Field: "simpleField1", Location: "body.container2.container22.simpleObject2", Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+	})
+
+	t.Run("arrays", func(t *testing.T) {
+		randomObjectArraysSimpleObject := func(
+			opts ...func(*models.ObjectArraysSimpleObject),
+		) *models.ObjectArraysSimpleObject {
+			obj := &models.ObjectArraysSimpleObject{
+				SimpleField1: fake.RandomStringWithLength(fake.IntBetween(5, 10)),
+			}
+			for _, opt := range opts {
+				opt(obj)
+			}
+			return obj
+		}
+		randomObjectArraysSimpleObjects := func() []*models.ObjectArraysSimpleObject {
+			return []*models.ObjectArraysSimpleObject{
+				randomObjectArraysSimpleObject(),
+				randomObjectArraysSimpleObject(),
+			}
+		}
+
+		runRouteTestCase(t, "should parse direct body array", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayBodyDirectRequest{
+				Payload: randomObjectArraysSimpleObjects(),
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/arrays",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsArrayParsingBodyDirect.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate direct body array items", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayBodyDirectRequest{
+				Payload: randomObjectArraysSimpleObjects(),
+			}
+			var badIndex int
+			badIndex, originalReq.Payload = injectValueRandomly(fake, originalReq.Payload, randomObjectArraysSimpleObject(
+				func(obj *models.ObjectArraysSimpleObject) {
+					obj.SimpleField1 = fake.RandomStringWithLength(201)
+				},
+			))
+			return testCase{
+				method: http.MethodPost,
+				path:   "/objects/arrays",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*objectsControllerTestActions](
+					[]expectedBindingError{
+						// body
+						{Field: "simpleField1", Location: fmt.Sprintf("body.%d", badIndex), Code: "INVALID_OUT_OF_RANGE"},
+					},
+				),
+			}
+		})
+
+		runRouteTestCase(t, "should parse nested body array", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayBodyNestedRequest{
+				Payload: &models.ObjectsArrayBodyNestedRequest{
+					NestedArray1: randomObjectArraysSimpleObjects(),
+					NestedArray2: randomObjectArraysSimpleObjects(),
+					NestedArrayContainer1: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+					NestedArrayContainer2: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+				},
+			}
+			return testCase{
+				method: http.MethodPut,
+				path:   "/objects/arrays",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: func(t *testing.T, testActions *objectsControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, &originalReq, testActions.objectsArrayParsingBodyNested.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should validate nested body array", setupRouter, func() testCase {
+			originalReq := handlers.ObjectsObjectsArrayBodyNestedRequest{
+				Payload: &models.ObjectsArrayBodyNestedRequest{
+					NestedArray1: randomObjectArraysSimpleObjects(),
+					NestedArray2: randomObjectArraysSimpleObjects(),
+					NestedArrayContainer1: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+					NestedArrayContainer2: []*models.ObjectArraysSimpleObjectsContainer{
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+						{
+							SimpleObjects1: randomObjectArraysSimpleObjects(),
+							SimpleObjects2: randomObjectArraysSimpleObjects(),
+						},
+					},
+				},
+			}
+			var badIndex int
+			badIndex, originalReq.Payload.NestedArrayContainer1[1].SimpleObjects1 = injectValueRandomly(
+				fake,
+				originalReq.Payload.NestedArrayContainer1[0].SimpleObjects1,
+				randomObjectArraysSimpleObject(
+					func(obj *models.ObjectArraysSimpleObject) {
+						obj.SimpleField1 = fake.RandomStringWithLength(201)
+					},
+				))
+			return testCase{
+				method: http.MethodPut,
+				path:   "/objects/arrays",
+				body:   marshalJSONDataAsReader(t, originalReq.Payload),
+				expect: expectBindingErrors[*objectsControllerTestActions](
+					[]expectedBindingError{
+						// body
+						{
+							Field:    "simpleField1",
+							Location: fmt.Sprintf("body.nestedArrayContainer1.%d.simpleObjects1.%d", 1, badIndex),
+							Code:     "INVALID_OUT_OF_RANGE",
+						},
 					},
 				),
 			}

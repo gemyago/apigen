@@ -10,22 +10,19 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewPetValidator(params ModelValidatorParams) FieldValidator[*models.Pet] {
+func NewPetValidator() FieldValidator[*models.Pet] {
 	validateId := NewSimpleFieldValidator[int64](
-		SimpleFieldValidatorParams{Field: "id", Location: params.Location},
 		EnsureNonDefault[int64],
 	)
 	validateName := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "name", Location: params.Location},
 		EnsureNonDefault[string],
 	)
 	validateComments := NewSimpleFieldValidator[string](
-		SimpleFieldValidatorParams{Field: "comments", Location: params.Location},
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.Pet) {
-		validateId(bindingCtx, value.Id)
-		validateName(bindingCtx, value.Name)
-		validateComments(bindingCtx, value.Comments)
+		validateId(bindingCtx.Fork("id"), value.Id)
+		validateName(bindingCtx.Fork("name"), value.Name)
+		validateComments(bindingCtx.Fork("comments"), value.Comments)
 	}
 }

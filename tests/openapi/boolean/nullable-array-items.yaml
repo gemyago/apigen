@@ -1,0 +1,64 @@
+post:
+  summary: API to simulate and test nullable boolean array items type
+  operationId: booleanNullableArrayItems
+  tags:
+    - boolean
+  parameters:
+    # params in path
+    - name: boolParam1
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+          nullable: true
+    - name: boolParam2
+      in: path
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+          nullable: true
+
+    # params in query
+    - name: boolParam1InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+          nullable: true
+    - name: boolParam2InQuery
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: boolean
+          nullable: true
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - boolParam1
+            - boolParam2
+          properties:
+            boolParam1:
+              type: array
+              items:
+                type: boolean
+                nullable: true
+            boolParam2:
+              type: array
+              items:
+                type: boolean
+                nullable: true
+  responses:
+    '204':
+      description: Request succeeded

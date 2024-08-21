@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strconv"
 
 	"golang.org/x/exp/constraints"
 )
@@ -34,14 +35,13 @@ func (c BindingError) Error() string {
 // FieldBindingError occurs at parsing/validation stage and holds
 // context on field that the error is related to.
 type FieldBindingError struct {
-	Field    string `json:"field"`
 	Location string `json:"location"`
 	Err      error  `json:"-"`
 	Code     string `json:"code"`
 }
 
 func (be FieldBindingError) Error() string {
-	return fmt.Sprintf("field %s (in %s) code=%s, error: %v", be.Field, be.Location, be.Code, be.Err)
+	return fmt.Sprintf("field %s code=%s, error: %v", be.Location, be.Code, be.Err)
 }
 
 type AggregatedBindingError struct {
@@ -57,14 +57,47 @@ func (c AggregatedBindingError) Error() string {
 }
 
 type BindingContext struct {
-	errors []FieldBindingError
+	parent       *BindingContext
+	field        string
+	memoizedPath string
+	errors       []FieldBindingError
+}
+
+func (c *BindingContext) Fork(field string) *BindingContext {
+	return &BindingContext{
+		parent: c,
+		field:  field,
+	}
+}
+
+func (c *BindingContext) BuildPath() string {
+	if c.memoizedPath != "" {
+		return c.memoizedPath
+	}
+	if c.parent == nil {
+		return c.field
+	}
+	parentPath := c.parent.BuildPath()
+	if parentPath == "" {
+		c.memoizedPath = c.field
+	} else {
+		c.memoizedPath = parentPath + "." + c.field
+	}
+	return c.memoizedPath
 }
 
 func (c *BindingContext) AppendFieldError(err FieldBindingError) {
+	if c.parent != nil {
+		c.parent.AppendFieldError(err)
+		return
+	}
 	c.errors = append(c.errors, err)
 }
 
 func (c BindingContext) AggregatedError() error {
+	if c.parent != nil {
+		return c.parent.AggregatedError()
+	}
 	if len(c.errors) == 0 {
 		return nil
 	}
@@ -172,18 +205,9 @@ type FieldValidator[TValue any] func(
 	value TValue,
 )
 
-type ModelValidatorParams struct {
-	Location string
-}
-
-type SimpleFieldValidatorParams struct {
-	Field    string
-	Location string
-}
-
 func NewSimpleFieldValidator[
 	TValue any,
-](params SimpleFieldValidatorParams, validators ...ValueValidator[TValue]) FieldValidator[TValue] {
+](validators ...ValueValidator[TValue]) FieldValidator[TValue] {
 	return func(
 		bindingCtx *BindingContext,
 		value TValue,
@@ -193,8 +217,7 @@ func NewSimpleFieldValidator[
 				errCode := ErrInvalidValue
 				errors.As(err, &errCode)
 				bindingCtx.AppendFieldError(FieldBindingError{
-					Field:    params.Field,
-					Location: params.Location,
+					Location: bindingCtx.BuildPath(),
 					Code:     errCode.Error(),
 					Err:      err,
 				})
@@ -207,8 +230,6 @@ func NewSimpleFieldValidator[
 type ObjectFieldValidatorParams struct {
 	Nullable bool
 	Required bool
-	Field    string
-	Location string
 }
 
 func NewObjectFieldValidator[TTargetVal any](
@@ -219,8 +240,7 @@ func NewObjectFieldValidator[TTargetVal any](
 		if value == nil {
 			if params.Required && !params.Nullable {
 				bindingCtx.AppendFieldError(FieldBindingError{
-					Field:    params.Field,
-					Location: params.Location,
+					Location: bindingCtx.BuildPath(),
 					Code:     ErrValueRequired.Error(),
 				})
 			}
@@ -233,11 +253,14 @@ func NewObjectFieldValidator[TTargetVal any](
 
 func NewArrayValidator[
 	TValue any,
-](_ FieldValidator[TValue]) FieldValidator[[]TValue] {
+](validateField FieldValidator[TValue]) FieldValidator[[]TValue] {
 	return func(
-		_ *BindingContext,
-		_ []TValue,
+		bindingCtx *BindingContext,
+		value []TValue,
 	) {
-		// TODO: Implement me
+		for i, v := range value {
+			// TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
+			validateField(bindingCtx.Fork(strconv.Itoa(i)), v)
+		}
 	}
 }

@@ -52,18 +52,3 @@ func (src {{classname}}) MarshalJSON() ([]byte, error) {
 {{/oneOf}}
 	return nil, fmt.Errorf("empty {{classname}} object")
 }
-
-type {{>model-validator-type}} struct {	{{#oneOf}}
-	validate{{{.}}} FieldValidator[{{#isNullable}}*{{/isNullable}}{{{.}}}]{{/oneOf}}
-}
-
-func New{{classname}}Validator(opts *ModelValidatorOpts) FieldValidator[{{classname}}] {
-	validator := {{>model-validator-type}}{ {{#oneOf}}
-		validate{{{.}}}: New{{{.}}}Validator(opts),{{/oneOf}}
-	}
-	return func(vc *ValidationContext, m {{classname}}) { {{#oneOf}}
-		if m.{{{.}}} != nil {
-			validator.validate{{{.}}}(vc, *m.{{{.}}})
-		}{{/oneOf}}
-	}
-}
