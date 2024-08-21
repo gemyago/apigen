@@ -61,7 +61,8 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 			validateValue: {{#isArray}}internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[{{>params/type}}]({{#minItems}}
 					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
-					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, false),{{/maxItems}}),{{#items}}{{#isModel}}
+					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, false),{{/maxItems}}
+				),{{#items}}{{#isModel}}
 				internal.New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
 				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
 			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}

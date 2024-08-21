@@ -32,7 +32,8 @@ func newParamsParserObjectsObjectsArrayBodyDirect(app *HTTPApp) paramsParser[*Ob
 				parseJSONPayload[[]*models.ObjectArraysSimpleObject],
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](),
+				internal.NewSimpleFieldValidator[[]*models.ObjectArraysSimpleObject](
+				),
 				internal.NewObjectArraysSimpleObjectValidator(),
 			),
 		}),

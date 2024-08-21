@@ -12,6 +12,8 @@ func NewArraysRangeValidationRequestValidator() FieldValidator[*models.ArraysRan
 	validateSimpleItems1 := NewArrayValidator[string](
 		NewSimpleFieldValidator[[]string](
 			EnsureArrayFieldRequired,
+			NewMinMaxLengthValidator[string, []string](5, true),
+			NewMinMaxLengthValidator[string, []string](10, false),
 		),
 		NewSimpleFieldValidator[string](
 			),
@@ -19,18 +21,24 @@ func NewArraysRangeValidationRequestValidator() FieldValidator[*models.ArraysRan
 	validateSimpleItems2 := NewArrayValidator[string](
 		NewSimpleFieldValidator[[]string](
 			EnsureArrayFieldRequired,
+			NewMinMaxLengthValidator[string, []string](10, true),
+			NewMinMaxLengthValidator[string, []string](15, false),
 		),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems1 := NewArrayValidator[string](
 		NewSimpleFieldValidator[[]string](
+			NewMinMaxLengthValidator[string, []string](15, true),
+			NewMinMaxLengthValidator[string, []string](20, false),
 		),
 		NewSimpleFieldValidator[string](
 			),
 	)
 	validateOptionalSimpleItems2 := NewArrayValidator[string](
 		NewSimpleFieldValidator[[]string](
+			NewMinMaxLengthValidator[string, []string](20, true),
+			NewMinMaxLengthValidator[string, []string](25, false),
 		),
 		NewSimpleFieldValidator[string](
 			),

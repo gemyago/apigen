@@ -61,7 +61,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float32](),
+				internal.NewSimpleFieldValidator[[]float32](
+				),
 				internal.NewSimpleFieldValidator[float32](
 					internal.NewMinMaxValueValidator[float32](100.01, false, true),
 					internal.NewMinMaxValueValidator[float32](200.02, false, false),
@@ -74,7 +75,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float32](),
+				internal.NewSimpleFieldValidator[[]float32](
+				),
 				internal.NewSimpleFieldValidator[float32](
 					internal.NewMinMaxValueValidator[float32](200.02, false, true),
 					internal.NewMinMaxValueValidator[float32](300.03, false, false),
@@ -87,7 +89,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float64Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float64](),
+				internal.NewSimpleFieldValidator[[]float64](
+				),
 				internal.NewSimpleFieldValidator[float64](
 					internal.NewMinMaxValueValidator[float64](300.03, false, true),
 					internal.NewMinMaxValueValidator[float64](400.04, false, false),
@@ -100,7 +103,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int32](),
+				internal.NewSimpleFieldValidator[[]int32](
+				),
 				internal.NewSimpleFieldValidator[int32](
 					internal.NewMinMaxValueValidator[int32](400, false, true),
 					internal.NewMinMaxValueValidator[int32](500, false, false),
@@ -113,7 +117,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int32](),
+				internal.NewSimpleFieldValidator[[]int32](
+				),
 				internal.NewSimpleFieldValidator[int32](
 					internal.NewMinMaxValueValidator[int32](500, false, true),
 					internal.NewMinMaxValueValidator[int32](600, false, false),
@@ -126,7 +131,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int64Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int64](),
+				internal.NewSimpleFieldValidator[[]int64](
+				),
 				internal.NewSimpleFieldValidator[int64](
 					internal.NewMinMaxValueValidator[int64](600, false, true),
 					internal.NewMinMaxValueValidator[int64](700, false, false),
@@ -139,7 +145,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float32](),
+				internal.NewSimpleFieldValidator[[]float32](
+				),
 				internal.NewSimpleFieldValidator[float32](
 					internal.NewMinMaxValueValidator[float32](100.01, false, true),
 					internal.NewMinMaxValueValidator[float32](200.02, false, false),
@@ -152,7 +159,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float32](),
+				internal.NewSimpleFieldValidator[[]float32](
+				),
 				internal.NewSimpleFieldValidator[float32](
 					internal.NewMinMaxValueValidator[float32](200.02, false, true),
 					internal.NewMinMaxValueValidator[float32](300.03, false, false),
@@ -165,7 +173,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.float64Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]float64](),
+				internal.NewSimpleFieldValidator[[]float64](
+				),
 				internal.NewSimpleFieldValidator[float64](
 					internal.NewMinMaxValueValidator[float64](300.03, false, true),
 					internal.NewMinMaxValueValidator[float64](400.04, false, false),
@@ -178,7 +187,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int32](),
+				internal.NewSimpleFieldValidator[[]int32](
+				),
 				internal.NewSimpleFieldValidator[int32](
 					internal.NewMinMaxValueValidator[int32](400, false, true),
 					internal.NewMinMaxValueValidator[int32](500, false, false),
@@ -191,7 +201,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int32Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int32](),
+				internal.NewSimpleFieldValidator[[]int32](
+				),
 				internal.NewSimpleFieldValidator[int32](
 					internal.NewMinMaxValueValidator[int32](500, false, true),
 					internal.NewMinMaxValueValidator[int32](600, false, false),
@@ -204,7 +215,8 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				app.knownParsers.int64Parser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]int64](),
+				internal.NewSimpleFieldValidator[[]int64](
+				),
 				internal.NewSimpleFieldValidator[int64](
 					internal.NewMinMaxValueValidator[int64](600, false, true),
 					internal.NewMinMaxValueValidator[int64](700, false, false),
@@ -455,7 +467,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float32](),
+				internal.NewSimpleFieldValidator[[]*float32](
+				),
 				internal.NewSimpleFieldValidator[*float32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
@@ -468,7 +481,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float32](),
+				internal.NewSimpleFieldValidator[[]*float32](
+				),
 				internal.NewSimpleFieldValidator[*float32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
@@ -481,7 +495,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float64Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float64](),
+				internal.NewSimpleFieldValidator[[]*float64](
+				),
 				internal.NewSimpleFieldValidator[*float64](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
@@ -494,7 +509,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int32](),
+				internal.NewSimpleFieldValidator[[]*int32](
+				),
 				internal.NewSimpleFieldValidator[*int32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
@@ -507,7 +523,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int32](),
+				internal.NewSimpleFieldValidator[[]*int32](
+				),
 				internal.NewSimpleFieldValidator[*int32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
@@ -520,7 +537,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int64Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int64](),
+				internal.NewSimpleFieldValidator[[]*int64](
+				),
 				internal.NewSimpleFieldValidator[*int64](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
@@ -533,7 +551,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float32](),
+				internal.NewSimpleFieldValidator[[]*float32](
+				),
 				internal.NewSimpleFieldValidator[*float32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](100.01, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, false)),
@@ -546,7 +565,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float32](),
+				internal.NewSimpleFieldValidator[[]*float32](
+				),
 				internal.NewSimpleFieldValidator[*float32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](200.02, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float32](300.03, false, false)),
@@ -559,7 +579,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.float64Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*float64](),
+				internal.NewSimpleFieldValidator[[]*float64](
+				),
 				internal.NewSimpleFieldValidator[*float64](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](300.03, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[float64](400.04, false, false)),
@@ -572,7 +593,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int32](),
+				internal.NewSimpleFieldValidator[[]*int32](
+				),
 				internal.NewSimpleFieldValidator[*int32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](400, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, false)),
@@ -585,7 +607,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int32Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int32](),
+				internal.NewSimpleFieldValidator[[]*int32](
+				),
 				internal.NewSimpleFieldValidator[*int32](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](500, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int32](600, false, false)),
@@ -598,7 +621,8 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				parseNullableParam(app.knownParsers.int64Parser),
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*int64](),
+				internal.NewSimpleFieldValidator[[]*int64](
+				),
 				internal.NewSimpleFieldValidator[*int64](
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](600, false, true)),
 					internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
