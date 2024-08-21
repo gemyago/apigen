@@ -16,4 +16,4 @@ threshold:
 
   # (optional; default 0) 
   # The minimum total coverage project should have
-  total: 95
+  total: 96
