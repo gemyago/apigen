@@ -156,7 +156,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](5, true),
+					internal.NewMinMaxLengthValidator[string, []string](10, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -167,7 +169,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](10, true),
+					internal.NewMinMaxLengthValidator[string, []string](15, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -178,7 +182,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](5, true),
+					internal.NewMinMaxLengthValidator[string, []string](10, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -189,7 +195,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](10, true),
+					internal.NewMinMaxLengthValidator[string, []string](15, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -207,7 +215,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](15, true),
+					internal.NewMinMaxLengthValidator[string, []string](20, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),
@@ -218,7 +228,9 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]string](),
+				internal.NewSimpleFieldValidator[[]string](
+					internal.NewMinMaxLengthValidator[string, []string](20, true),
+					internal.NewMinMaxLengthValidator[string, []string](25, false),),
 				internal.NewSimpleFieldValidator[string](
 				),
 			),

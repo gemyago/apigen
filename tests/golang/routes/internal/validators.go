@@ -177,11 +177,15 @@ func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	}
 }
 
-func NewMinMaxLengthValidator[TTargetVal string](
+type Measurable[T any] interface {
+	~string | ~[]T
+}
+
+func NewMinMaxLengthValidator[TTargetVal any, TValidatorVal Measurable[TTargetVal]](
 	threshold int,
 	isMin bool,
-) ValueValidator[TTargetVal] {
-	return func(tv TTargetVal) error {
+) ValueValidator[TValidatorVal] {
+	return func(tv TValidatorVal) error {
 		targetLen := len(tv)
 		if isMin && targetLen < threshold {
 			return fmt.Errorf(

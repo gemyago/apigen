@@ -11,13 +11,13 @@ var _ = time.Time{}
 func NewStringTypesRangeValidationRequestValidator() FieldValidator[*models.StringTypesRangeValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
-		NewMinMaxLengthValidator[string](10, true),
-		NewMinMaxLengthValidator[string](20, false),
+		NewMinMaxLengthValidator[string, string](10, true),
+		NewMinMaxLengthValidator[string, string](20, false),
 	)
 	validateCustomFormatStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
-		NewMinMaxLengthValidator[string](20, true),
-		NewMinMaxLengthValidator[string](30, false),
+		NewMinMaxLengthValidator[string, string](20, true),
+		NewMinMaxLengthValidator[string, string](30, false),
 	)
 	validateDateStr := NewSimpleFieldValidator[time.Time](
 		EnsureNonDefault[time.Time],
@@ -27,8 +27,8 @@ func NewStringTypesRangeValidationRequestValidator() FieldValidator[*models.Stri
 	)
 	validateByteStr := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
-		NewMinMaxLengthValidator[string](30, true),
-		NewMinMaxLengthValidator[string](40, false),
+		NewMinMaxLengthValidator[string, string](30, true),
+		NewMinMaxLengthValidator[string, string](40, false),
 	)
 	
 	return func(bindingCtx *BindingContext, value *models.StringTypesRangeValidationRequest) {

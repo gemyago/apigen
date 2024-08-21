@@ -59,8 +59,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](10, true),
-					internal.NewMinMaxLengthValidator[string](20, false),
+					internal.NewMinMaxLengthValidator[string, string](10, true),
+					internal.NewMinMaxLengthValidator[string, string](20, false),
 				),
 			),
 		}),
@@ -72,8 +72,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](20, true),
-					internal.NewMinMaxLengthValidator[string](30, false),
+					internal.NewMinMaxLengthValidator[string, string](20, true),
+					internal.NewMinMaxLengthValidator[string, string](30, false),
 				),
 			),
 		}),
@@ -107,8 +107,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](30, true),
-					internal.NewMinMaxLengthValidator[string](40, false),
+					internal.NewMinMaxLengthValidator[string, string](30, true),
+					internal.NewMinMaxLengthValidator[string, string](40, false),
 				),
 			),
 		}),
@@ -120,8 +120,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](10, true),
-					internal.NewMinMaxLengthValidator[string](20, false),
+					internal.NewMinMaxLengthValidator[string, string](10, true),
+					internal.NewMinMaxLengthValidator[string, string](20, false),
 				),
 			),
 		}),
@@ -133,8 +133,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](20, true),
-					internal.NewMinMaxLengthValidator[string](30, false),
+					internal.NewMinMaxLengthValidator[string, string](20, true),
+					internal.NewMinMaxLengthValidator[string, string](30, false),
 				),
 			),
 		}),
@@ -168,8 +168,8 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]string](),
 				internal.NewSimpleFieldValidator[string](
-					internal.NewMinMaxLengthValidator[string](30, true),
-					internal.NewMinMaxLengthValidator[string](40, false),
+					internal.NewMinMaxLengthValidator[string, string](30, true),
+					internal.NewMinMaxLengthValidator[string, string](40, false),
 				),
 			),
 		}),
@@ -389,8 +389,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](10, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](20, false)),
 					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
 				),
 			),
@@ -403,8 +403,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](20, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](30, false)),
 					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
 				),
 			),
@@ -439,8 +439,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](30, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](40, false)),
 				),
 			),
 		}),
@@ -452,8 +452,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](10, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](20, false)),
 					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
 				),
 			),
@@ -466,8 +466,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](20, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](20, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](30, false)),
 					internal.SkipNullValidator(internal.NewPatternValidator[string]("^[A-Za-z]*$")),
 				),
 			),
@@ -502,8 +502,8 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 			validateValue: internal.NewArrayValidator(
 				internal.NewSimpleFieldValidator[[]*string](),
 				internal.NewSimpleFieldValidator[*string](
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](30, true)),
-					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](40, false)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](30, true)),
+					internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](40, false)),
 				),
 			),
 		}),
@@ -673,8 +673,8 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewSimpleFieldValidator[*string](
-				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
-				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](100, false)),
+				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](10, true)),
+				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](100, false)),
 				internal.SkipNullValidator(internal.NewPatternValidator[string](".*")),
 			),
 		}),
@@ -691,8 +691,8 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 				parseNullableParam(app.knownParsers.stringParser),
 			),
 			validateValue: internal.NewSimpleFieldValidator[*string](
-				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](10, true)),
-				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string](100, false)),
+				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](10, true)),
+				internal.SkipNullValidator(internal.NewMinMaxLengthValidator[string, string](100, false)),
 				internal.SkipNullValidator(internal.NewPatternValidator[string](".*")),
 			),
 		}),
@@ -986,8 +986,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](10, true),
-				internal.NewMinMaxLengthValidator[string](20, false),
+				internal.NewMinMaxLengthValidator[string, string](10, true),
+				internal.NewMinMaxLengthValidator[string, string](20, false),
 			),
 		}),
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, string]{
@@ -996,8 +996,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](20, true),
-				internal.NewMinMaxLengthValidator[string](30, false),
+				internal.NewMinMaxLengthValidator[string, string](20, true),
+				internal.NewMinMaxLengthValidator[string, string](30, false),
 			),
 		}),
 		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
@@ -1022,8 +1022,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](30, true),
-				internal.NewMinMaxLengthValidator[string](40, false),
+				internal.NewMinMaxLengthValidator[string, string](30, true),
+				internal.NewMinMaxLengthValidator[string, string](40, false),
 			),
 		}),
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -1032,8 +1032,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](10, true),
-				internal.NewMinMaxLengthValidator[string](20, false),
+				internal.NewMinMaxLengthValidator[string, string](10, true),
+				internal.NewMinMaxLengthValidator[string, string](20, false),
 			),
 		}),
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -1042,8 +1042,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](20, true),
-				internal.NewMinMaxLengthValidator[string](30, false),
+				internal.NewMinMaxLengthValidator[string, string](20, true),
+				internal.NewMinMaxLengthValidator[string, string](30, false),
 			),
 		}),
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
@@ -1068,8 +1068,8 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](30, true),
-				internal.NewMinMaxLengthValidator[string](40, false),
+				internal.NewMinMaxLengthValidator[string, string](30, true),
+				internal.NewMinMaxLengthValidator[string, string](40, false),
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRangeValidationRequest]{
@@ -1125,7 +1125,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](10, true),
+				internal.NewMinMaxLengthValidator[string, string](10, true),
 			),
 		}),
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -1134,7 +1134,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](20, true),
+				internal.NewMinMaxLengthValidator[string, string](20, true),
 			),
 		}),
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
@@ -1159,7 +1159,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](30, true),
+				internal.NewMinMaxLengthValidator[string, string](30, true),
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRequiredValidationRequest]{
@@ -1175,7 +1175,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](10, true),
+				internal.NewMinMaxLengthValidator[string, string](10, true),
 			),
 		}),
 		bindOptionalCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
@@ -1184,7 +1184,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](20, true),
+				internal.NewMinMaxLengthValidator[string, string](20, true),
 			),
 		}),
 		bindOptionalDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
@@ -1209,7 +1209,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				app.knownParsers.stringParser,
 			),
 			validateValue: internal.NewSimpleFieldValidator[string](
-				internal.NewMinMaxLengthValidator[string](30, true),
+				internal.NewMinMaxLengthValidator[string, string](30, true),
 			),
 		}),
 	}

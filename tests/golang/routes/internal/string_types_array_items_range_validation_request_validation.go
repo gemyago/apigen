@@ -14,8 +14,8 @@ func NewStringTypesArrayItemsRangeValidationRequestValidator() FieldValidator[*m
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[string](
-				NewMinMaxLengthValidator[string](10, true),
-				NewMinMaxLengthValidator[string](20, false),
+				NewMinMaxLengthValidator[string, string](10, true),
+				NewMinMaxLengthValidator[string, string](20, false),
 			),
 	)
 	validateCustomFormatStr := NewArrayValidator[string](
@@ -23,8 +23,8 @@ func NewStringTypesArrayItemsRangeValidationRequestValidator() FieldValidator[*m
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[string](
-				NewMinMaxLengthValidator[string](20, true),
-				NewMinMaxLengthValidator[string](30, false),
+				NewMinMaxLengthValidator[string, string](20, true),
+				NewMinMaxLengthValidator[string, string](30, false),
 			),
 	)
 	validateDateStr := NewArrayValidator[time.Time](
@@ -46,8 +46,8 @@ func NewStringTypesArrayItemsRangeValidationRequestValidator() FieldValidator[*m
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[string](
-				NewMinMaxLengthValidator[string](30, true),
-				NewMinMaxLengthValidator[string](40, false),
+				NewMinMaxLengthValidator[string, string](30, true),
+				NewMinMaxLengthValidator[string, string](40, false),
 			),
 	)
 	

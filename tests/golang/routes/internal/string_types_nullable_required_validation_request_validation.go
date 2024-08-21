@@ -11,13 +11,13 @@ var _ = time.Time{}
 func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[*string](
 		SkipNullValidator(EnsureNonDefault[string]),
-		SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
-		SkipNullValidator(NewMinMaxLengthValidator[string](100, false)),
+		SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
+		SkipNullValidator(NewMinMaxLengthValidator[string, string](100, false)),
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
 	validateOptionalUnformattedStr := NewSimpleFieldValidator[*string](
-		SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
-		SkipNullValidator(NewMinMaxLengthValidator[string](100, false)),
+		SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
+		SkipNullValidator(NewMinMaxLengthValidator[string, string](100, false)),
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
 	

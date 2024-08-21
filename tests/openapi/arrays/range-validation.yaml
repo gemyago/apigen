@@ -10,8 +10,8 @@ post:
       required: true
       schema:
         type: array
-        minItems: 2
-        maxItems: 5
+        minItems: 5
+        maxItems: 10
         items:
           type: string
     - name: simpleItems2
@@ -19,8 +19,8 @@ post:
       required: true
       schema:
         type: array
-        minItems: 5
-        maxItems: 10
+        minItems: 10
+        maxItems: 15
         items:
           type: string
 
@@ -30,8 +30,8 @@ post:
       required: true
       schema:
         type: array
-        minItems: 2
-        maxItems: 5
+        minItems: 5
+        maxItems: 10
         items:
           type: string
     - name: simpleItems2InQuery
@@ -39,8 +39,8 @@ post:
       required: true
       schema:
         type: array
-        minItems: 5
-        maxItems: 10
+        minItems: 10
+        maxItems: 15
         items:
           type: string
     - name: optionalSimpleItems1InQuery
@@ -74,14 +74,14 @@ post:
           properties: 
             simpleItems1:
               type: array
-              minItems: 2
-              maxItems: 5
+              minItems: 5
+              maxItems: 10
               items:
                 type: string
             simpleItems2:
               type: array
-              minItems: 5
-              maxItems: 10
+              minItems: 10
+              maxItems: 15
               items:
                 type: string
             optionalSimpleItems1:

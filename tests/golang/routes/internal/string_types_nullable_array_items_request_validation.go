@@ -14,8 +14,8 @@ func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.S
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[*string](
-				SkipNullValidator(NewMinMaxLengthValidator[string](10, true)),
-				SkipNullValidator(NewMinMaxLengthValidator[string](20, false)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](20, false)),
 				SkipNullValidator(NewPatternValidator[string]("^[A-Za-z]*$")),
 			),
 	)
@@ -24,8 +24,8 @@ func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.S
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[*string](
-				SkipNullValidator(NewMinMaxLengthValidator[string](20, true)),
-				SkipNullValidator(NewMinMaxLengthValidator[string](30, false)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](20, true)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](30, false)),
 				SkipNullValidator(NewPatternValidator[string]("^[A-Za-z]*$")),
 			),
 	)
@@ -48,8 +48,8 @@ func NewStringTypesNullableArrayItemsRequestValidator() FieldValidator[*models.S
 			EnsureArrayFieldRequired,
 		),
 		NewSimpleFieldValidator[*string](
-				SkipNullValidator(NewMinMaxLengthValidator[string](30, true)),
-				SkipNullValidator(NewMinMaxLengthValidator[string](40, false)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](30, true)),
+				SkipNullValidator(NewMinMaxLengthValidator[string, string](40, false)),
 			),
 	)
 	
