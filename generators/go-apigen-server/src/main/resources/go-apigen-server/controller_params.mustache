@@ -14,7 +14,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}{{#hasImportedModel}}
-var _ = {{importedModels.0}}{}{{/hasImportedModel}}
+type _ func() {{importedModels.0}}{{/hasImportedModel}}
 
 {{#operations}}
 {{#operation}}

@@ -4,9 +4,13 @@
 
 {{#models}}
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 )
 
 // Unused imports workaround.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 {{#model}}{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#isEnum}}{{>enums/model}}{{/isEnum}}{{^isEnum}}{{>model_simple}}{{/isEnum}}{{/oneOf}}{{/model}}{{/models}}
