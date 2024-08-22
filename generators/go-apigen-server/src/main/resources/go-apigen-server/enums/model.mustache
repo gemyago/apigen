@@ -35,23 +35,26 @@ func As{{{classname}}}(v assignable{{{classname}}}) ({{{classname}}}) {
 	return {{{classname}}}(v.String())
 }
 
-func (v *{{{classname}}}) UnmarshalJSON(data []byte) error {
-	var str string
-	err := json.Unmarshal(data, &str)
-	if err != nil {
-		return err
-	}
+func Parse{{{classname}}}(str string, target *{{{classname}}}) error {
 	switch str {
 	{{#allowableValues}}
 	{{#enumVars}}
 	case {{{value}}}:
-		*v = {{#enumClassPrefix}}{{{classname}}}{{/enumClassPrefix}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}
+		*target = {{#enumClassPrefix}}{{{classname}}}{{/enumClassPrefix}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}
 	{{/enumVars}}
 	{{/allowableValues}}
 	default:
 		return fmt.Errorf("unexpected {{{classname}}} value: %s", str)
 	}
 	return nil
+}
+
+func (v *{{{classname}}}) UnmarshalJSON(data []byte) error {
+	var str string
+	if err := json.Unmarshal(data, &str); err != nil {
+		return err
+	}
+	return Parse{{{classname}}}(str, v)
 }
 
 // All allowed values of {{{classname}}} enum
