@@ -196,6 +196,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
   @Override
   public void processOpts() {
+    if(!additionalProperties.containsKey(CodegenConstants.ENUM_CLASS_PREFIX)) {
+      additionalProperties.put(CodegenConstants.ENUM_CLASS_PREFIX, true);
+    }
+
     super.processOpts();
 
     File outputFolderFile = new File(outputFolder);
