@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.NumericTypesArrayItemsRequest{}
+type _ func() models.NumericTypesArrayItemsRequest
 
 type paramsParserNumericTypesNumericTypesArrayItems struct {
 	bindNumberAny requestParamBinder[string, []float32]

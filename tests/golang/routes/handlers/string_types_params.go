@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.StringTypesArrayItemsRangeValidationRequest{}
+type _ func() models.StringTypesArrayItemsRangeValidationRequest
 
 type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
 	bindUnformattedStr requestParamBinder[string, []string]

@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
@@ -8,6 +10,8 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
 
 
@@ -15,7 +19,11 @@ var _ = time.Time{}
 
 
 
+// BehaviorBehaviorWithParamsAndResponseRequest represents params for behaviorWithParamsAndResponse operation
+//
+// Request: GET /behavior/with-params-and-response.
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
+	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
 }
 

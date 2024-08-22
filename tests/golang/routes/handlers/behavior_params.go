@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.BehaviorNoParamsWithResponse202Response{}
+type _ func() models.BehaviorNoParamsWithResponse202Response
 
 type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 	bindQueryParam1 requestParamBinder[[]string, string]

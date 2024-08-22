@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.BooleanArrayItemsRequest{}
+type _ func() models.BooleanArrayItemsRequest
 
 type paramsParserBooleanBooleanArrayItems struct {
 	bindBoolParam1 requestParamBinder[string, []bool]

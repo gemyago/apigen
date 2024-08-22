@@ -1,21 +1,37 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
+// ErrorHandlingErrorHandlingParsingErrorsRequest represents params for errorHandlingParsingErrors operation
+//
+// Request: GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}.
 type ErrorHandlingErrorHandlingParsingErrorsRequest struct {
+	// PathParam1 is parsed from request path and declared as pathParam1.
 	PathParam1 float32
+	// PathParam2 is parsed from request path and declared as pathParam2.
 	PathParam2 float32
+	// RequiredQuery1 is parsed from request query and declared as requiredQuery1.
 	RequiredQuery1 float32
+	// RequiredQuery2 is parsed from request query and declared as requiredQuery2.
 	RequiredQuery2 float32
 }
 
+// ErrorHandlingErrorHandlingValidationErrorsRequest represents params for errorHandlingValidationErrors operation
+//
+// Request: GET /error-handling/validation-errors.
 type ErrorHandlingErrorHandlingValidationErrorsRequest struct {
+	// RequiredQuery1 is parsed from request query and declared as requiredQuery1.
 	RequiredQuery1 float32
+	// RequiredQuery2 is parsed from request query and declared as requiredQuery2.
 	RequiredQuery2 float32
 }
 

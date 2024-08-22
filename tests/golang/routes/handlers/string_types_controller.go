@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
@@ -8,120 +10,238 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
+// StringTypesStringTypesArrayItemsRangeValidationRequest represents params for stringTypesArrayItemsRangeValidation operation
+//
+// Request: POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesArrayItemsRangeValidationRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr []string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr []time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr []time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr []string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery []string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery []string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery []time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery []time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesArrayItemsRangeValidationRequest
 }
 
+// StringTypesStringTypesArraysParsingRequest represents params for stringTypesArraysParsing operation
+//
+// Request: POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesArraysParsingRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr []string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr []time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr []time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr []string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery []string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery []string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery []time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery []time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesArraysParsingRequest
 }
 
+// StringTypesStringTypesNullableArrayItemsRequest represents params for stringTypesNullableArrayItems operation
+//
+// Request: POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesNullableArrayItemsRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []*string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr []*string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr []*time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr []*time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr []*string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery []*string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery []*string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery []*time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery []*time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []*string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesNullableArrayItemsRequest
 }
 
+// StringTypesStringTypesNullableParsingRequest represents params for stringTypesNullableParsing operation
+//
+// Request: POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesNullableParsingRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr *string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr *string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr *time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr *time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr *string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery *string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery *string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery *time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery *time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery *string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesNullableParsingRequest
 }
 
+// StringTypesStringTypesNullableRequiredValidationRequest represents params for stringTypesNullableRequiredValidation operation
+//
+// Request: POST /string-types/nullable-required-validation.
 type StringTypesStringTypesNullableRequiredValidationRequest struct {
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery *string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesNullableRequiredValidationRequest
+	// OptionalUnformattedStrInQuery is parsed from request query and declared as optionalUnformattedStrInQuery.
 	OptionalUnformattedStrInQuery *string
 }
 
+// StringTypesStringTypesParsingRequest represents params for stringTypesParsing operation
+//
+// Request: POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesParsingRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesParsingRequest
 }
 
+// StringTypesStringTypesPatternValidationRequest represents params for stringTypesPatternValidation operation
+//
+// Request: POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}.
 type StringTypesStringTypesPatternValidationRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr time.Time
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery time.Time
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesPatternValidationRequest
 }
 
+// StringTypesStringTypesRangeValidationRequest represents params for stringTypesRangeValidation operation
+//
+// Request: POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
 type StringTypesStringTypesRangeValidationRequest struct {
+	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
+	// CustomFormatStr is parsed from request path and declared as customFormatStr.
 	CustomFormatStr string
+	// DateStr is parsed from request path and declared as dateStr.
 	DateStr time.Time
+	// DateTimeStr is parsed from request path and declared as dateTimeStr.
 	DateTimeStr time.Time
+	// ByteStr is parsed from request path and declared as byteStr.
 	ByteStr string
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesRangeValidationRequest
 }
 
+// StringTypesStringTypesRequiredValidationRequest represents params for stringTypesRequiredValidation operation
+//
+// Request: POST /string-types/required-validation.
 type StringTypesStringTypesRequiredValidationRequest struct {
+	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery string
+	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.
 	CustomFormatStrInQuery string
+	// DateStrInQuery is parsed from request query and declared as dateStrInQuery.
 	DateStrInQuery time.Time
+	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery time.Time
+	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.StringTypesRequiredValidationRequest
+	// OptionalUnformattedStrInQuery is parsed from request query and declared as optionalUnformattedStrInQuery.
 	OptionalUnformattedStrInQuery string
+	// OptionalCustomFormatStrInQuery is parsed from request query and declared as optionalCustomFormatStrInQuery.
 	OptionalCustomFormatStrInQuery string
+	// OptionalDateStrInQuery is parsed from request query and declared as optionalDateStrInQuery.
 	OptionalDateStrInQuery time.Time
+	// OptionalDateTimeStrInQuery is parsed from request query and declared as optionalDateTimeStrInQuery.
 	OptionalDateTimeStrInQuery time.Time
+	// OptionalByteStrInQuery is parsed from request query and declared as optionalByteStrInQuery.
 	OptionalByteStrInQuery string
 }
 

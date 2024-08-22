@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.ObjectArraysSimpleObject{}
+type _ func() models.ObjectArraysSimpleObject
 
 type paramsParserObjectsObjectsArrayBodyDirect struct {
 	bindPayload requestParamBinder[*http.Request, []*models.ObjectArraysSimpleObject]

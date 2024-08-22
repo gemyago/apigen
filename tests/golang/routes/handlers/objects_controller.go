@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
@@ -8,36 +10,70 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
+// ObjectsObjectsArrayBodyDirectRequest represents params for objectsArrayBodyDirect operation
+//
+// Request: POST /objects/arrays.
 type ObjectsObjectsArrayBodyDirectRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload []*models.ObjectArraysSimpleObject
 }
 
+// ObjectsObjectsArrayBodyNestedRequest represents params for objectsArrayBodyNested operation
+//
+// Request: PUT /objects/arrays.
 type ObjectsObjectsArrayBodyNestedRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.ObjectsArrayBodyNestedRequest
 }
 
+// ObjectsObjectsDeeplyNestedRequest represents params for objectsDeeplyNested operation
+//
+// Request: POST /objects/deeply-nested.
 type ObjectsObjectsDeeplyNestedRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.ObjectsDeeplyNestedRequest
 }
 
+// ObjectsObjectsNullableOptionalBodyRequest represents params for objectsNullableOptionalBody operation
+//
+// Request: PUT /objects/nullable-body.
 type ObjectsObjectsNullableOptionalBodyRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.SimpleNullableObject
 }
 
+// ObjectsObjectsNullableRequiredBodyRequest represents params for objectsNullableRequiredBody operation
+//
+// Request: POST /objects/nullable-body.
 type ObjectsObjectsNullableRequiredBodyRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.SimpleNullableObject
 }
 
+// ObjectsObjectsOptionalBodyRequest represents params for objectsOptionalBody operation
+//
+// Request: PUT /objects/required-body.
 type ObjectsObjectsOptionalBodyRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.SimpleObject
 }
 
+// ObjectsObjectsRequiredBodyRequest represents params for objectsRequiredBody operation
+//
+// Request: POST /objects/required-body.
 type ObjectsObjectsRequiredBodyRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.SimpleObject
 }
 
+// ObjectsObjectsRequiredNestedObjectsRequest represents params for objectsRequiredNestedObjects operation
+//
+// Request: POST /objects/required-nested-objects.
 type ObjectsObjectsRequiredNestedObjectsRequest struct {
+	// Payload is parsed from request body and declared as payload.
 	Payload *models.SimpleObjectsContainer
 }
 

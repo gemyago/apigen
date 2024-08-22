@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.ArraysNullableRequiredValidationRequest{}
+type _ func() models.ArraysNullableRequiredValidationRequest
 
 type paramsParserArraysArraysNullableRequiredValidation struct {
 	bindSimpleItems1 requestParamBinder[string, []string]

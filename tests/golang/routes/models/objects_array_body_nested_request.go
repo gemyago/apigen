@@ -1,11 +1,15 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 )
 
 // Unused imports workaround.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
 type ObjectsArrayBodyNestedRequest struct { 
 	NestedArray1 []*ObjectArraysSimpleObject `json:"nestedArray1"`
