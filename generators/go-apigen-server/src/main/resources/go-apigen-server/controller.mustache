@@ -3,6 +3,8 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 	{{#hasImportedModel}}
 
@@ -12,13 +14,19 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
-{{>enums/params/type}}
-{{/isEnum}}{{/allParams}}type {{>request-type}} struct {
+{{>enums/param-type}}
+{{/isEnum}}{{/allParams}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
+//
+// Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
+type {{>request-type}} struct {
 	{{#allParams}}
+	// {{nameInPascalCase}} is parsed from request {{vendorExtensions.x-apigen-param-location}} and declared as {{paramName}}.
 	{{nameInPascalCase}} {{>params/type}}
 	{{/allParams}}
 }{{/allParams.0}}{{^-last}}
