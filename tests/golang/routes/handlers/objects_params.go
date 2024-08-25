@@ -5,7 +5,7 @@ import (
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
-	"github.com/gemyago/apigen/tests/golang/routes/internal"
+	. "github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
@@ -17,7 +17,7 @@ type paramsParserObjectsObjectsArrayBodyDirect struct {
 }
 
 func (p *paramsParserObjectsObjectsArrayBodyDirect) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyDirectRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsArrayBodyDirectRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -31,10 +31,10 @@ func newParamsParserObjectsObjectsArrayBodyDirect(app *HTTPApp) paramsParser[*Ob
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[[]*ObjectArraysSimpleObject],
 			),
-			validateValue: internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[[]*ObjectArraysSimpleObject](
+			validateValue: NewArrayValidator(
+				NewSimpleFieldValidator[[]*ObjectArraysSimpleObject](
 				),
-				internal.NewObjectArraysSimpleObjectValidator(),
+				NewObjectArraysSimpleObjectValidator(),
 			),
 		}),
 	}
@@ -45,7 +45,7 @@ type paramsParserObjectsObjectsArrayBodyNested struct {
 }
 
 func (p *paramsParserObjectsObjectsArrayBodyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyNestedRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsArrayBodyNestedRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -59,7 +59,7 @@ func newParamsParserObjectsObjectsArrayBodyNested(app *HTTPApp) paramsParser[*Ob
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*ObjectsArrayBodyNestedRequest],
 			),
-			validateValue: internal.NewObjectsArrayBodyNestedRequestValidator(),
+			validateValue: NewObjectsArrayBodyNestedRequestValidator(),
 		}),
 	}
 }
@@ -69,7 +69,7 @@ type paramsParserObjectsObjectsDeeplyNested struct {
 }
 
 func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsDeeplyNestedRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsDeeplyNestedRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -83,7 +83,7 @@ func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*ObjectsDeeplyNestedRequest],
 			),
-			validateValue: internal.NewObjectsDeeplyNestedRequestValidator(),
+			validateValue: NewObjectsDeeplyNestedRequestValidator(),
 		}),
 	}
 }
@@ -93,7 +93,7 @@ type paramsParserObjectsObjectsNullableOptionalBody struct {
 }
 
 func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableOptionalBodyRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsNullableOptionalBodyRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -107,7 +107,7 @@ func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParse
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*SimpleNullableObject],
 			),
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
+			validateValue: SkipNullFieldValidator(NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
@@ -117,7 +117,7 @@ type paramsParserObjectsObjectsNullableRequiredBody struct {
 }
 
 func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableRequiredBodyRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsNullableRequiredBodyRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -131,7 +131,7 @@ func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParse
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*SimpleNullableObject],
 			),
-			validateValue: internal.SkipNullFieldValidator(internal.NewSimpleNullableObjectValidator()),
+			validateValue: SkipNullFieldValidator(NewSimpleNullableObjectValidator()),
 		}),
 	}
 }
@@ -141,7 +141,7 @@ type paramsParserObjectsObjectsOptionalBody struct {
 }
 
 func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsOptionalBodyRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsOptionalBodyRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -155,7 +155,7 @@ func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*SimpleObject],
 			),
-			validateValue: internal.NewSimpleObjectValidator(),
+			validateValue: NewSimpleObjectValidator(),
 		}),
 	}
 }
@@ -165,7 +165,7 @@ type paramsParserObjectsObjectsRequiredBody struct {
 }
 
 func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredBodyRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsRequiredBodyRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -179,7 +179,7 @@ func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*Objec
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*SimpleObject],
 			),
-			validateValue: internal.NewSimpleObjectValidator(),
+			validateValue: NewSimpleObjectValidator(),
 		}),
 	}
 }
@@ -189,7 +189,7 @@ type paramsParserObjectsObjectsRequiredNestedObjects struct {
 }
 
 func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredNestedObjectsRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ObjectsObjectsRequiredNestedObjectsRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -203,7 +203,7 @@ func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsPars
 			parseValue: parseSoloValueParamAsSoloValue(
 				parseJSONPayload[*SimpleObjectsContainer],
 			),
-			validateValue: internal.NewSimpleObjectsContainerValidator(),
+			validateValue: NewSimpleObjectsContainerValidator(),
 		}),
 	}
 }

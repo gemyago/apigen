@@ -5,7 +5,7 @@ import (
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
-	"github.com/gemyago/apigen/tests/golang/routes/internal"
+	. "github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
@@ -17,7 +17,7 @@ type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 }
 
 func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsAndResponseRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &BehaviorBehaviorWithParamsAndResponseRequest{}
 	// query params
 	query := req.URL.Query()
@@ -33,7 +33,7 @@ func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsPa
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.stringParser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[string](
+			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
 	}
