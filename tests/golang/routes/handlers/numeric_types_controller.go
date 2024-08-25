@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -42,7 +42,7 @@ type NumericTypesNumericTypesArrayItemsRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery []int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesArrayItemsRequest
+	Payload *NumericTypesArrayItemsRequest
 }
 
 // NumericTypesNumericTypesNullableRequest represents params for numericTypesNullable operation
@@ -74,7 +74,7 @@ type NumericTypesNumericTypesNullableRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery *int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesNullableRequest
+	Payload *NumericTypesNullableRequest
 	// OptionalNumberAnyInQuery is parsed from request query and declared as optionalNumberAnyInQuery.
 	OptionalNumberAnyInQuery *float32
 }
@@ -108,7 +108,7 @@ type NumericTypesNumericTypesNullableArrayItemsRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery []*int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesNullableArrayItemsRequest
+	Payload *NumericTypesNullableArrayItemsRequest
 }
 
 // NumericTypesNumericTypesParsingRequest represents params for numericTypesParsing operation
@@ -140,7 +140,7 @@ type NumericTypesNumericTypesParsingRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesParsingRequest
+	Payload *NumericTypesParsingRequest
 }
 
 // NumericTypesNumericTypesRangeValidationRequest represents params for numericTypesRangeValidation operation
@@ -172,7 +172,7 @@ type NumericTypesNumericTypesRangeValidationRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesRangeValidationRequest
+	Payload *NumericTypesRangeValidationRequest
 }
 
 // NumericTypesNumericTypesRangeValidationExclusiveRequest represents params for numericTypesRangeValidationExclusive operation
@@ -204,7 +204,7 @@ type NumericTypesNumericTypesRangeValidationExclusiveRequest struct {
 	// NumberInt64InQuery is parsed from request query and declared as numberInt64InQuery.
 	NumberInt64InQuery int64
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.NumericTypesRangeValidationExclusiveRequest
+	Payload *NumericTypesRangeValidationExclusiveRequest
 }
 
 // NumericTypesNumericTypesRequiredValidationRequest represents params for numericTypesRequiredValidation operation

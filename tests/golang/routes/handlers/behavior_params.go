@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-type _ func() models.BehaviorNoParamsWithResponse202Response
+type _ func() BehaviorNoParamsWithResponse202Response
 
 type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 	bindQueryParam1 requestParamBinder[[]string, string]

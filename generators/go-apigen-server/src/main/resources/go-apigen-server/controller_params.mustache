@@ -7,7 +7,7 @@ import (
 	"time"
 	{{#hasImportedModel}}
 
-	"{{invokerPackage}}/models"
+	. "{{invokerPackage}}/models"
 {{/hasImportedModel}}
 	"{{invokerPackage}}/internal"
 )
@@ -59,13 +59,13 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 				{{>params/parse-non-array-value}},{{/isArray}}
 			),{{/isBodyParam}}
 			validateValue: {{#isArray}}internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[{{>params/type}}]({{#minItems}}
-					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
-					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, false),{{/maxItems}}
+				internal.NewSimpleFieldValidator[{{>fields/type}}]({{#minItems}}
+					internal.NewMinMaxLengthValidator[{{#items}}{{>fields/type}}{{/items}}, {{>fields/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
+					internal.NewMinMaxLengthValidator[{{#items}}{{>fields/type}}{{/items}}, {{>fields/type}}]({{.}}, false),{{/maxItems}}
 				),{{#items}}{{#isModel}}
 				internal.New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
-				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
-			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
+				{{#lambda.tab_indented_4}}{{>fields/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
+			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>fields/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
 		}),
 		{{/allParams}}
 	}

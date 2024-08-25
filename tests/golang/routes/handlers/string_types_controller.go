@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -38,7 +38,7 @@ type StringTypesStringTypesArrayItemsRangeValidationRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesArrayItemsRangeValidationRequest
+	Payload *StringTypesArrayItemsRangeValidationRequest
 }
 
 // StringTypesStringTypesArraysParsingRequest represents params for stringTypesArraysParsing operation
@@ -66,7 +66,7 @@ type StringTypesStringTypesArraysParsingRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesArraysParsingRequest
+	Payload *StringTypesArraysParsingRequest
 }
 
 // StringTypesStringTypesNullableArrayItemsRequest represents params for stringTypesNullableArrayItems operation
@@ -94,7 +94,7 @@ type StringTypesStringTypesNullableArrayItemsRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery []*string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesNullableArrayItemsRequest
+	Payload *StringTypesNullableArrayItemsRequest
 }
 
 // StringTypesStringTypesNullableParsingRequest represents params for stringTypesNullableParsing operation
@@ -122,7 +122,7 @@ type StringTypesStringTypesNullableParsingRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery *string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesNullableParsingRequest
+	Payload *StringTypesNullableParsingRequest
 }
 
 // StringTypesStringTypesNullableRequiredValidationRequest represents params for stringTypesNullableRequiredValidation operation
@@ -132,7 +132,7 @@ type StringTypesStringTypesNullableRequiredValidationRequest struct {
 	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery *string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesNullableRequiredValidationRequest
+	Payload *StringTypesNullableRequiredValidationRequest
 	// OptionalUnformattedStrInQuery is parsed from request query and declared as optionalUnformattedStrInQuery.
 	OptionalUnformattedStrInQuery *string
 }
@@ -162,7 +162,7 @@ type StringTypesStringTypesParsingRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesParsingRequest
+	Payload *StringTypesParsingRequest
 }
 
 // StringTypesStringTypesPatternValidationRequest represents params for stringTypesPatternValidation operation
@@ -186,7 +186,7 @@ type StringTypesStringTypesPatternValidationRequest struct {
 	// DateTimeStrInQuery is parsed from request query and declared as dateTimeStrInQuery.
 	DateTimeStrInQuery time.Time
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesPatternValidationRequest
+	Payload *StringTypesPatternValidationRequest
 }
 
 // StringTypesStringTypesRangeValidationRequest represents params for stringTypesRangeValidation operation
@@ -214,7 +214,7 @@ type StringTypesStringTypesRangeValidationRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesRangeValidationRequest
+	Payload *StringTypesRangeValidationRequest
 }
 
 // StringTypesStringTypesRequiredValidationRequest represents params for stringTypesRequiredValidation operation
@@ -232,7 +232,7 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 	// ByteStrInQuery is parsed from request query and declared as byteStrInQuery.
 	ByteStrInQuery string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.StringTypesRequiredValidationRequest
+	Payload *StringTypesRequiredValidationRequest
 	// OptionalUnformattedStrInQuery is parsed from request query and declared as optionalUnformattedStrInQuery.
 	OptionalUnformattedStrInQuery string
 	// OptionalCustomFormatStrInQuery is parsed from request query and declared as optionalCustomFormatStrInQuery.

@@ -277,9 +277,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     List<String> importedModels = new ArrayList<>();
     while (iterator.hasNext()) {
       String _import = iterator.next().get("import");
-      if (_import.startsWith(modelPackage())) {
+      int modelPkgStartsAt = _import.indexOf(modelPackage());
+      if (modelPkgStartsAt >= 0) {
         operationsMap.put("hasImportedModel", true);
-        importedModels.add(_import);
+        importedModels.add(_import.substring(modelPkgStartsAt + modelPackage().length() + 1));
       }
     }
     operationsMap.put("importedModels", importedModels);

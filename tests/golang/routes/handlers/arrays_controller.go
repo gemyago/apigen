@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -26,7 +26,7 @@ type ArraysArraysNullableRequiredValidationRequest struct {
 	// SimpleItems2InQuery is parsed from request query and declared as simpleItems2InQuery.
 	SimpleItems2InQuery []string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.ArraysNullableRequiredValidationRequest
+	Payload *ArraysNullableRequiredValidationRequest
 	// OptionalSimpleItems1InQuery is parsed from request query and declared as optionalSimpleItems1InQuery.
 	OptionalSimpleItems1InQuery []string
 	// OptionalSimpleItems2InQuery is parsed from request query and declared as optionalSimpleItems2InQuery.
@@ -46,7 +46,7 @@ type ArraysArraysRangeValidationRequest struct {
 	// SimpleItems2InQuery is parsed from request query and declared as simpleItems2InQuery.
 	SimpleItems2InQuery []string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.ArraysRangeValidationRequest
+	Payload *ArraysRangeValidationRequest
 	// OptionalSimpleItems1InQuery is parsed from request query and declared as optionalSimpleItems1InQuery.
 	OptionalSimpleItems1InQuery []string
 	// OptionalSimpleItems2InQuery is parsed from request query and declared as optionalSimpleItems2InQuery.
@@ -66,7 +66,7 @@ type ArraysArraysRequiredValidationRequest struct {
 	// SimpleItems2InQuery is parsed from request query and declared as simpleItems2InQuery.
 	SimpleItems2InQuery []string
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.ArraysRequiredValidationRequest
+	Payload *ArraysRequiredValidationRequest
 	// OptionalSimpleItems1InQuery is parsed from request query and declared as optionalSimpleItems1InQuery.
 	OptionalSimpleItems1InQuery []string
 	// OptionalSimpleItems2InQuery is parsed from request query and declared as optionalSimpleItems2InQuery.

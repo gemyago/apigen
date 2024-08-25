@@ -1,1 +1,0 @@
-{{#isArray}}[]{{#items}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/items}}{{/isArray}}{{^isArray}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isEnumRef}}models.{{/isEnumRef}}{{#isModel}}*models.{{/isModel}}{{{dataType}}}{{/isArray}}

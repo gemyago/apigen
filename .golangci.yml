@@ -385,3 +385,12 @@ issues:
       source: "func newParams.+\\(app \\*HTTPApp\\)"
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
+
+    # mustache templates are limited and sometimes it's challenging to build
+    # a reusable template that can generate code with or without module prefix
+    # so we have to use dot imports and always generate without the prefix.
+    - path: "routes/handlers/(.+)_(controller|params)\\.go"
+      text: "should not use dot imports"
+      linters:
+        - revive
+        - stylecheck

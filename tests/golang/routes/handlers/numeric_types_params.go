@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-type _ func() models.NumericTypesArrayItemsRequest
+type _ func() NumericTypesArrayItemsRequest
 
 type paramsParserNumericTypesNumericTypesArrayItems struct {
 	bindNumberAny requestParamBinder[string, []float32]
@@ -25,7 +25,7 @@ type paramsParserNumericTypesNumericTypesArrayItems struct {
 	bindNumberIntInQuery requestParamBinder[[]string, []int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, []int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, []int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesArrayItemsRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesArrayItemsRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesArrayItemsRequest, error) {
@@ -223,10 +223,10 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesArrayItemsRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesArrayItemsRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesArrayItemsRequest],
+				parseJSONPayload[*NumericTypesArrayItemsRequest],
 			),
 			validateValue: internal.NewNumericTypesArrayItemsRequestValidator(),
 		}),
@@ -246,7 +246,7 @@ type paramsParserNumericTypesNumericTypesNullable struct {
 	bindNumberIntInQuery requestParamBinder[[]string, *int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, *int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, *int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesNullableRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesNullableRequest]
 	bindOptionalNumberAnyInQuery requestParamBinder[[]string, *float32]
 }
 
@@ -398,10 +398,10 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 				internal.SkipNullValidator(internal.NewMinMaxValueValidator[int64](700, false, false)),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesNullableRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesNullableRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesNullableRequest],
+				parseJSONPayload[*NumericTypesNullableRequest],
 			),
 			validateValue: internal.NewNumericTypesNullableRequestValidator(),
 		}),
@@ -431,7 +431,7 @@ type paramsParserNumericTypesNumericTypesNullableArrayItems struct {
 	bindNumberIntInQuery requestParamBinder[[]string, []*int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, []*int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, []*int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesNullableArrayItemsRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesNullableArrayItemsRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesNullableArrayItemsRequest, error) {
@@ -629,10 +629,10 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesNullableArrayItemsRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesNullableArrayItemsRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesNullableArrayItemsRequest],
+				parseJSONPayload[*NumericTypesNullableArrayItemsRequest],
 			),
 			validateValue: internal.NewNumericTypesNullableArrayItemsRequestValidator(),
 		}),
@@ -652,7 +652,7 @@ type paramsParserNumericTypesNumericTypesParsing struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesParsingRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingRequest, error) {
@@ -778,10 +778,10 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 			validateValue: internal.NewSimpleFieldValidator[int64](
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesParsingRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesParsingRequest],
+				parseJSONPayload[*NumericTypesParsingRequest],
 			),
 			validateValue: internal.NewNumericTypesParsingRequestValidator(),
 		}),
@@ -801,7 +801,7 @@ type paramsParserNumericTypesNumericTypesRangeValidation struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesRangeValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesRangeValidationRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationRequest, error) {
@@ -951,10 +951,10 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 				internal.NewMinMaxValueValidator[int64](700, false, false),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesRangeValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesRangeValidationRequest],
+				parseJSONPayload[*NumericTypesRangeValidationRequest],
 			),
 			validateValue: internal.NewNumericTypesRangeValidationRequestValidator(),
 		}),
@@ -974,7 +974,7 @@ type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 	bindNumberIntInQuery requestParamBinder[[]string, int32]
 	bindNumberInt32InQuery requestParamBinder[[]string, int32]
 	bindNumberInt64InQuery requestParamBinder[[]string, int64]
-	bindPayload requestParamBinder[*http.Request, *models.NumericTypesRangeValidationExclusiveRequest]
+	bindPayload requestParamBinder[*http.Request, *NumericTypesRangeValidationExclusiveRequest]
 }
 
 func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveRequest, error) {
@@ -1124,10 +1124,10 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 				internal.NewMinMaxValueValidator[int64](700, true, false),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.NumericTypesRangeValidationExclusiveRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *NumericTypesRangeValidationExclusiveRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.NumericTypesRangeValidationExclusiveRequest],
+				parseJSONPayload[*NumericTypesRangeValidationExclusiveRequest],
 			),
 			validateValue: internal.NewNumericTypesRangeValidationExclusiveRequestValidator(),
 		}),

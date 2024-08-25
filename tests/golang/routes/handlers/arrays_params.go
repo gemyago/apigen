@@ -4,20 +4,20 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-type _ func() models.ArraysNullableRequiredValidationRequest
+type _ func() ArraysNullableRequiredValidationRequest
 
 type paramsParserArraysArraysNullableRequiredValidation struct {
 	bindSimpleItems1 requestParamBinder[string, []string]
 	bindSimpleItems2 requestParamBinder[string, []string]
 	bindSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindSimpleItems2InQuery requestParamBinder[[]string, []string]
-	bindPayload requestParamBinder[*http.Request, *models.ArraysNullableRequiredValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *ArraysNullableRequiredValidationRequest]
 	bindOptionalSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
@@ -91,10 +91,10 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ArraysNullableRequiredValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ArraysNullableRequiredValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.ArraysNullableRequiredValidationRequest],
+				parseJSONPayload[*ArraysNullableRequiredValidationRequest],
 			),
 			validateValue: internal.NewArraysNullableRequiredValidationRequestValidator(),
 		}),
@@ -130,7 +130,7 @@ type paramsParserArraysArraysRangeValidation struct {
 	bindSimpleItems2 requestParamBinder[string, []string]
 	bindSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindSimpleItems2InQuery requestParamBinder[[]string, []string]
-	bindPayload requestParamBinder[*http.Request, *models.ArraysRangeValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *ArraysRangeValidationRequest]
 	bindOptionalSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
@@ -212,10 +212,10 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ArraysRangeValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ArraysRangeValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.ArraysRangeValidationRequest],
+				parseJSONPayload[*ArraysRangeValidationRequest],
 			),
 			validateValue: internal.NewArraysRangeValidationRequestValidator(),
 		}),
@@ -255,7 +255,7 @@ type paramsParserArraysArraysRequiredValidation struct {
 	bindSimpleItems2 requestParamBinder[string, []string]
 	bindSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindSimpleItems2InQuery requestParamBinder[[]string, []string]
-	bindPayload requestParamBinder[*http.Request, *models.ArraysRequiredValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *ArraysRequiredValidationRequest]
 	bindOptionalSimpleItems1InQuery requestParamBinder[[]string, []string]
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
@@ -329,10 +329,10 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.ArraysRequiredValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ArraysRequiredValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.ArraysRequiredValidationRequest],
+				parseJSONPayload[*ArraysRequiredValidationRequest],
 			),
 			validateValue: internal.NewArraysRequiredValidationRequestValidator(),
 		}),

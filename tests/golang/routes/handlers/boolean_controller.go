@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -26,7 +26,7 @@ type BooleanBooleanArrayItemsRequest struct {
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.
 	BoolParam2InQuery []bool
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.BooleanArrayItemsRequest
+	Payload *BooleanArrayItemsRequest
 }
 
 // BooleanBooleanNullableRequest represents params for booleanNullable operation
@@ -42,7 +42,7 @@ type BooleanBooleanNullableRequest struct {
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.
 	BoolParam2InQuery *bool
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.BooleanNullableRequest
+	Payload *BooleanNullableRequest
 	// OptionalBoolParam1InQuery is parsed from request query and declared as optionalBoolParam1InQuery.
 	OptionalBoolParam1InQuery *bool
 }
@@ -60,7 +60,7 @@ type BooleanBooleanNullableArrayItemsRequest struct {
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.
 	BoolParam2InQuery []*bool
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.BooleanNullableArrayItemsRequest
+	Payload *BooleanNullableArrayItemsRequest
 }
 
 // BooleanBooleanParsingRequest represents params for booleanParsing operation
@@ -76,7 +76,7 @@ type BooleanBooleanParsingRequest struct {
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.
 	BoolParam2InQuery bool
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.BooleanParsingRequest
+	Payload *BooleanParsingRequest
 }
 
 // BooleanBooleanRequiredValidationRequest represents params for booleanRequiredValidation operation
@@ -88,7 +88,7 @@ type BooleanBooleanRequiredValidationRequest struct {
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.
 	BoolParam2InQuery bool
 	// Payload is parsed from request body and declared as payload.
-	Payload *models.BooleanRequiredValidationRequest
+	Payload *BooleanRequiredValidationRequest
 	// OptionalBoolParam1InQuery is parsed from request query and declared as optionalBoolParam1InQuery.
 	OptionalBoolParam1InQuery bool
 	// OptionalBoolParam2InQuery is parsed from request query and declared as optionalBoolParam2InQuery.

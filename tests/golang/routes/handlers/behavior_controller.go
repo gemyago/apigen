@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
@@ -41,7 +41,7 @@ type BehaviorController struct {
 	//
 	// Request type: none
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorNoParamsWithResponse httpHandlerFactory
 
 	// GET /behavior/no-status-defined
@@ -55,7 +55,7 @@ type BehaviorController struct {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorWithParamsAndResponse httpHandlerFactory
 
 	// POST /behavior/with-status-defined
@@ -78,8 +78,8 @@ type BehaviorControllerBuilder struct {
 	//
 	// Request type: none
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
-	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *models.BehaviorNoParamsWithResponse202Response]
+	// Response type: BehaviorNoParamsWithResponse202Response
+	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *BehaviorNoParamsWithResponse202Response]
 
 	// GET /behavior/no-status-defined
 	//
@@ -92,8 +92,8 @@ type BehaviorControllerBuilder struct {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
-	HandleBehaviorWithParamsAndResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorWithParamsAndResponseRequest, *models.BehaviorNoParamsWithResponse202Response]
+	// Response type: BehaviorNoParamsWithResponse202Response
+	HandleBehaviorWithParamsAndResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorWithParamsAndResponseRequest, *BehaviorNoParamsWithResponse202Response]
 
 	// POST /behavior/with-status-defined
 	//

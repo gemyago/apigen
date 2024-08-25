@@ -8,7 +8,7 @@ import (
 	"time"
 	{{#hasImportedModel}}
 
-	"{{invokerPackage}}/models"
+	. "{{invokerPackage}}/models"
 {{/hasImportedModel}}
 )
 
@@ -27,7 +27,7 @@ var _ = fmt.Sprint
 type {{>request-type}} struct {
 	{{#allParams}}
 	// {{nameInPascalCase}} is parsed from request {{vendorExtensions.x-apigen-param-location}} and declared as {{paramName}}.
-	{{nameInPascalCase}} {{>params/type}}
+	{{nameInPascalCase}} {{>fields/type}}
 	{{/allParams}}
 }{{/allParams.0}}{{^-last}}
 

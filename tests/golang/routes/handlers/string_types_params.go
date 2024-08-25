@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-type _ func() models.StringTypesArrayItemsRangeValidationRequest
+type _ func() StringTypesArrayItemsRangeValidationRequest
 
 type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
 	bindUnformattedStr requestParamBinder[string, []string]
@@ -23,7 +23,7 @@ type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
 	bindDateStrInQuery requestParamBinder[[]string, []time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, []time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, []string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesArrayItemsRangeValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesArrayItemsRangeValidationRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesArrayItemsRangeValidationRequest, error) {
@@ -183,10 +183,10 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesArrayItemsRangeValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesArrayItemsRangeValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesArrayItemsRangeValidationRequest],
+				parseJSONPayload[*StringTypesArrayItemsRangeValidationRequest],
 			),
 			validateValue: internal.NewStringTypesArrayItemsRangeValidationRequestValidator(),
 		}),
@@ -204,7 +204,7 @@ type paramsParserStringTypesStringTypesArraysParsing struct {
 	bindDateStrInQuery requestParamBinder[[]string, []time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, []time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, []string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesArraysParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesArraysParsingRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesArraysParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesArraysParsingRequest, error) {
@@ -352,10 +352,10 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesArraysParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesArraysParsingRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesArraysParsingRequest],
+				parseJSONPayload[*StringTypesArraysParsingRequest],
 			),
 			validateValue: internal.NewStringTypesArraysParsingRequestValidator(),
 		}),
@@ -373,7 +373,7 @@ type paramsParserStringTypesStringTypesNullableArrayItems struct {
 	bindDateStrInQuery requestParamBinder[[]string, []*time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, []*time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, []*string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesNullableArrayItemsRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesNullableArrayItemsRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableArrayItemsRequest, error) {
@@ -537,10 +537,10 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 				),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesNullableArrayItemsRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesNullableArrayItemsRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesNullableArrayItemsRequest],
+				parseJSONPayload[*StringTypesNullableArrayItemsRequest],
 			),
 			validateValue: internal.NewStringTypesNullableArrayItemsRequestValidator(),
 		}),
@@ -558,7 +558,7 @@ type paramsParserStringTypesStringTypesNullableParsing struct {
 	bindDateStrInQuery requestParamBinder[[]string, *time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, *time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, *string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesNullableParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesNullableParsingRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesNullableParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableParsingRequest, error) {
@@ -666,10 +666,10 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 			validateValue: internal.NewSimpleFieldValidator[*string](
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesNullableParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesNullableParsingRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesNullableParsingRequest],
+				parseJSONPayload[*StringTypesNullableParsingRequest],
 			),
 			validateValue: internal.NewStringTypesNullableParsingRequestValidator(),
 		}),
@@ -678,7 +678,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 
 type paramsParserStringTypesStringTypesNullableRequiredValidation struct {
 	bindUnformattedStrInQuery requestParamBinder[[]string, *string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesNullableRequiredValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesNullableRequiredValidationRequest]
 	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, *string]
 }
 
@@ -708,10 +708,10 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 				internal.SkipNullValidator(internal.NewPatternValidator[string](".*")),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesNullableRequiredValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesNullableRequiredValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesNullableRequiredValidationRequest],
+				parseJSONPayload[*StringTypesNullableRequiredValidationRequest],
 			),
 			validateValue: internal.NewStringTypesNullableRequiredValidationRequestValidator(),
 		}),
@@ -740,7 +740,7 @@ type paramsParserStringTypesStringTypesParsing struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesParsingRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesParsingRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesParsingRequest, error) {
@@ -848,10 +848,10 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 			validateValue: internal.NewSimpleFieldValidator[string](
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesParsingRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesParsingRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesParsingRequest],
+				parseJSONPayload[*StringTypesParsingRequest],
 			),
 			validateValue: internal.NewStringTypesParsingRequestValidator(),
 		}),
@@ -867,7 +867,7 @@ type paramsParserStringTypesStringTypesPatternValidation struct {
 	bindCustomFormatStrInQuery requestParamBinder[[]string, string]
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesPatternValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesPatternValidationRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesPatternValidationRequest, error) {
@@ -961,10 +961,10 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 			validateValue: internal.NewSimpleFieldValidator[time.Time](
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesPatternValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesPatternValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesPatternValidationRequest],
+				parseJSONPayload[*StringTypesPatternValidationRequest],
 			),
 			validateValue: internal.NewStringTypesPatternValidationRequestValidator(),
 		}),
@@ -982,7 +982,7 @@ type paramsParserStringTypesStringTypesRangeValidation struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesRangeValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesRangeValidationRequest]
 }
 
 func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRangeValidationRequest, error) {
@@ -1102,10 +1102,10 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 				internal.NewMinMaxLengthValidator[string, string](40, false),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRangeValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesRangeValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesRangeValidationRequest],
+				parseJSONPayload[*StringTypesRangeValidationRequest],
 			),
 			validateValue: internal.NewStringTypesRangeValidationRequestValidator(),
 		}),
@@ -1118,7 +1118,7 @@ type paramsParserStringTypesStringTypesRequiredValidation struct {
 	bindDateStrInQuery requestParamBinder[[]string, time.Time]
 	bindDateTimeStrInQuery requestParamBinder[[]string, time.Time]
 	bindByteStrInQuery requestParamBinder[[]string, string]
-	bindPayload requestParamBinder[*http.Request, *models.StringTypesRequiredValidationRequest]
+	bindPayload requestParamBinder[*http.Request, *StringTypesRequiredValidationRequest]
 	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, string]
 	bindOptionalCustomFormatStrInQuery requestParamBinder[[]string, string]
 	bindOptionalDateStrInQuery requestParamBinder[[]string, time.Time]
@@ -1192,10 +1192,10 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 				internal.NewMinMaxLengthValidator[string, string](30, true),
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.StringTypesRequiredValidationRequest]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesRequiredValidationRequest]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.StringTypesRequiredValidationRequest],
+				parseJSONPayload[*StringTypesRequiredValidationRequest],
 			),
 			validateValue: internal.NewStringTypesRequiredValidationRequestValidator(),
 		}),
