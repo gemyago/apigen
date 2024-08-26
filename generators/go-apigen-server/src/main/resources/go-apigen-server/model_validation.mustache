@@ -20,9 +20,9 @@ func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
 			NewMinMaxLengthValidator[{{>models/array-item-full-type}}, []{{>models/array-item-full-type}}]({{.}}, false),{{/maxItems}}
 		),{{#items}}{{#isModel}}
 		New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
-		{{#lambda.tab_indented_3}}{{>models/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
+		{{#lambda.tab_indented_3}}{{>fields/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
 	{{/items}})
-	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>models/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
+	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>fields/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
 		ObjectFieldValidatorParams{Required: {{{required}}}, Nullable: {{{isNullable}}}},
 		New{{dataType}}Validator(),
 	){{/isModel}}
