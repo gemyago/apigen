@@ -2,13 +2,13 @@ package internal
 
 import (
 	"time"
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*models.StringTypesNullableRequiredValidationRequest] {
+func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*StringTypesNullableRequiredValidationRequest] {
 	validateUnformattedStr := NewSimpleFieldValidator[*string](
 		SkipNullValidator(EnsureNonDefault[string]),
 		SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
@@ -21,7 +21,7 @@ func NewStringTypesNullableRequiredValidationRequestValidator() FieldValidator[*
 		SkipNullValidator(NewPatternValidator[string](".*")),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.StringTypesNullableRequiredValidationRequest) {
+	return func(bindingCtx *BindingContext, value *StringTypesNullableRequiredValidationRequest) {
 		validateUnformattedStr(bindingCtx.Fork("unformattedStr"), value.UnformattedStr)
 		validateOptionalUnformattedStr(bindingCtx.Fork("optionalUnformattedStr"), value.OptionalUnformattedStr)
 	}

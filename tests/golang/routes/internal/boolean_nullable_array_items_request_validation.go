@@ -2,13 +2,13 @@ package internal
 
 import (
 	"time"
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBooleanNullableArrayItemsRequestValidator() FieldValidator[*models.BooleanNullableArrayItemsRequest] {
+func NewBooleanNullableArrayItemsRequestValidator() FieldValidator[*BooleanNullableArrayItemsRequest] {
 	validateBoolParam1 := NewArrayValidator[*bool](
 		NewSimpleFieldValidator[[]*bool](
 			EnsureArrayFieldRequired,
@@ -24,7 +24,7 @@ func NewBooleanNullableArrayItemsRequestValidator() FieldValidator[*models.Boole
 			),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.BooleanNullableArrayItemsRequest) {
+	return func(bindingCtx *BindingContext, value *BooleanNullableArrayItemsRequest) {
 		validateBoolParam1(bindingCtx.Fork("boolParam1"), value.BoolParam1)
 		validateBoolParam2(bindingCtx.Fork("boolParam2"), value.BoolParam2)
 	}
