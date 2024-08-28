@@ -1652,7 +1652,7 @@ func TestStringTypes(t *testing.T) {
 					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues)[0],
 				),
 				RefEnumParam:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-				NullableRefEnumParam: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+				NullableRefEnumParam: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
 
 				// query
 				InlineEnumParamInQuery: lo.Shuffle(
@@ -1664,7 +1664,7 @@ func TestStringTypes(t *testing.T) {
 				RefEnumParamInQuery: lo.Shuffle(
 					models.AllowableBasicStringEnumValues,
 				)[0],
-				NullableRefEnumParamInQuery: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+				NullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
 				OptionalInlineEnumParamInQuery: lo.Shuffle(
 					handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
 				)[0],
@@ -1672,7 +1672,7 @@ func TestStringTypes(t *testing.T) {
 					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues)[0],
 				),
 				OptionalRefEnumParamInQuery:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-				OptionalNullableRefEnumParamInQuery: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+				OptionalNullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
 
 				// body
 				Payload: &models.StringTypesEnumsRequest{

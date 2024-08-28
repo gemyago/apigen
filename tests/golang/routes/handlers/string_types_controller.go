@@ -470,7 +470,7 @@ type StringTypesStringTypesEnumsRequest struct {
 	// RefEnumParam is parsed from request path and declared as refEnumParam.
 	RefEnumParam BasicStringEnum
 	// NullableRefEnumParam is parsed from request path and declared as nullableRefEnumParam.
-	NullableRefEnumParam NullableStringEnum
+	NullableRefEnumParam *NullableStringEnum
 	// InlineEnumParamInQuery is parsed from request query and declared as inlineEnumParamInQuery.
 	InlineEnumParamInQuery StringTypesStringTypesEnumsInlineEnumParamInQuery
 	// NullableInlineEnumParamInQuery is parsed from request query and declared as nullableInlineEnumParamInQuery.
@@ -478,7 +478,7 @@ type StringTypesStringTypesEnumsRequest struct {
 	// RefEnumParamInQuery is parsed from request query and declared as refEnumParamInQuery.
 	RefEnumParamInQuery BasicStringEnum
 	// NullableRefEnumParamInQuery is parsed from request query and declared as nullableRefEnumParamInQuery.
-	NullableRefEnumParamInQuery NullableStringEnum
+	NullableRefEnumParamInQuery *NullableStringEnum
 	// Payload is parsed from request body and declared as payload.
 	Payload *StringTypesEnumsRequest
 	// OptionalInlineEnumParamInQuery is parsed from request query and declared as optionalInlineEnumParamInQuery.
@@ -488,7 +488,7 @@ type StringTypesStringTypesEnumsRequest struct {
 	// OptionalRefEnumParamInQuery is parsed from request query and declared as optionalRefEnumParamInQuery.
 	OptionalRefEnumParamInQuery BasicStringEnum
 	// OptionalNullableRefEnumParamInQuery is parsed from request query and declared as optionalNullableRefEnumParamInQuery.
-	OptionalNullableRefEnumParamInQuery NullableStringEnum
+	OptionalNullableRefEnumParamInQuery *NullableStringEnum
 }
 
 // StringTypesStringTypesNullableArrayItemsRequest represents params for stringTypesNullableArrayItems operation

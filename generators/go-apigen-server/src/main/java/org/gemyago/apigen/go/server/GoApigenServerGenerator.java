@@ -21,11 +21,13 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
+import org.openapitools.codegen.utils.ModelUtils;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 
@@ -236,6 +238,13 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenParameter fromParameter(Parameter parameter, Set<String> imports) {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
+
+    // fromParameter will not dereference the schema to set some properties
+    Schema schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
+    if(schema.getNullable() != null) {
+      codegenParameter.isNullable = schema.getNullable();
+    }
+
     appendParamVendorExtensions(codegenParameter, parameter.getIn());
     return codegenParameter;
   }

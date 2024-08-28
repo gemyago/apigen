@@ -366,16 +366,16 @@ type paramsParserStringTypesStringTypesEnums struct {
 	bindInlineEnumParam requestParamBinder[string, StringTypesStringTypesEnumsInlineEnumParam]
 	bindNullableInlineEnumParam requestParamBinder[string, *StringTypesStringTypesEnumsNullableInlineEnumParam]
 	bindRefEnumParam requestParamBinder[string, BasicStringEnum]
-	bindNullableRefEnumParam requestParamBinder[string, NullableStringEnum]
+	bindNullableRefEnumParam requestParamBinder[string, *NullableStringEnum]
 	bindInlineEnumParamInQuery requestParamBinder[[]string, StringTypesStringTypesEnumsInlineEnumParamInQuery]
 	bindNullableInlineEnumParamInQuery requestParamBinder[[]string, *StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]
 	bindRefEnumParamInQuery requestParamBinder[[]string, BasicStringEnum]
-	bindNullableRefEnumParamInQuery requestParamBinder[[]string, NullableStringEnum]
+	bindNullableRefEnumParamInQuery requestParamBinder[[]string, *NullableStringEnum]
 	bindPayload requestParamBinder[*http.Request, *StringTypesEnumsRequest]
 	bindOptionalInlineEnumParamInQuery requestParamBinder[[]string, StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]
 	bindOptionalNullableInlineEnumParamInQuery requestParamBinder[[]string, *StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]
 	bindOptionalRefEnumParamInQuery requestParamBinder[[]string, BasicStringEnum]
-	bindOptionalNullableRefEnumParamInQuery requestParamBinder[[]string, NullableStringEnum]
+	bindOptionalNullableRefEnumParamInQuery requestParamBinder[[]string, *NullableStringEnum]
 }
 
 func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesEnumsRequest, error) {
@@ -429,12 +429,12 @@ func newParamsParserStringTypesStringTypesEnums(app *HTTPApp) paramsParser[*Stri
 			validateValue: NewSimpleFieldValidator[BasicStringEnum](
 			),
 		}),
-		bindNullableRefEnumParam: newRequestParamBinder(binderParams[string, NullableStringEnum]{
+		bindNullableRefEnumParam: newRequestParamBinder(binderParams[string, *NullableStringEnum]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				ParseNullableStringEnum,
+				parseNullableParam(ParseNullableStringEnum),
 			),
-			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			validateValue: NewSimpleFieldValidator[*NullableStringEnum](
 			),
 		}),
 		bindInlineEnumParamInQuery: newRequestParamBinder(binderParams[[]string, StringTypesStringTypesEnumsInlineEnumParamInQuery]{
@@ -461,12 +461,12 @@ func newParamsParserStringTypesStringTypesEnums(app *HTTPApp) paramsParser[*Stri
 			validateValue: NewSimpleFieldValidator[BasicStringEnum](
 			),
 		}),
-		bindNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, NullableStringEnum]{
+		bindNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, *NullableStringEnum]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				ParseNullableStringEnum,
+				parseNullableParam(ParseNullableStringEnum),
 			),
-			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			validateValue: NewSimpleFieldValidator[*NullableStringEnum](
 			),
 		}),
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesEnumsRequest]{
@@ -500,12 +500,12 @@ func newParamsParserStringTypesStringTypesEnums(app *HTTPApp) paramsParser[*Stri
 			validateValue: NewSimpleFieldValidator[BasicStringEnum](
 			),
 		}),
-		bindOptionalNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, NullableStringEnum]{
+		bindOptionalNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, *NullableStringEnum]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				ParseNullableStringEnum,
+				parseNullableParam(ParseNullableStringEnum),
 			),
-			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			validateValue: NewSimpleFieldValidator[*NullableStringEnum](
 			),
 		}),
 	}
