@@ -16,12 +16,10 @@ import (
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
-
-{{#operations}}
+{{#operations}}{{#operation}}{{#allParams}}{{#isEnum}}
+{{>enums/type}}{{/isEnum}}{{/allParams}}{{/operation}}{{/operations}}{{#operations}}
 {{#operation}}
-{{#allParams.0}}{{#allParams}}{{#isEnum}}
-{{>enums/type}}
-{{/isEnum}}{{/allParams}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
+{{#allParams.0}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
 //
 // Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
 type {{>request-type}} struct {
