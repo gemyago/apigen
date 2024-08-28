@@ -1640,4 +1640,99 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("enums", func(t *testing.T) {
+		randomReq := func(
+			opts ...func(*handlers.StringTypesStringTypesEnumsRequest),
+		) *handlers.StringTypesStringTypesEnumsRequest {
+			req := &handlers.StringTypesStringTypesEnumsRequest{
+				// path
+				InlineEnumParam: lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues)[0],
+				NullableInlineEnumParam: lo.ToPtr(
+					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues)[0],
+				),
+				RefEnumParam:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
+				NullableRefEnumParam: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+
+				// query
+				InlineEnumParamInQuery: lo.Shuffle(
+					handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues,
+				)[0],
+				NullableInlineEnumParamInQuery: lo.ToPtr(
+					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues)[0],
+				),
+				RefEnumParamInQuery: lo.Shuffle(
+					models.AllowableBasicStringEnumValues,
+				)[0],
+				NullableRefEnumParamInQuery: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+				OptionalInlineEnumParamInQuery: lo.Shuffle(
+					handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
+				)[0],
+				OptionalNullableInlineEnumParamInQuery: lo.ToPtr(
+					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues)[0],
+				),
+				OptionalRefEnumParamInQuery:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
+				OptionalNullableRefEnumParamInQuery: lo.Shuffle(models.AllowableNullableStringEnumValues)[0],
+
+				// body
+				Payload: &models.StringTypesEnumsRequest{
+					InlineEnumProp: lo.Shuffle(models.AllowableStringTypesEnumsRequestInlineEnumPropValues)[0],
+					NullableInlineEnumProp: lo.ToPtr(
+						lo.Shuffle(models.AllowableStringTypesEnumsRequestNullableInlineEnumPropValues)[0]),
+					RefEnumProp:            lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
+					NullableRefEnumProp:    lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+					OptionalInlineEnumProp: lo.Shuffle(models.AllowableStringTypesEnumsRequestOptionalInlineEnumPropValues)[0],
+					OptionalNullableInlineEnumProp: lo.ToPtr(
+						lo.Shuffle(models.AllowableStringTypesEnumsRequestOptionalNullableInlineEnumPropValues)[0]),
+					OptionalRefEnumProp:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
+					OptionalNullableRefEnumProp: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+				},
+			}
+			for _, opt := range opts {
+				opt(req)
+			}
+			return req
+		}
+
+		buildPath := func(originalReq *handlers.StringTypesStringTypesEnumsRequest) string {
+			return fmt.Sprintf(
+				"/string-types/enums/%v/%v/%v/%v",
+				originalReq.InlineEnumParam,
+				originalReq.NullableInlineEnumParam,
+				originalReq.RefEnumParam,
+				originalReq.NullableRefEnumParam,
+			)
+		}
+
+		buildQuery := func(req *handlers.StringTypesStringTypesEnumsRequest) url.Values {
+			query := url.Values{}
+			query.Add("inlineEnumParamInQuery", req.InlineEnumParamInQuery.String())
+			query.Add("nullableInlineEnumParamInQuery", req.NullableInlineEnumParamInQuery.String())
+			query.Add("refEnumParamInQuery", req.RefEnumParamInQuery.String())
+			query.Add("nullableRefEnumParamInQuery", req.NullableRefEnumParamInQuery.String())
+			query.Add("optionalInlineEnumParamInQuery", req.OptionalInlineEnumParamInQuery.String())
+			query.Add("optionalNullableInlineEnumParamInQuery", req.OptionalNullableInlineEnumParamInQuery.String())
+			query.Add("optionalRefEnumParamInQuery", req.OptionalRefEnumParamInQuery.String())
+			query.Add("optionalNullableRefEnumParamInQuery", req.OptionalNullableRefEnumParamInQuery.String())
+			return query
+		}
+
+		runRouteTestCase(t, "should parse and bind valid values", setupRouter, func() testCase {
+			req := randomReq()
+			query := buildQuery(req)
+
+			return testCase{
+				method: http.MethodPost,
+				path:   buildPath(req),
+				query:  query,
+				body:   marshalJSONDataAsReader(t, req.Payload),
+				expect: func(t *testing.T, testActions *stringTypesControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Equal(t, req, testActions.stringTypesEnums.calls[0].params)
+				},
+			}
+		})
+	})
 }

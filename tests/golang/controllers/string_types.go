@@ -14,6 +14,7 @@ type stringTypesControllerTestActions struct {
 	stringTypesPatternValidation          mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
 	stringTypesRequiredValidation         mockAction[*handlers.StringTypesStringTypesRequiredValidationRequest]
 	stringTypesNullableRequiredValidation mockAction[*handlers.StringTypesStringTypesNullableRequiredValidationRequest]
+	stringTypesEnums                      mockAction[*handlers.StringTypesStringTypesEnumsRequest]
 }
 
 func newStringTypesController(
@@ -29,5 +30,6 @@ func newStringTypesController(
 		HandleStringTypesPatternValidation.With(testActions.stringTypesPatternValidation.action).
 		HandleStringTypesRequiredValidation.With(testActions.stringTypesRequiredValidation.action).
 		HandleStringTypesNullableRequiredValidation.With(testActions.stringTypesNullableRequiredValidation.action).
+		HandleStringTypesEnums.With(testActions.stringTypesEnums.action).
 		Finalize()
 }
