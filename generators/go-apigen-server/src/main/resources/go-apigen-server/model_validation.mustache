@@ -11,8 +11,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-{{#model}}
-func New{{classname}}Validator() FieldValidator[*{{classname}}] {
+{{#model}}{{^isEnum}}func New{{classname}}Validator() FieldValidator[*{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-type}}](
 		NewSimpleFieldValidator[[]{{>models/array-item-type}}]({{#required}}
 			EnsureArrayFieldRequired,{{/required}}{{#minItems}}
@@ -32,6 +31,6 @@ func New{{classname}}Validator() FieldValidator[*{{classname}}] {
 		validate{{name}}(bindingCtx.Fork("{{baseName}}"), value.{{name}})
 		{{/vars}}
 	}
-}
-{{/model}}
-{{/models}}
+}{{/isEnum}}{{#isEnum}}// We don't need to validate enums. This file is just a placeholder.
+// Below is to workaround unused imports.
+var _ {{classname}}{{/isEnum}}{{/model}}{{/models}}

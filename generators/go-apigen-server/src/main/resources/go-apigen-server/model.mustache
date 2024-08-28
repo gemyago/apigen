@@ -13,4 +13,4 @@ import (
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
-{{#model}}{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#isEnum}}{{>enums/model}}{{/isEnum}}{{^isEnum}}{{>model_simple}}{{/isEnum}}{{/oneOf}}{{/model}}{{/models}}
+{{#model}}{{#oneOf}}{{#-first}}{{>model_oneof}}{{/-first}}{{/oneOf}}{{^oneOf}}{{#isEnum}}{{>enums/type}}{{/isEnum}}{{^isEnum}}{{>model_simple}}{{/isEnum}}{{/oneOf}}{{/model}}{{/models}}

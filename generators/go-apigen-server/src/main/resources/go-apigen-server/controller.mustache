@@ -20,7 +20,7 @@ var _ = fmt.Sprint
 {{#operations}}
 {{#operation}}
 {{#allParams.0}}{{#allParams}}{{#isEnum}}
-{{>enums/param-type}}
+{{>enums/type}}
 {{/isEnum}}{{/allParams}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
 //
 // Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
@@ -36,7 +36,7 @@ type {{>request-type}} struct {
 
 {{/operations}}
 
-type {{baseName}}Controller struct {
+type {{classname}}Controller struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -46,7 +46,7 @@ type {{baseName}}Controller struct {
 {{/operations}}
 }
 
-type {{baseName}}ControllerBuilder struct {
+type {{classname}}ControllerBuilder struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -56,8 +56,8 @@ type {{baseName}}ControllerBuilder struct {
 {{/operations}}
 }
 
-func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
-	return &{{baseName}}Controller{
+func (c *{{classname}}ControllerBuilder) Finalize() *{{classname}}Controller {
+	return &{{classname}}Controller{
 		{{#operations}}
 		{{#operation}}
 		{{operationId}}: mustInitializeAction("{{operationIdOriginal}}", c.Handle{{operationId}}.httpHandlerFactory),
@@ -66,8 +66,8 @@ func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
 	}
 }
 
-func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
-	controllerBuilder := &{{baseName}}ControllerBuilder{}
+func Build{{classname}}Controller() *{{classname}}ControllerBuilder {
+	controllerBuilder := &{{classname}}ControllerBuilder{}
 
 	{{#operations}}
 	{{#operation}}
