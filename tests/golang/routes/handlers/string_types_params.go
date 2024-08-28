@@ -10,7 +10,7 @@ import (
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-type _ func() StringTypesArrayItemsRangeValidationRequest
+type _ func() BasicStringEnum
 
 type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
 	bindUnformattedStr requestParamBinder[string, []string]
@@ -358,6 +358,155 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 				parseJSONPayload[*StringTypesArraysParsingRequest],
 			),
 			validateValue: NewStringTypesArraysParsingRequestValidator(),
+		}),
+	}
+}
+
+type paramsParserStringTypesStringTypesEnums struct {
+	bindInlineEnumParam requestParamBinder[string, StringTypesStringTypesEnumsInlineEnumParam]
+	bindNullableInlineEnumParam requestParamBinder[string, *StringTypesStringTypesEnumsNullableInlineEnumParam]
+	bindRefEnumParam requestParamBinder[string, BasicStringEnum]
+	bindNullableRefEnumParam requestParamBinder[string, NullableStringEnum]
+	bindInlineEnumParamInQuery requestParamBinder[[]string, StringTypesStringTypesEnumsInlineEnumParamInQuery]
+	bindNullableInlineEnumParamInQuery requestParamBinder[[]string, *StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]
+	bindRefEnumParamInQuery requestParamBinder[[]string, BasicStringEnum]
+	bindNullableRefEnumParamInQuery requestParamBinder[[]string, NullableStringEnum]
+	bindPayload requestParamBinder[*http.Request, *StringTypesEnumsRequest]
+	bindOptionalInlineEnumParamInQuery requestParamBinder[[]string, StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]
+	bindOptionalNullableInlineEnumParamInQuery requestParamBinder[[]string, *StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]
+	bindOptionalRefEnumParamInQuery requestParamBinder[[]string, BasicStringEnum]
+	bindOptionalNullableRefEnumParamInQuery requestParamBinder[[]string, NullableStringEnum]
+}
+
+func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesEnumsRequest, error) {
+	bindingCtx := BindingContext{}
+	reqParams := &StringTypesStringTypesEnumsRequest{}
+	// path params
+	pathParamsCtx := bindingCtx.Fork("path")
+	p.bindInlineEnumParam(pathParamsCtx.Fork("inlineEnumParam"), readPathValue("inlineEnumParam", router, req), &reqParams.InlineEnumParam)
+	p.bindNullableInlineEnumParam(pathParamsCtx.Fork("nullableInlineEnumParam"), readPathValue("nullableInlineEnumParam", router, req), &reqParams.NullableInlineEnumParam)
+	p.bindRefEnumParam(pathParamsCtx.Fork("refEnumParam"), readPathValue("refEnumParam", router, req), &reqParams.RefEnumParam)
+	p.bindNullableRefEnumParam(pathParamsCtx.Fork("nullableRefEnumParam"), readPathValue("nullableRefEnumParam", router, req), &reqParams.NullableRefEnumParam)
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindInlineEnumParamInQuery(queryParamsCtx.Fork("inlineEnumParamInQuery"), readQueryValue("inlineEnumParamInQuery", query), &reqParams.InlineEnumParamInQuery)
+	p.bindOptionalInlineEnumParamInQuery(queryParamsCtx.Fork("optionalInlineEnumParamInQuery"), readQueryValue("optionalInlineEnumParamInQuery", query), &reqParams.OptionalInlineEnumParamInQuery)
+	p.bindNullableInlineEnumParamInQuery(queryParamsCtx.Fork("nullableInlineEnumParamInQuery"), readQueryValue("nullableInlineEnumParamInQuery", query), &reqParams.NullableInlineEnumParamInQuery)
+	p.bindOptionalNullableInlineEnumParamInQuery(queryParamsCtx.Fork("optionalNullableInlineEnumParamInQuery"), readQueryValue("optionalNullableInlineEnumParamInQuery", query), &reqParams.OptionalNullableInlineEnumParamInQuery)
+	p.bindRefEnumParamInQuery(queryParamsCtx.Fork("refEnumParamInQuery"), readQueryValue("refEnumParamInQuery", query), &reqParams.RefEnumParamInQuery)
+	p.bindNullableRefEnumParamInQuery(queryParamsCtx.Fork("nullableRefEnumParamInQuery"), readQueryValue("nullableRefEnumParamInQuery", query), &reqParams.NullableRefEnumParamInQuery)
+	p.bindOptionalRefEnumParamInQuery(queryParamsCtx.Fork("optionalRefEnumParamInQuery"), readQueryValue("optionalRefEnumParamInQuery", query), &reqParams.OptionalRefEnumParamInQuery)
+	p.bindOptionalNullableRefEnumParamInQuery(queryParamsCtx.Fork("optionalNullableRefEnumParamInQuery"), readQueryValue("optionalNullableRefEnumParamInQuery", query), &reqParams.OptionalNullableRefEnumParamInQuery)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserStringTypesStringTypesEnums(app *HTTPApp) paramsParser[*StringTypesStringTypesEnumsRequest] {
+	return &paramsParserStringTypesStringTypesEnums{
+		bindInlineEnumParam: newRequestParamBinder(binderParams[string, StringTypesStringTypesEnumsInlineEnumParam]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				ParseStringTypesStringTypesEnumsInlineEnumParam,
+			),
+			validateValue: NewSimpleFieldValidator[StringTypesStringTypesEnumsInlineEnumParam](
+			),
+		}),
+		bindNullableInlineEnumParam: newRequestParamBinder(binderParams[string, *StringTypesStringTypesEnumsNullableInlineEnumParam]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseNullableParam(ParseStringTypesStringTypesEnumsNullableInlineEnumParam),
+			),
+			validateValue: NewSimpleFieldValidator[*StringTypesStringTypesEnumsNullableInlineEnumParam](
+			),
+		}),
+		bindRefEnumParam: newRequestParamBinder(binderParams[string, BasicStringEnum]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				ParseBasicStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[BasicStringEnum](
+			),
+		}),
+		bindNullableRefEnumParam: newRequestParamBinder(binderParams[string, NullableStringEnum]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				ParseNullableStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			),
+		}),
+		bindInlineEnumParamInQuery: newRequestParamBinder(binderParams[[]string, StringTypesStringTypesEnumsInlineEnumParamInQuery]{
+			required: true,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseStringTypesStringTypesEnumsInlineEnumParamInQuery,
+			),
+			validateValue: NewSimpleFieldValidator[StringTypesStringTypesEnumsInlineEnumParamInQuery](
+			),
+		}),
+		bindNullableInlineEnumParamInQuery: newRequestParamBinder(binderParams[[]string, *StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]{
+			required: true,
+			parseValue: parseMultiValueParamAsSoloValue(
+				parseNullableParam(ParseStringTypesStringTypesEnumsNullableInlineEnumParamInQuery),
+			),
+			validateValue: NewSimpleFieldValidator[*StringTypesStringTypesEnumsNullableInlineEnumParamInQuery](
+			),
+		}),
+		bindRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, BasicStringEnum]{
+			required: true,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseBasicStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[BasicStringEnum](
+			),
+		}),
+		bindNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, NullableStringEnum]{
+			required: true,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseNullableStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *StringTypesEnumsRequest]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*StringTypesEnumsRequest],
+			),
+			validateValue: NewStringTypesEnumsRequestValidator(),
+		}),
+		bindOptionalInlineEnumParamInQuery: newRequestParamBinder(binderParams[[]string, StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
+			),
+			validateValue: NewSimpleFieldValidator[StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery](
+			),
+		}),
+		bindOptionalNullableInlineEnumParamInQuery: newRequestParamBinder(binderParams[[]string, *StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				parseNullableParam(ParseStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery),
+			),
+			validateValue: NewSimpleFieldValidator[*StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery](
+			),
+		}),
+		bindOptionalRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, BasicStringEnum]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseBasicStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[BasicStringEnum](
+			),
+		}),
+		bindOptionalNullableRefEnumParamInQuery: newRequestParamBinder(binderParams[[]string, NullableStringEnum]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				ParseNullableStringEnum,
+			),
+			validateValue: NewSimpleFieldValidator[NullableStringEnum](
+			),
 		}),
 	}
 }
