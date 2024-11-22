@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"math/rand/v2"
+	"strconv"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
@@ -90,7 +92,7 @@ func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 				require.Error(t, err)
 			})
 			t.Run("invalid json", func(t *testing.T) {
-				data := []byte(`{"value": 2}`)
+				data := []byte(`{"value": ` + strconv.Itoa(rand.Int()) + `}`)
 				var val TEnum
 				err := json.Unmarshal(data, &val)
 				require.Error(t, err)
