@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/models"
+	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -27,6 +29,7 @@ type basicStringEnumTestCaseParams[
 func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 	tc basicStringEnumTestCaseParams[TEnum],
 ) func(t *testing.T) {
+	fake := faker.New()
 	return func(t *testing.T) {
 		t.Run("StandardProperties", func(t *testing.T) {
 			t.Run("IsVALUE1", func(t *testing.T) {
@@ -67,6 +70,22 @@ func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 			t.Run("invalid value", func(t *testing.T) {
 				var val TEnum
 				err := tc.parserFn("invalid", &val)
+				assert.Error(t, err)
+			})
+		})
+		t.Run("UnmarshalJSON", func(t *testing.T) {
+			t.Run("valid value", func(t *testing.T) {
+				for _, v := range tc.allowableValues {
+					data := []byte(`"` + v.String() + `"`)
+					var val TEnum
+					err := json.Unmarshal(data, &val)
+					require.NoError(t, err)
+					assert.Equal(t, v, val)
+				}
+			})
+			t.Run("invalid value", func(t *testing.T) {
+				var val TEnum
+				err := json.Unmarshal([]byte(`"`+fake.UUID().V4()+`"`), &val)
 				assert.Error(t, err)
 			})
 		})
