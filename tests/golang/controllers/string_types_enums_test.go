@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
@@ -33,7 +34,7 @@ func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 ) func(t *testing.T) {
 	fake := faker.New()
 	return func(t *testing.T) {
-		t.Run("StandardProperties", func(t *testing.T) {
+		t.Run("IsMethods", func(t *testing.T) {
 			t.Run("IsVALUE1", func(t *testing.T) {
 				v := tc.allowableValues[0]
 				assert.True(t, v.IsVALUE1())
@@ -156,4 +157,67 @@ func TestStringTypesEnums(t *testing.T) {
 			},
 			parserFn: models.ParseNullableStringEnum,
 		}))
+	t.Run("handlers.StringTypesStringTypesEnumsInlineEnumParam",
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsInlineEnumParam]{
+			allowableValues: handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues,
+			asFn: func(
+				val handlers.StringTypesStringTypesEnumsInlineEnumParam,
+			) handlers.StringTypesStringTypesEnumsInlineEnumParam {
+				return handlers.AsStringTypesStringTypesEnumsInlineEnumParam(val)
+			},
+			parserFn: handlers.ParseStringTypesStringTypesEnumsInlineEnumParam,
+		}))
+	t.Run("StringTypesStringTypesEnumsNullableInlineEnumParam",
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsNullableInlineEnumParam]{
+			allowableValues: handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues,
+			asFn: func(
+				val handlers.StringTypesStringTypesEnumsNullableInlineEnumParam,
+			) handlers.StringTypesStringTypesEnumsNullableInlineEnumParam {
+				return handlers.AsStringTypesStringTypesEnumsNullableInlineEnumParam(val)
+			},
+			parserFn: handlers.ParseStringTypesStringTypesEnumsNullableInlineEnumParam,
+		}))
+	t.Run("StringTypesStringTypesEnumsInlineEnumParamInQuery",
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery]{
+			allowableValues: handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues,
+			asFn: func(
+				val handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery,
+			) handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery {
+				return handlers.AsStringTypesStringTypesEnumsInlineEnumParamInQuery(val)
+			},
+			parserFn: handlers.ParseStringTypesStringTypesEnumsInlineEnumParamInQuery,
+		}))
+	t.Run("StringTypesStringTypesEnumsNullableInlineEnumParamInQuery",
+		newBasicStringEnumTestCase(
+			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]{
+				allowableValues: handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues,
+				asFn: func(
+					val handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
+				) handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery {
+					return handlers.AsStringTypesStringTypesEnumsNullableInlineEnumParamInQuery(val)
+				},
+				parserFn: handlers.ParseStringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
+			}))
+	t.Run("StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery",
+		newBasicStringEnumTestCase(
+			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]{
+				allowableValues: handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
+				asFn: func(
+					val handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
+				) handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery {
+					return handlers.AsStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery(val)
+				},
+				parserFn: handlers.ParseStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
+			}))
+	t.Run("StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery",
+		newBasicStringEnumTestCase(
+			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]{
+				allowableValues: handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues,
+				asFn: func(
+					val handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
+				) handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery {
+					return handlers.AsStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery(val)
+				},
+				parserFn: handlers.ParseStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
+			}))
 }
