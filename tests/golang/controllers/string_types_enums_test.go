@@ -100,4 +100,11 @@ func TestStringTypesEnums(t *testing.T) {
 		},
 		parserFn: models.ParseBasicStringEnum,
 	}))
+	t.Run("StringTypesEnumsRequestInlineEnumProp", newBasicStringEnumTestCase(basicStringEnumTestCaseParams[models.StringTypesEnumsRequestInlineEnumProp]{
+		allowableValues: models.AllowableStringTypesEnumsRequestInlineEnumPropValues,
+		asFn: func(val models.StringTypesEnumsRequestInlineEnumProp) models.StringTypesEnumsRequestInlineEnumProp {
+			return models.AsStringTypesEnumsRequestInlineEnumProp(val)
+		},
+		parserFn: models.ParseStringTypesEnumsRequestInlineEnumProp,
+	}))
 }
