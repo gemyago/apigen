@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"math/rand/v2"
+	"slices"
 	"strconv"
 	"testing"
 
@@ -56,7 +57,7 @@ func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 		})
 		t.Run("AsEnum", func(t *testing.T) {
 			t.Run("assign compatible value", func(t *testing.T) {
-				val1 := lo.Shuffle(tc.allowableValues)[0]
+				val1 := lo.Shuffle(slices.Clone(tc.allowableValues))[0]
 				val2 := tc.asFn(val1)
 				assert.Equal(t, val1, val2)
 			})

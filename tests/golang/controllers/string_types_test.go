@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -1647,45 +1648,50 @@ func TestStringTypes(t *testing.T) {
 		) *handlers.StringTypesStringTypesEnumsRequest {
 			req := &handlers.StringTypesStringTypesEnumsRequest{
 				// path
-				InlineEnumParam: lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues)[0],
+				InlineEnumParam: lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues))[0],
 				NullableInlineEnumParam: lo.ToPtr(
-					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues)[0],
+					lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues))[0],
 				),
-				RefEnumParam:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-				NullableRefEnumParam: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+				RefEnumParam:         lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
+				NullableRefEnumParam: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 
 				// query
 				InlineEnumParamInQuery: lo.Shuffle(
-					handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues,
+					slices.Clone(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues),
 				)[0],
 				NullableInlineEnumParamInQuery: lo.ToPtr(
-					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues)[0],
+					lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues))[0],
 				),
 				RefEnumParamInQuery: lo.Shuffle(
-					models.AllowableBasicStringEnumValues,
+					slices.Clone(models.AllowableBasicStringEnumValues),
 				)[0],
-				NullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+				NullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 				OptionalInlineEnumParamInQuery: lo.Shuffle(
-					handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
+					slices.Clone(handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues),
 				)[0],
 				OptionalNullableInlineEnumParamInQuery: lo.ToPtr(
-					lo.Shuffle(handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues)[0],
+					lo.Shuffle(
+						slices.Clone(handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues),
+					)[0],
 				),
-				OptionalRefEnumParamInQuery:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-				OptionalNullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+				OptionalRefEnumParamInQuery: lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
+				OptionalNullableRefEnumParamInQuery: lo.ToPtr(
+					lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 
 				// body
 				Payload: &models.StringTypesEnumsRequest{
-					InlineEnumProp: lo.Shuffle(models.AllowableStringTypesEnumsRequestInlineEnumPropValues)[0],
+					InlineEnumProp: lo.Shuffle(slices.Clone(models.AllowableStringTypesEnumsRequestInlineEnumPropValues))[0],
 					NullableInlineEnumProp: lo.ToPtr(
-						lo.Shuffle(models.AllowableStringTypesEnumsRequestNullableInlineEnumPropValues)[0]),
-					RefEnumProp:            lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-					NullableRefEnumProp:    lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
-					OptionalInlineEnumProp: lo.Shuffle(models.AllowableStringTypesEnumsRequestOptionalInlineEnumPropValues)[0],
+						lo.Shuffle(slices.Clone(models.AllowableStringTypesEnumsRequestNullableInlineEnumPropValues))[0]),
+					RefEnumProp:         lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
+					NullableRefEnumProp: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
+					OptionalInlineEnumProp: lo.Shuffle(
+						slices.Clone(models.AllowableStringTypesEnumsRequestOptionalInlineEnumPropValues),
+					)[0],
 					OptionalNullableInlineEnumProp: lo.ToPtr(
-						lo.Shuffle(models.AllowableStringTypesEnumsRequestOptionalNullableInlineEnumPropValues)[0]),
-					OptionalRefEnumProp:         lo.Shuffle(models.AllowableBasicStringEnumValues)[0],
-					OptionalNullableRefEnumProp: lo.ToPtr(lo.Shuffle(models.AllowableNullableStringEnumValues)[0]),
+						lo.Shuffle(slices.Clone(models.AllowableStringTypesEnumsRequestOptionalNullableInlineEnumPropValues))[0]),
+					OptionalRefEnumProp:         lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
+					OptionalNullableRefEnumProp: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 				},
 			}
 			for _, opt := range opts {
