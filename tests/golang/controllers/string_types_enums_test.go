@@ -84,9 +84,16 @@ func newBasicStringEnumTestCase[TEnum standardBasicEnumProperties](
 				}
 			})
 			t.Run("invalid value", func(t *testing.T) {
+				data := []byte(`"` + fake.UUID().V4() + `"`)
 				var val TEnum
-				err := json.Unmarshal([]byte(`"`+fake.UUID().V4()+`"`), &val)
-				assert.Error(t, err)
+				err := json.Unmarshal(data, &val)
+				require.Error(t, err)
+			})
+			t.Run("invalid json", func(t *testing.T) {
+				data := []byte(`{"value": 2}`)
+				var val TEnum
+				err := json.Unmarshal(data, &val)
+				require.Error(t, err)
 			})
 		})
 	}

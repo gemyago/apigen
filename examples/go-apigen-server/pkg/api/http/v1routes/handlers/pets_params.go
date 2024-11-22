@@ -6,20 +6,20 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/internal"
+	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-var _ = models.Error{}
+type _ func() Error
 
 type paramsParserPetsCreatePet struct {
-	bindPayload requestParamBinder[*http.Request, *models.Pet]
+	bindPayload requestParamBinder[*http.Request, *Pet]
 }
 
 func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) (*PetsCreatePetRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &PetsCreatePetRequest{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
@@ -28,12 +28,12 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 
 func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetRequest] {
 	return &paramsParserPetsCreatePet{
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *models.Pet]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *Pet]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*models.Pet],
+				parseJSONPayload[*Pet],
 			),
-			validateValue: internal.NewPetValidator(),
+			validateValue: NewPetValidator(),
 		}),
 	}
 }
@@ -43,7 +43,7 @@ type paramsParserPetsGetPetById struct {
 }
 
 func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request) (*PetsGetPetByIdRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &PetsGetPetByIdRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
@@ -58,7 +58,7 @@ func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdReq
 			parseValue: parseSoloValueParamAsSoloValue(
 				app.knownParsers.int64Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[int64](
+			validateValue: NewSimpleFieldValidator[int64](
 			),
 		}),
 	}
@@ -70,7 +70,7 @@ type paramsParserPetsListPets struct {
 }
 
 func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (*PetsListPetsRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &PetsListPetsRequest{}
 	// query params
 	query := req.URL.Query()
@@ -87,9 +87,9 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.int64Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[int64](
-				internal.NewMinMaxValueValidator[int64](1, false, true),
-				internal.NewMinMaxValueValidator[int64](100, false, false),
+			validateValue: NewSimpleFieldValidator[int64](
+				NewMinMaxValueValidator[int64](1, false, true),
+				NewMinMaxValueValidator[int64](100, false, false),
 			),
 		}),
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
@@ -97,8 +97,8 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.int64Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[int64](
-				internal.NewMinMaxValueValidator[int64](1, false, true),
+			validateValue: NewSimpleFieldValidator[int64](
+				NewMinMaxValueValidator[int64](1, false, true),
 			),
 		}),
 	}
