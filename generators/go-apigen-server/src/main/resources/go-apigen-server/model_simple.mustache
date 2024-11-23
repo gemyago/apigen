@@ -1,8 +1,8 @@
 {{#vars}}
-{{#isEnum}}{{>enums/var_type}}{{/isEnum}}{{/vars}}{{#description}}
+{{#isEnum}}{{>enums/type}}{{/isEnum}}{{/vars}}{{#description}}
 // {{classname}} - {{{description}}}{{/description}}
 type {{classname}} struct { {{#vars}}{{#description}}
 	// {{{.}}}{{/description}}{{#deprecated}}
 	// Deprecated{{/deprecated}}
-	{{name}} {{#isModel}}*{{/isModel}}{{^isModel}}{{^isArray}}{{#isNullable}}*{{/isNullable}}{{/isArray}}{{/isModel}}{{#isEnum}}{{>enums/var_type_name}}{{/isEnum}}{{^isEnum}}{{^isArray}}{{{dataType}}}{{/isArray}}{{#isArray}}[]{{>models/array-item-type}}{{/isArray}}{{/isEnum}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`{{/vars}}
+	{{name}} {{>models/prop-type}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`{{/vars}}
 }

@@ -1,0 +1,1 @@
+{{#isModel}}*{{/isModel}}{{^isModel}}{{^isArray}}{{#isNullable}}*{{/isNullable}}{{/isArray}}{{/isModel}}{{#isEnum}}{{datatypeWithEnum}}{{/isEnum}}{{^isEnum}}{{^isArray}}{{{dataType}}}{{/isArray}}{{#isArray}}[]{{>models/array-item-type}}{{/isArray}}{{/isEnum}}

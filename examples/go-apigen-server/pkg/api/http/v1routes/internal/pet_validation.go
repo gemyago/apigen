@@ -4,13 +4,13 @@ package internal
 
 import (
 	"time"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewPetValidator() FieldValidator[*models.Pet] {
+func NewPetValidator() FieldValidator[*Pet] {
 	validateId := NewSimpleFieldValidator[int64](
 		EnsureNonDefault[int64],
 	)
@@ -20,7 +20,7 @@ func NewPetValidator() FieldValidator[*models.Pet] {
 	validateComments := NewSimpleFieldValidator[string](
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.Pet) {
+	return func(bindingCtx *BindingContext, value *Pet) {
 		validateId(bindingCtx.Fork("id"), value.Id)
 		validateName(bindingCtx.Fork("name"), value.Name)
 		validateComments(bindingCtx.Fork("comments"), value.Comments)

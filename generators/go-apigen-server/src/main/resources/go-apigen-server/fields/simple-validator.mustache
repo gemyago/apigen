@@ -1,5 +1,5 @@
-NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{{dataType}}}]({{^isBoolean}}{{#required}}
-	{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{{dataType}}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{^isDate}}{{#minimum}}
+NewSimpleFieldValidator[{{#isNullable}}*{{/isNullable}}{{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}]({{^paramName}}{{^isBoolean}}{{#required}}
+	{{#isNullable}}SkipNullValidator({{/isNullable}}EnsureNonDefault[{{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}]{{#isNullable}}){{/isNullable}},{{/required}}{{/isBoolean}}{{/paramName}}{{^isDate}}{{#minimum}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMinimum}}, true){{#isNullable}}){{/isNullable}},{{/minimum}}{{#maximum}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxValueValidator[{{{dataType}}}]({{.}}, {{exclusiveMaximum}}, false){{#isNullable}}){{/isNullable}},{{/maximum}}{{^isDateTime}}{{#minLength}}
 	{{#isNullable}}SkipNullValidator({{/isNullable}}NewMinMaxLengthValidator[{{{dataType}}}, {{{dataType}}}]({{.}}, true){{#isNullable}}){{/isNullable}},{{/minLength}}{{#maxLength}}

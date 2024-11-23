@@ -18,13 +18,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.*;
 import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
+import org.openapitools.codegen.utils.ModelUtils;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 
@@ -196,6 +199,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
   @Override
   public void processOpts() {
+    if(!additionalProperties.containsKey(CodegenConstants.ENUM_CLASS_PREFIX)) {
+      additionalProperties.put(CodegenConstants.ENUM_CLASS_PREFIX, true);
+    }
+
     super.processOpts();
 
     File outputFolderFile = new File(outputFolder);
@@ -231,6 +238,13 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenParameter fromParameter(Parameter parameter, Set<String> imports) {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
+
+    // fromParameter will not dereference the schema to set some properties
+    Schema schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
+    if(schema.getNullable() != null) {
+      codegenParameter.isNullable = schema.getNullable();
+    }
+
     appendParamVendorExtensions(codegenParameter, parameter.getIn());
     return codegenParameter;
   }
@@ -262,8 +276,27 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   }
 
   @Override
+  public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
+    super.postProcessModelProperty(model, property);
+
+    if (property.isEnum) {
+      property.datatypeWithEnum = model.classname + property.nameInPascalCase;
+    }
+  }
+
+  @Override
   public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> allModels) {
     OperationsMap operationsMap = super.postProcessOperationsWithModels(objs, allModels);
+
+    OperationMap operations = operationsMap.getOperations();
+    for (CodegenOperation op : operations.getOperation()) {
+      for (CodegenParameter param : op.allParams) {
+        if(param.isEnum) {
+          param.datatypeWithEnum = operations.getClassname() + op.operationId + camelize(param.datatypeWithEnum.replace("_", "-").toLowerCase());
+        }
+      }
+    }
+
     List<Map<String, String>> imports = objs.getImports();
     if (imports == null)
       return objs;
@@ -273,9 +306,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     List<String> importedModels = new ArrayList<>();
     while (iterator.hasNext()) {
       String _import = iterator.next().get("import");
-      if (_import.startsWith(modelPackage())) {
+      int modelPkgStartsAt = _import.indexOf(modelPackage());
+      if (modelPkgStartsAt >= 0) {
         operationsMap.put("hasImportedModel", true);
-        importedModels.add(_import);
+        importedModels.add(_import.substring(modelPkgStartsAt + modelPackage().length() + 1));
       }
     }
     operationsMap.put("importedModels", importedModels);

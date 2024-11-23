@@ -124,6 +124,18 @@ func EnsureNonDefault[TTargetVal comparable](val TTargetVal) error {
 	return nil
 }
 
+var _ = EnsureNonDefault[int]
+
+// EnsureArrayFieldRequired will validate if given array is not empty.
+func EnsureArrayFieldRequired[TTargetVal any](val []TTargetVal) error {
+	if len(val) == 0 {
+		return fmt.Errorf("provided array is empty: %w", ErrValueRequired)
+	}
+	return nil
+}
+
+var _ = EnsureArrayFieldRequired[int]
+
 func SkipNullValidator[TTargetVal any](target ValueValidator[TTargetVal]) ValueValidator[*TTargetVal] {
 	return func(tv *TTargetVal) error {
 		if tv == nil {
@@ -167,11 +179,15 @@ func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
 	}
 }
 
-func NewMinMaxLengthValidator[TTargetVal string](
+type Measurable[T any] interface {
+	~string | ~[]T
+}
+
+func NewMinMaxLengthValidator[TTargetVal any, TValidatorVal Measurable[TTargetVal]](
 	threshold int,
 	isMin bool,
-) ValueValidator[TTargetVal] {
-	return func(tv TTargetVal) error {
+) ValueValidator[TValidatorVal] {
+	return func(tv TValidatorVal) error {
 		targetLen := len(tv)
 		if isMin && targetLen < threshold {
 			return fmt.Errorf(
@@ -253,14 +269,18 @@ func NewObjectFieldValidator[TTargetVal any](
 
 func NewArrayValidator[
 	TValue any,
-](validateField FieldValidator[TValue]) FieldValidator[[]TValue] {
+](
+	validateField FieldValidator[[]TValue],
+	validateItems FieldValidator[TValue],
+) FieldValidator[[]TValue] {
 	return func(
 		bindingCtx *BindingContext,
 		value []TValue,
 	) {
+		validateField(bindingCtx, value)
 		for i, v := range value {
 			// TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
-			validateField(bindingCtx.Fork(strconv.Itoa(i)), v)
+			validateItems(bindingCtx.Fork(strconv.Itoa(i)), v)
 		}
 	}
 }

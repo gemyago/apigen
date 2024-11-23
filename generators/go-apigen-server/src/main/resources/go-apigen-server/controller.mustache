@@ -3,23 +3,29 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 	{{#hasImportedModel}}
 
-	"{{invokerPackage}}/models"
+	. "{{invokerPackage}}/models"
 {{/hasImportedModel}}
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
-
-{{#operations}}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
+{{#operations}}{{#operation}}{{#allParams}}{{#isEnum}}
+{{>enums/type}}{{/isEnum}}{{/allParams}}{{/operation}}{{/operations}}{{#operations}}
 {{#operation}}
-{{#allParams.0}}{{#allParams}}{{#isEnum}}
-{{>enums/params/type}}
-{{/isEnum}}{{/allParams}}type {{>request-type}} struct {
+{{#allParams.0}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
+//
+// Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
+type {{>request-type}} struct {
 	{{#allParams}}
-	{{nameInPascalCase}} {{>params/type}}
+	// {{nameInPascalCase}} is parsed from request {{vendorExtensions.x-apigen-param-location}} and declared as {{paramName}}.
+	{{nameInPascalCase}} {{>fields/type}}
 	{{/allParams}}
 }{{/allParams.0}}{{^-last}}
 
@@ -28,7 +34,7 @@ var _ = time.Time{}
 
 {{/operations}}
 
-type {{baseName}}Controller struct {
+type {{classname}}Controller struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -38,7 +44,7 @@ type {{baseName}}Controller struct {
 {{/operations}}
 }
 
-type {{baseName}}ControllerBuilder struct {
+type {{classname}}ControllerBuilder struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -48,8 +54,8 @@ type {{baseName}}ControllerBuilder struct {
 {{/operations}}
 }
 
-func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
-	return &{{baseName}}Controller{
+func (c *{{classname}}ControllerBuilder) Finalize() *{{classname}}Controller {
+	return &{{classname}}Controller{
 		{{#operations}}
 		{{#operation}}
 		{{operationId}}: mustInitializeAction("{{operationIdOriginal}}", c.Handle{{operationId}}.httpHandlerFactory),
@@ -58,8 +64,8 @@ func (c *{{baseName}}ControllerBuilder) Finalize() *{{baseName}}Controller {
 	}
 }
 
-func Build{{baseName}}Controller() *{{baseName}}ControllerBuilder {
-	controllerBuilder := &{{baseName}}ControllerBuilder{}
+func Build{{classname}}Controller() *{{classname}}ControllerBuilder {
+	controllerBuilder := &{{classname}}ControllerBuilder{}
 
 	{{#operations}}
 	{{#operation}}

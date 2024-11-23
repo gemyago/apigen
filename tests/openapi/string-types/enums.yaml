@@ -1,0 +1,160 @@
+post:
+  summary: API to test enum string types parsing
+  operationId: stringTypesEnums
+  tags:
+    - string-types
+  parameters:
+    # params in path
+    - name: inlineEnumParam
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: nullableInlineEnumParam
+      in: path
+      required: true
+      schema:
+        type: string
+        nullable: true
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: refEnumParam
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/BasicStringEnum"
+    - name: nullableRefEnumParam
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/NullableStringEnum"
+
+    # params in query
+    - name: inlineEnumParamInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: optionalInlineEnumParamInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: nullableInlineEnumParamInQuery
+      in: query
+      required: true
+      schema:
+        type: string
+        nullable: true
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: optionalNullableInlineEnumParamInQuery
+      in: query
+      required: false
+      schema:
+        type: string
+        nullable: true
+        enum:
+          - VALUE1
+          - VALUE2
+          - VALUE3
+    - name: refEnumParamInQuery
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/BasicStringEnum"
+    - name: nullableRefEnumParamInQuery
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/NullableStringEnum"
+    - name: optionalRefEnumParamInQuery
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/BasicStringEnum"
+    - name: optionalNullableRefEnumParamInQuery
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/NullableStringEnum"
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - inlineEnumProp
+            - nullableInlineEnumProp
+            - refEnumProp
+            - nullableRefEnumProp
+          properties:
+            inlineEnumProp:
+              type: string
+              enum:
+                - VALUE1
+                - VALUE2
+                - VALUE3
+            optionalInlineEnumProp:
+              type: string
+              enum:
+                - VALUE1
+                - VALUE2
+                - VALUE3
+            nullableInlineEnumProp:
+              type: string
+              nullable: true
+              enum:
+                - VALUE1
+                - VALUE2
+                - VALUE3
+            optionalNullableInlineEnumProp:
+              type: string
+              nullable: true
+              enum:
+                - VALUE1
+                - VALUE2
+                - VALUE3
+            refEnumProp:
+              $ref: "#/components/schemas/BasicStringEnum"
+            optionalRefEnumProp:
+              $ref: "#/components/schemas/BasicStringEnum"
+            nullableRefEnumProp:
+              $ref: "#/components/schemas/NullableStringEnum"
+            optionalNullableRefEnumProp:
+              $ref: "#/components/schemas/NullableStringEnum"
+  responses:
+    '204':
+      description: Request succeeded
+components:
+  schemas:
+    BasicStringEnum:
+      type: string
+      enum:
+        - VALUE1
+        - VALUE2
+        - VALUE3
+    NullableStringEnum:
+      type: string
+      nullable: true
+      enum:
+        - VALUE1
+        - VALUE2
+        - VALUE3

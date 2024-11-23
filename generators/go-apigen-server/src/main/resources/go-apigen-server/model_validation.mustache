@@ -5,33 +5,32 @@
 {{#models}}
 import (
 	"time"
-	"{{invokerPackage}}/{{ package }}"
+	. "{{invokerPackage}}/{{ package }}"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-{{#model}}
-func New{{classname}}Validator() FieldValidator[*{{package}}.{{classname}}] {
-	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-full-type}}](
-		NewSimpleFieldValidator[[]{{>models/array-item-full-type}}]({{#required}}
+{{#model}}{{^isEnum}}func New{{classname}}Validator() FieldValidator[*{{classname}}] {
+	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-type}}](
+		NewSimpleFieldValidator[[]{{>models/array-item-type}}]({{#required}}
 			EnsureArrayFieldRequired,{{/required}}{{#minItems}}
-			NewMinMaxLengthValidator[{{>models/array-item-full-type}}, []{{>models/array-item-full-type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
-			NewMinMaxLengthValidator[{{>models/array-item-full-type}}, []{{>models/array-item-full-type}}]({{.}}, false),{{/maxItems}}
+			NewMinMaxLengthValidator[{{>models/array-item-type}}, []{{>models/array-item-type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
+			NewMinMaxLengthValidator[{{>models/array-item-type}}, []{{>models/array-item-type}}]({{.}}, false),{{/maxItems}}
 		),{{#items}}{{#isModel}}
 		New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
-		{{#lambda.tab_indented_3}}{{>models/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
+		{{#lambda.tab_indented_3}}{{>fields/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}
 	{{/items}})
-	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>models/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
+	{{/isArray}}{{^isArray}}{{^isModel}}validate{{name}} := {{#lambda.tab_indented_2}}{{>fields/simple-validator}}{{/lambda.tab_indented_2}}{{/isModel}}{{#isModel}}validate{{name}} := NewObjectFieldValidator(
 		ObjectFieldValidatorParams{Required: {{{required}}}, Nullable: {{{isNullable}}}},
 		New{{dataType}}Validator(),
 	){{/isModel}}
 	{{/isArray}}{{/vars}}
-	return func(bindingCtx *BindingContext, value *{{package}}.{{classname}}) {
+	return func(bindingCtx *BindingContext, value *{{classname}}) {
 		{{#vars}}
 		validate{{name}}(bindingCtx.Fork("{{baseName}}"), value.{{name}})
 		{{/vars}}
 	}
-}
-{{/model}}
-{{/models}}
+}{{/isEnum}}{{#isEnum}}// We don't need to validate enums. This file is just a placeholder.
+// Below is to workaround unused imports.
+var _ {{classname}}{{/isEnum}}{{/model}}{{/models}}

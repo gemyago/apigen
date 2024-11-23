@@ -2,13 +2,13 @@ package internal
 
 import (
 	"time"
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewSimpleObjectsContainerValidator() FieldValidator[*models.SimpleObjectsContainer] {
+func NewSimpleObjectsContainerValidator() FieldValidator[*SimpleObjectsContainer] {
 	validateSimpleField1 := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
@@ -48,7 +48,7 @@ func NewSimpleObjectsContainerValidator() FieldValidator[*models.SimpleObjectsCo
 		NewSimpleNullableObjectValidator(),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.SimpleObjectsContainer) {
+	return func(bindingCtx *BindingContext, value *SimpleObjectsContainer) {
 		validateSimpleField1(bindingCtx.Fork("simpleField1"), value.SimpleField1)
 		validateSimpleField2(bindingCtx.Fork("simpleField2"), value.SimpleField2)
 		validateSimpleObject1(bindingCtx.Fork("simpleObject1"), value.SimpleObject1)

@@ -2,13 +2,13 @@ package internal
 
 import (
 	"time"
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewNumericTypesRangeValidationRequestValidator() FieldValidator[*models.NumericTypesRangeValidationRequest] {
+func NewNumericTypesRangeValidationRequestValidator() FieldValidator[*NumericTypesRangeValidationRequest] {
 	validateNumberAny := NewSimpleFieldValidator[float32](
 		EnsureNonDefault[float32],
 		NewMinMaxValueValidator[float32](100.01, false, true),
@@ -40,7 +40,7 @@ func NewNumericTypesRangeValidationRequestValidator() FieldValidator[*models.Num
 		NewMinMaxValueValidator[int64](700, false, false),
 	)
 	
-	return func(bindingCtx *BindingContext, value *models.NumericTypesRangeValidationRequest) {
+	return func(bindingCtx *BindingContext, value *NumericTypesRangeValidationRequest) {
 		validateNumberAny(bindingCtx.Fork("numberAny"), value.NumberAny)
 		validateNumberFloat(bindingCtx.Fork("numberFloat"), value.NumberFloat)
 		validateNumberDouble(bindingCtx.Fork("numberDouble"), value.NumberDouble)

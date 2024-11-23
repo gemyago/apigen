@@ -1,0 +1,66 @@
+type {{>enums/type-name}} string
+
+// List of {{>enums/type-name}} values.
+const (
+	{{#allowableValues}}
+	{{#enumVars}}
+	{{>enums/type-name}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}} {{>enums/type-name}} = {{{value}}}
+	{{/enumVars}}
+	{{/allowableValues}}
+)
+
+{{#allowableValues}}
+{{#enumVars}}
+func(v {{>enums/type-name}}) Is{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}() bool {
+  return v == {{>enums/type-name}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}
+}
+
+{{/enumVars}}
+{{/allowableValues}}
+func(v {{>enums/type-name}}) String() string {
+	return string(v)
+}
+
+type assignable{{>enums/type-name}} interface {
+	{{#allowableValues}}
+	{{#enumVars}}
+	Is{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}() bool
+	{{/enumVars}}
+	{{/allowableValues}}
+	String() string
+}
+
+func As{{>enums/type-name}}(v assignable{{>enums/type-name}}) ({{>enums/type-name}}) {
+	return {{>enums/type-name}}(v.String())
+}
+
+func Parse{{>enums/type-name}}(str string, target *{{>enums/type-name}}) error {
+	switch str {
+	{{#allowableValues}}
+	{{#enumVars}}
+	case {{{value}}}:
+		*target = {{>enums/type-name}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}}
+	{{/enumVars}}
+	{{/allowableValues}}
+	default:
+		return fmt.Errorf("unexpected {{>enums/type-name}} value: %s", str)
+	}
+	return nil
+}
+
+func (v *{{>enums/type-name}}) UnmarshalJSON(data []byte) error {
+	var str string
+	if err := json.Unmarshal(data, &str); err != nil {
+		return err
+	}
+	return Parse{{>enums/type-name}}(str, v)
+}
+
+// All allowed values of {{>enums/type-name}} enum.
+var Allowable{{>enums/type-name}}Values = []{{>enums/type-name}}{
+	{{#allowableValues}}
+	{{#enumVars}}
+	{{>enums/type-name}}{{#lambda.pascalcase}}{{{value}}}{{/lambda.pascalcase}},
+	{{/enumVars}}
+	{{/allowableValues}}
+}

@@ -1,0 +1,1 @@
+{{#isArray}}[]{{#items}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*{{/isModel}}{{{dataType}}}{{/items}}{{/isArray}}{{^isArray}}{{#isNullable}}{{^isModel}}*{{/isModel}}{{/isNullable}}{{#isModel}}*{{/isModel}}{{{dataType}}}{{/isArray}}

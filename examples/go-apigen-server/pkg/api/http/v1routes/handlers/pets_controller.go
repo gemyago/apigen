@@ -3,24 +3,41 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
+// PetsCreatePetRequest represents params for createPet operation
+//
+// Request: POST /pets.
 type PetsCreatePetRequest struct {
-	Payload *models.Pet
+	// Payload is parsed from request body and declared as payload.
+	Payload *Pet
 }
 
+// PetsGetPetByIdRequest represents params for getPetById operation
+//
+// Request: GET /pets/{petId}.
 type PetsGetPetByIdRequest struct {
+	// PetId is parsed from request path and declared as petId.
 	PetId int64
 }
 
+// PetsListPetsRequest represents params for listPets operation
+//
+// Request: GET /pets.
 type PetsListPetsRequest struct {
+	// Limit is parsed from request query and declared as limit.
 	Limit int64
+	// Offset is parsed from request query and declared as offset.
 	Offset int64
 }
 
@@ -36,14 +53,14 @@ type PetsController struct {
 	//
 	// Request type: PetsGetPetByIdRequest,
 	//
-	// Response type: models.PetResponse
+	// Response type: PetResponse
 	GetPetById httpHandlerFactory
 
 	// GET /pets
 	//
 	// Request type: PetsListPetsRequest,
 	//
-	// Response type: models.PetsResponse
+	// Response type: PetsResponse
 	ListPets httpHandlerFactory
 }
 
@@ -59,15 +76,15 @@ type PetsControllerBuilder struct {
 	//
 	// Request type: PetsGetPetByIdRequest,
 	//
-	// Response type: models.PetResponse
-	HandleGetPetById actionBuilder[*PetsControllerBuilder, *PetsGetPetByIdRequest, *models.PetResponse]
+	// Response type: PetResponse
+	HandleGetPetById actionBuilder[*PetsControllerBuilder, *PetsGetPetByIdRequest, *PetResponse]
 
 	// GET /pets
 	//
 	// Request type: PetsListPetsRequest,
 	//
-	// Response type: models.PetsResponse
-	HandleListPets actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *models.PetsResponse]
+	// Response type: PetsResponse
+	HandleListPets actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *PetsResponse]
 }
 
 func (c *PetsControllerBuilder) Finalize() *PetsController {

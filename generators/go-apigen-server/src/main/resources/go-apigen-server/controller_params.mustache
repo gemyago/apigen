@@ -7,14 +7,14 @@ import (
 	"time"
 	{{#hasImportedModel}}
 
-	"{{invokerPackage}}/models"
+	. "{{invokerPackage}}/models"
 {{/hasImportedModel}}
-	"{{invokerPackage}}/internal"
+	. "{{invokerPackage}}/internal"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}{{#hasImportedModel}}
-var _ = {{importedModels.0}}{}{{/hasImportedModel}}
+type _ func() {{importedModels.0}}{{/hasImportedModel}}
 
 {{#operations}}
 {{#operation}}
@@ -26,7 +26,7 @@ type paramsParser{{baseName}}{{operationId}} struct {
 }
 
 func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *http.Request) (*{{>request-type}}, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
 	{{#-first}}// path params
@@ -58,14 +58,14 @@ func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>r
 				{{#items}}{{>params/parse-non-array-value}}{{/items}},{{/isArray}}{{^isArray}}
 				{{>params/parse-non-array-value}},{{/isArray}}
 			),{{/isBodyParam}}
-			validateValue: {{#isArray}}internal.NewArrayValidator(
-				internal.NewSimpleFieldValidator[{{>params/type}}]({{#minItems}}
-					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
-					internal.NewMinMaxLengthValidator[{{#items}}{{>params/type}}{{/items}}, {{>params/type}}]({{.}}, false),{{/maxItems}}
+			validateValue: {{#isArray}}NewArrayValidator(
+				NewSimpleFieldValidator[{{>fields/type}}]({{#minItems}}
+					NewMinMaxLengthValidator[{{#items}}{{>fields/type}}{{/items}}, {{>fields/type}}]({{.}}, true),{{/minItems}}{{#maxItems}}
+					NewMinMaxLengthValidator[{{#items}}{{>fields/type}}{{/items}}, {{>fields/type}}]({{.}}, false),{{/maxItems}}
 				),{{#items}}{{#isModel}}
-				internal.New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
-				{{#lambda.tab_indented_4}}{{>params/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
-			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>params/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
+				New{{{dataType}}}Validator(),{{/isModel}}{{^isModel}}
+				{{#lambda.tab_indented_4}}{{>fields/simple-validator}}{{/lambda.tab_indented_4}},{{/isModel}}{{/items}}
+			),{{/isArray}}{{^isArray}}{{#isModel}}{{>params/model-validator}},{{/isModel}}{{^isModel}}{{#lambda.tab_indented_3}}{{>fields/simple-validator}}{{/lambda.tab_indented_3}},{{/isModel}}{{/isArray}}
 		}),
 		{{/allParams}}
 	}

@@ -385,3 +385,21 @@ issues:
       source: "func newParams.+\\(app \\*HTTPApp\\)"
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
+
+    # mustache templates are limited and sometimes it's challenging to build
+    # a reusable template that can generate code with or without module prefix
+    # so we have to use dot imports and always generate without the prefix.
+    - path: "(routes/handlers/(.+)_(controller|params)\\.go)|(internal/(.+)_validation\\.go)"
+      text: "should not use dot imports"
+      linters:
+        - revive
+        - stylecheck
+
+    # enums are generated from schema and may have overlapping values
+    - text: "string `\\w+` has \\d+ occurrences, but such constant `\\w+` already exists"
+      linters: [ goconst ]
+
+    # we need some way to have all values of the enum available.
+    # it helps sometimes to just iterate over them.
+    - source: "Allowable(\\w+)Values"
+      linters: [ gochecknoglobals ]

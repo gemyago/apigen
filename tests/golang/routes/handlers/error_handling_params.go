@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 	"time"
-	"github.com/gemyago/apigen/tests/golang/routes/internal"
+	. "github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
 // Below is to workaround unused imports.
@@ -17,7 +17,7 @@ type paramsParserErrorHandlingErrorHandlingParsingErrors struct {
 }
 
 func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingParsingErrorsRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingParsingErrorsRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
@@ -38,7 +38,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			parseValue: parseSoloValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
+			validateValue: NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindPathParam2: newRequestParamBinder(binderParams[string, float32]{
@@ -46,7 +46,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			parseValue: parseSoloValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
+			validateValue: NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
@@ -54,7 +54,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
+			validateValue: NewSimpleFieldValidator[float32](
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -62,7 +62,7 @@ func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) params
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
+			validateValue: NewSimpleFieldValidator[float32](
 			),
 		}),
 	}
@@ -74,7 +74,7 @@ type paramsParserErrorHandlingErrorHandlingValidationErrors struct {
 }
 
 func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router httpRouter, req *http.Request) (*ErrorHandlingErrorHandlingValidationErrorsRequest, error) {
-	bindingCtx := internal.BindingContext{}
+	bindingCtx := BindingContext{}
 	reqParams := &ErrorHandlingErrorHandlingValidationErrorsRequest{}
 	// query params
 	query := req.URL.Query()
@@ -91,8 +91,8 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+			validateValue: NewSimpleFieldValidator[float32](
+				NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 		bindRequiredQuery2: newRequestParamBinder(binderParams[[]string, float32]{
@@ -100,8 +100,8 @@ func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) par
 			parseValue: parseMultiValueParamAsSoloValue(
 				app.knownParsers.float32Parser,
 			),
-			validateValue: internal.NewSimpleFieldValidator[float32](
-				internal.NewMinMaxValueValidator[float32](10, false, true),
+			validateValue: NewSimpleFieldValidator[float32](
+				NewMinMaxValueValidator[float32](10, false, true),
 			),
 		}),
 	}

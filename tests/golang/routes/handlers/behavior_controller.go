@@ -1,13 +1,17 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
-	"github.com/gemyago/apigen/tests/golang/routes/models"
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
+var _ = json.Unmarshal
+var _ = fmt.Sprint
 
 
 
@@ -15,7 +19,11 @@ var _ = time.Time{}
 
 
 
+// BehaviorBehaviorWithParamsAndResponseRequest represents params for behaviorWithParamsAndResponse operation
+//
+// Request: GET /behavior/with-params-and-response.
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
+	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
 }
 
@@ -33,7 +41,7 @@ type BehaviorController struct {
 	//
 	// Request type: none
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorNoParamsWithResponse httpHandlerFactory
 
 	// GET /behavior/no-status-defined
@@ -47,7 +55,7 @@ type BehaviorController struct {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorWithParamsAndResponse httpHandlerFactory
 
 	// POST /behavior/with-status-defined
@@ -70,8 +78,8 @@ type BehaviorControllerBuilder struct {
 	//
 	// Request type: none
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
-	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *models.BehaviorNoParamsWithResponse202Response]
+	// Response type: BehaviorNoParamsWithResponse202Response
+	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *BehaviorNoParamsWithResponse202Response]
 
 	// GET /behavior/no-status-defined
 	//
@@ -84,8 +92,8 @@ type BehaviorControllerBuilder struct {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: models.BehaviorNoParamsWithResponse202Response
-	HandleBehaviorWithParamsAndResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorWithParamsAndResponseRequest, *models.BehaviorNoParamsWithResponse202Response]
+	// Response type: BehaviorNoParamsWithResponse202Response
+	HandleBehaviorWithParamsAndResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorWithParamsAndResponseRequest, *BehaviorNoParamsWithResponse202Response]
 
 	// POST /behavior/with-status-defined
 	//
