@@ -2,8 +2,7 @@ name: Release
 
 on:
   pull_request:
-    # Use triggers below for testing purposes
-    # types: [opened, synchronize, reopened]
+    types: [closed]
     branches:
       - main
 
@@ -14,8 +13,7 @@ jobs:
       contents: read
 
     name: Deploy Go APIGen Server
-    # TODO: Uncomment.
-    # if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
 
     steps:
