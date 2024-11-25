@@ -23,6 +23,8 @@ golang_tests_cover_dir=tests/golang/.cover
 golang_tests_cover_profile=${golang_tests_cover_dir}/profile.out
 golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
 
+golang_server_jar=generators/go-apigen-server/target/server-0.0.1.jar
+
 $(bin):
 	mkdir -p $@
 
@@ -75,7 +77,7 @@ generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -
 	touch $@
 
 examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server examples/petstore.yaml
-	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		-i examples/petstore.yaml \
@@ -88,7 +90,7 @@ examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
 # generatedCodeComment set to empty to allow linter to lint generated code.
 tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml generators/go-apigen-server
 	mkdir -p $@
-	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		--additional-properties generatedCodeComment="" \
