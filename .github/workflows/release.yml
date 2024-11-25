@@ -10,7 +10,8 @@ on:
 jobs:
   deploy-go-apigen-server:
     name: Deploy Go APIGen Server
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    # TODO: Uncomment.
+    # if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
 
     steps:
