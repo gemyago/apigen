@@ -24,3 +24,5 @@ jobs:
 
       - name: Run deploy
         run: make deploy/generators/go-apigen-server
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
