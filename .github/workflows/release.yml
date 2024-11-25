@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  pull_request:
+    # Use triggers below for testing purposes
+    # types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  deploy-go-apigen-server:
+    name: Deploy Go APIGen Server
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run deploy
+        run: make deploy/generators/go-apigen-server
