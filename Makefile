@@ -23,7 +23,7 @@ golang_tests_cover_dir=tests/golang/.cover
 golang_tests_cover_profile=${golang_tests_cover_dir}/profile.out
 golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
 
-golang_server_jar=generators/go-apigen-server/target/server-0.0.1.jar
+golang_server_jar=generators/go-apigen-server/target/server.jar
 
 $(bin):
 	mkdir -p $@
@@ -72,11 +72,11 @@ endef
 %/.openapi-generator/REMOVED_FILES:
 	$(if $(strip $(openapi_generator_removed_files)),$(current_make) $(openapi_generator_removed_files), $(NOOP))
 
-generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -type f)
-	mvn -f $@/pom.xml package
+$(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
+	mvn -f generators/go-apigen-server/pom.xml package
 	touch $@
 
-examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server examples/petstore.yaml
+examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/petstore.yaml
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
