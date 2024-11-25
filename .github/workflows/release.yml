@@ -9,6 +9,10 @@ on:
 
 jobs:
   deploy-go-apigen-server:
+    permissions:
+      packages: write
+      contents: read
+
     name: Deploy Go APIGen Server
     # TODO: Uncomment.
     # if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
