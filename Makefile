@@ -170,5 +170,5 @@ tmp/maven-settings.xml: $(tmp) generators/maven-settings.xml.template
 
 .PHONY: deploy/generators/go-apigen-server
 deploy/generators/go-apigen-server: $(mvn) tmp/maven-settings.xml
-	mvn -s tmp/maven-settings.xml -f generators/go-apigen-server/pom.xml deploy
+	mvn --batch-mode -s tmp/maven-settings.xml -f generators/go-apigen-server/pom.xml deploy
 	rm tmp/maven-settings.xml
