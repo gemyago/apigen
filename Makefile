@@ -168,7 +168,7 @@ tests: tests/golang
 tmp/maven-settings.xml: $(tmp) generators/maven-settings.xml.template
 	sed 's/\${GITHUB_TOKEN}/$(GITHUB_TOKEN)/g' generators/maven-settings.xml.template > $@
 
-.PHONY: deploy
-deploy: $(mvn) tmp/maven-settings.xml
+.PHONY: deploy/generators/go-apigen-server
+deploy/generators/go-apigen-server: $(mvn) tmp/maven-settings.xml
 	mvn -s tmp/maven-settings.xml -f generators/go-apigen-server/pom.xml deploy
 	rm tmp/maven-settings.xml
