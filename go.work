@@ -2,4 +2,6 @@ go 1.23
 
 use ./examples/go-apigen-server
 
+use ./lang/apigengo
+
 use ./tests/golang
