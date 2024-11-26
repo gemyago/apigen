@@ -17,20 +17,23 @@ func TestReadPluginVersion(t *testing.T) {
 				Data: []byte(`<project><version>` + wantVer + `</version></project>`),
 			},
 		}
-		ver, err := readPluginVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		ver, err := reader.ReadPluginVersion()
 		require.NoError(t, err)
 		assert.Equal(t, wantVer, ver)
 	})
 
 	t.Run("should read the version from the embedded file", func(t *testing.T) {
-		ver, err := ReadPluginVersion()
+		reader := NewResourcesMetadataReader()
+		ver, err := reader.ReadPluginVersion()
 		require.NoError(t, err)
 		assert.NotEmpty(t, ver)
 	})
 
 	t.Run("should fail if no such file", func(t *testing.T) {
 		mockFs := fstest.MapFS{}
-		_, err := readPluginVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadPluginVersion()
 		require.Error(t, err)
 	})
 
@@ -40,7 +43,8 @@ func TestReadPluginVersion(t *testing.T) {
 				Data: []byte("not an xml"),
 			},
 		}
-		_, err := readPluginVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadPluginVersion()
 		require.Error(t, err)
 	})
 
@@ -50,7 +54,8 @@ func TestReadPluginVersion(t *testing.T) {
 				Data: []byte(`<project></project>`),
 			},
 		}
-		_, err := readPluginVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadPluginVersion()
 		require.Error(t, err)
 	})
 
@@ -60,7 +65,8 @@ func TestReadPluginVersion(t *testing.T) {
 				Data: []byte(`<project><version></version></project>`),
 			},
 		}
-		_, err := readPluginVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadPluginVersion()
 		require.Error(t, err)
 	})
 }
@@ -73,20 +79,23 @@ func TestReadOpenapiGeneratorCliVersion(t *testing.T) {
 				Data: []byte("OPENAPI_GENERATOR_CLI: " + wantVer + "\nMAVEN: 3.8.8"),
 			},
 		}
-		ver, err := readOpenapiGeneratorCliVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		ver, err := reader.ReadOpenapiGeneratorCliVersion()
 		require.NoError(t, err)
 		assert.Equal(t, wantVer, ver)
 	})
 
 	t.Run("should read the version from the embedded file", func(t *testing.T) {
-		ver, err := ReadOpenapiGeneratorCliVersion()
+		reader := NewResourcesMetadataReader()
+		ver, err := reader.ReadOpenapiGeneratorCliVersion()
 		require.NoError(t, err)
 		assert.NotEmpty(t, ver)
 	})
 
 	t.Run("should fail if no such file", func(t *testing.T) {
 		mockFs := fstest.MapFS{}
-		_, err := readOpenapiGeneratorCliVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadOpenapiGeneratorCliVersion()
 		require.Error(t, err)
 	})
 
@@ -96,7 +105,8 @@ func TestReadOpenapiGeneratorCliVersion(t *testing.T) {
 				Data: []byte("MAVEN: 3.8.8"),
 			},
 		}
-		_, err := readOpenapiGeneratorCliVersion(mockFs)
+		reader := ResourcesMetadataReader{fs: mockFs}
+		_, err := reader.ReadOpenapiGeneratorCliVersion()
 		require.Error(t, err)
 	})
 }

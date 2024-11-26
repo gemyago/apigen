@@ -12,11 +12,8 @@ import (
 //go:generate cp -r ../../../../../../generators/go-apigen-server/pom.xml ./go-apigen-server.xml
 //go:generate cp -r ../../../../../../.versions ./.versions
 
-//go:embed go-apigen-server.xml
-var goApigenServer embed.FS
-
-//go:embed .versions
-var versions embed.FS
+//go:embed go-apigen-server.xml .versions
+var resources embed.FS
 
 const versionLineSegmentsCount = 2
 
@@ -24,8 +21,12 @@ type mavenProject struct {
 	Version string `xml:"version"`
 }
 
-func readPluginVersion(fs fs.ReadFileFS) (string, error) {
-	data, err := fs.ReadFile("go-apigen-server.xml")
+type ResourcesMetadataReader struct {
+	fs fs.ReadFileFS
+}
+
+func (r *ResourcesMetadataReader) ReadPluginVersion() (string, error) {
+	data, err := r.fs.ReadFile("go-apigen-server.xml")
 	if err != nil {
 		return "", err
 	}
@@ -42,12 +43,8 @@ func readPluginVersion(fs fs.ReadFileFS) (string, error) {
 	return project.Version, nil
 }
 
-func ReadPluginVersion() (string, error) {
-	return readPluginVersion(goApigenServer)
-}
-
-func readOpenapiGeneratorCliVersion(fs fs.ReadFileFS) (string, error) {
-	data, err := fs.ReadFile(".versions")
+func (r *ResourcesMetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
+	data, err := r.fs.ReadFile(".versions")
 	if err != nil {
 		return "", err
 	}
@@ -66,6 +63,6 @@ func readOpenapiGeneratorCliVersion(fs fs.ReadFileFS) (string, error) {
 	return "", errors.New("OPENAPI_GENERATOR_CLI version not found")
 }
 
-func ReadOpenapiGeneratorCliVersion() (string, error) {
-	return readOpenapiGeneratorCliVersion(versions)
+func NewResourcesMetadataReader() *ResourcesMetadataReader {
+	return &ResourcesMetadataReader{fs: resources}
 }
