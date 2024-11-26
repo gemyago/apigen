@@ -13,7 +13,10 @@ jobs:
       contents: read
 
     name: Deploy Go APIGen Server
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    if: |
+      github.event.pull_request.merged == true && 
+      startsWith(github.event.pull_request.head.ref, 'release/') &&
+      !contains(github.event.pull_request.labels.*.name, 'no-build')
     runs-on: ubuntu-latest
 
     steps:

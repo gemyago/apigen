@@ -9,6 +9,7 @@ on:
 
 jobs:
   build-and-test:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     name: Lint And Test
     runs-on: ubuntu-latest
     steps:
