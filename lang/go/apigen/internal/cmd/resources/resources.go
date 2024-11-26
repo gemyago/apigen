@@ -21,11 +21,11 @@ type mavenProject struct {
 	Version string `xml:"version"`
 }
 
-type ResourcesMetadataReader struct {
+type MetadataReader struct {
 	fs fs.ReadFileFS
 }
 
-func (r *ResourcesMetadataReader) ReadPluginVersion() (string, error) {
+func (r *MetadataReader) ReadPluginVersion() (string, error) {
 	data, err := r.fs.ReadFile("go-apigen-server.xml")
 	if err != nil {
 		return "", err
@@ -43,7 +43,7 @@ func (r *ResourcesMetadataReader) ReadPluginVersion() (string, error) {
 	return project.Version, nil
 }
 
-func (r *ResourcesMetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
+func (r *MetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
 	data, err := r.fs.ReadFile(".versions")
 	if err != nil {
 		return "", err
@@ -63,6 +63,6 @@ func (r *ResourcesMetadataReader) ReadOpenapiGeneratorCliVersion() (string, erro
 	return "", errors.New("OPENAPI_GENERATOR_CLI version not found")
 }
 
-func NewResourcesMetadataReader() *ResourcesMetadataReader {
-	return &ResourcesMetadataReader{fs: resources}
+func NewMetadataReader() *MetadataReader {
+	return &MetadataReader{fs: resources}
 }
