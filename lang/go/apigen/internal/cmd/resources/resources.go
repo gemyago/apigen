@@ -20,8 +20,8 @@ type mavenProject struct {
 	Version string `xml:"version"`
 }
 
-func ReadPluginVersion() (string, error) {
-	data, err := fs.ReadFile(goApigenServer, "go-apigen-server.xml")
+func readPluginVersion(fs fs.ReadFileFS) (string, error) {
+	data, err := fs.ReadFile("go-apigen-server.xml")
 	if err != nil {
 		return "", err
 	}
@@ -36,4 +36,8 @@ func ReadPluginVersion() (string, error) {
 	}
 
 	return project.Version, nil
+}
+
+func ReadPluginVersion() (string, error) {
+	return readPluginVersion(goApigenServer)
 }
