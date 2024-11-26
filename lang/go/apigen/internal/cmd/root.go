@@ -4,10 +4,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const expectedArgsCount = 2
+
 func NewRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apigengo",
+		Use:   "apigengo [input] [output]",
 		Short: "Generate HTTP layer from OpenAPI spec",
+		Args:  cobra.ExactArgs(expectedArgsCount),
 		Run: func(cmd *cobra.Command, args []string) {
 		},
 	}
