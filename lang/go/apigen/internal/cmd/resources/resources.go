@@ -18,6 +18,8 @@ var goApigenServer embed.FS
 //go:embed .versions
 var versions embed.FS
 
+const versionLineSegmentsCount = 2
+
 type mavenProject struct {
 	Version string `xml:"version"`
 }
@@ -55,7 +57,7 @@ func readOpenapiGeneratorCliVersion(fs fs.ReadFileFS) (string, error) {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "OPENAPI_GENERATOR_CLI:") {
 			parts := strings.Split(line, ":")
-			if len(parts) == 2 {
+			if len(parts) == versionLineSegmentsCount {
 				return strings.TrimSpace(parts[1]), nil
 			}
 		}
