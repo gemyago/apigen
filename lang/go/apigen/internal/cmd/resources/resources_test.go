@@ -64,3 +64,39 @@ func TestReadPluginVersion(t *testing.T) {
 		require.Error(t, err)
 	})
 }
+
+func TestReadOpenapiGeneratorCliVersion(t *testing.T) {
+	t.Run("should read the OPENAPI_GENERATOR_CLI version", func(t *testing.T) {
+		wantVer := faker.Word()
+		mockFs := fstest.MapFS{
+			".versions": &fstest.MapFile{
+				Data: []byte("OPENAPI_GENERATOR_CLI: " + wantVer + "\nMAVEN: 3.8.8"),
+			},
+		}
+		ver, err := readOpenapiGeneratorCliVersion(mockFs)
+		require.NoError(t, err)
+		assert.Equal(t, wantVer, ver)
+	})
+
+	t.Run("should read the version from the embedded file", func(t *testing.T) {
+		ver, err := ReadOpenapiGeneratorCliVersion()
+		require.NoError(t, err)
+		assert.NotEmpty(t, ver)
+	})
+
+	t.Run("should fail if no such file", func(t *testing.T) {
+		mockFs := fstest.MapFS{}
+		_, err := readOpenapiGeneratorCliVersion(mockFs)
+		require.Error(t, err)
+	})
+
+	t.Run("should fail if the version is not found", func(t *testing.T) {
+		mockFs := fstest.MapFS{
+			".versions": &fstest.MapFile{
+				Data: []byte("MAVEN: 3.8.8"),
+			},
+		}
+		_, err := readOpenapiGeneratorCliVersion(mockFs)
+		require.Error(t, err)
+	})
+}
