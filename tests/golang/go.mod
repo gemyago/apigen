@@ -6,7 +6,7 @@ require (
 	github.com/jaswdr/faker v1.19.1
 	github.com/samber/lo v1.46.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
+	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa
 )
 
 require (
