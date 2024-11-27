@@ -88,7 +88,7 @@ examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/p
 examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
 
 # generatedCodeComment set to empty to allow linter to lint generated code.
-tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml generators/go-apigen-server
+tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_server_jar)
 	mkdir -p $@
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
@@ -165,10 +165,13 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 .PHONY: tests
 tests: tests/golang
 
-tmp/maven-settings.xml: $(tmp) generators/maven-settings.xml.template
-	sed 's/\${GITHUB_TOKEN}/$(GITHUB_TOKEN)/g' generators/maven-settings.xml.template > $@
+tmp/release-tag.txt: $(tmp)
+	./scripts/resolve-release-tag.sh > $@
 
-.PHONY: deploy/generators/go-apigen-server
-deploy/generators/go-apigen-server: $(mvn) tmp/maven-settings.xml
-	mvn --batch-mode -s tmp/maven-settings.xml -f generators/go-apigen-server/pom.xml deploy
-	rm tmp/maven-settings.xml
+.PHONY: release
+release: $(golang_server_jar) tmp/release-tag.txt
+	gh release create $(shell cat tmp/release-tag.txt) \
+		--generate-notes \
+		--latest=false \
+		--draft \
+		$(golang_server_jar) > tmp/release-url.txt
