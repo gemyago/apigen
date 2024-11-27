@@ -165,12 +165,9 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 .PHONY: tests
 tests: tests/golang
 
-tmp/release-tag.txt: $(tmp)
-	./scripts/resolve-release-tag.sh > $@
-
 .PHONY: release
-release: $(golang_server_jar) tmp/release-tag.txt
-	gh release create $(shell cat tmp/release-tag.txt) \
+release: $(golang_server_jar) $(tmp)
+	gh release create $(shell ./scripts/release.sh resolve-release-tag) \
 		--generate-notes \
 		--latest=false \
 		--draft \
