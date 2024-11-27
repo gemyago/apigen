@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	rootCmd := cmd.NewRootCmd()
+	generator := cmd.NewGenerator()
+	rootCmd := cmd.NewRootCmd(generator)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
