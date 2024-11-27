@@ -2,7 +2,10 @@ module github.com/gemyago/apigen/lang/go/apigen
 
 go 1.23
 
-require github.com/spf13/cobra v1.8.1
+require (
+	github.com/spf13/cobra v1.8.1
+	golang.org/x/net v0.31.0
+)
 
 require (
 	github.com/go-faker/faker/v4 v4.5.0 // indirect
