@@ -47,8 +47,12 @@ func TestSupportFilesInstaller(t *testing.T) {
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootFS: mockFS,
 		})
-		err := installer(context.Background(), params)
+		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
+		assert.Equal(t, SupportingFilesInstallResult{
+			OagLocation:             oagCliFile,
+			ServerGeneratorLocation: serverGeneratorFile,
+		}, res)
 	})
 
 	t.Run("should download all files on fresh environment", func(t *testing.T) {
@@ -61,8 +65,12 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		err := installer(context.Background(), params)
+		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
+		assert.Equal(t, SupportingFilesInstallResult{
+			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
+			ServerGeneratorLocation: path.Join(params.SupportDir, "server-generator.jar"),
+		}, res)
 		require.Len(t, downloaderCalls, 2)
 		assert.Equal(t, []string{
 			params.OagSourceLocation,
@@ -101,8 +109,12 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		err := installer(context.Background(), params)
+		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
+		assert.Equal(t, SupportingFilesInstallResult{
+			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
+			ServerGeneratorLocation: path.Join(params.SupportDir, "server-generator.jar"),
+		}, res)
 		require.Len(t, downloaderCalls, 2)
 		assert.Equal(t, []string{
 			params.OagSourceLocation,
@@ -136,8 +148,12 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		err := installer(context.Background(), params)
+		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
+		assert.Equal(t, SupportingFilesInstallResult{
+			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
+			ServerGeneratorLocation: path.Join(params.SupportDir, "server-generator.jar"),
+		}, res)
 		require.Len(t, downloaderCalls, 2)
 		assert.Equal(t, []string{
 			params.OagSourceLocation,

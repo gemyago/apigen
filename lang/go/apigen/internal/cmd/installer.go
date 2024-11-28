@@ -25,7 +25,15 @@ type SupportFilesInstallerParams struct {
 	ServerGeneratorSourceLocation string
 }
 
-type SupportFilesInstaller func(ctx context.Context, params SupportFilesInstallerParams) error
+type SupportingFilesInstallResult struct {
+	OagLocation             string
+	ServerGeneratorLocation string
+}
+
+type SupportFilesInstaller func(
+	ctx context.Context,
+	params SupportFilesInstallerParams,
+) (SupportingFilesInstallResult, error)
 
 type SupportFilesInstallerDeps struct {
 	Downloader ResourceDownloader
@@ -82,11 +90,12 @@ func downloadSupportFileIfRequired(
 }
 
 func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstaller {
-	return func(ctx context.Context, params SupportFilesInstallerParams) error {
+	return func(ctx context.Context, params SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
+		var emptyResult SupportingFilesInstallResult
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		metadata, err := readSupportFilesMetadata(deps.RootFS, metadataFile)
 		if err != nil {
-			return err
+			return emptyResult, err
 		}
 
 		metadataChanged := false
@@ -103,7 +112,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 				metadataChanged:  &metadataChanged,
 			},
 		); err != nil {
-			return err
+			return emptyResult, err
 		}
 
 		serverGeneratorDestination := path.Join(params.SupportDir, "server-generator.jar")
@@ -119,21 +128,24 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 				metadataChanged:  &metadataChanged,
 			},
 		); err != nil {
-			return err
+			return emptyResult, err
 		}
 
 		if metadataChanged {
 			var metadataOutput *os.File
 			metadataOutput, err = os.Create(metadataFile)
 			if err != nil {
-				return fmt.Errorf("failed to open metadata file for writing: %w", err)
+				return emptyResult, fmt.Errorf("failed to open metadata file for writing: %w", err)
 			}
 			defer metadataOutput.Close()
 			if err = json.NewEncoder(metadataOutput).Encode(metadata); err != nil {
-				return fmt.Errorf("failed to write metadata: %w", err)
+				return emptyResult, fmt.Errorf("failed to write metadata: %w", err)
 			}
 		}
 
-		return nil
+		return SupportingFilesInstallResult{
+			OagLocation:             oagDestination,
+			ServerGeneratorLocation: serverGeneratorDestination,
+		}, nil
 	}
 }
