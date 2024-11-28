@@ -44,35 +44,39 @@ func readSupportFilesMetadata(rootFS fs.ReadFileFS, metadataFile string) (Suppor
 	return metadata, nil
 }
 
+type downloadSupportFileIfRequiredParams struct {
+	sourceLocation   string
+	destinationPath  string
+	sourceVersion    string
+	metadataVersion  *string
+	metadataLocation *string
+	metadataChanged  *bool
+}
+
 func downloadSupportFileIfRequired(
 	ctx context.Context,
 	deps SupportFilesInstallerDeps,
-	sourceLocation string,
-	destinationPath string,
-	sourceVersion string,
-	metadataVersion *string,
-	metadataLocation *string,
-	metadataChanged *bool,
+	params downloadSupportFileIfRequiredParams,
 ) error {
 	fileExists := true
-	file, err := deps.RootFS.Open(destinationPath[1:])
+	file, err := deps.RootFS.Open(params.destinationPath[1:])
 	if err != nil {
 		fileExists = false
 	} else {
 		defer file.Close()
 	}
 
-	if !fileExists || sourceVersion != *metadataVersion {
+	if !fileExists || params.sourceVersion != *params.metadataVersion {
 		if err = deps.Downloader(
 			ctx,
-			sourceLocation,
-			destinationPath,
+			params.sourceLocation,
+			params.destinationPath,
 		); err != nil {
 			return fmt.Errorf("failed to download openapi-generator-cli: %w", err)
 		}
-		*metadataLocation = sourceLocation
-		*metadataVersion = sourceVersion
-		*metadataChanged = true
+		*params.metadataLocation = params.sourceLocation
+		*params.metadataVersion = params.sourceVersion
+		*params.metadataChanged = true
 	}
 	return nil
 }
@@ -90,12 +94,14 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		if err = downloadSupportFileIfRequired(
 			ctx,
 			deps,
-			params.OagSourceLocation,
-			oagDestination,
-			params.OagSourceVersion,
-			&metadata.OagSourceVersion,
-			&metadata.OagSourceLocation,
-			&metadataChanged,
+			downloadSupportFileIfRequiredParams{
+				sourceLocation:   params.OagSourceLocation,
+				destinationPath:  oagDestination,
+				sourceVersion:    params.OagSourceVersion,
+				metadataVersion:  &metadata.OagSourceVersion,
+				metadataLocation: &metadata.OagSourceLocation,
+				metadataChanged:  &metadataChanged,
+			},
 		); err != nil {
 			return err
 		}
@@ -104,12 +110,14 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		if err = downloadSupportFileIfRequired(
 			ctx,
 			deps,
-			params.ServerGeneratorSourceLocation,
-			serverGeneratorDestination,
-			params.ServerGeneratorSourceVersion,
-			&metadata.GeneratorSourceVersion,
-			&metadata.GeneratorSourceLocation,
-			&metadataChanged,
+			downloadSupportFileIfRequiredParams{
+				sourceLocation:   params.ServerGeneratorSourceLocation,
+				destinationPath:  serverGeneratorDestination,
+				sourceVersion:    params.ServerGeneratorSourceVersion,
+				metadataVersion:  &metadata.GeneratorSourceVersion,
+				metadataLocation: &metadata.GeneratorSourceLocation,
+				metadataChanged:  &metadataChanged,
+			},
 		); err != nil {
 			return err
 		}
