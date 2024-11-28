@@ -12,12 +12,20 @@ import (
 )
 
 type GeneratorParams struct {
-	input             string
-	output            string
-	supportDir        string
-	oagCliVersion     string
-	oagCliLocation    string
-	generatorVersion  string
+	input      string
+	output     string
+	supportDir string
+
+	// oagCliVersion is a version of the required openapi-generator-cli
+	oagCliVersion string
+
+	// oagCliLocation is a path to the source openapi-generator-cli jar file
+	oagCliLocation string
+
+	// generatorVersion is a version of the required generator plugin
+	generatorVersion string
+
+	// generatorLocation is a path to the source generator plugin jar file
 	generatorLocation string
 }
 
