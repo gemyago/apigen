@@ -21,7 +21,9 @@ func TestSupportFilesInstaller(t *testing.T) {
 		require.NoError(t, os.MkdirAll(supportDir, 0755))
 		return SupportFilesInstallerParams{
 			SupportDir:                    supportDir,
+			OagSourceVersion:              "1.2.3-" + faker.Word(),
 			OagSourceLocation:             "file://" + path.Join(t.TempDir(), "oag-cli-"+faker.Word()+".jar"),
+			ServerGeneratorSourceVersion:  "3.2.1-" + faker.Word(),
 			ServerGeneratorSourceLocation: "file://" + path.Join(t.TempDir(), "generator-"+faker.Word()+".jar"),
 		}
 	}
@@ -29,7 +31,9 @@ func TestSupportFilesInstaller(t *testing.T) {
 	t.Run("should do nothing if generator and cli are already installed", func(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadata := SupportFilesMetadata{
+			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
+			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := filepath.Join(params.SupportDir, "metadata.json")
@@ -37,8 +41,8 @@ func TestSupportFilesInstaller(t *testing.T) {
 		serverGeneratorFile := filepath.Join(params.SupportDir, "server-generator.jar")
 		mockFS := fstest.MapFS{
 			metadataFile[1:]:        {Data: lo.Must(json.Marshal(metadata))},
-			oagCliFile[1:]:          {},
-			serverGeneratorFile[1:]: {},
+			oagCliFile[1:]:          {Data: []byte{}},
+			serverGeneratorFile[1:]: {Data: []byte{}},
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootFS: mockFS,
@@ -78,12 +82,14 @@ func TestSupportFilesInstaller(t *testing.T) {
 	t.Run("should download if actual files are missing but not metadata", func(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadata := SupportFilesMetadata{
+			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
+			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		mockFS := fstest.MapFS{
-			metadataFile: &fstest.MapFile{
+			metadataFile[1:]: &fstest.MapFile{
 				Data: lo.Must(json.Marshal(metadata)),
 			},
 		}
@@ -108,15 +114,17 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}, downloaderCalls[1])
 	})
 
-	t.Run("should download if metadata locations are different", func(t *testing.T) {
+	t.Run("should download if metadata versions are different", func(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadata := SupportFilesMetadata{
-			OagSourceLocation:       "file://" + path.Join(t.TempDir(), "oag-cli-"+faker.Word()+".jar"),
-			GeneratorSourceLocation: "file://" + path.Join(t.TempDir(), "generator-"+faker.Word()+".jar"),
+			OagSourceVersion:        params.OagSourceVersion + "-" + faker.Word(),
+			OagSourceLocation:       params.OagSourceLocation,
+			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion + "-" + faker.Word(),
+			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		mockFS := fstest.MapFS{
-			metadataFile: &fstest.MapFile{
+			metadataFile[1:]: &fstest.MapFile{
 				Data: lo.Must(json.Marshal(metadata)),
 			},
 		}

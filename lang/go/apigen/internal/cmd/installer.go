@@ -10,13 +10,18 @@ import (
 )
 
 type SupportFilesMetadata struct {
-	OagSourceLocation       string `json:"oagSourceLocation"`
+	OagSourceVersion  string `json:"oagSourceVersion"`
+	OagSourceLocation string `json:"oagSourceLocation"`
+
+	GeneratorSourceVersion  string `json:"serverGeneratorSourceVersion"`
 	GeneratorSourceLocation string `json:"serverGeneratorSourceLocation"`
 }
 
 type SupportFilesInstallerParams struct {
 	SupportDir                    string
+	OagSourceVersion              string
 	OagSourceLocation             string
+	ServerGeneratorSourceVersion  string
 	ServerGeneratorSourceLocation string
 }
 
@@ -39,6 +44,15 @@ func readSupportFilesMetadata(rootFS fs.ReadFileFS, metadataFile string) (Suppor
 	return metadata, nil
 }
 
+func fsFileExists(fs fs.FS, fullPath string) bool {
+	file, err := fs.Open(fullPath[1:])
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+	return true
+}
+
 func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstaller {
 	return func(ctx context.Context, params SupportFilesInstallerParams) error {
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
@@ -47,28 +61,33 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 			return err
 		}
 
+		oagDestination := path.Join(params.SupportDir, "openapi-generator-cli.jar")
 		metadataChanged := false
-		if metadata.OagSourceLocation != params.OagSourceLocation {
+		if !fsFileExists(deps.RootFS, oagDestination) || metadata.OagSourceVersion != params.OagSourceVersion {
 			if err = deps.Downloader(
 				ctx,
 				params.OagSourceLocation,
-				path.Join(params.SupportDir, "openapi-generator-cli.jar"),
+				oagDestination,
 			); err != nil {
 				return fmt.Errorf("failed to download openapi-generator-cli: %w", err)
 			}
 			metadata.OagSourceLocation = params.OagSourceLocation
+			metadata.OagSourceVersion = params.OagSourceVersion
 			metadataChanged = true
 		}
 
-		if metadata.GeneratorSourceLocation != params.ServerGeneratorSourceLocation {
+		serverGeneratorDestination := path.Join(params.SupportDir, "server-generator.jar")
+		if !fsFileExists(deps.RootFS, serverGeneratorDestination) ||
+			metadata.GeneratorSourceVersion != params.ServerGeneratorSourceVersion {
 			if err = deps.Downloader(
 				ctx,
 				params.ServerGeneratorSourceLocation,
-				path.Join(params.SupportDir, "server-generator.jar"),
+				serverGeneratorDestination,
 			); err != nil {
 				return fmt.Errorf("failed to download server-generator: %w", err)
 			}
 			metadata.GeneratorSourceLocation = params.ServerGeneratorSourceLocation
+			metadata.GeneratorSourceVersion = params.ServerGeneratorSourceVersion
 			metadataChanged = true
 		}
 
