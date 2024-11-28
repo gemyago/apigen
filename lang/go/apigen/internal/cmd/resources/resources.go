@@ -25,6 +25,7 @@ type MetadataReader struct {
 	fs fs.ReadFileFS
 }
 
+// TODO: Rename to something that has server in it
 func (r *MetadataReader) ReadPluginVersion() (string, error) {
 	data, err := r.fs.ReadFile("go-apigen-server.xml")
 	if err != nil {

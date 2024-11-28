@@ -22,18 +22,18 @@ type GeneratorInvokerParams struct {
 	GeneratorLocation string
 }
 
-type osExecutableCmd interface {
+type OsExecutableCmd interface {
 	Run() error
 	StderrPipe() (io.ReadCloser, error)
 	StdoutPipe() (io.ReadCloser, error)
 }
 
-var _ osExecutableCmd = (*exec.Cmd)(nil)
+var _ OsExecutableCmd = (*exec.Cmd)(nil)
 
 type GeneratorInvokerDeps struct {
-	stdOut                     io.Writer
-	stdErr                     io.Writer
-	osExecutableCmdFactoryFunc func(name string, arg ...string) osExecutableCmd
+	StdOut                     io.Writer
+	StdErr                     io.Writer
+	OsExecutableCmdFactoryFunc func(name string, arg ...string) OsExecutableCmd
 }
 
 type GeneratorInvoker func(ctx context.Context, params GeneratorInvokerParams) error
@@ -42,7 +42,7 @@ func NewGeneratorInvoker(
 	deps GeneratorInvokerDeps,
 ) GeneratorInvoker {
 	return func(_ context.Context, params GeneratorInvokerParams) error {
-		cmd := deps.osExecutableCmdFactoryFunc(
+		cmd := deps.OsExecutableCmdFactoryFunc(
 			"java",
 			"-cp",
 			params.OagCliLocation+":"+params.GeneratorLocation,
@@ -65,8 +65,8 @@ func NewGeneratorInvoker(
 		wg := sync.WaitGroup{}
 		wg.Add(1)
 		go func() {
-			if _, pipeErr := io.Copy(deps.stdOut, stdOut); pipeErr != nil {
-				fmt.Fprintf(deps.stdErr, "failed to copy stdout: %v", pipeErr)
+			if _, pipeErr := io.Copy(deps.StdOut, stdOut); pipeErr != nil {
+				fmt.Fprintf(deps.StdErr, "failed to copy stdout: %v", pipeErr)
 			}
 			wg.Done()
 		}()
@@ -79,8 +79,8 @@ func NewGeneratorInvoker(
 
 		wg.Add(1)
 		go func() {
-			if _, pipeErr := io.Copy(deps.stdErr, stdErr); pipeErr != nil {
-				fmt.Fprintf(deps.stdErr, "failed to copy stderr: %v", pipeErr)
+			if _, pipeErr := io.Copy(deps.StdErr, stdErr); pipeErr != nil {
+				fmt.Fprintf(deps.StdErr, "failed to copy stderr: %v", pipeErr)
 			}
 			wg.Done()
 		}()
