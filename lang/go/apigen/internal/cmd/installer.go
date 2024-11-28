@@ -27,21 +27,29 @@ type SupportFilesInstallerDeps struct {
 	RootFS     fs.ReadFileFS
 }
 
+func readSupportFilesMetadata(rootFS fs.ReadFileFS, metadataFile string) (SupportFilesMetadata, error) {
+	var metadata SupportFilesMetadata
+	if data, err := rootFS.ReadFile(metadataFile[1:]); err == nil {
+		if err = json.Unmarshal(data, &metadata); err != nil {
+			return SupportFilesMetadata{}, fmt.Errorf("failed to unmarshal metadata: %w", err)
+		}
+	} else if !os.IsNotExist(err) {
+		return SupportFilesMetadata{}, fmt.Errorf("failed to read metadata: %w", err)
+	}
+	return metadata, nil
+}
+
 func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstaller {
 	return func(ctx context.Context, params SupportFilesInstallerParams) error {
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		var metadata SupportFilesMetadata
-		if data, err := deps.RootFS.ReadFile(metadataFile[1:]); err == nil {
-			if err = json.Unmarshal(data, &metadata); err != nil {
-				return fmt.Errorf("failed to unmarshal metadata: %w", err)
-			}
-		} else if !os.IsNotExist(err) {
-			return fmt.Errorf("failed to read metadata: %w", err)
+		metadata, err := readSupportFilesMetadata(deps.RootFS, metadataFile)
+		if err != nil {
+			return err
 		}
 
 		metadataChanged := false
 		if metadata.OagSourceLocation != params.OagSourceLocation {
-			if err := deps.Downloader(
+			if err = deps.Downloader(
 				ctx,
 				params.OagSourceLocation,
 				path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -53,7 +61,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		}
 
 		if metadata.GeneratorSourceLocation != params.ServerGeneratorSourceLocation {
-			if err := deps.Downloader(
+			if err = deps.Downloader(
 				ctx,
 				params.ServerGeneratorSourceLocation,
 				path.Join(params.SupportDir, "server-generator.jar"),
@@ -65,9 +73,10 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		}
 
 		if metadataChanged {
-			metadataOutput, err := os.Create(metadataFile)
+			var metadataOutput *os.File
+			metadataOutput, err = os.Create(metadataFile)
 			if err != nil {
-				return fmt.Errorf("failed to open metadata file: %w", err)
+				return fmt.Errorf("failed to open metadata file for writing: %w", err)
 			}
 			defer metadataOutput.Close()
 			if err = json.NewEncoder(metadataOutput).Encode(metadata); err != nil {

@@ -17,8 +17,10 @@ import (
 
 func TestSupportFilesInstaller(t *testing.T) {
 	makeRandomGeneratorParams := func(t *testing.T) SupportFilesInstallerParams {
+		supportDir := path.Join(t.TempDir(), "support", faker.Word())
+		require.NoError(t, os.MkdirAll(supportDir, 0755))
 		return SupportFilesInstallerParams{
-			SupportDir:                    path.Join(t.TempDir(), "support", faker.Word()),
+			SupportDir:                    supportDir,
 			OagSourceLocation:             "file://" + path.Join(t.TempDir(), "oag-cli-"+faker.Word()+".jar"),
 			ServerGeneratorSourceLocation: "file://" + path.Join(t.TempDir(), "generator-"+faker.Word()+".jar"),
 		}
