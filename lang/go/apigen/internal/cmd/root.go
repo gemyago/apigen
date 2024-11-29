@@ -34,6 +34,7 @@ func NewRootCmd() *cobra.Command {
 			generator = NewGenerator(GeneratorDeps{
 				RootLogger: rootLogger,
 				SupportFilesInstaller: NewSupportFilesInstaller(SupportFilesInstallerDeps{
+					RootLogger: rootLogger,
 					Downloader: NewResourceDownloader(),
 					RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
 				}),

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"log/slog"
 	"os"
 	"path"
 )
@@ -36,6 +37,7 @@ type SupportFilesInstaller func(
 ) (SupportingFilesInstallResult, error)
 
 type SupportFilesInstallerDeps struct {
+	RootLogger *slog.Logger
 	Downloader ResourceDownloader
 	RootFS     fs.ReadFileFS
 }
@@ -63,6 +65,7 @@ type downloadSupportFileIfRequiredParams struct {
 
 func downloadSupportFileIfRequired(
 	ctx context.Context,
+	logger *slog.Logger,
 	deps SupportFilesInstallerDeps,
 	params downloadSupportFileIfRequiredParams,
 ) error {
@@ -75,12 +78,16 @@ func downloadSupportFileIfRequired(
 	}
 
 	if !fileExists || params.sourceVersion != *params.metadataVersion {
+		logger.InfoContext(ctx, "Downloading support file",
+			slog.String("source", params.sourceLocation),
+			slog.String("destination", params.destinationPath),
+		)
 		if err = deps.Downloader(
 			ctx,
 			params.sourceLocation,
 			params.destinationPath,
 		); err != nil {
-			return fmt.Errorf("failed to download openapi-generator-cli: %w", err)
+			return fmt.Errorf("failed to download support file %s: %w", params.sourceLocation, err)
 		}
 		*params.metadataLocation = params.sourceLocation
 		*params.metadataVersion = params.sourceVersion
@@ -90,6 +97,7 @@ func downloadSupportFileIfRequired(
 }
 
 func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstaller {
+	logger := deps.RootLogger.WithGroup("support-files-installer")
 	return func(ctx context.Context, params SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 		var emptyResult SupportingFilesInstallResult
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
@@ -102,6 +110,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		oagDestination := path.Join(params.SupportDir, "openapi-generator-cli.jar")
 		if err = downloadSupportFileIfRequired(
 			ctx,
+			logger,
 			deps,
 			downloadSupportFileIfRequiredParams{
 				sourceLocation:   params.OagSourceLocation,
@@ -118,6 +127,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		serverGeneratorDestination := path.Join(params.SupportDir, "server-generator.jar")
 		if err = downloadSupportFileIfRequired(
 			ctx,
+			logger,
 			deps,
 			downloadSupportFileIfRequiredParams{
 				sourceLocation:   params.ServerGeneratorSourceLocation,

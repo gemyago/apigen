@@ -45,7 +45,8 @@ func TestSupportFilesInstaller(t *testing.T) {
 			serverGeneratorFile[1:]: {Data: []byte{}},
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootFS: mockFS,
+			RootLogger: DiscardLogger,
+			RootFS:     mockFS,
 		})
 		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
@@ -59,7 +60,8 @@ func TestSupportFilesInstaller(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootFS: fstest.MapFS{},
+			RootLogger: DiscardLogger,
+			RootFS:     fstest.MapFS{},
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
@@ -103,7 +105,8 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootFS: mockFS,
+			RootLogger: DiscardLogger,
+			RootFS:     mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
@@ -142,7 +145,8 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootFS: mockFS,
+			RootLogger: DiscardLogger,
+			RootFS:     mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
