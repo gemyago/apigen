@@ -39,9 +39,11 @@ type GeneratorDeps struct {
 }
 
 func NewGenerator(deps GeneratorDeps) Generator {
+	logger := deps.RootLogger.WithGroup("generator")
 	return func(ctx context.Context, params GeneratorParams) error {
 		if params.supportDir == "" {
 			params.supportDir = params.output + "/.apigen"
+			logger.InfoContext(ctx, "Using default support directory", slog.String("supportDir", params.supportDir))
 		}
 
 		if params.oagCliVersion == "" {
