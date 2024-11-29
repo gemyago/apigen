@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-
-	"github.com/gemyago/apigen/lang/go/apigen/internal/cmd/resources"
 )
 
 type GeneratorParams struct {
@@ -28,15 +26,24 @@ type GeneratorParams struct {
 
 type Generator func(ctx context.Context, params GeneratorParams) error
 
+type metadataReader interface {
+	ReadOpenapiGeneratorCliVersion() (string, error)
+	ReadPluginVersion() (string, error)
+}
+
 type GeneratorDeps struct {
 	RootLogger *slog.Logger
 	SupportFilesInstaller
-	MetadataReader *resources.MetadataReader
+	MetadataReader metadataReader
 	GeneratorInvoker
 }
 
 func NewGenerator(deps GeneratorDeps) Generator {
 	return func(ctx context.Context, params GeneratorParams) error {
+		if params.supportDir == "" {
+			params.supportDir = params.output + "/.apigen"
+		}
+
 		if params.oagCliVersion == "" {
 			ver, err := deps.MetadataReader.ReadOpenapiGeneratorCliVersion()
 			if err != nil {
