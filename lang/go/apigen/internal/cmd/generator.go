@@ -24,9 +24,6 @@ type GeneratorParams struct {
 
 	// generatorLocation is a path to the source generator plugin jar file
 	generatorLocation string
-
-	// verboseLogging enables logging of the generator
-	verboseLogging bool
 }
 
 type Generator func(ctx context.Context, params GeneratorParams) error
@@ -36,7 +33,6 @@ type GeneratorDeps struct {
 	SupportFilesInstaller
 	MetadataReader *resources.MetadataReader
 	GeneratorInvoker
-	Downloader ResourceDownloader
 }
 
 func NewGenerator(deps GeneratorDeps) Generator {
