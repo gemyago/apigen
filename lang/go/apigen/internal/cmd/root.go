@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -19,10 +17,7 @@ func NewRootCmd(generator Generator) *cobra.Command {
 			params.input = args[0]
 			params.output = args[1]
 
-			if err := generator(cmd.Context(), params); err != nil {
-				return fmt.Errorf("generator failed: %w", err)
-			}
-			return nil
+			return generator(cmd.Context(), params)
 		},
 	}
 
