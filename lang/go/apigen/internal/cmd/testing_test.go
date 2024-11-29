@@ -5,6 +5,5 @@ import (
 	"log/slog"
 )
 
-func NewNullLogger() *slog.Logger {
-	return slog.New(slog.NewTextHandler(io.Discard, nil))
-}
+//nolint:gochecknoglobals // used in tests only so it's ok to have it global
+var DiscardLogger = slog.New(slog.NewTextHandler(io.Discard, nil))

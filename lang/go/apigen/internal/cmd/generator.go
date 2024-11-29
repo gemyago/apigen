@@ -79,6 +79,10 @@ func NewGenerator(deps GeneratorDeps) Generator {
 				"https://github.com/gemyago/apigen/releases/download/%s/server.jar",
 				params.generatorVersion,
 			)
+			logger.InfoContext(ctx,
+				"Using default generator location",
+				slog.String("generatorLocation", params.generatorLocation),
+			)
 		}
 
 		installResult, err := deps.SupportFilesInstaller(ctx, SupportFilesInstallerParams{

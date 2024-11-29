@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"testing"
 
 	"github.com/go-faker/faker/v4"
@@ -46,7 +45,7 @@ func TestGenerator(t *testing.T) {
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger: NewNullLogger(),
+			RootLogger: DiscardLogger,
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
@@ -96,7 +95,7 @@ func TestGenerator(t *testing.T) {
 			oagPluginVersion: "4.5.6-" + faker.Word(),
 		}
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     slog.Default(),
+			RootLogger:     DiscardLogger,
 			MetadataReader: &mockMetadataReader,
 			SupportFilesInstaller: func(
 				_ context.Context,
@@ -155,7 +154,7 @@ func TestGenerator(t *testing.T) {
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger: NewNullLogger(),
+			RootLogger: DiscardLogger,
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
