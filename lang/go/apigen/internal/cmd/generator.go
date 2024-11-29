@@ -60,6 +60,10 @@ func NewGenerator(deps GeneratorDeps) Generator {
 				params.oagCliVersion,
 				params.oagCliVersion,
 			)
+			logger.InfoContext(ctx,
+				"Using default openapi-generator-cli location",
+				slog.String("oagCliLocation", params.oagCliLocation),
+			)
 		}
 
 		if params.generatorVersion == "" {
