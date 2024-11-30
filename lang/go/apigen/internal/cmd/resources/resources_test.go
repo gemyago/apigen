@@ -111,4 +111,37 @@ func TestMetadataReader(t *testing.T) {
 			require.Error(t, err)
 		})
 	})
+
+	t.Run("ReadAppVersion", func(t *testing.T) {
+		t.Run("should read the APP_VERSION version", func(t *testing.T) {
+			wantVer := faker.Word()
+			mockFs := fstest.MapFS{
+				".versions": &fstest.MapFile{
+					Data: []byte("APP_VERSION: " + wantVer + "\nMAVEN: 3.8.8"),
+				},
+			}
+			reader := MetadataReader{fs: mockFs}
+			ver, err := reader.ReadAppVersion()
+			require.NoError(t, err)
+			assert.Equal(t, wantVer, ver)
+		})
+
+		t.Run("should fail if no such file", func(t *testing.T) {
+			mockFs := fstest.MapFS{}
+			reader := MetadataReader{fs: mockFs}
+			_, err := reader.ReadAppVersion()
+			require.Error(t, err)
+		})
+
+		t.Run("should fail if the version is not found", func(t *testing.T) {
+			mockFs := fstest.MapFS{
+				".versions": &fstest.MapFile{
+					Data: []byte("MAVEN: 3.8.8"),
+				},
+			}
+			reader := MetadataReader{fs: mockFs}
+			_, err := reader.ReadAppVersion()
+			require.Error(t, err)
+		})
+	})
 }

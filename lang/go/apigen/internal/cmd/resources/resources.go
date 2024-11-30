@@ -25,7 +25,28 @@ type MetadataReader struct {
 	fs fs.ReadFileFS
 }
 
-// TODO: Rename to something that has server in it
+// ReadAppVersion reads the APP_VERSION value from embedded .versions file.
+func (r *MetadataReader) ReadAppVersion() (string, error) {
+	data, err := r.fs.ReadFile(".versions")
+	if err != nil {
+		return "", err
+	}
+
+	scanner := bufio.NewScanner(strings.NewReader(string(data)))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "APP_VERSION:") {
+			parts := strings.Split(line, ":")
+			if len(parts) == versionLineSegmentsCount {
+				return strings.TrimSpace(parts[1]), nil
+			}
+		}
+	}
+
+	return "", errors.New("APP_VERSION version not found")
+}
+
+// ReadServerPluginVersion reads the version of the server plugin from the embedded go-apigen-server.xml file.
 func (r *MetadataReader) ReadServerPluginVersion() (string, error) {
 	data, err := r.fs.ReadFile("go-apigen-server.xml")
 	if err != nil {
@@ -44,6 +65,7 @@ func (r *MetadataReader) ReadServerPluginVersion() (string, error) {
 	return project.Version, nil
 }
 
+// ReadOpenapiGeneratorCliVersion reads the OPENAPI_GENERATOR_CLI value from embedded .versions file.
 func (r *MetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
 	data, err := r.fs.ReadFile(".versions")
 	if err != nil {
