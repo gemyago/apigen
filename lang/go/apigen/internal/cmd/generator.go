@@ -28,7 +28,7 @@ type Generator func(ctx context.Context, params GeneratorParams) error
 
 type metadataReader interface {
 	ReadOpenapiGeneratorCliVersion() (string, error)
-	ReadPluginVersion() (string, error)
+	ReadServerPluginVersion() (string, error)
 }
 
 type GeneratorDeps struct {
@@ -67,7 +67,7 @@ func NewGenerator(deps GeneratorDeps) Generator {
 		}
 
 		if params.generatorVersion == "" {
-			ver, err := deps.MetadataReader.ReadPluginVersion()
+			ver, err := deps.MetadataReader.ReadServerPluginVersion()
 			if err != nil {
 				return fmt.Errorf("failed to read generator version: %w", err)
 			}

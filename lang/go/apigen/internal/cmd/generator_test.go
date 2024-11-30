@@ -11,16 +11,16 @@ import (
 )
 
 type mockResourceMetadataReader struct {
-	oagCliVersion    string
-	oagPluginVersion string
+	oagCliVersion       string
+	serverPluginVersion string
 }
 
 func (m *mockResourceMetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
 	return m.oagCliVersion, nil
 }
 
-func (m *mockResourceMetadataReader) ReadPluginVersion() (string, error) {
-	return m.oagPluginVersion, nil
+func (m *mockResourceMetadataReader) ReadServerPluginVersion() (string, error) {
+	return m.serverPluginVersion, nil
 }
 
 func TestGenerator(t *testing.T) {
@@ -91,8 +91,8 @@ func TestGenerator(t *testing.T) {
 		generatorInvoked := false
 
 		mockMetadataReader := mockResourceMetadataReader{
-			oagCliVersion:    "1.2.3-" + faker.Word(),
-			oagPluginVersion: "4.5.6-" + faker.Word(),
+			oagCliVersion:       "1.2.3-" + faker.Word(),
+			serverPluginVersion: "4.5.6-" + faker.Word(),
 		}
 		generator := NewGenerator(GeneratorDeps{
 			RootLogger:     DiscardLogger,
@@ -109,10 +109,10 @@ func TestGenerator(t *testing.T) {
 					mockMetadataReader.oagCliVersion,
 					mockMetadataReader.oagCliVersion,
 				), installerParams.OagSourceLocation)
-				assert.Equal(t, mockMetadataReader.oagPluginVersion, installerParams.ServerGeneratorSourceVersion)
+				assert.Equal(t, mockMetadataReader.serverPluginVersion, installerParams.ServerGeneratorSourceVersion)
 				assert.Equal(t, fmt.Sprintf(
 					"https://github.com/gemyago/apigen/releases/download/%s/server.jar",
-					mockMetadataReader.oagPluginVersion,
+					mockMetadataReader.serverPluginVersion,
 				), installerParams.ServerGeneratorSourceLocation)
 
 				return installResult, nil

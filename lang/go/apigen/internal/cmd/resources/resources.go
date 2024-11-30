@@ -27,7 +27,7 @@ type MetadataReader struct {
 }
 
 // TODO: Rename to something that has server in it
-func (r *MetadataReader) ReadPluginVersion() (string, error) {
+func (r *MetadataReader) ReadServerPluginVersion() (string, error) {
 	data, err := r.fs.ReadFile("go-apigen-server.xml")
 	if err != nil {
 		return "", err

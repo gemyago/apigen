@@ -10,7 +10,7 @@ import (
 )
 
 func TestMetadataReader(t *testing.T) {
-	t.Run("ReadPluginVersion", func(t *testing.T) {
+	t.Run("ReadServerPluginVersion", func(t *testing.T) {
 		t.Run("should read the version", func(t *testing.T) {
 			wantVer := faker.Word()
 			mockFs := fstest.MapFS{
@@ -19,14 +19,14 @@ func TestMetadataReader(t *testing.T) {
 				},
 			}
 			reader := MetadataReader{fs: mockFs}
-			ver, err := reader.ReadPluginVersion()
+			ver, err := reader.ReadServerPluginVersion()
 			require.NoError(t, err)
 			assert.Equal(t, wantVer, ver)
 		})
 
 		t.Run("should read the version from the embedded file", func(t *testing.T) {
 			reader := NewMetadataReader()
-			ver, err := reader.ReadPluginVersion()
+			ver, err := reader.ReadServerPluginVersion()
 			require.NoError(t, err)
 			assert.NotEmpty(t, ver)
 		})
@@ -34,7 +34,7 @@ func TestMetadataReader(t *testing.T) {
 		t.Run("should fail if no such file", func(t *testing.T) {
 			mockFs := fstest.MapFS{}
 			reader := MetadataReader{fs: mockFs}
-			_, err := reader.ReadPluginVersion()
+			_, err := reader.ReadServerPluginVersion()
 			require.Error(t, err)
 		})
 
@@ -45,7 +45,7 @@ func TestMetadataReader(t *testing.T) {
 				},
 			}
 			reader := MetadataReader{fs: mockFs}
-			_, err := reader.ReadPluginVersion()
+			_, err := reader.ReadServerPluginVersion()
 			require.Error(t, err)
 		})
 
@@ -56,7 +56,7 @@ func TestMetadataReader(t *testing.T) {
 				},
 			}
 			reader := MetadataReader{fs: mockFs}
-			_, err := reader.ReadPluginVersion()
+			_, err := reader.ReadServerPluginVersion()
 			require.Error(t, err)
 		})
 
@@ -67,7 +67,7 @@ func TestMetadataReader(t *testing.T) {
 				},
 			}
 			reader := MetadataReader{fs: mockFs}
-			_, err := reader.ReadPluginVersion()
+			_, err := reader.ReadServerPluginVersion()
 			require.Error(t, err)
 		})
 	})
