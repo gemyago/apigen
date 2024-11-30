@@ -2,8 +2,7 @@ name: Release
 
 on:
   pull_request:
-    # types: [closed]
-    types: [labeled]
+    types: [closed]
     branches:
       - main
 
@@ -13,10 +12,10 @@ jobs:
       contents: write
 
     name: Create Release
-    # if: |
-    #   github.event.pull_request.merged == true && 
-    #   startsWith(github.event.pull_request.head.ref, 'release/') &&
-    #   !contains(github.event.pull_request.labels.*.name, 'no-build')
+    if: |
+      github.event.pull_request.merged == true && 
+      startsWith(github.event.pull_request.head.ref, 'release/') &&
+      !contains(github.event.pull_request.labels.*.name, 'no-build')
     runs-on: ubuntu-latest
 
     steps:
