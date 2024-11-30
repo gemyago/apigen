@@ -32,7 +32,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.AppVersion,
+			AppVersion:              params.AppVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := filepath.Join(params.SupportDir, "metadata.json")
@@ -102,7 +102,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.AppVersion,
+			AppVersion:              params.AppVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
@@ -142,7 +142,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion + "-" + faker.Word(),
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.AppVersion + "-" + faker.Word(),
+			AppVersion:              params.AppVersion + "-" + faker.Word(),
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")

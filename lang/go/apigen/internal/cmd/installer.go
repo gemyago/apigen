@@ -11,10 +11,11 @@ import (
 )
 
 type SupportFilesMetadata struct {
+	AppVersion string `json:"appVersion"`
+
 	OagSourceVersion  string `json:"oagSourceVersion"`
 	OagSourceLocation string `json:"oagSourceLocation"`
 
-	GeneratorSourceVersion  string `json:"serverGeneratorSourceVersion"`
 	GeneratorSourceLocation string `json:"serverGeneratorSourceLocation"`
 }
 
@@ -163,7 +164,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 				sourceLocation:   params.ServerGeneratorSourceLocation,
 				destinationPath:  serverGeneratorDestination,
 				sourceVersion:    params.AppVersion,
-				metadataVersion:  &metadata.GeneratorSourceVersion,
+				metadataVersion:  &metadata.AppVersion,
 				metadataLocation: &metadata.GeneratorSourceLocation,
 				metadataChanged:  &metadataChanged,
 			},
