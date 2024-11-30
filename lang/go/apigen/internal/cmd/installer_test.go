@@ -18,7 +18,6 @@ import (
 func TestSupportFilesInstaller(t *testing.T) {
 	makeRandomGeneratorParams := func(t *testing.T) SupportFilesInstallerParams {
 		supportDir := path.Join(t.TempDir(), "support", faker.Word())
-		require.NoError(t, os.MkdirAll(supportDir, 0755))
 		return SupportFilesInstallerParams{
 			SupportDir:                    supportDir,
 			OagSourceVersion:              "1.2.3-" + faker.Word(),
@@ -69,6 +68,15 @@ func TestSupportFilesInstaller(t *testing.T) {
 		})
 		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
+
+		supportDirStat, err := os.Stat(params.SupportDir)
+		require.NoError(t, err)
+		assert.True(t, supportDirStat.IsDir())
+
+		gitIgnoreFile, err := os.ReadFile(filepath.Join(params.SupportDir, ".gitignore"))
+		require.NoError(t, err)
+		assert.Equal(t, []byte("*\n"), gitIgnoreFile)
+
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
 			ServerGeneratorLocation: path.Join(params.SupportDir, "server-generator.jar"),

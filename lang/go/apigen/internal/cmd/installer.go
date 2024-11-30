@@ -96,10 +96,38 @@ func downloadSupportFileIfRequired(
 	return nil
 }
 
+func ensureSupportDir(fs fs.FS, logger *slog.Logger, dir string) error {
+	_, err := fs.Open(dir)
+	if err == nil {
+		return nil
+	}
+
+	if !os.IsNotExist(err) {
+		return fmt.Errorf("failed to open support directory: %w", err)
+	}
+
+	logger.Info("Creating support directory", slog.String("dir", dir))
+	if err = os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("failed to create support directory: %w", err)
+	}
+
+	logger.Info("Creating .gitignore file", slog.String("dir", dir))
+	if err = os.WriteFile(path.Join(dir, ".gitignore"), []byte("*\n"), 0600); err != nil {
+		return fmt.Errorf("failed to create .gitignore file: %w", err)
+	}
+
+	return nil
+}
+
 func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstaller {
 	logger := deps.RootLogger.WithGroup("support-files-installer")
 	return func(ctx context.Context, params SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 		var emptyResult SupportingFilesInstallResult
+
+		if err := ensureSupportDir(deps.RootFS, logger, params.SupportDir); err != nil {
+			return emptyResult, err
+		}
+
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		metadata, err := readSupportFilesMetadata(deps.RootFS, metadataFile)
 		if err != nil {
