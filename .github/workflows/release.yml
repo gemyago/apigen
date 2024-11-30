@@ -10,8 +10,7 @@ on:
 jobs:
   deploy-go-apigen-server:
     permissions:
-      packages: write
-      contents: read
+      contents: write
 
     name: Create Release
     # if: |
