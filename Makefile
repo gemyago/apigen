@@ -83,10 +83,10 @@ endef
 
 # Update pom.xml (version) with app_version
 generators/go-apigen-server/pom.xml: .versions
-	mvn -f generators/go-apigen-server/pom.xml versions:set -DnewVersion=$(app_version)
+	mvn -B -q -f generators/go-apigen-server/pom.xml versions:set -DnewVersion=$(app_version)
 
 $(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f) generators/go-apigen-server/pom.xml
-	mvn -f generators/go-apigen-server/pom.xml package
+	mvn -B -q -f generators/go-apigen-server/pom.xml package
 	touch $@
 
 examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/petstore.yaml
