@@ -2,7 +2,8 @@ name: Release
 
 on:
   pull_request:
-    types: [closed]
+    # types: [closed]
+    types: [labeled]
     branches:
       - main
 
@@ -24,6 +25,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run deploy
-        run: make deploy/generators/go-apigen-server
+        run: make release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

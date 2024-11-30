@@ -85,7 +85,7 @@ endef
 generators/go-apigen-server/pom.xml: .versions
 	mvn -f generators/go-apigen-server/pom.xml versions:set -DnewVersion=$(app_version)
 
-$(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
+$(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f) generators/go-apigen-server/pom.xml
 	mvn -f generators/go-apigen-server/pom.xml package
 	touch $@
 
