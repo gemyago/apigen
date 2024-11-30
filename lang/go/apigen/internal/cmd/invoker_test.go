@@ -55,8 +55,9 @@ func TestGeneratorInvoker(t *testing.T) {
 		}
 
 		invoker := NewGeneratorInvoker(GeneratorInvokerDeps{
-			StdOut: mockStdOut,
-			StdErr: mockStdErr,
+			RootLogger: DiscardLogger,
+			StdOut:     mockStdOut,
+			StdErr:     mockStdErr,
 			OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {
 				assert.Equal(t, "java", name)
 				assert.Equal(t, []string{

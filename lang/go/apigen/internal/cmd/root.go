@@ -40,8 +40,9 @@ func NewRootCmd() *cobra.Command {
 				}),
 				MetadataReader: resources.NewMetadataReader(),
 				GeneratorInvoker: NewGeneratorInvoker(GeneratorInvokerDeps{
-					StdOut: os.Stdout,
-					StdErr: os.Stderr,
+					RootLogger: rootLogger,
+					StdOut:     os.Stdout,
+					StdErr:     os.Stderr,
 					OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {
 						return exec.Command(name, arg...)
 					},

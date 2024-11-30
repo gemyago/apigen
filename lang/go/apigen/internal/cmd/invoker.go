@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log/slog"
 	"os/exec"
 	"sync"
 )
@@ -31,6 +32,7 @@ type OsExecutableCmd interface {
 var _ OsExecutableCmd = (*exec.Cmd)(nil)
 
 type GeneratorInvokerDeps struct {
+	RootLogger                 *slog.Logger
 	StdOut                     io.Writer
 	StdErr                     io.Writer
 	OsExecutableCmdFactoryFunc func(name string, arg ...string) OsExecutableCmd
@@ -41,11 +43,11 @@ type GeneratorInvoker func(ctx context.Context, params GeneratorInvokerParams) e
 func NewGeneratorInvoker(
 	deps GeneratorInvokerDeps,
 ) GeneratorInvoker {
+	logger := deps.RootLogger.WithGroup("generator-invoker")
 	return func(_ context.Context, params GeneratorInvokerParams) error {
-		cmd := deps.OsExecutableCmdFactoryFunc(
-			"java",
+		args := []string{
 			"-cp",
-			params.OagCliLocation+":"+params.GeneratorLocation,
+			params.OagCliLocation + ":" + params.GeneratorLocation,
 			"org.openapitools.codegen.OpenAPIGenerator",
 			"generate",
 			"-g",
@@ -54,6 +56,11 @@ func NewGeneratorInvoker(
 			params.Input,
 			"-o",
 			params.Output,
+		}
+		logger.Info("Invoking java program", slog.String("args", fmt.Sprintf("%v", args)))
+		cmd := deps.OsExecutableCmdFactoryFunc(
+			"java",
+			args...,
 		)
 
 		stdOut, err := cmd.StdoutPipe()
