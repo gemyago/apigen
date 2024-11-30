@@ -6,6 +6,13 @@ MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
 .SUFFIXES:
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+    sed_i := sed -i ''
+else
+    sed_i := sed -i
+endif
+
 tmp=./tmp
 bin=bin
 
@@ -73,6 +80,10 @@ endef
 # Remove files that are no longer included in the .openapi-generator/FILES
 %/.openapi-generator/REMOVED_FILES:
 	$(if $(strip $(openapi_generator_removed_files)),$(current_make) $(openapi_generator_removed_files), $(NOOP))
+
+# Update pom.xml (version) with app_version
+generators/go-apigen-server/pom.xml: .versions
+	mvn -f generators/go-apigen-server/pom.xml versions:set -DnewVersion=$(app_version)
 
 $(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
 	mvn -f generators/go-apigen-server/pom.xml package
