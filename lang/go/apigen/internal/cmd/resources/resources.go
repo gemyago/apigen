@@ -11,6 +11,7 @@ import (
 
 //go:generate cp -r ../../../../../../generators/go-apigen-server/pom.xml ./go-apigen-server.xml
 //go:generate cp -r ../../../../../../.versions ./.versions
+//go:generate cp -r ../../../../../../version ./version
 
 //go:embed go-apigen-server.xml .versions
 var resources embed.FS
