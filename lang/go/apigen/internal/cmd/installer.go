@@ -77,7 +77,9 @@ func downloadSupportFileIfRequired(
 		defer file.Close()
 	}
 
-	if !fileExists || params.sourceVersion != *params.metadataVersion {
+	if !fileExists ||
+		params.sourceVersion != *params.metadataVersion ||
+		params.sourceLocation != *params.metadataLocation {
 		logger.InfoContext(ctx, "Downloading support file",
 			slog.String("source", params.sourceLocation),
 			slog.String("destination", params.destinationPath),
