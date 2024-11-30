@@ -9,6 +9,8 @@ MAKEFLAGS += --no-builtin-variables
 tmp=./tmp
 bin=bin
 
+app_version=$(shell sed -n -r 's/APP_VERSION: (.+)/\1/p' .versions)
+
 cli_version=$(shell sed -n -r 's/OPENAPI_GENERATOR_CLI: (.+)/\1/p' .versions)
 cli_url=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$(cli_version)/openapi-generator-cli-$(cli_version).jar
 cli_jar=bin/openapi-generator-cli-$(cli_version).jar

@@ -22,7 +22,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 			SupportDir:                    supportDir,
 			OagSourceVersion:              "1.2.3-" + faker.Word(),
 			OagSourceLocation:             "file://" + path.Join(t.TempDir(), "oag-cli-"+faker.Word()+".jar"),
-			ServerGeneratorSourceVersion:  "3.2.1-" + faker.Word(),
+			AppVersion:                    "3.2.1-" + faker.Word(),
 			ServerGeneratorSourceLocation: "file://" + path.Join(t.TempDir(), "generator-"+faker.Word()+".jar"),
 		}
 	}
@@ -32,7 +32,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion,
+			GeneratorSourceVersion:  params.AppVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := filepath.Join(params.SupportDir, "metadata.json")
@@ -102,7 +102,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion,
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion,
+			GeneratorSourceVersion:  params.AppVersion,
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
@@ -142,7 +142,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadata := SupportFilesMetadata{
 			OagSourceVersion:        params.OagSourceVersion + "-" + faker.Word(),
 			OagSourceLocation:       params.OagSourceLocation,
-			GeneratorSourceVersion:  params.ServerGeneratorSourceVersion + "-" + faker.Word(),
+			GeneratorSourceVersion:  params.AppVersion + "-" + faker.Word(),
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")

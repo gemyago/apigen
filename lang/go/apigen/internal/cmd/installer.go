@@ -22,7 +22,7 @@ type SupportFilesInstallerParams struct {
 	SupportDir                    string
 	OagSourceVersion              string
 	OagSourceLocation             string
-	ServerGeneratorSourceVersion  string
+	AppVersion                    string
 	ServerGeneratorSourceLocation string
 }
 
@@ -162,7 +162,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 			downloadSupportFileIfRequiredParams{
 				sourceLocation:   params.ServerGeneratorSourceLocation,
 				destinationPath:  serverGeneratorDestination,
-				sourceVersion:    params.ServerGeneratorSourceVersion,
+				sourceVersion:    params.AppVersion,
 				metadataVersion:  &metadata.GeneratorSourceVersion,
 				metadataLocation: &metadata.GeneratorSourceLocation,
 				metadataChanged:  &metadataChanged,

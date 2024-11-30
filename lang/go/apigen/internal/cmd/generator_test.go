@@ -19,7 +19,7 @@ func (m *mockResourceMetadataReader) ReadOpenapiGeneratorCliVersion() (string, e
 	return m.oagCliVersion, nil
 }
 
-func (m *mockResourceMetadataReader) ReadServerPluginVersion() (string, error) {
+func (m *mockResourceMetadataReader) ReadAppVersion() (string, error) {
 	return m.serverPluginVersion, nil
 }
 
@@ -33,8 +33,8 @@ func TestGenerator(t *testing.T) {
 			oagCliVersion:  "1.2.3-" + faker.Word(),
 			oagCliLocation: faker.URL(),
 
-			generatorVersion:  "4.5.6-" + faker.Word(),
-			generatorLocation: faker.URL(),
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -53,8 +53,8 @@ func TestGenerator(t *testing.T) {
 				assert.Equal(t, params.supportDir, installerParams.SupportDir)
 				assert.Equal(t, params.oagCliVersion, installerParams.OagSourceVersion)
 				assert.Equal(t, params.oagCliLocation, installerParams.OagSourceLocation)
-				assert.Equal(t, params.generatorVersion, installerParams.ServerGeneratorSourceVersion)
-				assert.Equal(t, params.generatorLocation, installerParams.ServerGeneratorSourceLocation)
+				assert.Equal(t, params.appVersion, installerParams.AppVersion)
+				assert.Equal(t, params.serverGeneratorLocation, installerParams.ServerGeneratorSourceLocation)
 				installerInvoked = true
 
 				return installResult, nil
@@ -109,7 +109,7 @@ func TestGenerator(t *testing.T) {
 					mockMetadataReader.oagCliVersion,
 					mockMetadataReader.oagCliVersion,
 				), installerParams.OagSourceLocation)
-				assert.Equal(t, mockMetadataReader.serverPluginVersion, installerParams.ServerGeneratorSourceVersion)
+				assert.Equal(t, mockMetadataReader.serverPluginVersion, installerParams.AppVersion)
 				assert.Equal(t, fmt.Sprintf(
 					"https://github.com/gemyago/apigen/releases/download/%s/server.jar",
 					mockMetadataReader.serverPluginVersion,
@@ -142,8 +142,8 @@ func TestGenerator(t *testing.T) {
 			oagCliVersion:  "1.2.3-" + faker.Word(),
 			oagCliLocation: faker.URL(),
 
-			generatorVersion:  "4.5.6-" + faker.Word(),
-			generatorLocation: faker.URL(),
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
 		}
 
 		installResult := SupportingFilesInstallResult{

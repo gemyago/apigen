@@ -17,18 +17,18 @@ type GeneratorParams struct {
 	// oagCliLocation is a path to the source openapi-generator-cli jar file
 	oagCliLocation string
 
-	// generatorVersion is a version of the required generator plugin
-	generatorVersion string
+	// appVersion is a version of the required generator plugin
+	appVersion string
 
-	// generatorLocation is a path to the source generator plugin jar file
-	generatorLocation string
+	// serverGeneratorLocation is a path to the source generator plugin jar file
+	serverGeneratorLocation string
 }
 
 type Generator func(ctx context.Context, params GeneratorParams) error
 
 type metadataReader interface {
 	ReadOpenapiGeneratorCliVersion() (string, error)
-	ReadServerPluginVersion() (string, error)
+	ReadAppVersion() (string, error)
 }
 
 type GeneratorDeps struct {
@@ -66,22 +66,22 @@ func NewGenerator(deps GeneratorDeps) Generator {
 			)
 		}
 
-		if params.generatorVersion == "" {
-			ver, err := deps.MetadataReader.ReadServerPluginVersion()
+		if params.appVersion == "" {
+			ver, err := deps.MetadataReader.ReadAppVersion()
 			if err != nil {
 				return fmt.Errorf("failed to read generator version: %w", err)
 			}
-			params.generatorVersion = ver
+			params.appVersion = ver
 		}
 
-		if params.generatorLocation == "" {
-			params.generatorLocation = fmt.Sprintf(
+		if params.serverGeneratorLocation == "" {
+			params.serverGeneratorLocation = fmt.Sprintf(
 				"https://github.com/gemyago/apigen/releases/download/%s/server.jar",
-				params.generatorVersion,
+				params.appVersion,
 			)
 			logger.InfoContext(ctx,
 				"Using default generator location",
-				slog.String("generatorLocation", params.generatorLocation),
+				slog.String("generatorLocation", params.serverGeneratorLocation),
 			)
 		}
 
@@ -89,8 +89,8 @@ func NewGenerator(deps GeneratorDeps) Generator {
 			SupportDir:                    params.supportDir,
 			OagSourceVersion:              params.oagCliVersion,
 			OagSourceLocation:             params.oagCliLocation,
-			ServerGeneratorSourceVersion:  params.generatorVersion,
-			ServerGeneratorSourceLocation: params.generatorLocation,
+			AppVersion:                    params.appVersion,
+			ServerGeneratorSourceLocation: params.serverGeneratorLocation,
 		})
 		if err != nil {
 			return fmt.Errorf("failed to install support files: %w", err)

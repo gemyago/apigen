@@ -65,9 +65,9 @@ func NewRootCmd() *cobra.Command {
 	pFlags.StringVar(&params.oagCliLocation, "oag-cli-location", "",
 		"Alternative location of the openapi-generator-cli jar file "+
 			"(can be file or url)")
-	pFlags.StringVar(&params.generatorVersion, "generator-version", "", "Alternative version of the generator plugin")
-	pFlags.StringVar(&params.generatorLocation, "generator-location", "",
-		"Alternative location of the generator plugin jar file "+
+	pFlags.StringVar(&params.appVersion, "app-version", "", "Alternative application version. Impacts plugins locations.")
+	pFlags.StringVar(&params.serverGeneratorLocation, "server-generator-location", "",
+		"Alternative location of the server generator plugin jar file "+
 			"(can be file or url)")
 	pFlags.BoolVar(&verbose, "verbose", verbose, "Enable verbose output")
 	return cmd
