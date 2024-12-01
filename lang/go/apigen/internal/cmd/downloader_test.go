@@ -35,6 +35,16 @@ func TestResourceDownloader(t *testing.T) {
 		assert.Equal(t, sourceContent, string(content))
 	})
 
+	t.Run("should return an error if url the resource is not found", func(t *testing.T) {
+		outputDir := t.TempDir()
+		outputFile := path.Join(outputDir, faker.Word()+".txt")
+
+		downloader := NewResourceDownloader()
+
+		err := downloader(context.Background(), "http://"+faker.Word(), outputFile)
+		require.Error(t, err)
+	})
+
 	t.Run("should copy the resource if it's not an url", func(t *testing.T) {
 		outputDir := t.TempDir()
 		outputFile := path.Join(outputDir, faker.Word()+".txt")
@@ -53,6 +63,16 @@ func TestResourceDownloader(t *testing.T) {
 		assert.Equal(t, sourceContent, string(content))
 	})
 
+	t.Run("should return an error if file the resource is not found", func(t *testing.T) {
+		outputDir := t.TempDir()
+		outputFile := path.Join(outputDir, faker.Word()+".txt")
+
+		downloader := NewResourceDownloader()
+
+		err := downloader(context.Background(), "file://"+faker.Word(), outputFile)
+		require.Error(t, err)
+	})
+
 	t.Run("should copy the resource if it's a file url", func(t *testing.T) {
 		outputDir := t.TempDir()
 		outputFile := path.Join(outputDir, faker.Word()+".txt")
@@ -69,5 +89,20 @@ func TestResourceDownloader(t *testing.T) {
 		content, err := os.ReadFile(outputFile)
 		require.NoError(t, err)
 		assert.Equal(t, sourceContent, string(content))
+	})
+
+	t.Run("should fail if can not copy to the destination file", func(t *testing.T) {
+		outputDir := t.TempDir()
+		outputFile := path.Join(outputDir, faker.Word(), faker.Word()+".txt")
+
+		sourceContent := faker.Sentence()
+		sourceFile := path.Join(outputDir, faker.Word()+".txt")
+		require.NoError(t, os.WriteFile(sourceFile, []byte(sourceContent), 0644))
+
+		downloader := NewResourceDownloader()
+
+		err := downloader(context.Background(), sourceFile, outputFile)
+		require.Error(t, err)
+		require.ErrorIs(t, err, os.ErrNotExist)
 	})
 }
