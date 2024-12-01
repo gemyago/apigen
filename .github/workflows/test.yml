@@ -28,8 +28,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: test-artifacts-pr-${{ github.event.pull_request.node_id }}
-        path: |
-          tests/golang/.cover/coverage.svg
-          tests/golang/.cover/coverage.html
+        path: .cover
         retention-days: 10
         overwrite: true
