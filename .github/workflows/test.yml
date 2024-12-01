@@ -30,6 +30,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: test-artifacts-pr-${{ github.event.pull_request.node_id }}
-        path: .cover/**/*
+        include-hidden-files: true
+        path: .cover/
         retention-days: 10
         overwrite: true
