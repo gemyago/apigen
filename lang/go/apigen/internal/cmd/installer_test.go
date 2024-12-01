@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path"
 	"path/filepath"
@@ -175,5 +176,52 @@ func TestSupportFilesInstaller(t *testing.T) {
 			params.ServerGeneratorSourceLocation,
 			path.Join(params.SupportDir, "server-generator.jar"),
 		}, downloaderCalls[1])
+	})
+
+	t.Run("should fail if failed to read metadata", func(t *testing.T) {
+		params := makeRandomGeneratorParams(t)
+		metadataFile := path.Join(params.SupportDir, "metadata.json")
+		mockFS := fstest.MapFS{
+			metadataFile[1:]: &fstest.MapFile{
+				Data: []byte("invalid json"),
+			},
+		}
+		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
+			RootLogger: DiscardLogger,
+			RootFS:     mockFS,
+		})
+		_, err := installer(context.Background(), params)
+		require.Error(t, err)
+	})
+
+	t.Run("should fail if failed to download oag-cli", func(t *testing.T) {
+		params := makeRandomGeneratorParams(t)
+		wantErr := errors.New(faker.Sentence())
+		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
+			RootLogger: DiscardLogger,
+			RootFS:     fstest.MapFS{},
+			Downloader: func(_ context.Context, _, _ string) error {
+				return wantErr
+			},
+		})
+		_, err := installer(context.Background(), params)
+		require.Error(t, err)
+	})
+
+	t.Run("should fail if failed to download server-generator", func(t *testing.T) {
+		params := makeRandomGeneratorParams(t)
+		wantErr := errors.New(faker.Sentence())
+		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
+			RootLogger: DiscardLogger,
+			RootFS:     fstest.MapFS{},
+			Downloader: func(_ context.Context, source, _ string) error {
+				if source == params.OagSourceLocation {
+					return nil
+				}
+				return wantErr
+			},
+		})
+		_, err := installer(context.Background(), params)
+		require.Error(t, err)
 	})
 }
