@@ -212,4 +212,4 @@ release: $(golang_server_jar) $(tmp)
 		--generate-notes \
 		--latest=false \
 		--draft \
-		$(golang_server_jar) > tmp/release-url.txt
+		$(golang_server_jar)

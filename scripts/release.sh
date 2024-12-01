@@ -21,7 +21,9 @@ fi
 
 case $command in
   resolve-release-tag)
-    branch_name=$(git rev-parse --abbrev-ref HEAD)
+    # If GITHUB_HEAD_REF is set, we take the branch name from it.
+    # otherwise we take the branch name from the current branch. 
+    branch_name=${GITHUB_HEAD_REF:-$(git rev-parse --abbrev-ref HEAD)}
 
     if [[ $branch_name =~ ^release/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
       release_tag=${branch_name#release/}
