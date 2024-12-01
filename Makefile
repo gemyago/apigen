@@ -28,8 +28,7 @@ maven_url=https://dlcdn.apache.org/maven/maven-3/$(maven_version)/binaries/$(mav
 maven_archive=$(tmp)/$(maven_dir_name)-bin.tar.gz
 mvn=$(bin)/apache-maven/bin/mvn
 
-golang_tests_cover_dir=tests/golang/.cover
-golang_tests_cover_profile=${golang_tests_cover_dir}/profile.out
+golang_tests_cover_dir=.cover/golang
 golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
 
 golang_server_jar=generators/go-apigen-server/target/server.jar
@@ -134,12 +133,39 @@ $(go-test-coverage):
 $(golang_tests_cover_dir):
 	mkdir -p $(golang_tests_cover_dir)
 
-.PHONY: tests/golang
-tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
-	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./tests/golang/... -coverprofile=$(golang_tests_cover_profile) -covermode=atomic ./tests/golang/...
-	go tool cover -html=$(golang_tests_cover_profile) -o $(golang_tests_cover_html)
-	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
-	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
+.PHONY: $(golang_tests_cover_dir)/generated-routes-profile.out
+$(golang_tests_cover_dir)/generated-routes-profile.out: $(golang_tests_cover_dir) $(go-test-coverage)
+	@echo "Running generated routes tests"
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./tests/golang/... -coverprofile=$(golang_tests_cover_dir)/generated-routes-profile.out -covermode=atomic ./tests/golang/...
+	go tool cover -html=$(golang_tests_cover_dir)/generated-routes-profile.out -o $(golang_tests_cover_dir)/generated-routes-profile.html
+	@echo "Generated routes test coverage report: $(shell realpath $(golang_tests_cover_dir)/generated-routes-profile.html)"
+	$(go-test-coverage) --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_dir)/generated-routes-profile.out
+
+.PHONY: $(golang_tests_cover_dir)/apigen-profile.out
+$(golang_tests_cover_dir)/apigen-profile.out: $(golang_tests_cover_dir) $(go-test-coverage)
+	@echo "Running apigen cli tests"
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./lang/go/apigen/... -coverprofile=$(golang_tests_cover_dir)/apigen-profile.out -covermode=atomic ./lang/go/apigen/...
+	go tool cover -html=$(golang_tests_cover_dir)/apigen-profile.out -o $(golang_tests_cover_dir)/apigen-profile.html
+	@echo "Coverage report of apigen cli: $(shell realpath $(golang_tests_cover_dir)/apigen-profile.html)"
+	$(go-test-coverage) --config lang/go/apigen/.testcoverage.yaml --profile $(golang_tests_cover_dir)/apigen-profile.out
+
+# $(golang_tests_cover_dir)/generated-routes-profile.out $(golang_tests_cover_dir)/apigen-profile.out
+
+# This target combines the coverage profiles of the generated routes and the apigen cli
+$(golang_tests_cover_dir)/coverage.out:
+	@echo "Merging coverage profiles"
+	@echo "mode: atomic" > $@
+	@tail -n +2 $(golang_tests_cover_dir)/generated-routes-profile.out >> $@
+	@tail -n +2 $(golang_tests_cover_dir)/apigen-profile.out >> $@
+
+# Generate html coverage report
+$(golang_tests_cover_dir)/coverage.html: $(golang_tests_cover_dir)/coverage.out
+	@go tool cover -html=$< -o $@
+	@echo "Coverage report: $(shell realpath $@)"
+
+# Generate badge with $(go-test-coverage) --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_dir)/generated-routes-profile.out
+$(golang_tests_cover_dir)/coverage.svg: $(golang_tests_cover_dir)/coverage.out
+	$(go-test-coverage) --badge-file-name $@ --profile $<
 
 $(golang_tests_cover_dir)/coverage.%.blob-sha:
 	@gh api \
