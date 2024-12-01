@@ -198,6 +198,8 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 
 .PHONY: tests/golang tests/golang-generated-routes tests/golang-apigen
 tests/golang: tests/golang-generated-routes tests/golang-apigen
+	$(MAKE) $(golang_tests_cover_dir)/coverage.html
+	$(MAKE) $(golang_tests_cover_dir)/coverage.svg 
 tests/golang-generated-routes: $(golang_tests_cover_dir)/generated-routes-profile.out
 tests/golang-apigen: $(golang_tests_cover_dir)/apigen-profile.out
 
