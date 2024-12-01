@@ -22,9 +22,7 @@ jobs:
         cache-dependency-path: 'go.work.sum'
 
     - run: make lint
-    - run: |
-        make tests
-        ls -l -a .cover
+    - run: make tests
 
     - name: Store Test Artifacts
       uses: actions/upload-artifact@v4
