@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"io/fs"
 	"log/slog"
 	"os"
@@ -12,9 +13,38 @@ import (
 
 const expectedArgsCount = 2
 
+func newNoopableSupportFilesInstaller(
+	rootLogger *slog.Logger,
+	noop bool,
+	installer SupportFilesInstaller,
+) SupportFilesInstaller {
+	if noop {
+		return func(ctx context.Context, params SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
+			rootLogger.InfoContext(ctx, "NOOP: Installing support files", slog.Any("params", params))
+			return SupportingFilesInstallResult{}, nil
+		}
+	}
+	return installer
+}
+
+func newNoopableGeneratorInvoker(
+	rootLogger *slog.Logger,
+	noop bool,
+	invoker GeneratorInvoker,
+) GeneratorInvoker {
+	if noop {
+		return func(ctx context.Context, params GeneratorInvokerParams) error {
+			rootLogger.InfoContext(ctx, "NOOP: Invoking generator", slog.Any("params", params))
+			return nil
+		}
+	}
+	return invoker
+}
+
 func NewRootCmd() *cobra.Command {
 	var params GeneratorParams
 	verbose := false
+	noop := false
 
 	var generator Generator
 
@@ -33,20 +63,28 @@ func NewRootCmd() *cobra.Command {
 
 			generator = NewGenerator(GeneratorDeps{
 				RootLogger: rootLogger,
-				SupportFilesInstaller: NewSupportFilesInstaller(SupportFilesInstallerDeps{
-					RootLogger: rootLogger,
-					Downloader: NewResourceDownloader(),
-					RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
-				}),
+				SupportFilesInstaller: newNoopableSupportFilesInstaller(
+					rootLogger,
+					noop,
+					NewSupportFilesInstaller(SupportFilesInstallerDeps{
+						RootLogger: rootLogger,
+						Downloader: NewResourceDownloader(),
+						RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
+					}),
+				),
 				MetadataReader: resources.NewMetadataReader(),
-				GeneratorInvoker: NewGeneratorInvoker(GeneratorInvokerDeps{
-					RootLogger: rootLogger,
-					StdOut:     os.Stdout,
-					StdErr:     os.Stderr,
-					OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {
-						return exec.Command(name, arg...)
-					},
-				}),
+				GeneratorInvoker: newNoopableGeneratorInvoker(
+					rootLogger,
+					noop,
+					NewGeneratorInvoker(GeneratorInvokerDeps{
+						RootLogger: rootLogger,
+						StdOut:     os.Stdout,
+						StdErr:     os.Stderr,
+						OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {
+							return exec.Command(name, arg...)
+						},
+					}),
+				),
 			})
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -70,5 +108,6 @@ func NewRootCmd() *cobra.Command {
 		"Alternative location of the server generator plugin jar file "+
 			"(can be file or url)")
 	pFlags.BoolVar(&verbose, "verbose", verbose, "Enable verbose output")
+	pFlags.BoolVar(&noop, "noop", noop, "Enable no-op mode")
 	return cmd
 }
