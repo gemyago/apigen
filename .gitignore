@@ -5,4 +5,4 @@ tmp
 generators/*/target
 *-test.log
 
-tests/golang/.cover
+.cover

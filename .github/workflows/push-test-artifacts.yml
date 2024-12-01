@@ -11,7 +11,9 @@ on:
 
 jobs:
   push-test-artifacts:
-    if: github.event.pull_request.merged == true
+    if: |
+      github.event.pull_request.merged == true && 
+      !contains(github.event.pull_request.labels.*.name, 'no-build')
     name: Publish Test Artifacts
     runs-on: ubuntu-latest
     permissions:

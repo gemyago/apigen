@@ -1,0 +1,263 @@
+package cmd
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"testing"
+
+	"github.com/go-faker/faker/v4"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+type mockResourceMetadataReader struct {
+	oagCliVersion        string
+	oagCliVersionReadErr error
+	appVersion           string
+	appVersionReadErr    error
+}
+
+func (m *mockResourceMetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
+	return m.oagCliVersion, m.oagCliVersionReadErr
+}
+
+func (m *mockResourceMetadataReader) ReadAppVersion() (string, error) {
+	return m.appVersion, m.appVersionReadErr
+}
+
+func TestGenerator(t *testing.T) {
+	t.Run("should install provided support files and invoke generator", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+
+			oagCliVersion:  "1.2.3-" + faker.Word(),
+			oagCliLocation: faker.URL(),
+
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		installerInvoked := false
+		generatorInvoked := false
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger: DiscardLogger,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				installerParams SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				assert.Equal(t, params.supportDir, installerParams.SupportDir)
+				assert.Equal(t, params.oagCliVersion, installerParams.OagSourceVersion)
+				assert.Equal(t, params.oagCliLocation, installerParams.OagSourceLocation)
+				assert.Equal(t, params.appVersion, installerParams.AppVersion)
+				assert.Equal(t, params.serverGeneratorLocation, installerParams.ServerGeneratorSourceLocation)
+				installerInvoked = true
+
+				return installResult, nil
+			},
+			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+				assert.Equal(t, params.input, invokerParams.Input)
+				assert.Equal(t, params.output, invokerParams.Output)
+				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
+				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
+				generatorInvoked = true
+				return nil
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.NoError(t, err)
+		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should use predefined versions and locations if not provided", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		installerInvoked := false
+		generatorInvoked := false
+
+		mockMetadataReader := mockResourceMetadataReader{
+			oagCliVersion: "1.2.3-" + faker.Word(),
+			appVersion:    "4.5.6-" + faker.Word(),
+		}
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockMetadataReader,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				installerParams SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				installerInvoked = true
+				assert.Equal(t, params.supportDir, installerParams.SupportDir)
+				assert.Equal(t, mockMetadataReader.oagCliVersion, installerParams.OagSourceVersion)
+				assert.Equal(t, fmt.Sprintf(
+					"https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/%s/openapi-generator-cli-%s.jar",
+					mockMetadataReader.oagCliVersion,
+					mockMetadataReader.oagCliVersion,
+				), installerParams.OagSourceLocation)
+				assert.Equal(t, mockMetadataReader.appVersion, installerParams.AppVersion)
+				assert.Equal(t, fmt.Sprintf(
+					"https://github.com/gemyago/apigen/releases/download/%s/server.jar",
+					mockMetadataReader.appVersion,
+				), installerParams.ServerGeneratorSourceLocation)
+
+				return installResult, nil
+			},
+			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+				generatorInvoked = true
+				assert.Equal(t, params.input, invokerParams.Input)
+				assert.Equal(t, params.output, invokerParams.Output)
+				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
+				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
+				return nil
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.NoError(t, err)
+		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should use output relative support path if not provided", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: "",
+
+			oagCliVersion:  "1.2.3-" + faker.Word(),
+			oagCliLocation: faker.URL(),
+
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		installerInvoked := false
+		generatorInvoked := false
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger: DiscardLogger,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				installerParams SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				installerInvoked = true
+				assert.Equal(t, params.output+"/.apigen", installerParams.SupportDir)
+				return installResult, nil
+			},
+			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+				generatorInvoked = true
+				return nil
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.NoError(t, err)
+		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should return error if failed to read openapi-generator-cli version", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		wantErr := errors.New(faker.Sentence())
+		mockMetadataReader := mockResourceMetadataReader{
+			oagCliVersionReadErr: wantErr,
+		}
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockMetadataReader,
+		})
+
+		err := generator(context.Background(), params)
+		require.ErrorIs(t, err, wantErr)
+	})
+
+	t.Run("should return error if failed to read app version", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		wantErr := errors.New(faker.Sentence())
+		mockMetadataReader := mockResourceMetadataReader{
+			appVersionReadErr: wantErr,
+		}
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockMetadataReader,
+		})
+
+		err := generator(context.Background(), params)
+		require.ErrorIs(t, err, wantErr)
+	})
+
+	t.Run("should return error if failed to install support files", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		wantErr := errors.New(faker.Sentence())
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockResourceMetadataReader{},
+			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
+				return SupportingFilesInstallResult{}, wantErr
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.ErrorIs(t, err, wantErr)
+	})
+
+	t.Run("should return error if failed to invoke generator", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		wantErr := errors.New(faker.Sentence())
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockResourceMetadataReader{},
+			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
+				return SupportingFilesInstallResult{}, nil
+			},
+			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+				return wantErr
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.ErrorIs(t, err, wantErr)
+	})
+}

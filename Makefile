@@ -6,8 +6,17 @@ MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
 .SUFFIXES:
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+    sed_i := sed -i ''
+else
+    sed_i := sed -i
+endif
+
 tmp=./tmp
 bin=bin
+
+app_version=$(shell sed -n -r 's/APP_VERSION: (.+)/\1/p' .versions)
 
 cli_version=$(shell sed -n -r 's/OPENAPI_GENERATOR_CLI: (.+)/\1/p' .versions)
 cli_url=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/$(cli_version)/openapi-generator-cli-$(cli_version).jar
@@ -19,9 +28,10 @@ maven_url=https://dlcdn.apache.org/maven/maven-3/$(maven_version)/binaries/$(mav
 maven_archive=$(tmp)/$(maven_dir_name)-bin.tar.gz
 mvn=$(bin)/apache-maven/bin/mvn
 
-golang_tests_cover_dir=tests/golang/.cover
-golang_tests_cover_profile=${golang_tests_cover_dir}/profile.out
+golang_tests_cover_dir=.cover/golang
 golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
+
+golang_server_jar=generators/go-apigen-server/target/server.jar
 
 $(bin):
 	mkdir -p $@
@@ -70,12 +80,16 @@ endef
 %/.openapi-generator/REMOVED_FILES:
 	$(if $(strip $(openapi_generator_removed_files)),$(current_make) $(openapi_generator_removed_files), $(NOOP))
 
-generators/go-apigen-server: $(shell find generators/go-apigen-server/src/main -type f)
-	mvn -f $@/pom.xml package
+# Update pom.xml (version) with app_version
+generators/go-apigen-server/pom.xml: .versions
+	mvn -B -q -f generators/go-apigen-server/pom.xml versions:set -DnewVersion=$(app_version)
+
+$(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f) generators/go-apigen-server/pom.xml
+	mvn -B -q -f generators/go-apigen-server/pom.xml package
 	touch $@
 
-examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server examples/petstore.yaml
-	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/petstore.yaml
+	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		-i examples/petstore.yaml \
@@ -86,9 +100,9 @@ examples/go-apigen-server/pkg/api/http/v1routes: generators/go-apigen-server exa
 examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
 
 # generatedCodeComment set to empty to allow linter to lint generated code.
-tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml generators/go-apigen-server
+tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_server_jar)
 	mkdir -p $@
-	java -cp $(cli_jar):generators/go-apigen-server/target/go-apigen-server-openapi-generator-0.0.1.jar \
+	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		--additional-properties generatedCodeComment="" \
@@ -119,12 +133,34 @@ $(go-test-coverage):
 $(golang_tests_cover_dir):
 	mkdir -p $(golang_tests_cover_dir)
 
-.PHONY: tests/golang
-tests/golang: $(golang_tests_cover_dir) $(go-test-coverage)
-	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./tests/golang/... -coverprofile=$(golang_tests_cover_profile) -covermode=atomic ./tests/golang/...
-	go tool cover -html=$(golang_tests_cover_profile) -o $(golang_tests_cover_html)
-	@echo "Test coverage report: $(shell realpath $(golang_tests_cover_html))"
-	$(go-test-coverage) --badge-file-name $(golang_tests_cover_dir)/coverage.svg --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_profile)
+.PHONY: $(golang_tests_cover_dir)/generated-routes-profile.out
+$(golang_tests_cover_dir)/generated-routes-profile.out: $(golang_tests_cover_dir) $(go-test-coverage)
+	@echo "Running generated routes tests"
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./tests/golang/... -coverprofile=$(golang_tests_cover_dir)/generated-routes-profile.out -covermode=atomic ./tests/golang/...
+	go tool cover -html=$(golang_tests_cover_dir)/generated-routes-profile.out -o $(golang_tests_cover_dir)/generated-routes-profile.html
+	@echo "Generated routes test coverage report: $(shell realpath $(golang_tests_cover_dir)/generated-routes-profile.html)"
+	$(go-test-coverage) --config tests/golang/.testcoverage.yaml --profile $(golang_tests_cover_dir)/generated-routes-profile.out
+
+.PHONY: $(golang_tests_cover_dir)/apigen-profile.out
+$(golang_tests_cover_dir)/apigen-profile.out: $(golang_tests_cover_dir) $(go-test-coverage)
+	@echo "Running apigen cli tests"
+	TZ=US/Alaska go test -shuffle=on -failfast -coverpkg=./lang/go/apigen/... -coverprofile=$(golang_tests_cover_dir)/apigen-profile.out -covermode=atomic ./lang/go/apigen/...
+	go tool cover -html=$(golang_tests_cover_dir)/apigen-profile.out -o $(golang_tests_cover_dir)/apigen-profile.html
+	@echo "Coverage report of apigen cli: $(shell realpath $(golang_tests_cover_dir)/apigen-profile.html)"
+	$(go-test-coverage) --config lang/go/apigen/.testcoverage.yaml --profile $(golang_tests_cover_dir)/apigen-profile.out
+
+$(golang_tests_cover_dir)/coverage.out:
+	@echo "Merging coverage profiles"
+	@echo "mode: atomic" > $@
+	@tail -n +2 $(golang_tests_cover_dir)/generated-routes-profile.out >> $@
+	@tail -n +2 $(golang_tests_cover_dir)/apigen-profile.out >> $@
+
+$(golang_tests_cover_dir)/coverage.html: $(golang_tests_cover_dir)/coverage.out
+	@go tool cover -html=$< -o $@
+	@echo "Coverage report: $(shell realpath $@)"
+
+$(golang_tests_cover_dir)/coverage.svg: $(golang_tests_cover_dir)/coverage.out
+	$(go-test-coverage) --badge-file-name $@ --profile $<
 
 $(golang_tests_cover_dir)/coverage.%.blob-sha:
 	@gh api \
@@ -160,5 +196,18 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 		/repos/gemyago/apigen/contents/coverage/golang-coverage.html \
 		--input $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
 
+.PHONY: tests/golang tests/golang-generated-routes tests/golang-apigen
+tests/golang: $(golang_tests_cover_dir)/generated-routes-profile.out $(golang_tests_cover_dir)/apigen-profile.out
+tests/golang-generated-routes: $(golang_tests_cover_dir)/generated-routes-profile.out
+tests/golang-apigen: $(golang_tests_cover_dir)/apigen-profile.out
+
 .PHONY: tests
 tests: tests/golang
+
+.PHONY: release
+release: $(golang_server_jar) $(tmp)
+	gh release create $(shell ./scripts/release.sh resolve-release-tag) \
+		--generate-notes \
+		--latest=false \
+		--draft \
+		$(golang_server_jar) > tmp/release-url.txt
