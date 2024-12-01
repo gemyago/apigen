@@ -1,0 +1,19 @@
+# go-test-coverage tool is used to check for coverage threshold (see https://github.com/vladopajic/go-test-coverage)
+
+# (optional; but recommended to set) 
+# When specified reported file paths will not contain local prefix in the output
+local-prefix: "github.com/gemyago/apigen/lang/go/apigen"
+
+# Holds coverage thresholds percentages, values should be in range [0-100]
+threshold:
+  # (optional; default 0) 
+  # The minimum coverage that each file should have
+  file: 0
+
+  # (optional; default 0) 
+  # The minimum coverage that each package should have
+  package: 75
+
+  # (optional; default 0) 
+  # The minimum total coverage project should have
+  total: 96
