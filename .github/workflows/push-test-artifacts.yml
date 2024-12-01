@@ -24,7 +24,7 @@ jobs:
 
       - name: Get Test Artifacts
         run: |
-          gh run download --dir tests/golang/.cover/ -n test-artifacts-pr-${{ github.event.pull_request.node_id }}
+          gh run download --dir .cover/ -n test-artifacts-pr-${{ github.event.pull_request.node_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
