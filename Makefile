@@ -149,7 +149,8 @@ $(golang_tests_cover_dir)/apigen-profile.out: $(golang_tests_cover_dir) $(go-tes
 	@echo "Coverage report of apigen cli: $(shell realpath $(golang_tests_cover_dir)/apigen-profile.html)"
 	$(go-test-coverage) --config lang/go/apigen/.testcoverage.yaml --profile $(golang_tests_cover_dir)/apigen-profile.out
 
-$(golang_tests_cover_dir)/coverage.out:
+.PHONY: $(golang_tests_cover_dir)/coverage.out
+$(golang_tests_cover_dir)/coverage.out: $(golang_tests_cover_dir)/generated-routes-profile.out $(golang_tests_cover_dir)/apigen-profile.out
 	@echo "Merging coverage profiles"
 	@echo "mode: atomic" > $@
 	@tail -n +2 $(golang_tests_cover_dir)/generated-routes-profile.out >> $@
@@ -197,7 +198,7 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 		--input $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
 
 .PHONY: tests/golang tests/golang-generated-routes tests/golang-apigen
-tests/golang: $(golang_tests_cover_dir)/generated-routes-profile.out $(golang_tests_cover_dir)/apigen-profile.out
+tests/golang: $(golang_tests_cover_dir)/coverage.out
 tests/golang-generated-routes: $(golang_tests_cover_dir)/generated-routes-profile.out
 tests/golang-apigen: $(golang_tests_cover_dir)/apigen-profile.out
 
