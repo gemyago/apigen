@@ -197,7 +197,7 @@ tests/golang/push-test-artifacts: $(golang_tests_cover_dir)/coverage.svg.gh-cli-
 		--input $(golang_tests_cover_dir)/coverage.html.gh-cli-body.json
 
 .PHONY: tests/golang tests/golang-generated-routes tests/golang-apigen
-tests/golang: $(golang_tests_cover_dir)/generated-routes-profile.out $(golang_tests_cover_dir)/apigen-profile.out
+tests/golang: tests/golang-generated-routes tests/golang-apigen
 tests/golang-generated-routes: $(golang_tests_cover_dir)/generated-routes-profile.out
 tests/golang-apigen: $(golang_tests_cover_dir)/apigen-profile.out
 
