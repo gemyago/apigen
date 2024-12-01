@@ -3,7 +3,8 @@ name: Push Test Artifacts
 on:
   pull_request:
     # to test this flow: add labeled or synchronize for testing and comment job condition
-    types: [closed]
+    # types: [closed]
+    types: [labeled]
 
     # Target branch for the PR
     branches:
@@ -11,9 +12,9 @@ on:
 
 jobs:
   push-test-artifacts:
-    if: |
-      github.event.pull_request.merged == true && 
-      !contains(github.event.pull_request.labels.*.name, 'no-build')
+    # if: |
+    #   github.event.pull_request.merged == true && 
+    #   !contains(github.event.pull_request.labels.*.name, 'no-build')
     name: Publish Test Artifacts
     runs-on: ubuntu-latest
     permissions:
