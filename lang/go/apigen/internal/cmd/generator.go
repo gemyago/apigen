@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"regexp"
 )
 
 type GeneratorParams struct {
@@ -40,6 +41,7 @@ type GeneratorDeps struct {
 
 func NewGenerator(deps GeneratorDeps) Generator {
 	logger := deps.RootLogger.WithGroup("generator")
+	semverPattern := regexp.MustCompile(`^(\d+\.\d+\.\d+)(.*)$`)
 	return func(ctx context.Context, params GeneratorParams) error {
 		if params.supportDir == "" {
 			params.supportDir = params.output + "/.apigen"
@@ -70,6 +72,10 @@ func NewGenerator(deps GeneratorDeps) Generator {
 			ver, err := deps.MetadataReader.ReadAppVersion()
 			if err != nil {
 				return fmt.Errorf("failed to read generator version: %w", err)
+			}
+			// if ver follows semver, prefix it with "v"
+			if semverPattern.MatchString(ver) {
+				ver = "v" + ver
 			}
 			params.appVersion = ver
 		}

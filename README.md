@@ -7,12 +7,11 @@ API Layer Generator from the OpenAPI specification.
 
 This project is using the [OpenAPI Generator](https://github.com/openapitools/openapi-generator) and provides a set of plugins for it. Primary target is a golang, however other languages to be considered in the future.
 
-Project status: **pre-alpha**.
+Project status: **alpha**.
 
 ## TODOs
 
 ### General
-* Installation and usage instructions
 * Documentation on generated code structure and suggested patterns
 
 ### Golang
@@ -26,6 +25,29 @@ Project status: **pre-alpha**.
 
 ### Typescript
 Set of features compatible with golang
+
+## Installation & Usage
+
+### Golang projects
+
+Install `apigen` cli tool:
+```bash
+go install github.com/gemyago/apigen
+```
+
+Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/v1routes.yaml`.
+
+Add a golang file with generation instructions. For example: `internal/api/http/v1routes.go`:
+```go
+//go:generate go run apigen ./v1routes.yaml ./v1routes
+```
+
+Run the generation:
+```bash
+go generate ./internal/api/http
+```
+
+Folders structure suggested above is not enforced and can be adjusted to your project needs.
 
 ## Supported OpenAPI features
 
