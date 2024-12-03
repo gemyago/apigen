@@ -1,7 +1,14 @@
 package main
 
-import "github.com/gemyago/apigen/lang/go/apigen"
+import (
+	"embed"
 
-func main() {
-	apigen.Execute()
+	"github.com/gemyago/apigen/lang/go/apigen"
+)
+
+//go:embed .versions
+var rootFS embed.FS
+
+func main() { // coverage-ignore
+	apigen.Execute(rootFS)
 }

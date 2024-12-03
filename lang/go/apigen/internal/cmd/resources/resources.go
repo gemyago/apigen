@@ -2,26 +2,21 @@ package resources
 
 import (
 	"bufio"
-	"embed"
 	"errors"
 	"io/fs"
 	"strings"
 )
 
-//go:generate cp -r ../../../../../../.versions ./.versions
-
-//go:embed .versions
-var resources embed.FS
-
 const versionLineSegmentsCount = 2
 
 type MetadataReader struct {
-	fs fs.ReadFileFS
+	// Represent a repository relative filesystem.
+	rootFS fs.ReadFileFS
 }
 
 // ReadAppVersion reads the APP_VERSION value from embedded .versions file.
 func (r *MetadataReader) ReadAppVersion() (string, error) {
-	data, err := r.fs.ReadFile(".versions")
+	data, err := r.rootFS.ReadFile(".versions")
 	if err != nil {
 		return "", err
 	}
@@ -42,7 +37,7 @@ func (r *MetadataReader) ReadAppVersion() (string, error) {
 
 // ReadOpenapiGeneratorCliVersion reads the OPENAPI_GENERATOR_CLI value from embedded .versions file.
 func (r *MetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
-	data, err := r.fs.ReadFile(".versions")
+	data, err := r.rootFS.ReadFile(".versions")
 	if err != nil {
 		return "", err
 	}
@@ -61,6 +56,6 @@ func (r *MetadataReader) ReadOpenapiGeneratorCliVersion() (string, error) {
 	return "", errors.New("OPENAPI_GENERATOR_CLI version not found")
 }
 
-func NewMetadataReader() *MetadataReader {
-	return &MetadataReader{fs: resources}
+func NewMetadataReader(rootFS fs.ReadFileFS) *MetadataReader {
+	return &MetadataReader{rootFS: rootFS}
 }
