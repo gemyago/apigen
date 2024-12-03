@@ -94,8 +94,8 @@ func TestGenerator(t *testing.T) {
 		generatorInvoked := false
 
 		mockMetadataReader := mockResourceMetadataReader{
-			oagCliVersion: "1.2.3-" + faker.Word(),
-			appVersion:    "4.5.6-" + faker.Word(),
+			oagCliVersion: "1-" + faker.Word(),
+			appVersion:    "4-" + faker.Word(),
 		}
 		generator := NewGenerator(GeneratorDeps{
 			RootLogger:     DiscardLogger,
@@ -126,6 +126,53 @@ func TestGenerator(t *testing.T) {
 				assert.Equal(t, params.output, invokerParams.Output)
 				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
 				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
+				return nil
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.NoError(t, err)
+		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should prefix predefined app version with v if it follows semver pattern", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		installerInvoked := false
+		generatorInvoked := false
+
+		mockMetadataReader := mockResourceMetadataReader{
+			oagCliVersion: "1-" + faker.Word(),
+			appVersion:    "1.2.3-" + faker.Word(),
+		}
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger:     DiscardLogger,
+			MetadataReader: &mockMetadataReader,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				installerParams SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				installerInvoked = true
+				assert.Equal(t, "v"+mockMetadataReader.appVersion, installerParams.AppVersion)
+				assert.Equal(t, fmt.Sprintf(
+					"https://github.com/gemyago/apigen/releases/download/v%s/server.jar",
+					mockMetadataReader.appVersion,
+				), installerParams.ServerGeneratorSourceLocation)
+
+				return installResult, nil
+			},
+			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+				generatorInvoked = true
 				return nil
 			},
 		})
