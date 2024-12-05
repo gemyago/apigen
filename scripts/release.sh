@@ -3,7 +3,6 @@
 set -e
 
 # This script resolves the release tag for the current branch.
-# If the branch is in form release/v1.0.0, the release tag is v1.0.0.
 # If the branch is in form release/ or hotfix/, the release tag is the APP_VERSION from .versions file.
 # In other case the release will be rc-<short-hash>.
 
