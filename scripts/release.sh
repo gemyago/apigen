@@ -28,7 +28,7 @@ case $command in
     branch_name=${GITHUB_HEAD_REF:-$(git rev-parse --abbrev-ref HEAD)}
 
     if [[ $branch_name =~ ^release/.*$ || $branch_name =~ ^hotfix/.*$ ]]; then
-      release_tag=$(grep 'APP_VERSION' ${SCRIPT_DIR}/../.versions | cut -d ' ' -f 2)
+      release_tag=v$(grep 'APP_VERSION' ${SCRIPT_DIR}/../.versions | cut -d ' ' -f 2)
     else
       short_hash=$(git rev-parse --short HEAD)
       release_tag="rc-$short_hash"
