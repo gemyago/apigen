@@ -22,4 +22,5 @@ require (
 retract (
 	v1.2.3 // published while testing
 	v1.2.3-rc // published while testing
+	v1.2.4 // required to retract v1.2.3
 )
