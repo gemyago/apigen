@@ -7,11 +7,17 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
-func newBehaviorController() *handlers.BehaviorController {
+type behaviorControllerTestActions struct {
+	noParamsNoResponse mockAction[struct{}]
+}
+
+func newBehaviorController(
+	testActions *behaviorControllerTestActions,
+) *handlers.BehaviorController {
 	return handlers.BuildBehaviorController().
 		HandleBehaviorNoParamsNoResponse.With(
-		func(context.Context) error {
-			panic("not implemented")
+		func(ctx context.Context) error {
+			return testActions.noParamsNoResponse.action(ctx, struct{}{})
 		}).
 		HandleBehaviorNoParamsWithResponse.With(
 		func(context.Context) (*models.BehaviorNoParamsWithResponse202Response, error) {

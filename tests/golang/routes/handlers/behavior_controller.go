@@ -120,15 +120,18 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.defaultStatusCode = 202
 	controllerBuilder.HandleBehaviorNoParamsNoResponse.voidResult = true
+	controllerBuilder.HandleBehaviorNoParamsNoResponse.paramsParserFactory = makeVoidParamsParser
 
 	// GET /behavior/no-params-with-response
 	controllerBuilder.HandleBehaviorNoParamsWithResponse.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoParamsWithResponse.defaultStatusCode = 202
+	controllerBuilder.HandleBehaviorNoParamsWithResponse.paramsParserFactory = makeVoidParamsParser
 
 	// GET /behavior/no-status-defined
 	controllerBuilder.HandleBehaviorNoStatusDefined.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorNoStatusDefined.defaultStatusCode = 200
 	controllerBuilder.HandleBehaviorNoStatusDefined.voidResult = true
+	controllerBuilder.HandleBehaviorNoStatusDefined.paramsParserFactory = makeVoidParamsParser
 
 	// GET /behavior/with-params-and-response
 	controllerBuilder.HandleBehaviorWithParamsAndResponse.controllerBuilder = controllerBuilder
@@ -139,6 +142,7 @@ func BuildBehaviorController() *BehaviorControllerBuilder {
 	controllerBuilder.HandleBehaviorWithStatusDefined.controllerBuilder = controllerBuilder
 	controllerBuilder.HandleBehaviorWithStatusDefined.defaultStatusCode = 202
 	controllerBuilder.HandleBehaviorWithStatusDefined.voidResult = true
+	controllerBuilder.HandleBehaviorWithStatusDefined.paramsParserFactory = makeVoidParamsParser
 
 	return controllerBuilder
 }
