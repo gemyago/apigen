@@ -115,6 +115,16 @@ type paramsParser[TReqParams any] interface {
 }
 type paramsParserFactory[TReqParams any] func(app *HTTPApp) paramsParser[TReqParams]
 
+type voidParamsParser struct{}
+
+func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (voidValue, error) {
+	return voidValue(nil), nil
+}
+
+func makeVoidParamsParser(_ *HTTPApp) paramsParser[voidValue] {
+	return voidParamsParser{}
+}
+
 type handlerFactoryParams[TReqParams any, TResData any] struct {
 	defaultStatus       int
 	voidResult          bool

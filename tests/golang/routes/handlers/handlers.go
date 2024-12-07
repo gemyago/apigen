@@ -119,7 +119,7 @@ func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (voidValue, error
 	return voidValue(nil), nil
 }
 
-func voidParamsParserFactory(_ *HTTPApp) paramsParser[voidValue] {
+func makeVoidParamsParser(_ *HTTPApp) paramsParser[voidValue] {
 	return voidParamsParser{}
 }
 
