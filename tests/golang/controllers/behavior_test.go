@@ -37,16 +37,12 @@ func TestBehavior(t *testing.T) {
 	type testCase = routeTestCase[*behaviorControllerTestActions]
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {
-		t.Run("should process the request", func(t *testing.T) {
-
-		})
-
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
 			return testCase{
-				method: http.MethodPost,
+				method: http.MethodGet,
 				path:   "/behavior/no-params-no-response",
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 204, recorder.Code, "Unexpected response: %v", recorder.Body) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 
