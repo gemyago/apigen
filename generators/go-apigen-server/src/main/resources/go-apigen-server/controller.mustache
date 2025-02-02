@@ -15,7 +15,8 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 var _ = json.Unmarshal
-var _ = fmt.Sprint
+var _ = fmt.Sprint{{#hasImportedModel}}
+type _ func() {{importedModels.0}}{{/hasImportedModel}}
 {{#operations}}{{#operation}}{{#allParams}}{{#isEnum}}
 {{>enums/type}}{{/isEnum}}{{/allParams}}{{/operation}}{{/operations}}{{#operations}}
 {{#operation}}

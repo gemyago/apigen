@@ -12,6 +12,7 @@ import (
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
+type _ func() ArraysNullableRequiredValidationRequest
 
 // ArraysArraysNullableRequiredValidationRequest represents params for arraysNullableRequiredValidation operation
 //

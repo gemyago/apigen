@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 	"time"
+
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 	. "github.com/gemyago/apigen/tests/golang/routes/internal"
 )
 
@@ -10,5 +12,6 @@ import (
 var _ = BindingContext{}
 var _ = http.MethodGet
 var _ = time.Time{}
+type _ func() Error
 
 

@@ -25,6 +25,7 @@ internal/boolean_nullable_array_items_request_validation.go
 internal/boolean_nullable_request_validation.go
 internal/boolean_parsing_request_validation.go
 internal/boolean_required_validation_request_validation.go
+internal/error_validation.go
 internal/nullable_string_enum_validation.go
 internal/numeric_types_array_items_request_validation.go
 internal/numeric_types_nullable_array_items_request_validation.go
@@ -62,6 +63,7 @@ models/boolean_nullable_array_items_request.go
 models/boolean_nullable_request.go
 models/boolean_parsing_request.go
 models/boolean_required_validation_request.go
+models/error.go
 models/nullable_string_enum.go
 models/numeric_types_array_items_request.go
 models/numeric_types_nullable_array_items_request.go

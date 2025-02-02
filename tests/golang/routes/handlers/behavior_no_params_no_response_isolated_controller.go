@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
+type _ func() Error
 
 
 

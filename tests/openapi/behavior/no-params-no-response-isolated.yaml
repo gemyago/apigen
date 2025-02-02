@@ -6,3 +6,20 @@ get:
   responses:
     '202':
       description: Request succeeded
+    default:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          format: string
+        message:
+          type: string
