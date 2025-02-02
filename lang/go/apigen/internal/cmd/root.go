@@ -62,7 +62,8 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 			}))
 
 			generator = NewGenerator(GeneratorDeps{
-				RootLogger: rootLogger,
+				RootLogger:  rootLogger,
+				OsChdirFunc: os.Chdir,
 				SupportFilesInstaller: newNoopableSupportFilesInstaller(
 					rootLogger,
 					noop,
@@ -96,6 +97,8 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 	}
 
 	pFlags := cmd.PersistentFlags()
+	pFlags.StringVarP(&params.chdir, "chdir", "c", "",
+		"Change working directory before running the generator")
 	pFlags.StringVar(&params.supportDir, "support-dir", "",
 		"Path to the directory where supporting files will be placed. "+
 			"Defaults to the <output>/.apigen")

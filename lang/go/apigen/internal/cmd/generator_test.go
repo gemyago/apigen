@@ -78,6 +78,51 @@ func TestGenerator(t *testing.T) {
 		assert.True(t, generatorInvoked)
 	})
 
+	t.Run("should chdir to a given directory", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+			chdir:      faker.URL(),
+
+			oagCliVersion:  "1.2.3-" + faker.Word(),
+			oagCliLocation: faker.URL(),
+
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		invocationOrder := make([]int, 3)
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger: DiscardLogger,
+			OsChdirFunc: func(dir string) error {
+				assert.Equal(t, params.chdir, dir)
+				invocationOrder[0] = 1
+				return nil
+			},
+			SupportFilesInstaller: func(
+				_ context.Context,
+				_ SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				invocationOrder[1] = 2
+				return installResult, nil
+			},
+			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+				invocationOrder[2] = 3
+				return nil
+			},
+		})
+
+		err := generator(context.Background(), params)
+		require.NoError(t, err)
+		assert.Equal(t, []int{1, 2, 3}, invocationOrder)
+	})
+
 	t.Run("should use predefined versions and locations if not provided", func(t *testing.T) {
 		params := GeneratorParams{
 			input:      faker.URL(),
