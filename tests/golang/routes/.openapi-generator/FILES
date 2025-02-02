@@ -1,6 +1,8 @@
 handlers/arrays_controller.go
 handlers/arrays_params.go
 handlers/behavior_controller.go
+handlers/behavior_no_params_no_response_isolated_controller.go
+handlers/behavior_no_params_no_response_isolated_params.go
 handlers/behavior_params.go
 handlers/boolean_controller.go
 handlers/boolean_params.go
