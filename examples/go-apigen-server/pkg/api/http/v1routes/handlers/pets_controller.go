@@ -14,6 +14,7 @@ import (
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
+type _ func() Error
 
 // PetsCreatePetRequest represents params for createPet operation
 //
