@@ -17,5 +17,9 @@ func newErrorHandlingController() *handlers.ErrorHandlingController {
 		func(_ context.Context, _ *handlers.ErrorHandlingErrorHandlingValidationErrorsRequest) error {
 			return errors.New("not implemented")
 		}).
+		HandleErrorHandlingActionErrors.With(
+		func(_ context.Context) error {
+			return errors.New("simulated action error")
+		}).
 		Finalize()
 }

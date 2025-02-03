@@ -11,6 +11,8 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
+
+
 // ErrorHandlingErrorHandlingParsingErrorsRequest represents params for errorHandlingParsingErrors operation
 //
 // Request: GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}.
@@ -36,6 +38,13 @@ type ErrorHandlingErrorHandlingValidationErrorsRequest struct {
 }
 
 type ErrorHandlingController struct {
+	// GET /error-handling/action-errors
+	//
+	// Request type: none
+	//
+	// Response type: none
+	ErrorHandlingActionErrors httpHandlerFactory
+
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
@@ -52,6 +61,13 @@ type ErrorHandlingController struct {
 }
 
 type ErrorHandlingControllerBuilder struct {
+	// GET /error-handling/action-errors
+	//
+	// Request type: none
+	//
+	// Response type: none
+	HandleErrorHandlingActionErrors actionBuilderNoParamsVoidResult[*ErrorHandlingControllerBuilder]
+
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	//
 	// Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
@@ -69,6 +85,7 @@ type ErrorHandlingControllerBuilder struct {
 
 func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
 	return &ErrorHandlingController{
+		ErrorHandlingActionErrors: mustInitializeAction("errorHandlingActionErrors", c.HandleErrorHandlingActionErrors.httpHandlerFactory),
 		ErrorHandlingParsingErrors: mustInitializeAction("errorHandlingParsingErrors", c.HandleErrorHandlingParsingErrors.httpHandlerFactory),
 		ErrorHandlingValidationErrors: mustInitializeAction("errorHandlingValidationErrors", c.HandleErrorHandlingValidationErrors.httpHandlerFactory),
 	}
@@ -76,6 +93,12 @@ func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController {
 
 func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 	controllerBuilder := &ErrorHandlingControllerBuilder{}
+
+	// GET /error-handling/action-errors
+	controllerBuilder.HandleErrorHandlingActionErrors.controllerBuilder = controllerBuilder
+	controllerBuilder.HandleErrorHandlingActionErrors.defaultStatusCode = 204
+	controllerBuilder.HandleErrorHandlingActionErrors.voidResult = true
+	controllerBuilder.HandleErrorHandlingActionErrors.paramsParserFactory = makeVoidParamsParser
 
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
 	controllerBuilder.HandleErrorHandlingParsingErrors.controllerBuilder = controllerBuilder
@@ -93,6 +116,7 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder {
 }
 
 func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *HTTPApp) {
+	app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(app))
 }

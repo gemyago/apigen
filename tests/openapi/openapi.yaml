@@ -100,3 +100,5 @@ paths:
     $ref: "./error-handling/parsing-errors.yaml"
   /error-handling/validation-errors:
     $ref: "./error-handling/validation-errors.yaml"
+  /error-handling/action-errors:
+    $ref: "./error-handling/action-errors.yaml"

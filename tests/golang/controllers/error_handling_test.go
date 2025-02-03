@@ -18,9 +18,12 @@ func TestErrorHandling(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
+		rootLogger := newLogger()
 		handlers.RegisterErrorHandlingRoutes(
 			newErrorHandlingController(),
-			handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())),
+			handlers.NewHTTPApp(router,
+				handlers.WithLogger(rootLogger),
+			),
 		)
 		return router
 	}
@@ -32,7 +35,7 @@ func TestErrorHandling(t *testing.T) {
 		wantErrors []expectedBindingError
 	}
 
-	runTestCase := func(t *testing.T, tc testCase) {
+	runBadRequestTestCase := func(t *testing.T, tc testCase) {
 		router := setupRouter()
 		testReq := httptest.NewRequest(
 			http.MethodGet,
@@ -57,7 +60,7 @@ func TestErrorHandling(t *testing.T) {
 	}
 
 	t.Run("parsing-errors", func(t *testing.T) {
-		runTestCase(t, testCase{
+		runBadRequestTestCase(t, testCase{
 			name: "respond with 400 if parsing fails",
 			path: fmt.Sprintf(
 				"/error-handling/parsing-errors/%[1]s/%[1]s?requiredQuery1=%[1]s&requiredQuery2=%[1]s",
@@ -73,7 +76,7 @@ func TestErrorHandling(t *testing.T) {
 	})
 
 	t.Run("validation-errors", func(t *testing.T) {
-		runTestCase(t, testCase{
+		runBadRequestTestCase(t, testCase{
 			name: "respond with 400 if validation fails",
 			path: "/error-handling/validation-errors?requiredQuery1=1&requiredQuery2=2",
 			wantErrors: []expectedBindingError{
@@ -81,5 +84,20 @@ func TestErrorHandling(t *testing.T) {
 				{Field: "requiredQuery2", Location: "query", Code: "INVALID_OUT_OF_RANGE"},
 			},
 		})
+	})
+
+	t.Run("action error with default action error handler", func(t *testing.T) {
+		router := setupRouter()
+		testReq := httptest.NewRequest(
+			http.MethodGet,
+			"/error-handling/action-errors",
+			http.NoBody,
+		)
+		recorder := httptest.NewRecorder()
+		router.mux.ServeHTTP(recorder, testReq)
+
+		assert.Equal(t, 500, recorder.Code)
+		assert.Equal(t, "text/plain; charset=utf-8", recorder.Header().Get("content-type"))
+		assert.Equal(t, "Internal Server Error\n", recorder.Body.String())
 	})
 }
