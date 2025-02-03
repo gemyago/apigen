@@ -1,0 +1,25 @@
+get:
+  summary: API to test if no params and no response isolated (e.g no other stuff)
+  operationId: behaviorNoParamsNoResponse
+  tags:
+    - behavior-no-params-no-response-isolated
+  responses:
+    '202':
+      description: Request succeeded
+    default:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          format: string
+        message:
+          type: string

@@ -10,6 +10,7 @@ import (
 type GeneratorParams struct {
 	input      string
 	output     string
+	chdir      string
 	supportDir string
 
 	// oagCliVersion is a version of the required openapi-generator-cli
@@ -37,12 +38,19 @@ type GeneratorDeps struct {
 	SupportFilesInstaller
 	MetadataReader metadataReader
 	GeneratorInvoker
+	OsChdirFunc func(dir string) error
 }
 
 func NewGenerator(deps GeneratorDeps) Generator {
 	logger := deps.RootLogger.WithGroup("generator")
 	semverPattern := regexp.MustCompile(`^(\d+\.\d+\.\d+)(.*)$`)
 	return func(ctx context.Context, params GeneratorParams) error {
+		if params.chdir != "" {
+			if err := deps.OsChdirFunc(params.chdir); err != nil {
+				return fmt.Errorf("failed to change working directory: %w", err)
+			}
+		}
+
 		if params.supportDir == "" {
 			params.supportDir = params.output + "/.apigen"
 			logger.InfoContext(ctx, "Using default support directory", slog.String("supportDir", params.supportDir))

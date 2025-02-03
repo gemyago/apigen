@@ -12,7 +12,9 @@ import (
 	. "{{invokerPackage}}/internal"
 )
 
-// Below is to workaround unused imports.
+// Below is to workaround unused imports if that happens.
+var _ = BindingContext{}
+var _ = http.MethodGet
 var _ = time.Time{}{{#hasImportedModel}}
 type _ func() {{importedModels.0}}{{/hasImportedModel}}
 
