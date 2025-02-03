@@ -77,7 +77,7 @@
 				
 				<option value="file10">github.com/gemyago/apigen/tests/golang/controllers/boolean.go (100.0%)</option>
 				
-				<option value="file11">github.com/gemyago/apigen/tests/golang/controllers/error_handling.go (33.3%)</option>
+				<option value="file11">github.com/gemyago/apigen/tests/golang/controllers/error_handling.go (50.0%)</option>
 				
 				<option value="file12">github.com/gemyago/apigen/tests/golang/controllers/numeric_types.go (100.0%)</option>
 				
@@ -105,7 +105,7 @@
 				
 				<option value="file24">github.com/gemyago/apigen/tests/golang/routes/handlers/error_handling_params.go (100.0%)</option>
 				
-				<option value="file25">github.com/gemyago/apigen/tests/golang/routes/handlers/handlers.go (88.0%)</option>
+				<option value="file25">github.com/gemyago/apigen/tests/golang/routes/handlers/handlers.go (89.8%)</option>
 				
 				<option value="file26">github.com/gemyago/apigen/tests/golang/routes/handlers/numeric_types_controller.go (100.0%)</option>
 				
@@ -1015,7 +1015,7 @@ import (
         "github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
-func newErrorHandlingController() *handlers.ErrorHandlingController <span class="cov10" title="2">{
+func newErrorHandlingController() *handlers.ErrorHandlingController <span class="cov10" title="3">{
         return handlers.BuildErrorHandlingController().
                 HandleErrorHandlingParsingErrors.With(
                 func(_ context.Context, _ *handlers.ErrorHandlingErrorHandlingParsingErrorsRequest) error </span><span class="cov0" title="0">{
@@ -1024,6 +1024,10 @@ func newErrorHandlingController() *handlers.ErrorHandlingController <span class=
                 HandleErrorHandlingValidationErrors.With(
                 func(_ context.Context, _ *handlers.ErrorHandlingErrorHandlingValidationErrorsRequest) error <span class="cov0" title="0">{
                         return errors.New("not implemented")
+                }</span>).
+                HandleErrorHandlingActionErrors.With(
+                func(_ context.Context) error <span class="cov1" title="1">{
+                        return errors.New("simulated action error")
                 }</span>).
                 Finalize()
 }
@@ -1162,7 +1166,7 @@ func (r *routerAdapter) PathValue(req *http.Request, paramName string) string <s
         return req.PathValue(paramName)
 }</span>
 
-func (r *routerAdapter) HandleRoute(method, pathPattern string, h http.Handler) <span class="cov8" title="748">{
+func (r *routerAdapter) HandleRoute(method, pathPattern string, h http.Handler) <span class="cov8" title="753">{
         r.mux.Handle(method+" "+pathPattern, h)
 }</span>
 
@@ -1185,7 +1189,7 @@ func openTestLogFile() *os.File <span class="cov1" title="1">{
 
 var testOutput = openTestLogFile() //nolint:gochecknoglobals // we want to open it once for all tests
 
-func newLogger() *slog.Logger <span class="cov6" title="100">{
+func newLogger() *slog.Logger <span class="cov6" title="101">{
         return slog.New(slog.NewJSONHandler(testOutput, nil))
 }</span>
 
@@ -2805,6 +2809,8 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
+
+
 // ErrorHandlingErrorHandlingParsingErrorsRequest represents params for errorHandlingParsingErrors operation
 //
 // Request: GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}.
@@ -2830,6 +2836,13 @@ type ErrorHandlingErrorHandlingValidationErrorsRequest struct {
 }
 
 type ErrorHandlingController struct {
+        // GET /error-handling/action-errors
+        //
+        // Request type: none
+        //
+        // Response type: none
+        ErrorHandlingActionErrors httpHandlerFactory
+
         // GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
         //
         // Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
@@ -2846,6 +2859,13 @@ type ErrorHandlingController struct {
 }
 
 type ErrorHandlingControllerBuilder struct {
+        // GET /error-handling/action-errors
+        //
+        // Request type: none
+        //
+        // Response type: none
+        HandleErrorHandlingActionErrors actionBuilderNoParamsVoidResult[*ErrorHandlingControllerBuilder]
+
         // GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
         //
         // Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
@@ -2861,15 +2881,22 @@ type ErrorHandlingControllerBuilder struct {
         HandleErrorHandlingValidationErrors actionBuilderVoidResult[*ErrorHandlingControllerBuilder, *ErrorHandlingErrorHandlingValidationErrorsRequest]
 }
 
-func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController <span class="cov10" title="2">{
+func (c *ErrorHandlingControllerBuilder) Finalize() *ErrorHandlingController <span class="cov10" title="3">{
         return &amp;ErrorHandlingController{
+                ErrorHandlingActionErrors: mustInitializeAction("errorHandlingActionErrors", c.HandleErrorHandlingActionErrors.httpHandlerFactory),
                 ErrorHandlingParsingErrors: mustInitializeAction("errorHandlingParsingErrors", c.HandleErrorHandlingParsingErrors.httpHandlerFactory),
                 ErrorHandlingValidationErrors: mustInitializeAction("errorHandlingValidationErrors", c.HandleErrorHandlingValidationErrors.httpHandlerFactory),
         }
 }</span>
 
-func BuildErrorHandlingController() *ErrorHandlingControllerBuilder <span class="cov10" title="2">{
+func BuildErrorHandlingController() *ErrorHandlingControllerBuilder <span class="cov10" title="3">{
         controllerBuilder := &amp;ErrorHandlingControllerBuilder{}
+
+        // GET /error-handling/action-errors
+        controllerBuilder.HandleErrorHandlingActionErrors.controllerBuilder = controllerBuilder
+        controllerBuilder.HandleErrorHandlingActionErrors.defaultStatusCode = 204
+        controllerBuilder.HandleErrorHandlingActionErrors.voidResult = true
+        controllerBuilder.HandleErrorHandlingActionErrors.paramsParserFactory = makeVoidParamsParser
 
         // GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
         controllerBuilder.HandleErrorHandlingParsingErrors.controllerBuilder = controllerBuilder
@@ -2886,7 +2913,8 @@ func BuildErrorHandlingController() *ErrorHandlingControllerBuilder <span class=
         return controllerBuilder
 }</span>
 
-func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *HTTPApp) <span class="cov10" title="2">{
+func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *HTTPApp) <span class="cov10" title="3">{
+        app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(app))
         app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(app))
         app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(app))
 }</span>
@@ -2927,7 +2955,7 @@ func (p *paramsParserErrorHandlingErrorHandlingParsingErrors) parse(router httpR
         return reqParams, bindingCtx.AggregatedError()
 }</span>
 
-func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] <span class="cov10" title="2">{
+func newParamsParserErrorHandlingErrorHandlingParsingErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingParsingErrorsRequest] <span class="cov10" title="3">{
         return &amp;paramsParserErrorHandlingErrorHandlingParsingErrors{
                 bindPathParam1: newRequestParamBinder(binderParams[string, float32]{
                         required: true,
@@ -2980,7 +3008,7 @@ func (p *paramsParserErrorHandlingErrorHandlingValidationErrors) parse(router ht
         return reqParams, bindingCtx.AggregatedError()
 }</span>
 
-func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] <span class="cov10" title="2">{
+func newParamsParserErrorHandlingErrorHandlingValidationErrors(app *HTTPApp) paramsParser[*ErrorHandlingErrorHandlingValidationErrorsRequest] <span class="cov10" title="3">{
         return &amp;paramsParserErrorHandlingErrorHandlingValidationErrors{
                 bindRequiredQuery1: newRequestParamBinder(binderParams[[]string, float32]{
                         required: true,
@@ -3078,22 +3106,26 @@ func WithResponseErrorHandler(handler ResponseErrorHandler) HTTPAppOpt <span cla
         }</span>
 }
 
-func WithLogger(logger SlogLogger) HTTPAppOpt <span class="cov5" title="100">{
-        return func(app *HTTPApp) </span><span class="cov5" title="100">{
+func WithLogger(logger SlogLogger) HTTPAppOpt <span class="cov5" title="101">{
+        return func(app *HTTPApp) </span><span class="cov5" title="101">{
                 app.logger = logger
         }</span>
 }
 
-func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp <span class="cov5" title="100">{
+func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp <span class="cov5" title="101">{
         app := &amp;HTTPApp{
                 router:       router,
                 logger:       slog.Default(),
                 knownParsers: newKnownParsers(),
         }
-        app.handleResponseErrors = func(r *http.Request, err error) </span><span class="cov0" title="0">{
+        app.handleActionErrors = func(r *http.Request, w http.ResponseWriter, err error) </span><span class="cov1" title="1">{
+                app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
+                http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+        }</span>
+        <span class="cov5" title="101">app.handleResponseErrors = func(r *http.Request, err error) </span><span class="cov0" title="0">{
                 app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
         }</span>
-        <span class="cov5" title="100">app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) </span><span class="cov4" title="42">{
+        <span class="cov5" title="101">app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) </span><span class="cov4" title="42">{
                 w.Header().Add("content-type", "application/json; charset=utf-8")
                 w.WriteHeader(http.StatusBadRequest)
                 app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
@@ -3105,10 +3137,10 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp <span class="cov
                         <span class="cov4" title="42">return</span>
                 }
         }
-        <span class="cov5" title="100">for _, opt := range opts </span><span class="cov5" title="100">{
+        <span class="cov5" title="101">for _, opt := range opts </span><span class="cov5" title="101">{
                 opt(app)
         }</span>
-        <span class="cov5" title="100">return app</span>
+        <span class="cov5" title="101">return app</span>
 }
 
 type voidValue *int
@@ -3121,11 +3153,11 @@ type paramsParserFactory[TReqParams any] func(app *HTTPApp) paramsParser[TReqPar
 
 type voidParamsParser struct{}
 
-func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (voidValue, error) <span class="cov1" title="2">{
+func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (voidValue, error) <span class="cov2" title="3">{
         return voidValue(nil), nil
 }</span>
 
-func makeVoidParamsParser(_ *HTTPApp) paramsParser[voidValue] <span class="cov2" title="5">{
+func makeVoidParamsParser(_ *HTTPApp) paramsParser[voidValue] <span class="cov3" title="8">{
         return voidParamsParser{}
 }</span>
 
@@ -3136,27 +3168,27 @@ type handlerFactoryParams[TReqParams any, TResData any] struct {
         handler             func(context.Context, TReqParams) (TResData, error)
 }
 
-func mustInitializeAction(actionName string, handlerFactory httpHandlerFactory) httpHandlerFactory <span class="cov7" title="756">{
+func mustInitializeAction(actionName string, handlerFactory httpHandlerFactory) httpHandlerFactory <span class="cov7" title="761">{
         if handlerFactory == nil </span><span class="cov1" title="2">{
                 panic(fmt.Errorf("%s action has not been initialized", actionName))</span>
         }
-        <span class="cov7" title="754">return handlerFactory</span>
+        <span class="cov7" title="759">return handlerFactory</span>
 }
 
 func createHandlerFactory[TReqParams any, TResData any](
         factoryParams handlerFactoryParams[TReqParams, TResData],
-) httpHandlerFactory <span class="cov7" title="754">{
-        return func(app *HTTPApp) http.Handler </span><span class="cov7" title="748">{
+) httpHandlerFactory <span class="cov7" title="759">{
+        return func(app *HTTPApp) http.Handler </span><span class="cov7" title="753">{
                 paramsParser := factoryParams.paramsParserFactory(app)
-                return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov5" title="100">{
+                return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov5" title="101">{
                         params, err := paramsParser.parse(app.router, r)
                         if err != nil </span><span class="cov4" title="42">{
                                 app.handleParsingErrors(r, w, err)
                                 return
                         }</span>
 
-                        <span class="cov5" title="58">resData, err := factoryParams.handler(r.Context(), params)
-                        if err != nil </span><span class="cov0" title="0">{
+                        <span class="cov5" title="59">resData, err := factoryParams.handler(r.Context(), params)
+                        if err != nil </span><span class="cov1" title="1">{
                                 app.handleActionErrors(r, w, err)
                                 return
                         }</span>
@@ -3184,7 +3216,7 @@ type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct 
 
 func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
         handler func(context.Context, TReqParams) (TResData, error),
-) TControllerBuilder <span class="cov7" title="754">{
+) TControllerBuilder <span class="cov7" title="759">{
         ab.httpHandlerFactory = createHandlerFactory(handlerFactoryParams[TReqParams, TResData]{
                 defaultStatus:       ab.defaultStatusCode,
                 voidResult:          ab.voidResult,
@@ -3200,7 +3232,7 @@ type actionBuilderVoidResult[TControllerBuilder any, TReqParams any] struct {
 
 func (ab *actionBuilderVoidResult[TControllerBuilder, TReqParams]) With(
         handler func(context.Context, TReqParams) error,
-) TControllerBuilder <span class="cov7" title="742">{
+) TControllerBuilder <span class="cov7" title="744">{
         return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidValue, error) </span><span class="cov5" title="56">{
                 return nil, handler(ctx, tp)
         }</span>)
@@ -3224,8 +3256,8 @@ type actionBuilderNoParamsVoidResult[TControllerBuilder any] struct {
 
 func (ab *actionBuilderNoParamsVoidResult[TControllerBuilder]) With(
         handler func(context.Context) error,
-) TControllerBuilder <span class="cov3" title="8">{
-        return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) </span><span class="cov1" title="2">{
+) TControllerBuilder <span class="cov3" title="11">{
+        return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) </span><span class="cov2" title="3">{
                 return nil, handler(ctx)
         }</span>)
 }
@@ -3261,45 +3293,45 @@ var _ rawValueParser[*http.Request, string] = parseJSONPayload
 
 func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
         bitSize int, parseFn func(string, int) (TTargetVal, error),
-) rawValueParser[string, TTargetVal] <span class="cov7" title="400">{
-        return func(ov string, target *TTargetVal) error </span><span class="cov7" title="556">{
+) rawValueParser[string, TTargetVal] <span class="cov7" title="404">{
+        return func(ov string, target *TTargetVal) error </span><span class="cov7" title="548">{
                 val, err := parseFn(ov, bitSize)
                 if err != nil </span><span class="cov4" title="40">{
                         return err
                 }</span>
-                <span class="cov7" title="516">*target = val
+                <span class="cov7" title="508">*target = val
                 return nil</span>
         }
 }
 
-func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] <span class="cov6" title="200">{
-        return func(ov string, t *time.Time) error </span><span class="cov6" title="186">{
+func newStringToDateTimeParser(isDateOnly bool) rawValueParser[string, time.Time] <span class="cov6" title="202">{
+        return func(ov string, t *time.Time) error </span><span class="cov6" title="184">{
                 format := time.RFC3339Nano
-                if isDateOnly </span><span class="cov5" title="93">{
+                if isDateOnly </span><span class="cov5" title="91">{
                         format = time.DateOnly
                 }</span>
-                <span class="cov6" title="186">val, err := time.Parse(format, ov)
+                <span class="cov6" title="184">val, err := time.Parse(format, ov)
                 if err != nil </span><span class="cov4" title="20">{
                         return err
                 }</span>
-                <span class="cov6" title="166">*t = val
+                <span class="cov6" title="164">*t = val
                 return nil</span>
         }
 }
 
-func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error) <span class="cov6" title="275">{
+func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error) <span class="cov6" title="266">{
         res, err := strconv.ParseInt(str, 10, bitSize)
         return (TInt)(res), err
 }</span>
 
-func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) <span class="cov6" title="191">{
+func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) <span class="cov6" title="189">{
         res, err := strconv.ParseFloat(str, bitSize)
         return (TFloat)(res), err
 }</span>
 
 func parseMultiValueParamAsSoloValue[TTargetVal any](
         targetParser rawValueParser[string, TTargetVal],
-) rawValueParser[[]string, TTargetVal] <span class="cov8" title="2257">{
+) rawValueParser[[]string, TTargetVal] <span class="cov8" title="2261">{
         return func(s []string, tv *TTargetVal) error </span><span class="cov6" title="250">{
                 return targetParser(s[0], tv)
         }</span>
@@ -3308,7 +3340,7 @@ func parseMultiValueParamAsSoloValue[TTargetVal any](
 // parseSoloValueParamAsSoloValue is noop and used just to simplify templates.
 func parseSoloValueParamAsSoloValue[TRawVal any, TTargetVal any](
         targetParser rawValueParser[TRawVal, TTargetVal],
-) rawValueParser[TRawVal, TTargetVal] <span class="cov8" title="2078">{
+) rawValueParser[TRawVal, TTargetVal] <span class="cov8" title="2080">{
         return targetParser
 }</span>
 
@@ -3319,12 +3351,12 @@ func parseSoloValueParamAsSlice[TTargetVal any](
         return func(s string, tv *[]TTargetVal) error </span><span class="cov5" title="110">{
                 items := strings.Split(s, ",")
                 resultingSlice := make([]TTargetVal, 0, len(items))
-                for i, item := range items </span><span class="cov7" title="511">{
+                for i, item := range items </span><span class="cov7" title="500">{
                         var val TTargetVal
                         if err := targetParser(item, &amp;val); err != nil </span><span class="cov3" title="10">{
                                 return fmt.Errorf("failed to parse value at index %d: %w", i, err)
                         }</span>
-                        <span class="cov7" title="501">resultingSlice = append(resultingSlice, val)</span>
+                        <span class="cov7" title="490">resultingSlice = append(resultingSlice, val)</span>
                 }
                 <span class="cov5" title="100">*tv = resultingSlice
                 return nil</span>
@@ -3337,12 +3369,12 @@ func parseMultiValueParamAsSlice[TTargetVal any](
 ) rawValueParser[[]string, []TTargetVal] <span class="cov8" title="918">{
         return func(s []string, tv *[]TTargetVal) error </span><span class="cov5" title="118">{
                 resultingSlice := make([]TTargetVal, 0, len(s))
-                for i, item := range s </span><span class="cov7" title="607">{
+                for i, item := range s </span><span class="cov7" title="611">{
                         var val TTargetVal
                         if err := targetParser(item, &amp;val); err != nil </span><span class="cov3" title="10">{
                                 return fmt.Errorf("failed to parse value at index %d: %w", i, err)
                         }</span>
-                        <span class="cov7" title="597">resultingSlice = append(resultingSlice, val)</span>
+                        <span class="cov7" title="601">resultingSlice = append(resultingSlice, val)</span>
                 }
                 <span class="cov5" title="108">*tv = resultingSlice
                 return nil</span>
@@ -3375,9 +3407,9 @@ type knownParsersDef struct {
 const bitSize32 = 32
 const bitSize64 = 64
 
-func newKnownParsers() *knownParsersDef <span class="cov5" title="100">{
+func newKnownParsers() *knownParsersDef <span class="cov5" title="101">{
         return &amp;knownParsersDef{
-                stringParser: func(ov string, s *string) error </span><span class="cov7" title="619">{
+                stringParser: func(ov string, s *string) error </span><span class="cov7" title="623">{
                         *s = ov
                         return nil
                 }</span>,
@@ -3387,16 +3419,16 @@ func newKnownParsers() *knownParsersDef <span class="cov5" title="100">{
                 int64Parser:   newStringToNumberParser[int64](bitSize64, parseDecInt),
                 float32Parser: newStringToNumberParser[float32](bitSize32, parseFloat),
                 float64Parser: newStringToNumberParser(bitSize64, strconv.ParseFloat),
-                boolParser: func(ov string, s *bool) error <span class="cov5" title="101">{
+                boolParser: func(ov string, s *bool) error <span class="cov5" title="100">{
                         switch ov </span>{
-                        case "true":<span class="cov4" title="37">
+                        case "true":<span class="cov5" title="50">
                                 *s = true</span>
-                        case "false":<span class="cov5" title="52">
+                        case "false":<span class="cov4" title="38">
                                 *s = false</span>
                         default:<span class="cov3" title="12">
                                 return fmt.Errorf("unexpected boolean format %v", ov)</span>
                         }
-                        <span class="cov5" title="89">return nil</span>
+                        <span class="cov5" title="88">return nil</span>
                 },
         }
 }
@@ -3415,7 +3447,7 @@ type binderParams[TRawVal any, TTargetVal any] struct {
 
 func newRequestParamBinder[TRawVal any, TTargetVal any](
         params binderParams[TRawVal, TTargetVal],
-) requestParamBinder[TRawVal, TTargetVal] <span class="cov10" title="6123">{
+) requestParamBinder[TRawVal, TTargetVal] <span class="cov10" title="6129">{
         return func(
                 bindingCtx *internal.BindingContext,
                 rawVal internal.OptionalVal[TRawVal],
@@ -5747,9 +5779,9 @@ func ParseStringTypesStringTypesEnumsNullableInlineEnumParam(str string, target 
         switch str </span>{
         case "VALUE1":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamVALUE1</span>
-        case "VALUE2":<span class="cov2" title="2">
+        case "VALUE2":<span class="cov3" title="3">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamVALUE2</span>
-        case "VALUE3":<span class="cov3" title="3">
+        case "VALUE3":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamVALUE3</span>
         default:<span class="cov2" title="2">
                 return fmt.Errorf("unexpected StringTypesStringTypesEnumsNullableInlineEnumParam value: %s", str)</span>
@@ -5810,11 +5842,11 @@ func AsStringTypesStringTypesEnumsInlineEnumParamInQuery(v assignableStringTypes
 
 func ParseStringTypesStringTypesEnumsInlineEnumParamInQuery(str string, target *StringTypesStringTypesEnumsInlineEnumParamInQuery) error <span class="cov6" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="3">
+        case "VALUE1":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsInlineEnumParamInQueryVALUE1</span>
         case "VALUE2":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsInlineEnumParamInQueryVALUE2</span>
-        case "VALUE3":<span class="cov2" title="2">
+        case "VALUE3":<span class="cov3" title="3">
                 *target = StringTypesStringTypesEnumsInlineEnumParamInQueryVALUE3</span>
         default:<span class="cov2" title="2">
                 return fmt.Errorf("unexpected StringTypesStringTypesEnumsInlineEnumParamInQuery value: %s", str)</span>
@@ -5875,9 +5907,9 @@ func AsStringTypesStringTypesEnumsNullableInlineEnumParamInQuery(v assignableStr
 
 func ParseStringTypesStringTypesEnumsNullableInlineEnumParamInQuery(str string, target *StringTypesStringTypesEnumsNullableInlineEnumParamInQuery) error <span class="cov6" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="3">
+        case "VALUE1":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamInQueryVALUE1</span>
-        case "VALUE2":<span class="cov2" title="2">
+        case "VALUE2":<span class="cov3" title="3">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamInQueryVALUE2</span>
         case "VALUE3":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsNullableInlineEnumParamInQueryVALUE3</span>
@@ -6005,9 +6037,9 @@ func AsStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery(v assig
 
 func ParseStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery(str string, target *StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery) error <span class="cov6" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov2" title="2">
+        case "VALUE1":<span class="cov3" title="3">
                 *target = StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryVALUE1</span>
-        case "VALUE2":<span class="cov3" title="3">
+        case "VALUE2":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryVALUE2</span>
         case "VALUE3":<span class="cov2" title="2">
                 *target = StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryVALUE3</span>
@@ -9457,7 +9489,7 @@ type BindingContext struct {
         errors       []FieldBindingError
 }
 
-func (c *BindingContext) Fork(field string) *BindingContext <span class="cov8" title="3185">{
+func (c *BindingContext) Fork(field string) *BindingContext <span class="cov8" title="3165">{
         return &amp;BindingContext{
                 parent: c,
                 field:  field,
@@ -9554,7 +9586,7 @@ func NewMinMaxValueValidator[TTargetVal constraints.Ordered](
         threshold TTargetVal,
         exclusive bool,
         isMin bool,
-) ValueValidator[TTargetVal] <span class="cov8" title="4184">{
+) ValueValidator[TTargetVal] <span class="cov8" title="4186">{
         return func(tv TTargetVal) error </span><span class="cov7" title="1216">{
                 // From OpenAPI spec:
                 // exclusiveMinimum: false or not included        value ≥ minimum
@@ -9617,11 +9649,11 @@ type FieldValidator[TValue any] func(
 
 func NewSimpleFieldValidator[
         TValue any,
-](validators ...ValueValidator[TValue]) FieldValidator[TValue] <span class="cov10" title="12517">{
+](validators ...ValueValidator[TValue]) FieldValidator[TValue] <span class="cov10" title="12523">{
         return func(
                 bindingCtx *BindingContext,
                 value TValue,
-        ) </span><span class="cov8" title="2684">{
+        ) </span><span class="cov8" title="2664">{
                 for _, v := range validators </span><span class="cov8" title="2549">{
                         if err := v(value); err != nil </span><span class="cov6" title="231">{
                                 errCode := ErrInvalidValue
@@ -9672,7 +9704,7 @@ func NewArrayValidator[
                 value []TValue,
         ) </span><span class="cov6" title="343">{
                 validateField(bindingCtx, value)
-                for i, v := range value </span><span class="cov8" title="1664">{
+                for i, v := range value </span><span class="cov8" title="1644">{
                         // TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
                         validateItems(bindingCtx.Fork(strconv.Itoa(i)), v)
                 }</span>
@@ -9811,9 +9843,9 @@ func ParseNullableStringEnum(str string, target *NullableStringEnum) error <span
         switch str </span>{
         case "VALUE1":<span class="cov4" title="3">
                 *target = NullableStringEnumVALUE1</span>
-        case "VALUE2":<span class="cov6" title="5">
+        case "VALUE2":<span class="cov5" title="4">
                 *target = NullableStringEnumVALUE2</span>
-        case "VALUE3":<span class="cov4" title="3">
+        case "VALUE3":<span class="cov5" title="4">
                 *target = NullableStringEnumVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected NullableStringEnum value: %s", str)</span>
@@ -9888,9 +9920,9 @@ func AsStringTypesEnumsRequestInlineEnumProp(v assignableStringTypesEnumsRequest
 
 func ParseStringTypesEnumsRequestInlineEnumProp(str string, target *StringTypesEnumsRequestInlineEnumProp) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="2">
+        case "VALUE1":<span class="cov5" title="3">
                 *target = StringTypesEnumsRequestInlineEnumPropVALUE1</span>
-        case "VALUE2":<span class="cov5" title="3">
+        case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestInlineEnumPropVALUE2</span>
         case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestInlineEnumPropVALUE3</span>
@@ -9952,9 +9984,9 @@ func AsStringTypesEnumsRequestOptionalInlineEnumProp(v assignableStringTypesEnum
 
 func ParseStringTypesEnumsRequestOptionalInlineEnumProp(str string, target *StringTypesEnumsRequestOptionalInlineEnumProp) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov5" title="3">
+        case "VALUE1":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestOptionalInlineEnumPropVALUE1</span>
-        case "VALUE2":<span class="cov3" title="2">
+        case "VALUE2":<span class="cov5" title="3">
                 *target = StringTypesEnumsRequestOptionalInlineEnumPropVALUE2</span>
         case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestOptionalInlineEnumPropVALUE3</span>
