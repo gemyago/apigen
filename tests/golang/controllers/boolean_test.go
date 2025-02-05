@@ -22,11 +22,11 @@ func TestBoolean(t *testing.T) {
 
 	setupRouter := func() (*booleanControllerTestActions, http.Handler) {
 		testActions := &booleanControllerTestActions{}
-		controller := newBooleanController(testActions)
+		controller := &booleanController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBooleanRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterBooleanRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 

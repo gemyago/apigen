@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
@@ -12,14 +14,48 @@ type booleanControllerTestActions struct {
 	nullableBooleanArrayItems mockAction[*handlers.BooleanBooleanNullableArrayItemsRequest]
 }
 
-func newBooleanController(
-	testActions *booleanControllerTestActions,
-) *handlers.BooleanController {
-	return handlers.BuildBooleanController().
-		HandleBooleanParsing.With(testActions.booleanParsing.action).
-		HandleBooleanRequiredValidation.With(testActions.booleanRequiredValidation.action).
-		HandleBooleanNullable.With(testActions.booleanNullable.action).
-		HandleBooleanArrayItems.With(testActions.booleanArrayItems.action).
-		HandleBooleanNullableArrayItems.With(testActions.nullableBooleanArrayItems.action).
-		Finalize()
+type booleanController struct {
+	testActions *booleanControllerTestActions
 }
+
+func (c *booleanController) BooleanParsing(
+	builder *handlers.BooleanControllerBuilderV2,
+) http.Handler {
+	return builder.BooleanParsing.HandleWith(
+		c.testActions.booleanParsing.action,
+	)
+}
+
+func (c *booleanController) BooleanRequiredValidation(
+	builder *handlers.BooleanControllerBuilderV2,
+) http.Handler {
+	return builder.BooleanRequiredValidation.HandleWith(
+		c.testActions.booleanRequiredValidation.action,
+	)
+}
+
+func (c *booleanController) BooleanNullable(
+	builder *handlers.BooleanControllerBuilderV2,
+) http.Handler {
+	return builder.BooleanNullable.HandleWith(
+		c.testActions.booleanNullable.action,
+	)
+}
+
+func (c *booleanController) BooleanArrayItems(
+	builder *handlers.BooleanControllerBuilderV2,
+) http.Handler {
+	return builder.BooleanArrayItems.HandleWith(
+		c.testActions.booleanArrayItems.action,
+	)
+}
+
+func (c *booleanController) BooleanNullableArrayItems(
+	builder *handlers.BooleanControllerBuilderV2,
+) http.Handler {
+	return builder.BooleanNullableArrayItems.HandleWith(
+		c.testActions.nullableBooleanArrayItems.action,
+	)
+}
+
+var _ handlers.BooleanControllerV2 = &booleanController{}

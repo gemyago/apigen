@@ -19,8 +19,8 @@ func TestErrorHandling(t *testing.T) {
 			mux: http.NewServeMux(),
 		}
 		rootLogger := newLogger()
-		handlers.RegisterErrorHandlingRoutes(
-			newErrorHandlingController(),
+		handlers.RegisterErrorHandlingRoutesV2(
+			&errorHandlingController{},
 			handlers.NewHTTPApp(router,
 				handlers.WithLogger(rootLogger),
 			),
