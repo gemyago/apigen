@@ -199,6 +199,73 @@ type ArraysControllerBuilderV2 struct {
 	]
 }
 
+func newArraysControllerBuilderV2(app *HTTPApp) *ArraysControllerBuilderV2 {
+	return &ArraysControllerBuilderV2{
+		// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
+		ArraysNullableRequiredValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ArraysArraysNullableRequiredValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ArraysArraysNullableRequiredValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ArraysArraysNullableRequiredValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserArraysArraysNullableRequiredValidation(app),
+			},
+		),
+
+		// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+		ArraysRangeValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ArraysArraysRangeValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ArraysArraysRangeValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ArraysArraysRangeValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserArraysArraysRangeValidation(app),
+			},
+		),
+
+		// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
+		ArraysRequiredValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ArraysArraysRequiredValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ArraysArraysRequiredValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ArraysArraysRequiredValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserArraysArraysRequiredValidation(app),
+			},
+		),
+	}
+}
+
 type ArraysControllerV2 interface {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//
@@ -223,8 +290,8 @@ type ArraysControllerV2 interface {
 }
 
 func RegisterArraysRoutesV2(controller ArraysControllerV2, app *HTTPApp) {
-  builder := ArraysControllerBuilderV2{}
-	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(&builder))
-	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(&builder))
-	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(&builder))
+	builder := newArraysControllerBuilderV2(app)
+	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder))
+	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder))
+	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(builder))
 }

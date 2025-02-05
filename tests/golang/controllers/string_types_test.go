@@ -24,11 +24,12 @@ func TestStringTypes(t *testing.T) {
 
 	setupRouter := func() (*stringTypesControllerTestActions, http.Handler) {
 		testActions := &stringTypesControllerTestActions{}
-		controller := newStringTypesController(testActions)
+		// controller := newStringTypesController(testActions)
+		controller := &stringTypesController{testActions: testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterStringTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterStringTypesRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 

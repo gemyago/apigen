@@ -1031,8 +1031,9 @@ type StringTypesControllerBuilderV2 struct {
 	]
 }
 
-func makeStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuilderV2 {
+func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuilderV2 {
 	return &StringTypesControllerBuilderV2{
+		// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 		StringTypesArrayItemsRangeValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
@@ -1043,10 +1044,202 @@ func makeStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuil
 				StringTypesStringTypesArrayItemsRangeValidationRequest,
 				Void,
 			](),
-			makeActionBuilderParams[StringTypesStringTypesArrayItemsRangeValidationRequest, Void]{
+			makeActionBuilderParams[
+				StringTypesStringTypesArrayItemsRangeValidationRequest,
+				Void,
+			]{
 				defaultStatus: 204,
 				voidResult:    true,
 				paramsParser:  newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app),
+			},
+		),
+
+		// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+		StringTypesArraysParsing: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesArraysParsingRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesArraysParsingRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesArraysParsingRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesArraysParsing(app),
+			},
+		),
+
+		// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
+		StringTypesEnums: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesEnumsRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesEnumsRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesEnumsRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesEnums(app),
+			},
+		),
+
+		// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+		StringTypesNullableArrayItems: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableArrayItemsRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableArrayItemsRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesNullableArrayItemsRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesNullableArrayItems(app),
+			},
+		),
+
+		// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+		StringTypesNullableParsing: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableParsingRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableParsingRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesNullableParsingRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesNullableParsing(app),
+			},
+		),
+
+		// POST /string-types/nullable-required-validation
+		StringTypesNullableRequiredValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableRequiredValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesNullableRequiredValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesNullableRequiredValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesNullableRequiredValidation(app),
+			},
+		),
+
+		// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+		StringTypesParsing: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesParsingRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesParsingRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesParsingRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesParsing(app),
+			},
+		),
+
+		// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
+		StringTypesPatternValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesPatternValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesPatternValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesPatternValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesPatternValidation(app),
+			},
+		),
+
+		// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
+		StringTypesRangeValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesRangeValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesRangeValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesRangeValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesRangeValidation(app),
+			},
+		),
+
+		// POST /string-types/required-validation
+		StringTypesRequiredValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesRequiredValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesRequiredValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				StringTypesStringTypesRequiredValidationRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesRequiredValidation(app),
 			},
 		),
 	}
@@ -1125,15 +1318,15 @@ type StringTypesControllerV2 interface {
 }
 
 func RegisterStringTypesRoutesV2(controller StringTypesControllerV2, app *HTTPApp) {
-  builder := StringTypesControllerBuilderV2{}
-	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(&builder))
-	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(&builder))
-	app.router.HandleRoute("POST", "/string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}", controller.StringTypesEnums(&builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableArrayItems(&builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(&builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(&builder))
-	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(&builder))
-	app.router.HandleRoute("POST", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(&builder))
-	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(&builder))
-	app.router.HandleRoute("POST", "/string-types/required-validation", controller.StringTypesRequiredValidation(&builder))
+	builder := newStringTypesControllerBuilderV2(app)
+	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder))
+	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder))
+	app.router.HandleRoute("POST", "/string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}", controller.StringTypesEnums(builder))
+	app.router.HandleRoute("POST", "/string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableArrayItems(builder))
+	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(builder))
+	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(builder))
+	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(builder))
+	app.router.HandleRoute("POST", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(builder))
+	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(builder))
+	app.router.HandleRoute("POST", "/string-types/required-validation", controller.StringTypesRequiredValidation(builder))
 }

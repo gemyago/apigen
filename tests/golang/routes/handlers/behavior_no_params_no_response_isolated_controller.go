@@ -73,6 +73,31 @@ type BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 struct {
 	]
 }
 
+func newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app *HTTPApp) *BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 {
+	return &BehaviorNoParamsNoResponseIsolatedControllerBuilderV2{
+		// GET /behavior/no-params-no-response-isolated
+		BehaviorNoParamsNoResponse: makeActionBuilder(
+			app,
+			newHandlerAdapterNoParamsNoResponse[
+				Void,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoParamsNoResponse[
+				Void,
+				Void,
+			](),
+			makeActionBuilderParams[
+				Void,
+				Void,
+			]{
+				defaultStatus: 202,
+				voidResult:    true,
+				paramsParser:  makeVoidParamsParserV2(app),
+			},
+		),
+	}
+}
+
 type BehaviorNoParamsNoResponseIsolatedControllerV2 interface {
 	// GET /behavior/no-params-no-response-isolated
 	//
@@ -83,6 +108,6 @@ type BehaviorNoParamsNoResponseIsolatedControllerV2 interface {
 }
 
 func RegisterBehaviorNoParamsNoResponseIsolatedRoutesV2(controller BehaviorNoParamsNoResponseIsolatedControllerV2, app *HTTPApp) {
-  builder := BehaviorNoParamsNoResponseIsolatedControllerBuilderV2{}
-	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(&builder))
+	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app)
+	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder))
 }

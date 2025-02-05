@@ -102,6 +102,36 @@ type {{classname}}ControllerBuilderV2 struct {
 {{/operations}}
 }
 
+func new{{classname}}ControllerBuilderV2(app *HTTPApp) *{{classname}}ControllerBuilderV2 {
+	return &{{classname}}ControllerBuilderV2{
+		{{#operations}}
+		{{#operation}}
+		// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
+		{{operationId}}: makeActionBuilder(
+			app,
+			newHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
+				{{^hasParams}}Void{{/hasParams}}{{#hasParams}}{{baseName}}{{operationId}}Request{{/hasParams}},
+				{{^returnType}}Void{{/returnType}}{{#returnType}}{{.}}{{/returnType}},
+			](),
+			newHTTPHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
+				{{^hasParams}}Void{{/hasParams}}{{#hasParams}}{{baseName}}{{operationId}}Request{{/hasParams}},
+				{{^returnType}}Void{{/returnType}}{{#returnType}}{{.}}{{/returnType}},
+			](),
+			makeActionBuilderParams[
+				{{^hasParams}}Void{{/hasParams}}{{#hasParams}}{{baseName}}{{operationId}}Request{{/hasParams}},
+				{{^returnType}}Void{{/returnType}}{{#returnType}}{{.}}{{/returnType}},
+			]{
+				defaultStatus: {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}},{{^returnType}}
+				voidResult:    true,{{/returnType}}
+				paramsParser:  {{#hasParams}}newParamsParser{{baseName}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParserV2{{/hasParams}}(app),
+			},
+		),{{^-last}}
+
+{{/-last}}{{/operation}}
+		{{/operations}}
+	}
+}
+
 type {{classname}}ControllerV2 interface {
 {{#operations}}
 {{#operation}}
@@ -113,10 +143,10 @@ type {{classname}}ControllerV2 interface {
 }
 
 func Register{{baseName}}RoutesV2(controller {{baseName}}ControllerV2, app *HTTPApp) {
-  builder := {{classname}}ControllerBuilderV2{}
+	builder := new{{classname}}ControllerBuilderV2(app)
 	{{#operations}}
 	{{#operation}}
-	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(&builder))
+	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder))
 	{{/operation}}
 	{{/operations}}
 }

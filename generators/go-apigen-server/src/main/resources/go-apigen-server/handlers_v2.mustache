@@ -12,6 +12,16 @@ type Void string
 
 const VoidValue Void = "void"
 
+type voidParamsParserV2 struct{}
+
+func (p voidParamsParserV2) parse(_ httpRouter, _ *http.Request) (*Void, error) {
+	return nil, nil
+}
+
+func makeVoidParamsParserV2(_ *HTTPApp) paramsParser[*Void] {
+	return voidParamsParserV2{}
+}
+
 // ActionHandlerFunc represents possible combination of action handler functions.
 // Each function can be with or without parameters and with or without response.
 // Additionally each function can have access to http objects for possible direct manipulation.

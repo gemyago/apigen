@@ -373,6 +373,178 @@ type ObjectsControllerBuilderV2 struct {
 	]
 }
 
+func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
+	return &ObjectsControllerBuilderV2{
+		// POST /objects/arrays
+		ObjectsArrayBodyDirect: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsArrayBodyDirectRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsArrayBodyDirectRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsArrayBodyDirectRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsArrayBodyDirect(app),
+			},
+		),
+
+		// PUT /objects/arrays
+		ObjectsArrayBodyNested: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsArrayBodyNestedRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsArrayBodyNestedRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsArrayBodyNestedRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsArrayBodyNested(app),
+			},
+		),
+
+		// POST /objects/deeply-nested
+		ObjectsDeeplyNested: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsDeeplyNestedRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsDeeplyNestedRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsDeeplyNestedRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsDeeplyNested(app),
+			},
+		),
+
+		// PUT /objects/nullable-body
+		ObjectsNullableOptionalBody: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsNullableOptionalBodyRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsNullableOptionalBodyRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsNullableOptionalBodyRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsNullableOptionalBody(app),
+			},
+		),
+
+		// POST /objects/nullable-body
+		ObjectsNullableRequiredBody: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsNullableRequiredBodyRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsNullableRequiredBodyRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsNullableRequiredBodyRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsNullableRequiredBody(app),
+			},
+		),
+
+		// PUT /objects/required-body
+		ObjectsOptionalBody: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsOptionalBodyRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsOptionalBodyRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsOptionalBodyRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsOptionalBody(app),
+			},
+		),
+
+		// POST /objects/required-body
+		ObjectsRequiredBody: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsRequiredBodyRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsRequiredBodyRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsRequiredBodyRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsRequiredBody(app),
+			},
+		),
+
+		// POST /objects/required-nested-objects
+		ObjectsRequiredNestedObjects: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ObjectsObjectsRequiredNestedObjectsRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ObjectsObjectsRequiredNestedObjectsRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ObjectsObjectsRequiredNestedObjectsRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserObjectsObjectsRequiredNestedObjects(app),
+			},
+		),
+	}
+}
+
 type ObjectsControllerV2 interface {
 	// POST /objects/arrays
 	//
@@ -432,13 +604,13 @@ type ObjectsControllerV2 interface {
 }
 
 func RegisterObjectsRoutesV2(controller ObjectsControllerV2, app *HTTPApp) {
-  builder := ObjectsControllerBuilderV2{}
-	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(&builder))
-	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(&builder))
-	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(&builder))
-	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(&builder))
-	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(&builder))
-	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(&builder))
-	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(&builder))
-	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(&builder))
+	builder := newObjectsControllerBuilderV2(app)
+	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder))
+	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder))
+	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(builder))
+	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(builder))
+	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(builder))
+	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder))
+	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder))
+	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder))
 }

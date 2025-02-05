@@ -162,6 +162,73 @@ type ErrorHandlingControllerBuilderV2 struct {
 	]
 }
 
+func newErrorHandlingControllerBuilderV2(app *HTTPApp) *ErrorHandlingControllerBuilderV2 {
+	return &ErrorHandlingControllerBuilderV2{
+		// GET /error-handling/action-errors
+		ErrorHandlingActionErrors: makeActionBuilder(
+			app,
+			newHandlerAdapterNoParamsNoResponse[
+				Void,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoParamsNoResponse[
+				Void,
+				Void,
+			](),
+			makeActionBuilderParams[
+				Void,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  makeVoidParamsParserV2(app),
+			},
+		),
+
+		// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
+		ErrorHandlingParsingErrors: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ErrorHandlingErrorHandlingParsingErrorsRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ErrorHandlingErrorHandlingParsingErrorsRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ErrorHandlingErrorHandlingParsingErrorsRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserErrorHandlingErrorHandlingParsingErrors(app),
+			},
+		),
+
+		// GET /error-handling/validation-errors
+		ErrorHandlingValidationErrors: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				ErrorHandlingErrorHandlingValidationErrorsRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				ErrorHandlingErrorHandlingValidationErrorsRequest,
+				Void,
+			](),
+			makeActionBuilderParams[
+				ErrorHandlingErrorHandlingValidationErrorsRequest,
+				Void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserErrorHandlingErrorHandlingValidationErrors(app),
+			},
+		),
+	}
+}
+
 type ErrorHandlingControllerV2 interface {
 	// GET /error-handling/action-errors
 	//
@@ -186,8 +253,8 @@ type ErrorHandlingControllerV2 interface {
 }
 
 func RegisterErrorHandlingRoutesV2(controller ErrorHandlingControllerV2, app *HTTPApp) {
-  builder := ErrorHandlingControllerBuilderV2{}
-	app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(&builder))
-	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(&builder))
-	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(&builder))
+	builder := newErrorHandlingControllerBuilderV2(app)
+	app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(builder))
+	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(builder))
+	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(builder))
 }
