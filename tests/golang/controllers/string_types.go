@@ -19,23 +19,6 @@ type stringTypesControllerTestActions struct {
 	stringTypesEnums                      mockAction[*handlers.StringTypesStringTypesEnumsRequest]
 }
 
-func newStringTypesController(
-	testActions *stringTypesControllerTestActions,
-) *handlers.StringTypesController {
-	return handlers.BuildStringTypesController().
-		HandleStringTypesParsing.With(testActions.stringTypesParsing.action).
-		HandleStringTypesArraysParsing.With(testActions.stringTypesArraysParsing.action).
-		HandleStringTypesNullableParsing.With(testActions.stringTypesNullableParsing.action).
-		HandleStringTypesNullableArrayItems.With(testActions.stringTypesNullableArrayItems.action).
-		HandleStringTypesRangeValidation.With(testActions.stringTypesRangeValidation.action).
-		HandleStringTypesArrayItemsRangeValidation.With(testActions.stringTypesArrayItemsRangeValidation.action).
-		HandleStringTypesPatternValidation.With(testActions.stringTypesPatternValidation.action).
-		HandleStringTypesRequiredValidation.With(testActions.stringTypesRequiredValidation.action).
-		HandleStringTypesNullableRequiredValidation.With(testActions.stringTypesNullableRequiredValidation.action).
-		HandleStringTypesEnums.With(testActions.stringTypesEnums.action).
-		Finalize()
-}
-
 type stringTypesController struct {
 	testActions *stringTypesControllerTestActions
 }
