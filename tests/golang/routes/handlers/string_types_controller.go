@@ -1031,6 +1031,27 @@ type StringTypesControllerBuilderV2 struct {
 	]
 }
 
+func makeStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuilderV2 {
+	return &StringTypesControllerBuilderV2{
+		StringTypesArrayItemsRangeValidation: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				StringTypesStringTypesArrayItemsRangeValidationRequest,
+				Void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				StringTypesStringTypesArrayItemsRangeValidationRequest,
+				Void,
+			](),
+			makeActionBuilderParams[StringTypesStringTypesArrayItemsRangeValidationRequest, Void]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app),
+			},
+		),
+	}
+}
+
 type StringTypesControllerV2 interface {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
