@@ -30,15 +30,32 @@ type Void string
 
 const VoidValue Void = "void"
 
-type ActionHandlerFunc[TRq any, TRs any] interface {
-	func(context.Context, *TRq) (*TRs, error) | // with params with response
-		func(context.Context) (*TRs, error) | // no params with response
-		func(context.Context, *TRq) error | // with params no response
-		func(context.Context) error // no params no response
+// ActionHandlerFunc represents possible combination of action handler functions.
+// Each function can be with or without parameters and with or without response.
+// Additionally each function can have access to http objects for possible direct manipulation.
+type ActionHandlerFunc[TReq any, TRes any] interface {
+	func(context.Context, *TReq) (*TRes, error) | // with params with response
+		func(context.Context) (*TRes, error) | // no params with response
+		func(context.Context, *TReq) error | // with params no response
+		func(context.Context) error | // no params no response
+
+		// handlers with http context exposed
+		func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) | // with params with response
+		func(http.ResponseWriter, *http.Request) (*TRes, error) | // no params with response
+		func(http.ResponseWriter, *http.Request, *TReq) error | // with params no response
+		func(http.ResponseWriter, *http.Request) error // no params no response
 }
 
-type ActionBuilder[TRq any, TRs any, Tb ActionHandlerFunc[TRq, TRs]] struct {
-	HandleWith func(Tb) http.Handler
+type ActionBuilderFunc[TReq any, TRes any, THandler ActionHandlerFunc[TReq, TRes]] func(THandler) http.Handler
+
+type ActionBuilder[
+	TReq any,
+	TRes any,
+	TPlainHandler ActionHandlerFunc[TReq, TRes],
+	THttpHandler ActionHandlerFunc[TReq, TRes],
+] struct {
+	HandleWith     func(TPlainHandler) http.Handler
+	HandleWithHTTP func(THttpHandler) http.Handler
 }
 
 type PetsControllerActionsBuilder struct {
@@ -49,16 +66,19 @@ type PetsControllerActionsBuilder struct {
 		Void,
 		Void,
 		func(context.Context) error,
+		func(http.ResponseWriter, *http.Request) error,
 	]
 	GetPet ActionBuilder[
 		GetPetRequest,
 		GetPetResponse,
 		func(context.Context, *GetPetRequest) (*GetPetResponse, error),
+		func(http.ResponseWriter, *http.Request, *GetPetRequest) (*GetPetResponse, error),
 	]
 	GetPets ActionBuilder[
 		Void,
 		GetPetsResponse,
 		func(context.Context) (*GetPetsResponse, error),
+		func(http.ResponseWriter, *http.Request) (*GetPetsResponse, error),
 	]
 }
 

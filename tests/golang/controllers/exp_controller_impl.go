@@ -41,11 +41,12 @@ func BuildActionWithTransformers[
 	TDeclaredReq any,
 	TDeclaredRes any,
 	TDeclaredFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
+	TDeclaredHttpFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
 	TAppReq any,
 	TAppRes any,
 	TAppFn ActionHandlerFunc[TAppReq, TAppRes],
 ](
-	actionBuilder ActionBuilder[TDeclaredReq, TDeclaredRes, TDeclaredFn],
+	actionBuilder ActionBuilder[TDeclaredReq, TDeclaredRes, TDeclaredFn, TDeclaredHttpFn],
 	action TAppFn,
 	inputTransformer func(req *http.Request, input *TDeclaredReq) (*TAppReq, error),
 	outputTransformer func(input *TAppRes) (*TDeclaredRes, error),
@@ -59,6 +60,20 @@ func (impl *controllerImpl) GetPet(b *PetsControllerActionsBuilder) http.Handler
 		impl.queries.GetPet,
 		func(*http.Request, *GetPetRequest) (*petsQueriesGetPetParams, error) { panic("not implemented") },
 		func(*petsQueriesGetPetResponse) (*GetPetResponse, error) { panic("not implemented") },
+	)
+}
+
+func (impl *controllerImpl) GetPetPassThrough(b *PetsControllerActionsBuilder) http.Handler {
+	return b.GetPet.HandleWith(func(ctx context.Context, gpr *GetPetRequest) (*GetPetResponse, error) {
+		return impl.queries.GetPetPassThrough(ctx, gpr)
+	})
+}
+
+func (impl *controllerImpl) GetPetHTTP(b *PetsControllerActionsBuilder) http.Handler {
+	return b.GetPet.HandleWithHTTP(
+		func(w http.ResponseWriter, r *http.Request, gpr *GetPetRequest) (*GetPetResponse, error) {
+			panic("not implemented")
+		},
 	)
 }
 
