@@ -1,12 +1,15 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -119,4 +122,72 @@ func RegisterErrorHandlingRoutes(controller *ErrorHandlingController, app *HTTPA
 	app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(app))
 	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(app))
+}
+
+type ErrorHandlingControllerBuilderV2 struct {
+	// GET /error-handling/action-errors
+	//
+	// Request type: none
+	//
+	// Response type: none
+	ErrorHandlingActionErrors ActionBuilder[
+	  Void,
+	  Void,
+	  func(context.Context) (error),
+	  func(http.ResponseWriter, *http.Request) (error),
+	]
+
+	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
+	//
+	// Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
+	//
+	// Response type: none
+	ErrorHandlingParsingErrors ActionBuilder[
+	  ErrorHandlingErrorHandlingParsingErrorsRequest,
+	  Void,
+	  func(context.Context, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
+	]
+
+	// GET /error-handling/validation-errors
+	//
+	// Request type: ErrorHandlingErrorHandlingValidationErrorsRequest,
+	//
+	// Response type: none
+	ErrorHandlingValidationErrors ActionBuilder[
+	  ErrorHandlingErrorHandlingValidationErrorsRequest,
+	  Void,
+	  func(context.Context, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
+	]
+}
+
+type ErrorHandlingControllerV2 interface {
+	// GET /error-handling/action-errors
+	//
+	// Request type: none
+	//
+	// Response type: none
+	ErrorHandlingActionErrors(b *ErrorHandlingControllerBuilderV2) http.Handler
+
+	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
+	//
+	// Request type: ErrorHandlingErrorHandlingParsingErrorsRequest,
+	//
+	// Response type: none
+	ErrorHandlingParsingErrors(b *ErrorHandlingControllerBuilderV2) http.Handler
+
+	// GET /error-handling/validation-errors
+	//
+	// Request type: ErrorHandlingErrorHandlingValidationErrorsRequest,
+	//
+	// Response type: none
+	ErrorHandlingValidationErrors(b *ErrorHandlingControllerBuilderV2) http.Handler
+}
+
+func RegisterErrorHandlingRoutesV2(controller ErrorHandlingControllerV2, app *HTTPApp) {
+  builder := ErrorHandlingControllerBuilderV2{}
+	app.router.HandleRoute("GET", "/error-handling/action-errors", controller.ErrorHandlingActionErrors(&builder))
+	app.router.HandleRoute("GET", "/error-handling/parsing-errors/{pathParam1}/{pathParam2}", controller.ErrorHandlingParsingErrors(&builder))
+	app.router.HandleRoute("GET", "/error-handling/validation-errors", controller.ErrorHandlingValidationErrors(&builder))
 }

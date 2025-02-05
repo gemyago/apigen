@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -154,4 +157,112 @@ func RegisterBehaviorRoutes(controller *BehaviorController, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(app))
 	app.router.HandleRoute("GET", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(app))
 	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(app))
+}
+
+type BehaviorControllerBuilderV2 struct {
+	// GET /behavior/no-params-no-response
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoParamsNoResponse ActionBuilder[
+	  Void,
+	  Void,
+	  func(context.Context) (error),
+	  func(http.ResponseWriter, *http.Request) (error),
+	]
+
+	// GET /behavior/no-params-with-response
+	//
+	// Request type: none
+	//
+	// Response type: BehaviorNoParamsWithResponse202Response
+	BehaviorNoParamsWithResponse ActionBuilder[
+	  Void,
+	  BehaviorNoParamsWithResponse202Response,
+	  func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
+	  func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
+	]
+
+	// GET /behavior/no-status-defined
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoStatusDefined ActionBuilder[
+	  Void,
+	  Void,
+	  func(context.Context) (error),
+	  func(http.ResponseWriter, *http.Request) (error),
+	]
+
+	// GET /behavior/with-params-and-response
+	//
+	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
+	//
+	// Response type: BehaviorNoParamsWithResponse202Response
+	BehaviorWithParamsAndResponse ActionBuilder[
+	  BehaviorBehaviorWithParamsAndResponseRequest,
+	  BehaviorNoParamsWithResponse202Response,
+	  func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+	  func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+	]
+
+	// POST /behavior/with-status-defined
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorWithStatusDefined ActionBuilder[
+	  Void,
+	  Void,
+	  func(context.Context) (error),
+	  func(http.ResponseWriter, *http.Request) (error),
+	]
+}
+
+type BehaviorControllerV2 interface {
+	// GET /behavior/no-params-no-response
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoParamsNoResponse(b *BehaviorControllerBuilderV2) http.Handler
+
+	// GET /behavior/no-params-with-response
+	//
+	// Request type: none
+	//
+	// Response type: BehaviorNoParamsWithResponse202Response
+	BehaviorNoParamsWithResponse(b *BehaviorControllerBuilderV2) http.Handler
+
+	// GET /behavior/no-status-defined
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoStatusDefined(b *BehaviorControllerBuilderV2) http.Handler
+
+	// GET /behavior/with-params-and-response
+	//
+	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
+	//
+	// Response type: BehaviorNoParamsWithResponse202Response
+	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilderV2) http.Handler
+
+	// POST /behavior/with-status-defined
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorWithStatusDefined(b *BehaviorControllerBuilderV2) http.Handler
+}
+
+func RegisterBehaviorRoutesV2(controller BehaviorControllerV2, app *HTTPApp) {
+  builder := BehaviorControllerBuilderV2{}
+	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(&builder))
+	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(&builder))
+	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(&builder))
+	app.router.HandleRoute("GET", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(&builder))
+	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(&builder))
 }

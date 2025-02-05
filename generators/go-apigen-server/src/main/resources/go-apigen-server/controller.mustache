@@ -3,8 +3,10 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 	{{#hasImportedModel}}
 
@@ -13,6 +15,7 @@ import (
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint{{#hasImportedModel}}
@@ -85,6 +88,35 @@ func Register{{baseName}}Routes(controller *{{baseName}}Controller, app *HTTPApp
 	{{#operations}}
 	{{#operation}}
 	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(app))
+	{{/operation}}
+	{{/operations}}
+}
+
+type {{classname}}ControllerBuilderV2 struct {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	{{operationId}} {{#lambda.tab_indented_2}}{{>action-builder-type-v2}}{{/lambda.tab_indented_2}}{{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}
+}
+
+type {{classname}}ControllerV2 interface {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	{{operationId}}(b *{{classname}}ControllerBuilderV2) http.Handler{{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}
+}
+
+func Register{{baseName}}RoutesV2(controller {{baseName}}ControllerV2, app *HTTPApp) {
+  builder := {{classname}}ControllerBuilderV2{}
+	{{#operations}}
+	{{#operation}}
+	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(&builder))
 	{{/operation}}
 	{{/operations}}
 }

@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -222,4 +225,112 @@ func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(app))
 	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
 	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
+}
+
+type BooleanControllerBuilderV2 struct {
+	// POST /boolean/array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanArrayItems ActionBuilder[
+	  BooleanBooleanArrayItemsRequest,
+	  Void,
+	  func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
+	]
+
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableRequest,
+	//
+	// Response type: none
+	BooleanNullable ActionBuilder[
+	  BooleanBooleanNullableRequest,
+	  Void,
+	  func(context.Context, *BooleanBooleanNullableRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
+	]
+
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanNullableArrayItems ActionBuilder[
+	  BooleanBooleanNullableArrayItemsRequest,
+	  Void,
+	  func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
+	]
+
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanParsingRequest,
+	//
+	// Response type: none
+	BooleanParsing ActionBuilder[
+	  BooleanBooleanParsingRequest,
+	  Void,
+	  func(context.Context, *BooleanBooleanParsingRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
+	]
+
+	// POST /boolean/required-validation
+	//
+	// Request type: BooleanBooleanRequiredValidationRequest,
+	//
+	// Response type: none
+	BooleanRequiredValidation ActionBuilder[
+	  BooleanBooleanRequiredValidationRequest,
+	  Void,
+	  func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
+	]
+}
+
+type BooleanControllerV2 interface {
+	// POST /boolean/array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanArrayItems(b *BooleanControllerBuilderV2) http.Handler
+
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableRequest,
+	//
+	// Response type: none
+	BooleanNullable(b *BooleanControllerBuilderV2) http.Handler
+
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanNullableArrayItems(b *BooleanControllerBuilderV2) http.Handler
+
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanParsingRequest,
+	//
+	// Response type: none
+	BooleanParsing(b *BooleanControllerBuilderV2) http.Handler
+
+	// POST /boolean/required-validation
+	//
+	// Request type: BooleanBooleanRequiredValidationRequest,
+	//
+	// Response type: none
+	BooleanRequiredValidation(b *BooleanControllerBuilderV2) http.Handler
+}
+
+func RegisterBooleanRoutesV2(controller BooleanControllerV2, app *HTTPApp) {
+  builder := BooleanControllerBuilderV2{}
+	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(&builder))
+	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(&builder))
+	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(&builder))
+	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(&builder))
+	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(&builder))
 }

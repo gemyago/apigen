@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -408,4 +411,152 @@ func RegisterNumericTypesRoutes(controller *NumericTypesController, app *HTTPApp
 	app.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(app))
 	app.router.HandleRoute("POST", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(app))
 	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(app))
+}
+
+type NumericTypesControllerBuilderV2 struct {
+	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesArrayItemsRequest,
+	//
+	// Response type: none
+	NumericTypesArrayItems ActionBuilder[
+	  NumericTypesNumericTypesArrayItemsRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesArrayItemsRequest) (error),
+	]
+
+	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesNullableRequest,
+	//
+	// Response type: none
+	NumericTypesNullable ActionBuilder[
+	  NumericTypesNumericTypesNullableRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableRequest) (error),
+	]
+
+	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesNullableArrayItemsRequest,
+	//
+	// Response type: none
+	NumericTypesNullableArrayItems ActionBuilder[
+	  NumericTypesNumericTypesNullableArrayItemsRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
+	]
+
+	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesParsingRequest,
+	//
+	// Response type: none
+	NumericTypesParsing ActionBuilder[
+	  NumericTypesNumericTypesParsingRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesParsingRequest) (error),
+	]
+
+	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesRangeValidationRequest,
+	//
+	// Response type: none
+	NumericTypesRangeValidation ActionBuilder[
+	  NumericTypesNumericTypesRangeValidationRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationRequest) (error),
+	]
+
+	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
+	//
+	// Response type: none
+	NumericTypesRangeValidationExclusive ActionBuilder[
+	  NumericTypesNumericTypesRangeValidationExclusiveRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
+	]
+
+	// GET /numeric-types/required-validation
+	//
+	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
+	//
+	// Response type: none
+	NumericTypesRequiredValidation ActionBuilder[
+	  NumericTypesNumericTypesRequiredValidationRequest,
+	  Void,
+	  func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRequiredValidationRequest) (error),
+	]
+}
+
+type NumericTypesControllerV2 interface {
+	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesArrayItemsRequest,
+	//
+	// Response type: none
+	NumericTypesArrayItems(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesNullableRequest,
+	//
+	// Response type: none
+	NumericTypesNullable(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesNullableArrayItemsRequest,
+	//
+	// Response type: none
+	NumericTypesNullableArrayItems(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesParsingRequest,
+	//
+	// Response type: none
+	NumericTypesParsing(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesRangeValidationRequest,
+	//
+	// Response type: none
+	NumericTypesRangeValidation(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
+	//
+	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
+	//
+	// Response type: none
+	NumericTypesRangeValidationExclusive(b *NumericTypesControllerBuilderV2) http.Handler
+
+	// GET /numeric-types/required-validation
+	//
+	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
+	//
+	// Response type: none
+	NumericTypesRequiredValidation(b *NumericTypesControllerBuilderV2) http.Handler
+}
+
+func RegisterNumericTypesRoutesV2(controller NumericTypesControllerV2, app *HTTPApp) {
+  builder := NumericTypesControllerBuilderV2{}
+	app.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(&builder))
+	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(&builder))
+	app.router.HandleRoute("POST", "/numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullableArrayItems(&builder))
+	app.router.HandleRoute("POST", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(&builder))
+	app.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(&builder))
+	app.router.HandleRoute("POST", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(&builder))
+	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(&builder))
 }

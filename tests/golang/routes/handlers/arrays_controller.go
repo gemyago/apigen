@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -156,4 +159,72 @@ func RegisterArraysRoutes(controller *ArraysController, app *HTTPApp) {
 	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(app))
 	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(app))
 	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(app))
+}
+
+type ArraysControllerBuilderV2 struct {
+	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysNullableRequiredValidationRequest,
+	//
+	// Response type: none
+	ArraysNullableRequiredValidation ActionBuilder[
+	  ArraysArraysNullableRequiredValidationRequest,
+	  Void,
+	  func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *ArraysArraysNullableRequiredValidationRequest) (error),
+	]
+
+	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysRangeValidationRequest,
+	//
+	// Response type: none
+	ArraysRangeValidation ActionBuilder[
+	  ArraysArraysRangeValidationRequest,
+	  Void,
+	  func(context.Context, *ArraysArraysRangeValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *ArraysArraysRangeValidationRequest) (error),
+	]
+
+	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysRequiredValidationRequest,
+	//
+	// Response type: none
+	ArraysRequiredValidation ActionBuilder[
+	  ArraysArraysRequiredValidationRequest,
+	  Void,
+	  func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
+	  func(http.ResponseWriter, *http.Request, *ArraysArraysRequiredValidationRequest) (error),
+	]
+}
+
+type ArraysControllerV2 interface {
+	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysNullableRequiredValidationRequest,
+	//
+	// Response type: none
+	ArraysNullableRequiredValidation(b *ArraysControllerBuilderV2) http.Handler
+
+	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysRangeValidationRequest,
+	//
+	// Response type: none
+	ArraysRangeValidation(b *ArraysControllerBuilderV2) http.Handler
+
+	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
+	//
+	// Request type: ArraysArraysRequiredValidationRequest,
+	//
+	// Response type: none
+	ArraysRequiredValidation(b *ArraysControllerBuilderV2) http.Handler
+}
+
+func RegisterArraysRoutesV2(controller ArraysControllerV2, app *HTTPApp) {
+  builder := ArraysControllerBuilderV2{}
+	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(&builder))
+	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(&builder))
+	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(&builder))
 }
