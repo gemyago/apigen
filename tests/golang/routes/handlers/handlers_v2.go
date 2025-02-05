@@ -48,6 +48,7 @@ type ActionBuilder[
 	HandleWithHTTP func(THttpHandler) http.Handler
 }
 
+/* TODO: implement this function
 func BuildActionWithTransformers[
 	TDeclaredReq any,
 	TDeclaredRes any,
@@ -64,6 +65,7 @@ func BuildActionWithTransformers[
 ) http.Handler {
 	panic("not implemented")
 }
+*/
 
 type makeActionBuilderParams[
 	TReqParams any,
