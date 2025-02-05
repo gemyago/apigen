@@ -38,60 +38,6 @@ type {{>request-type}} struct {
 
 {{/operations}}
 
-type {{classname}}Controller struct {
-{{#operations}}
-{{#operation}}
-	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}} httpHandlerFactory{{^-last}}
-
-{{/-last}}{{/operation}}
-{{/operations}}
-}
-
-type {{classname}}ControllerBuilder struct {
-{{#operations}}
-{{#operation}}
-	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	Handle{{operationId}} {{>action-builder-type}}{{^-last}}
-
-{{/-last}}{{/operation}}
-{{/operations}}
-}
-
-func (c *{{classname}}ControllerBuilder) Finalize() *{{classname}}Controller {
-	return &{{classname}}Controller{
-		{{#operations}}
-		{{#operation}}
-		{{operationId}}: mustInitializeAction("{{operationIdOriginal}}", c.Handle{{operationId}}.httpHandlerFactory),
-		{{/operation}}
-		{{/operations}}
-	}
-}
-
-func Build{{classname}}Controller() *{{classname}}ControllerBuilder {
-	controllerBuilder := &{{classname}}ControllerBuilder{}
-
-	{{#operations}}
-	{{#operation}}
-	// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
-	controllerBuilder.Handle{{operationId}}.controllerBuilder = controllerBuilder
-	controllerBuilder.Handle{{operationId}}.defaultStatusCode = {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}}{{^returnType}}
-	controllerBuilder.Handle{{operationId}}.voidResult = true{{/returnType}}
-	controllerBuilder.Handle{{operationId}}.paramsParserFactory = {{#hasParams}}newParamsParser{{baseName}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}
-
-	{{/operation}}
-	{{/operations}}
-	return controllerBuilder
-}
-
-func Register{{baseName}}Routes(controller *{{baseName}}Controller, app *HTTPApp) {
-	{{#operations}}
-	{{#operation}}
-	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(app))
-	{{/operation}}
-	{{/operations}}
-}
-
 type {{classname}}ControllerBuilderV2 struct {
 {{#operations}}
 {{#operation}}

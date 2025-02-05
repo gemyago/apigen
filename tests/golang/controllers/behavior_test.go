@@ -20,14 +20,6 @@ func TestBehavior(t *testing.T) {
 		return testActions, router.mux
 	}
 
-	t.Run("controller builder", func(t *testing.T) {
-		t.Run("should panic if actions are not initialized", func(t *testing.T) {
-			assert.PanicsWithError(t, "behaviorNoParamsNoResponse action has not been initialized", func() {
-				handlers.BuildBehaviorController().Finalize()
-			})
-		})
-	})
-
 	type testCase = routeTestCase[*behaviorControllerTestActions]
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {

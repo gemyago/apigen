@@ -111,123 +111,17 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	return app
 }
 
-type voidValue *int
-
 type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
 	parse(router httpRouter, req *http.Request) (TReqParams, error)
 }
 type paramsParserFactory[TReqParams any] func(app *HTTPApp) paramsParser[TReqParams]
 
-type voidParamsParser struct{}
-
-func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (voidValue, error) {
-	return voidValue(nil), nil
-}
-
-func makeVoidParamsParser(_ *HTTPApp) paramsParser[voidValue] {
-	return voidParamsParser{}
-}
-
 type handlerFactoryParams[TReqParams any, TResData any] struct {
 	defaultStatus       int
 	voidResult          bool
 	paramsParserFactory func(app *HTTPApp) paramsParser[TReqParams]
 	handler             func(context.Context, TReqParams) (TResData, error)
-}
-
-func mustInitializeAction(actionName string, handlerFactory httpHandlerFactory) httpHandlerFactory {
-	if handlerFactory == nil {
-		panic(fmt.Errorf("%s action has not been initialized", actionName))
-	}
-	return handlerFactory
-}
-
-func createHandlerFactory[TReqParams any, TResData any](
-	factoryParams handlerFactoryParams[TReqParams, TResData],
-) httpHandlerFactory {
-	return func(app *HTTPApp) http.Handler {
-		paramsParser := factoryParams.paramsParserFactory(app)
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			params, err := paramsParser.parse(app.router, r)
-			if err != nil {
-				app.handleParsingErrors(r, w, err)
-				return
-			}
-
-			resData, err := factoryParams.handler(r.Context(), params)
-			if err != nil {
-				app.handleActionErrors(r, w, err)
-				return
-			}
-			if factoryParams.voidResult {
-				w.WriteHeader(factoryParams.defaultStatus)
-				return
-			}
-
-			w.Header().Add("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(factoryParams.defaultStatus)
-			if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
-				app.handleResponseErrors(r, encodingErr)
-			}
-		})
-	}
-}
-
-type actionBuilder[TControllerBuilder any, TReqParams any, TResData any] struct {
-	defaultStatusCode   int
-	voidResult          bool
-	httpHandlerFactory  func(app *HTTPApp) http.Handler
-	paramsParserFactory paramsParserFactory[TReqParams]
-	controllerBuilder   TControllerBuilder
-}
-
-func (ab *actionBuilder[TControllerBuilder, TReqParams, TResData]) With(
-	handler func(context.Context, TReqParams) (TResData, error),
-) TControllerBuilder {
-	ab.httpHandlerFactory = createHandlerFactory(handlerFactoryParams[TReqParams, TResData]{
-		defaultStatus:       ab.defaultStatusCode,
-		voidResult:          ab.voidResult,
-		paramsParserFactory: ab.paramsParserFactory,
-		handler:             handler,
-	})
-	return ab.controllerBuilder
-}
-
-type actionBuilderVoidResult[TControllerBuilder any, TReqParams any] struct {
-	actionBuilder[TControllerBuilder, TReqParams, voidValue]
-}
-
-func (ab *actionBuilderVoidResult[TControllerBuilder, TReqParams]) With(
-	handler func(context.Context, TReqParams) error,
-) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, tp TReqParams) (voidValue, error) {
-		return nil, handler(ctx, tp)
-	})
-}
-
-type actionBuilderNoParams[TControllerBuilder any, TResData any] struct {
-	actionBuilder[TControllerBuilder, voidValue, TResData]
-}
-
-func (ab *actionBuilderNoParams[TControllerBuilder, TResData]) With(
-	handler func(context.Context) (TResData, error),
-) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (TResData, error) {
-		return handler(ctx)
-	})
-}
-
-type actionBuilderNoParamsVoidResult[TControllerBuilder any] struct {
-	actionBuilder[TControllerBuilder, voidValue, voidValue]
-}
-
-func (ab *actionBuilderNoParamsVoidResult[TControllerBuilder]) With(
-	handler func(context.Context) error,
-) TControllerBuilder {
-	return ab.actionBuilder.With(func(ctx context.Context, _ voidValue) (voidValue, error) {
-		return nil, handler(ctx)
-	})
 }
 
 func readPathValue(key string, router httpRouter, req *http.Request) internal.OptionalVal[string] {
