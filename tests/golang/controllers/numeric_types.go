@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
@@ -14,16 +16,64 @@ type numericTypesControllerTestActions struct {
 	numericTypesNullableArrayItems       mockAction[*handlers.NumericTypesNumericTypesNullableArrayItemsRequest]
 }
 
-func newNumericTypesController(
-	testActions *numericTypesControllerTestActions,
-) *handlers.NumericTypesController {
-	return handlers.BuildNumericTypesController().
-		HandleNumericTypesParsing.With(testActions.numericTypesParsing.action).
-		HandleNumericTypesArrayItems.With(testActions.numericTypesArrayItems.action).
-		HandleNumericTypesRangeValidation.With(testActions.numericTypesRangeValidation.action).
-		HandleNumericTypesRangeValidationExclusive.With(testActions.numericTypesRangeValidationExclusive.action).
-		HandleNumericTypesRequiredValidation.With(testActions.numericTypesRequiredValidation.action).
-		HandleNumericTypesNullable.With(testActions.numericTypesNullable.action).
-		HandleNumericTypesNullableArrayItems.With(testActions.numericTypesNullableArrayItems.action).
-		Finalize()
+type numericTypesController struct {
+	testActions *numericTypesControllerTestActions
 }
+
+func (c *numericTypesController) NumericTypesParsing(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesParsing.HandleWith(
+		c.testActions.numericTypesParsing.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesArrayItems(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesArrayItems.HandleWith(
+		c.testActions.numericTypesArrayItems.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesRangeValidation(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesRangeValidation.HandleWith(
+		c.testActions.numericTypesRangeValidation.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesRangeValidationExclusive(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesRangeValidationExclusive.HandleWith(
+		c.testActions.numericTypesRangeValidationExclusive.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesRequiredValidation(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesRequiredValidation.HandleWith(
+		c.testActions.numericTypesRequiredValidation.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesNullable(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesNullable.HandleWith(
+		c.testActions.numericTypesNullable.action,
+	)
+}
+
+func (c *numericTypesController) NumericTypesNullableArrayItems(
+	builder *handlers.NumericTypesControllerBuilderV2,
+) http.Handler {
+	return builder.NumericTypesNullableArrayItems.HandleWith(
+		c.testActions.numericTypesNullableArrayItems.action,
+	)
+}
+
+var _ handlers.NumericTypesControllerV2 = &numericTypesController{}

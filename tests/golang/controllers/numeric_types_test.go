@@ -22,11 +22,11 @@ func TestNumericTypes(t *testing.T) {
 
 	setupRouter := func() (*numericTypesControllerTestActions, http.Handler) {
 		testActions := &numericTypesControllerTestActions{}
-		controller := newNumericTypesController(testActions)
+		controller := &numericTypesController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterNumericTypesRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
