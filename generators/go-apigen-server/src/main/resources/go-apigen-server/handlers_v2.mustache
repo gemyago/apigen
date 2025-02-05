@@ -195,61 +195,38 @@ func makeActionBuilder[
 	httpHandlerAdapter actionBuilderHandlerAdapter[TReq, TRes, THttpHandler],
 	params makeActionBuilderParams[TReq, TRes],
 ) ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler] {
+	createHandler := func(handler func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error)) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			reqParams, err := params.paramsParser.parse(app.router, r)
+			if err != nil {
+				app.handleParsingErrors(r, w, err)
+				return
+			}
+
+			resData, err := handler(w, r, reqParams)
+			if err != nil {
+				app.handleActionErrors(r, w, err)
+				return
+			}
+			if params.voidResult {
+				w.WriteHeader(params.defaultStatus)
+				return
+			}
+
+			w.Header().Add("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(params.defaultStatus)
+			if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
+				app.handleResponseErrors(r, encodingErr)
+			}
+		})
+	}
+
 	return ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]{
 		HandleWith: func(inputHandler TPlainHandler) http.Handler {
-			handler := handlerAdapter(inputHandler)
-			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				reqParams, err := params.paramsParser.parse(app.router, r)
-				if err != nil {
-					app.handleParsingErrors(r, w, err)
-					return
-				}
-
-				resData, err := handler(w, r, reqParams)
-				if err != nil {
-					app.handleActionErrors(r, w, err)
-					return
-				}
-				if params.voidResult {
-					w.WriteHeader(params.defaultStatus)
-					return
-				}
-
-				w.Header().Add("Content-Type", "application/json; charset=utf-8")
-				w.WriteHeader(params.defaultStatus)
-				if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
-					app.handleResponseErrors(r, encodingErr)
-				}
-			})
+			return createHandler(handlerAdapter(inputHandler))
 		},
 		HandleWithHTTP: func(handler THttpHandler) http.Handler {
-			panic("not implemented")
+			return createHandler(httpHandlerAdapter(handler))
 		},
 	}
-	// return func(app *HTTPApp) http.Handler {
-	// 	paramsParser := factoryParams.paramsParserFactory(app)
-	// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// 		params, err := paramsParser.parse(app.router, r)
-	// 		if err != nil {
-	// 			app.handleParsingErrors(r, w, err)
-	// 			return
-	// 		}
-
-	// 		resData, err := factoryParams.handler(r.Context(), params)
-	// 		if err != nil {
-	// 			app.handleActionErrors(r, w, err)
-	// 			return
-	// 		}
-	// 		if factoryParams.voidResult {
-	// 			w.WriteHeader(factoryParams.defaultStatus)
-	// 			return
-	// 		}
-
-	// 		w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	// 		w.WriteHeader(factoryParams.defaultStatus)
-	// 		if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
-	// 			app.handleResponseErrors(r, encodingErr)
-	// 		}
-	// 	})
-	// }
 }
