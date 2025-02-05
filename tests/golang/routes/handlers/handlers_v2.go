@@ -70,6 +70,30 @@ type actionBuilderHandlerAdapter[
 	THandler ActionHandlerFunc[TReq, TRes],
 ] func(THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error)
 
+func newHandlerAdapter[
+	TReq any,
+	TRes any,
+	THandler func(context.Context, *TReq) (*TRes, error),
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(_ http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return t(r.Context(), req)
+		}
+	}
+}
+
+func newHandlerAdapterNoParams[
+	TReq any,
+	TRes any,
+	THandler func(context.Context) (*TRes, error),
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(_ http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return t(r.Context())
+		}
+	}
+}
+
 func newHandlerAdapterNoResponse[
 	TReq any,
 	TRes any,
@@ -84,6 +108,7 @@ func newHandlerAdapterNoResponse[
 		}
 	}
 }
+
 func newHandlerAdapterNoParamsNoResponse[
 	TReq any,
 	TRes any,
@@ -92,6 +117,30 @@ func newHandlerAdapterNoParamsNoResponse[
 	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
 		return func(w http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
 			return nil, t(r.Context())
+		}
+	}
+}
+
+func newHTTPHandlerAdapter[
+	TReq any,
+	TRes any,
+	THandler func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error),
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return t(w, r, req)
+		}
+	}
+}
+
+func newHTTPHandlerAdapterNoParams[
+	TReq any,
+	TRes any,
+	THandler func(http.ResponseWriter, *http.Request) (*TRes, error),
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return t(w, r)
 		}
 	}
 }
