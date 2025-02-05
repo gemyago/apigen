@@ -19,11 +19,11 @@ func TestArrays(t *testing.T) {
 
 	setupRouter := func() (*arraysControllerTestActions, http.Handler) {
 		testActions := &arraysControllerTestActions{}
-		controller := newArraysController(testActions)
+		controller := &arraysController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterArraysRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterArraysRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 

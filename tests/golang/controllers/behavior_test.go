@@ -12,11 +12,11 @@ import (
 func TestBehavior(t *testing.T) {
 	setupRouter := func() (*behaviorControllerTestActions, http.Handler) {
 		testActions := &behaviorControllerTestActions{}
-		controller := newBehaviorController(testActions)
+		controller := &behaviorController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBehaviorRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterBehaviorRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
 
@@ -24,12 +24,6 @@ func TestBehavior(t *testing.T) {
 		t.Run("should panic if actions are not initialized", func(t *testing.T) {
 			assert.PanicsWithError(t, "behaviorNoParamsNoResponse action has not been initialized", func() {
 				handlers.BuildBehaviorController().Finalize()
-			})
-		})
-
-		t.Run("should build the controller if all actions are initialized", func(t *testing.T) {
-			assert.NotPanics(t, func() {
-				newBehaviorController(&behaviorControllerTestActions{})
 			})
 		})
 	})
