@@ -84,6 +84,17 @@ func newHandlerAdapterNoResponse[
 		}
 	}
 }
+func newHandlerAdapterNoParamsNoResponse[
+	TReq any,
+	TRes any,
+	THandler func(context.Context) error,
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return nil, t(r.Context())
+		}
+	}
+}
 
 func newHTTPHandlerAdapterNoResponse[
 	TReq any,
@@ -96,6 +107,18 @@ func newHTTPHandlerAdapterNoResponse[
 				return nil, err
 			}
 			return nil, nil
+		}
+	}
+}
+
+func newHTTPHandlerAdapterNoParamsNoResponse[
+	TReq any,
+	TRes any,
+	THandler func(http.ResponseWriter, *http.Request) error,
+]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
+	return func(t THandler) func(http.ResponseWriter, *http.Request, *TReq) (*TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, req *TReq) (*TRes, error) {
+			return nil, t(w, r)
 		}
 	}
 }
