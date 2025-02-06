@@ -82,6 +82,23 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/no-params-with-response",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.noParamsWithResponse.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
+				},
+			}
+		})
 	})
 
 	t.Run("withParamsNoResponse", func(t *testing.T) {
@@ -100,6 +117,24 @@ func TestBehavior(t *testing.T) {
 
 					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
 					assert.Equal(t, wantParams, testActions.withParamsNoResponse.calls[0].params)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-no-response",
+				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.withParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
 				},
 			}
 		})
@@ -131,6 +166,24 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+				},
+			}
+		})
 	})
 
 	t.Run("noStatusDefined", func(t *testing.T) {
@@ -147,6 +200,23 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/no-status-defined",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.noStatusDefined.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.noStatusDefined.calls, 1)
+				},
+			}
+		})
 	})
 
 	t.Run("withStatusDefined", func(t *testing.T) {
@@ -156,6 +226,23 @@ func TestBehavior(t *testing.T) {
 				path:   "/behavior/with-status-defined",
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withStatusDefined.calls, 1)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-status-defined",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.withStatusDefined.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 
