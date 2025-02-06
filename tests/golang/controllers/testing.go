@@ -188,6 +188,8 @@ func assertFieldError(
 }
 
 type mockActionCall[TParams any] struct {
+	req    *http.Request
+	res    http.ResponseWriter
 	params TParams
 }
 
@@ -210,15 +212,23 @@ type mockActionV2[
 	TParams any,
 	TResult any,
 ] struct {
-	nextError  error
-	nextResult TResult
-	calls      []mockActionCall[TParams]
+	isHttpAction bool
+	nextError    error
+	nextResult   TResult
+	calls        []mockActionCall[TParams]
 }
 
 func (c *mockActionV2[TParams, TResult]) action(
 	_ context.Context, params TParams,
 ) (TResult, error) {
 	c.calls = append(c.calls, mockActionCall[TParams]{params: params})
+	return c.nextResult, c.nextError
+}
+
+func (c *mockActionV2[TParams, TResult]) httpAction(
+	w http.ResponseWriter, r *http.Request, params TParams,
+) (TResult, error) {
+	c.calls = append(c.calls, mockActionCall[TParams]{req: r, res: w, params: params})
 	return c.nextResult, c.nextError
 }
 

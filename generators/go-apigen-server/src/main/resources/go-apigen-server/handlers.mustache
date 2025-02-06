@@ -363,7 +363,19 @@ type ActionBuilder[
 	TPlainHandler ActionHandlerFunc[TReq, TRes],
 	THttpHandler ActionHandlerFunc[TReq, TRes],
 ] struct {
-	HandleWith     func(TPlainHandler) http.Handler
+	// HandleWith creates a new http.Handler from a given action handler.
+	//
+	// The action handler is not supposed to have access to http objects and
+	// in most scenarios can just delegate the work to the application logic layer.
+	// If you need access to http objects use HandleWithHTTP
+	HandleWith func(TPlainHandler) http.Handler
+
+	// HandleWithHTTP creates a new http.Handler from a given action handler.
+	//
+	// The action handler allows direct access to http.ResponseWriter and *http.Request.
+	// It also provides parsed request parameters and allows sending structured response.
+	// If you need fully customized behavior, feel free not to use the builder and
+	// return the handler directly.
 	HandleWithHTTP func(THttpHandler) http.Handler
 }
 
