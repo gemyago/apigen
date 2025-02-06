@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -67,15 +68,20 @@ func TestBehavior(t *testing.T) {
 
 	t.Run("withParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/with-params-no-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 
 					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
+					assert.Equal(t, wantParams, testActions.withParamsNoResponse.calls[0].params)
 				},
 			}
 		})
