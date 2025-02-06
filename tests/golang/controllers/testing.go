@@ -58,11 +58,12 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
-	method string
-	path   string
-	query  url.Values
-	body   io.Reader
-	expect routeTestCaseExpectFn[TActions]
+	method       string
+	path         string
+	query        url.Values
+	body         io.Reader
+	setupActions func(TActions)
+	expect       routeTestCaseExpectFn[TActions]
 }
 
 type routeTestCaseSetupFn[TActions any] func() (TActions, http.Handler)
@@ -76,6 +77,9 @@ func runRouteTestCase[TActions any](
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
 		testActions, router := setupFn()
+		if tc.setupActions != nil {
+			tc.setupActions(testActions)
+		}
 		method := tc.method
 		if method == "" {
 			method = http.MethodGet
@@ -144,16 +148,23 @@ func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeT
 	}
 }
 
+func unmarshalData[TResult any](
+	t *testing.T,
+	body *bytes.Buffer,
+) TResult {
+	var gotData TResult
+	if err := json.Unmarshal(body.Bytes(), &gotData); !assert.NoError(t, err) {
+		t.FailNow()
+		return gotData
+	}
+	return gotData
+}
+
 func unmarshalBindingErrors(
 	t *testing.T,
 	body *bytes.Buffer,
 ) *aggregatedBindingError {
-	var gotErrors aggregatedBindingError
-	if err := json.Unmarshal(body.Bytes(), &gotErrors); !assert.NoError(t, err) {
-		t.FailNow()
-		return nil
-	}
-	return &gotErrors
+	return unmarshalData[*aggregatedBindingError](t, body)
 }
 
 func assertFieldError(
@@ -232,6 +243,10 @@ func (c *mockActionV2[TParams, TResult]) actionNoParamsWithResponse(
 ) (TResult, error) {
 	var params TParams
 	return c.action(ctx, params)
+}
+
+func (c *mockActionV2[TParams, TResult]) unmarshalResult(t *testing.T, data *bytes.Buffer) TResult {
+	return unmarshalData[TResult](t, data)
 }
 
 func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T) {
