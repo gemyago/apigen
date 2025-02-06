@@ -417,7 +417,7 @@ func newHandlerAdapterNoParams[
 	THandler func(context.Context) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
-		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
+		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			return t(r.Context())
 		}
 	}
@@ -445,7 +445,7 @@ func newHandlerAdapterNoParamsNoResponse[
 	THandler func(context.Context) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
-		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
+		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			var emptyRes TRes
 			return emptyRes, t(r.Context())
 		}
@@ -470,7 +470,7 @@ func newHTTPHandlerAdapterNoParams[
 	THandler func(http.ResponseWriter, *http.Request) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
-		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			return t(w, r)
 		}
 	}
@@ -498,7 +498,7 @@ func newHTTPHandlerAdapterNoParamsNoResponse[
 	THandler func(http.ResponseWriter, *http.Request) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
-		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
+		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			var emptyRes TRes
 			return emptyRes, t(w, r)
 		}
