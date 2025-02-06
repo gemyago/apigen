@@ -111,17 +111,8 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	return app
 }
 
-type httpHandlerFactory func(app *HTTPApp) http.Handler
 type paramsParser[TReqParams any] interface {
 	parse(router httpRouter, req *http.Request) (TReqParams, error)
-}
-type paramsParserFactory[TReqParams any] func(app *HTTPApp) paramsParser[TReqParams]
-
-type handlerFactoryParams[TReqParams any, TResData any] struct {
-	defaultStatus       int
-	voidResult          bool
-	paramsParserFactory func(app *HTTPApp) paramsParser[TReqParams]
-	handler             func(context.Context, TReqParams) (TResData, error)
 }
 
 func readPathValue(key string, router httpRouter, req *http.Request) internal.OptionalVal[string] {
