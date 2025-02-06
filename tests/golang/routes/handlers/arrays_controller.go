@@ -84,10 +84,10 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysNullableRequiredValidation ActionBuilder[
-	  *ArraysArraysNullableRequiredValidationRequest,
-	  void,
-	  func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ArraysArraysNullableRequiredValidationRequest) (error),
+		*ArraysArraysNullableRequiredValidationRequest,
+		void,
+		func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ArraysArraysNullableRequiredValidationRequest) (error),
 	]
 
 	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
@@ -96,10 +96,10 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysRangeValidation ActionBuilder[
-	  *ArraysArraysRangeValidationRequest,
-	  void,
-	  func(context.Context, *ArraysArraysRangeValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ArraysArraysRangeValidationRequest) (error),
+		*ArraysArraysRangeValidationRequest,
+		void,
+		func(context.Context, *ArraysArraysRangeValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ArraysArraysRangeValidationRequest) (error),
 	]
 
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
@@ -108,10 +108,10 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysRequiredValidation ActionBuilder[
-	  *ArraysArraysRequiredValidationRequest,
-	  void,
-	  func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ArraysArraysRequiredValidationRequest) (error),
+		*ArraysArraysRequiredValidationRequest,
+		void,
+		func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ArraysArraysRequiredValidationRequest) (error),
 	]
 }
 

@@ -106,10 +106,10 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanArrayItems ActionBuilder[
-	  *BooleanBooleanArrayItemsRequest,
-	  void,
-	  func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
+		*BooleanBooleanArrayItemsRequest,
+		void,
+		func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
 	]
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
@@ -118,10 +118,10 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanNullable ActionBuilder[
-	  *BooleanBooleanNullableRequest,
-	  void,
-	  func(context.Context, *BooleanBooleanNullableRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
+		*BooleanBooleanNullableRequest,
+		void,
+		func(context.Context, *BooleanBooleanNullableRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
 	]
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
@@ -130,10 +130,10 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanNullableArrayItems ActionBuilder[
-	  *BooleanBooleanNullableArrayItemsRequest,
-	  void,
-	  func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
+		*BooleanBooleanNullableArrayItemsRequest,
+		void,
+		func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
 	]
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
@@ -142,10 +142,10 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanParsing ActionBuilder[
-	  *BooleanBooleanParsingRequest,
-	  void,
-	  func(context.Context, *BooleanBooleanParsingRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
+		*BooleanBooleanParsingRequest,
+		void,
+		func(context.Context, *BooleanBooleanParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
 	]
 
 	// POST /boolean/required-validation
@@ -154,10 +154,10 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanRequiredValidation ActionBuilder[
-	  *BooleanBooleanRequiredValidationRequest,
-	  void,
-	  func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
+		*BooleanBooleanRequiredValidationRequest,
+		void,
+		func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
 	]
 }
 

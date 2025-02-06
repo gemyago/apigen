@@ -1,6 +1,0 @@
-ActionBuilder[
-  {{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{baseName}}{{operationId}}Request{{/hasParams}},
-  {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-  func(context.Context{{#hasParams}}, *{{baseName}}{{operationId}}Request{{/hasParams}}) ({{#returnType}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{.}}, {{/returnType}}error),
-  func(http.ResponseWriter, *http.Request{{#hasParams}}, *{{baseName}}{{operationId}}Request{{/hasParams}}) ({{#returnType}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{.}}, {{/returnType}}error),
-]

@@ -40,10 +40,10 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoParamsNoResponse ActionBuilder[
-	  void,
-	  void,
-	  func(context.Context) (error),
-	  func(http.ResponseWriter, *http.Request) (error),
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
 	]
 
 	// GET /behavior/no-params-with-response
@@ -52,10 +52,10 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorNoParamsWithResponse ActionBuilder[
-	  void,
-	  *BehaviorNoParamsWithResponse202Response,
-	  func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
-	  func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
+		void,
+		*BehaviorNoParamsWithResponse202Response,
+		func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
+		func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
 	]
 
 	// GET /behavior/no-status-defined
@@ -64,10 +64,10 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoStatusDefined ActionBuilder[
-	  void,
-	  void,
-	  func(context.Context) (error),
-	  func(http.ResponseWriter, *http.Request) (error),
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
 	]
 
 	// GET /behavior/with-params-and-response
@@ -76,10 +76,10 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorWithParamsAndResponse ActionBuilder[
-	  *BehaviorBehaviorWithParamsAndResponseRequest,
-	  *BehaviorNoParamsWithResponse202Response,
-	  func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
-	  func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+		*BehaviorBehaviorWithParamsAndResponseRequest,
+		*BehaviorNoParamsWithResponse202Response,
+		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
 	]
 
 	// POST /behavior/with-status-defined
@@ -88,10 +88,10 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorWithStatusDefined ActionBuilder[
-	  void,
-	  void,
-	  func(context.Context) (error),
-	  func(http.ResponseWriter, *http.Request) (error),
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
 	]
 }
 

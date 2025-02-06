@@ -678,10 +678,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesArrayItemsRangeValidation ActionBuilder[
-	  *StringTypesStringTypesArrayItemsRangeValidationRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
+		*StringTypesStringTypesArrayItemsRangeValidationRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
 	]
 
 	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -690,10 +690,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesArraysParsing ActionBuilder[
-	  *StringTypesStringTypesArraysParsingRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesArraysParsingRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArraysParsingRequest) (error),
+		*StringTypesStringTypesArraysParsingRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesArraysParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArraysParsingRequest) (error),
 	]
 
 	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
@@ -702,10 +702,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesEnums ActionBuilder[
-	  *StringTypesStringTypesEnumsRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesEnumsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesEnumsRequest) (error),
+		*StringTypesStringTypesEnumsRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesEnumsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesEnumsRequest) (error),
 	]
 
 	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -714,10 +714,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableArrayItems ActionBuilder[
-	  *StringTypesStringTypesNullableArrayItemsRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesNullableArrayItemsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableArrayItemsRequest) (error),
+		*StringTypesStringTypesNullableArrayItemsRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesNullableArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableArrayItemsRequest) (error),
 	]
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -726,10 +726,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableParsing ActionBuilder[
-	  *StringTypesStringTypesNullableParsingRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesNullableParsingRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableParsingRequest) (error),
+		*StringTypesStringTypesNullableParsingRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesNullableParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableParsingRequest) (error),
 	]
 
 	// POST /string-types/nullable-required-validation
@@ -738,10 +738,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableRequiredValidation ActionBuilder[
-	  *StringTypesStringTypesNullableRequiredValidationRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
+		*StringTypesStringTypesNullableRequiredValidationRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
 	]
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -750,10 +750,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesParsing ActionBuilder[
-	  *StringTypesStringTypesParsingRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesParsingRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesParsingRequest) (error),
+		*StringTypesStringTypesParsingRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesParsingRequest) (error),
 	]
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
@@ -762,10 +762,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesPatternValidation ActionBuilder[
-	  *StringTypesStringTypesPatternValidationRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesPatternValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesPatternValidationRequest) (error),
+		*StringTypesStringTypesPatternValidationRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesPatternValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesPatternValidationRequest) (error),
 	]
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -774,10 +774,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesRangeValidation ActionBuilder[
-	  *StringTypesStringTypesRangeValidationRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesRangeValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRangeValidationRequest) (error),
+		*StringTypesStringTypesRangeValidationRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesRangeValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRangeValidationRequest) (error),
 	]
 
 	// POST /string-types/required-validation
@@ -786,10 +786,10 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesRequiredValidation ActionBuilder[
-	  *StringTypesStringTypesRequiredValidationRequest,
-	  void,
-	  func(context.Context, *StringTypesStringTypesRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRequiredValidationRequest) (error),
+		*StringTypesStringTypesRequiredValidationRequest,
+		void,
+		func(context.Context, *StringTypesStringTypesRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRequiredValidationRequest) (error),
 	]
 }
 

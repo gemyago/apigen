@@ -248,10 +248,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesArrayItems ActionBuilder[
-	  *NumericTypesNumericTypesArrayItemsRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesArrayItemsRequest) (error),
+		*NumericTypesNumericTypesArrayItemsRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesArrayItemsRequest) (error),
 	]
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -260,10 +260,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesNullable ActionBuilder[
-	  *NumericTypesNumericTypesNullableRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableRequest) (error),
+		*NumericTypesNumericTypesNullableRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableRequest) (error),
 	]
 
 	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -272,10 +272,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesNullableArrayItems ActionBuilder[
-	  *NumericTypesNumericTypesNullableArrayItemsRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
+		*NumericTypesNumericTypesNullableArrayItemsRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
 	]
 
 	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -284,10 +284,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesParsing ActionBuilder[
-	  *NumericTypesNumericTypesParsingRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesParsingRequest) (error),
+		*NumericTypesNumericTypesParsingRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesParsingRequest) (error),
 	]
 
 	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -296,10 +296,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRangeValidation ActionBuilder[
-	  *NumericTypesNumericTypesRangeValidationRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationRequest) (error),
+		*NumericTypesNumericTypesRangeValidationRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationRequest) (error),
 	]
 
 	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -308,10 +308,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRangeValidationExclusive ActionBuilder[
-	  *NumericTypesNumericTypesRangeValidationExclusiveRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
+		*NumericTypesNumericTypesRangeValidationExclusiveRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
 	]
 
 	// GET /numeric-types/required-validation
@@ -320,10 +320,10 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRequiredValidation ActionBuilder[
-	  *NumericTypesNumericTypesRequiredValidationRequest,
-	  void,
-	  func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRequiredValidationRequest) (error),
+		*NumericTypesNumericTypesRequiredValidationRequest,
+		void,
+		func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRequiredValidationRequest) (error),
 	]
 }
 

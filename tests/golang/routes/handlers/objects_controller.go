@@ -88,10 +88,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsArrayBodyDirect ActionBuilder[
-	  *ObjectsObjectsArrayBodyDirectRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsArrayBodyDirectRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyDirectRequest) (error),
+		*ObjectsObjectsArrayBodyDirectRequest,
+		void,
+		func(context.Context, *ObjectsObjectsArrayBodyDirectRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyDirectRequest) (error),
 	]
 
 	// PUT /objects/arrays
@@ -100,10 +100,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsArrayBodyNested ActionBuilder[
-	  *ObjectsObjectsArrayBodyNestedRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsArrayBodyNestedRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyNestedRequest) (error),
+		*ObjectsObjectsArrayBodyNestedRequest,
+		void,
+		func(context.Context, *ObjectsObjectsArrayBodyNestedRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyNestedRequest) (error),
 	]
 
 	// POST /objects/deeply-nested
@@ -112,10 +112,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsDeeplyNested ActionBuilder[
-	  *ObjectsObjectsDeeplyNestedRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsDeeplyNestedRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsDeeplyNestedRequest) (error),
+		*ObjectsObjectsDeeplyNestedRequest,
+		void,
+		func(context.Context, *ObjectsObjectsDeeplyNestedRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsDeeplyNestedRequest) (error),
 	]
 
 	// PUT /objects/nullable-body
@@ -124,10 +124,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsNullableOptionalBody ActionBuilder[
-	  *ObjectsObjectsNullableOptionalBodyRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsNullableOptionalBodyRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableOptionalBodyRequest) (error),
+		*ObjectsObjectsNullableOptionalBodyRequest,
+		void,
+		func(context.Context, *ObjectsObjectsNullableOptionalBodyRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableOptionalBodyRequest) (error),
 	]
 
 	// POST /objects/nullable-body
@@ -136,10 +136,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsNullableRequiredBody ActionBuilder[
-	  *ObjectsObjectsNullableRequiredBodyRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsNullableRequiredBodyRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableRequiredBodyRequest) (error),
+		*ObjectsObjectsNullableRequiredBodyRequest,
+		void,
+		func(context.Context, *ObjectsObjectsNullableRequiredBodyRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableRequiredBodyRequest) (error),
 	]
 
 	// PUT /objects/required-body
@@ -148,10 +148,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsOptionalBody ActionBuilder[
-	  *ObjectsObjectsOptionalBodyRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsOptionalBodyRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsOptionalBodyRequest) (error),
+		*ObjectsObjectsOptionalBodyRequest,
+		void,
+		func(context.Context, *ObjectsObjectsOptionalBodyRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsOptionalBodyRequest) (error),
 	]
 
 	// POST /objects/required-body
@@ -160,10 +160,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsRequiredBody ActionBuilder[
-	  *ObjectsObjectsRequiredBodyRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsRequiredBodyRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredBodyRequest) (error),
+		*ObjectsObjectsRequiredBodyRequest,
+		void,
+		func(context.Context, *ObjectsObjectsRequiredBodyRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredBodyRequest) (error),
 	]
 
 	// POST /objects/required-nested-objects
@@ -172,10 +172,10 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsRequiredNestedObjects ActionBuilder[
-	  *ObjectsObjectsRequiredNestedObjectsRequest,
-	  void,
-	  func(context.Context, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
+		*ObjectsObjectsRequiredNestedObjectsRequest,
+		void,
+		func(context.Context, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
 	]
 }
 

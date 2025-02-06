@@ -26,10 +26,10 @@ type BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoParamsNoResponse ActionBuilder[
-	  void,
-	  void,
-	  func(context.Context) (error),
-	  func(http.ResponseWriter, *http.Request) (error),
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
 	]
 }
 

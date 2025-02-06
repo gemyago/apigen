@@ -47,10 +47,10 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingActionErrors ActionBuilder[
-	  void,
-	  void,
-	  func(context.Context) (error),
-	  func(http.ResponseWriter, *http.Request) (error),
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
 	]
 
 	// GET /error-handling/parsing-errors/{pathParam1}/{pathParam2}
@@ -59,10 +59,10 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingParsingErrors ActionBuilder[
-	  *ErrorHandlingErrorHandlingParsingErrorsRequest,
-	  void,
-	  func(context.Context, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
+		*ErrorHandlingErrorHandlingParsingErrorsRequest,
+		void,
+		func(context.Context, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
 	]
 
 	// GET /error-handling/validation-errors
@@ -71,10 +71,10 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingValidationErrors ActionBuilder[
-	  *ErrorHandlingErrorHandlingValidationErrorsRequest,
-	  void,
-	  func(context.Context, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
-	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
+		*ErrorHandlingErrorHandlingValidationErrorsRequest,
+		void,
+		func(context.Context, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
 	]
 }
 
