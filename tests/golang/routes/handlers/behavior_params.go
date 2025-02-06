@@ -41,4 +41,31 @@ func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsPa
 	}
 }
 
+type paramsParserBehaviorBehaviorWithParamsNoResponse struct {
+	bindQueryParam1 requestParamBinder[[]string, string]
+}
+
+func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsNoResponseRequest, error) {
+	bindingCtx := BindingContext{}
+	reqParams := &BehaviorBehaviorWithParamsNoResponseRequest{}
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindQueryParam1(queryParamsCtx.Fork("queryParam1"), readQueryValue("queryParam1", query), &reqParams.QueryParam1)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBehaviorBehaviorWithParamsNoResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsNoResponseRequest] {
+	return &paramsParserBehaviorBehaviorWithParamsNoResponse{
+		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.stringParser,
+			),
+			validateValue: NewSimpleFieldValidator[string](
+			),
+		}),
+	}
+}
+
 

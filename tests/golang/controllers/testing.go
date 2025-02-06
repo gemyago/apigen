@@ -193,6 +193,47 @@ func (c *mockAction[TParams]) action(
 	return nil
 }
 
+type mockVoid *int
+
+type mockActionV2[
+	TParams any,
+	TResult any,
+] struct {
+	nextError  error
+	nextResult TResult
+	calls      []mockActionCall[TParams]
+}
+
+func (c *mockActionV2[TParams, TResult]) action(
+	_ context.Context, params TParams,
+) (TResult, error) {
+	c.calls = append(c.calls, mockActionCall[TParams]{params: params})
+	return c.nextResult, c.nextError
+}
+
+func (c *mockActionV2[TParams, TResult]) actionWithParamsNoResponse(
+	ctx context.Context,
+	params TParams,
+) error {
+	_, err := c.action(ctx, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) actionNoParamsNoResponse(
+	ctx context.Context,
+) error {
+	var params TParams
+	_, err := c.action(ctx, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) actionNoParamsWithResponse(
+	ctx context.Context,
+) (TResult, error) {
+	var params TParams
+	return c.action(ctx, params)
+}
+
 func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T) {
 	index := fake.IntBetween(0, len(values))
 	newValues := make([]T, len(values)+1)

@@ -31,6 +31,14 @@ type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	QueryParam1 string
 }
 
+// BehaviorBehaviorWithParamsNoResponseRequest represents params for behaviorWithParamsNoResponse operation
+//
+// Request: GET /behavior/with-params-no-response.
+type BehaviorBehaviorWithParamsNoResponseRequest struct {
+	// QueryParam1 is parsed from request query and declared as queryParam1.
+	QueryParam1 string
+}
+
 
 
 type BehaviorControllerBuilderV2 struct {
@@ -80,6 +88,18 @@ type BehaviorControllerBuilderV2 struct {
 		*BehaviorNoParamsWithResponse202Response,
 		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
 		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+	]
+
+	// GET /behavior/with-params-no-response
+	//
+	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
+	//
+	// Response type: none
+	BehaviorWithParamsNoResponse ActionBuilder[
+		*BehaviorBehaviorWithParamsNoResponseRequest,
+		void,
+		func(context.Context, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
 	]
 
 	// POST /behavior/with-status-defined
@@ -179,6 +199,27 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			},
 		),
 
+		// GET /behavior/with-params-no-response
+		BehaviorWithParamsNoResponse: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			]{
+				defaultStatus: 202,
+				voidResult:    true,
+				paramsParser:  newParamsParserBehaviorBehaviorWithParamsNoResponse(app),
+			},
+		),
+
 		// POST /behavior/with-status-defined
 		BehaviorWithStatusDefined: makeActionBuilder(
 			app,
@@ -231,6 +272,13 @@ type BehaviorControllerV2 interface {
 	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilderV2) http.Handler
 
+	// GET /behavior/with-params-no-response
+	//
+	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
+	//
+	// Response type: none
+	BehaviorWithParamsNoResponse(b *BehaviorControllerBuilderV2) http.Handler
+
 	// POST /behavior/with-status-defined
 	//
 	// Request type: none
@@ -245,5 +293,6 @@ func RegisterBehaviorRoutesV2(controller BehaviorControllerV2, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder))
 	app.router.HandleRoute("GET", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder))
+	app.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder))
 	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder))
 }

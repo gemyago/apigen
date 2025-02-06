@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -9,7 +8,21 @@ import (
 )
 
 type behaviorControllerTestActions struct {
-	noParamsNoResponse mockAction[struct{}]
+	noParamsNoResponse   mockActionV2[mockVoid, mockVoid]
+	noParamsWithResponse mockActionV2[
+		mockVoid,
+		*models.BehaviorNoParamsWithResponse202Response,
+	]
+	withParamsNoResponse mockActionV2[
+		*handlers.BehaviorBehaviorWithParamsNoResponseRequest,
+		mockVoid,
+	]
+	withParamsAndResponse mockActionV2[
+		*handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+		*models.BehaviorNoParamsWithResponse202Response,
+	]
+	noStatusDefined   mockActionV2[mockVoid, mockVoid]
+	withStatusDefined mockActionV2[mockVoid, mockVoid]
 }
 
 type behaviorController struct {
@@ -20,9 +33,7 @@ func (c *behaviorController) BehaviorNoParamsNoResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
 	return builder.BehaviorNoParamsNoResponse.HandleWith(
-		func(ctx context.Context) error {
-			return c.testActions.noParamsNoResponse.action(ctx, struct{}{})
-		},
+		c.testActions.noParamsNoResponse.actionNoParamsNoResponse,
 	)
 }
 
@@ -30,9 +41,15 @@ func (c *behaviorController) BehaviorNoParamsWithResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
 	return builder.BehaviorNoParamsWithResponse.HandleWith(
-		func(context.Context) (*models.BehaviorNoParamsWithResponse202Response, error) {
-			panic("not implemented")
-		},
+		c.testActions.noParamsWithResponse.actionNoParamsWithResponse,
+	)
+}
+
+func (c *behaviorController) BehaviorWithParamsNoResponse(
+	builder *handlers.BehaviorControllerBuilderV2,
+) http.Handler {
+	return builder.BehaviorWithParamsNoResponse.HandleWith(
+		c.testActions.withParamsNoResponse.actionWithParamsNoResponse,
 	)
 }
 
@@ -40,12 +57,7 @@ func (c *behaviorController) BehaviorWithParamsAndResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
 	return builder.BehaviorWithParamsAndResponse.HandleWith(
-		func(
-			context.Context,
-			*handlers.BehaviorBehaviorWithParamsAndResponseRequest,
-		) (*models.BehaviorNoParamsWithResponse202Response, error) {
-			panic("not implemented")
-		},
+		c.testActions.withParamsAndResponse.action,
 	)
 }
 
@@ -53,9 +65,7 @@ func (c *behaviorController) BehaviorNoStatusDefined(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
 	return builder.BehaviorNoStatusDefined.HandleWith(
-		func(context.Context) error {
-			panic("not implemented")
-		},
+		c.testActions.noStatusDefined.actionNoParamsNoResponse,
 	)
 }
 
@@ -63,9 +73,7 @@ func (c *behaviorController) BehaviorWithStatusDefined(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
 	return builder.BehaviorWithStatusDefined.HandleWith(
-		func(context.Context) error {
-			panic("not implemented")
-		},
+		c.testActions.withStatusDefined.actionNoParamsNoResponse,
 	)
 }
 
