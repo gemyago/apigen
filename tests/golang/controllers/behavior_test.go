@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -34,6 +35,23 @@ func TestBehavior(t *testing.T) {
 				path:   "/behavior/no-params-no-response",
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.noParamsNoResponse.calls, 1)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/no-params-no-response",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.noParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 
