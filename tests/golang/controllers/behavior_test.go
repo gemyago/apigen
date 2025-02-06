@@ -43,6 +43,26 @@ func TestBehavior(t *testing.T) {
 			}
 		})
 
+		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/no-params-no-response",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.noParamsNoResponse.isHttpAction = true
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.noParamsNoResponse.calls, 1)
+					lastCall := testActions.noParamsNoResponse.calls[0]
+					assert.Nil(t, lastCall.req)
+					assert.Nil(t, lastCall.res)
+				},
+			}
+		})
+
 		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodGet,
@@ -78,6 +98,31 @@ func TestBehavior(t *testing.T) {
 					}
 
 					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
+					assert.Equal(t, wantResponse, testActions.noParamsWithResponse.unmarshalResult(t, recorder.Body))
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
+			wantResponse := &models.BehaviorNoParamsWithResponse202Response{
+				Field1: fake.Lorem().Word(),
+			}
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/no-params-with-response",
+				setupActions: func(testActions *behaviorControllerTestActions) {
+					testActions.noParamsWithResponse.isHttpAction = true
+					testActions.noParamsWithResponse.nextResult = wantResponse
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
+					lastCall := testActions.noParamsWithResponse.calls[0]
+					assert.Nil(t, lastCall.req)
+					assert.Nil(t, lastCall.res)
 					assert.Equal(t, wantResponse, testActions.noParamsWithResponse.unmarshalResult(t, recorder.Body))
 				},
 			}

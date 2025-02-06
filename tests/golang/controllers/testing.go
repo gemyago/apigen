@@ -240,6 +240,13 @@ func (c *mockActionV2[TParams, TResult]) actionWithParamsNoResponse(
 	return err
 }
 
+func (c *mockActionV2[TParams, TResult]) httpActionWithParamsNoResponse(
+	w http.ResponseWriter, r *http.Request, params TParams,
+) error {
+	_, err := c.httpAction(w, r, params)
+	return err
+}
+
 func (c *mockActionV2[TParams, TResult]) actionNoParamsNoResponse(
 	ctx context.Context,
 ) error {
@@ -248,11 +255,26 @@ func (c *mockActionV2[TParams, TResult]) actionNoParamsNoResponse(
 	return err
 }
 
+func (c *mockActionV2[TParams, TResult]) httpActionNoParamsNoResponse(
+	w http.ResponseWriter, r *http.Request,
+) error {
+	var params TParams
+	_, err := c.httpAction(w, r, params)
+	return err
+}
+
 func (c *mockActionV2[TParams, TResult]) actionNoParamsWithResponse(
 	ctx context.Context,
 ) (TResult, error) {
 	var params TParams
 	return c.action(ctx, params)
+}
+
+func (c *mockActionV2[TParams, TResult]) httpActionNoParamsWithResponse(
+	w http.ResponseWriter, r *http.Request,
+) (TResult, error) {
+	var params TParams
+	return c.httpAction(w, r, params)
 }
 
 func (c *mockActionV2[TParams, TResult]) unmarshalResult(t *testing.T, data *bytes.Buffer) TResult {
