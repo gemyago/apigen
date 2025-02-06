@@ -144,10 +144,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "handlers.mustache",
         apiPackage,
         "handlers.go"));
-    supportingFiles.add(new SupportingFile(
-        "handlers_v2.mustache",
-        apiPackage,
-        "handlers_v2.go"));
 
     supportingFiles.add(new SupportingFile(
         "validators.mustache",

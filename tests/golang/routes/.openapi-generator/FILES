@@ -9,7 +9,6 @@ handlers/boolean_params.go
 handlers/error_handling_controller.go
 handlers/error_handling_params.go
 handlers/handlers.go
-handlers/handlers_v2.go
 handlers/numeric_types_controller.go
 handlers/numeric_types_params.go
 handlers/objects_controller.go
