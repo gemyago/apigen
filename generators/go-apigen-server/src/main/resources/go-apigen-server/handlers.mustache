@@ -120,7 +120,7 @@ type void *int
 type voidParamsParserV2 struct{}
 
 func (p voidParamsParserV2) parse(_ httpRouter, _ *http.Request) (void, error) {
-	return nil, nil
+	return void(nil), nil
 }
 
 func makeVoidParamsParserV2(_ *HTTPApp) paramsParser[void] {

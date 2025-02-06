@@ -368,23 +368,12 @@ issues:
     - path: "routes/handlers/(.+)_params\\.go"
       source: "func \\(p \\*paramsParser(.+)\\) parse\\(router httpRouter, req \\*http\\.Request\\)"
       linters:
-        - unused # if is false reporting really used struct function
-    - path: "routes/handlers/handlers\\.go"
-      source: "(func readPathValue|func readQueryValue|func readRequestBodyValue)"
-      linters:
-        - unused # if is false reporting really used funcs
-    - path: "(internal/(.+)_validation\\.go)"
-      source: "func\\(bindingCtx \\*BindingContext, field, location string, value \\*models.\\w+\\)"
-      linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
     - path: "routes/handlers/(.+)_params\\.go"
-      source: "func \\(p \\*paramsParser(.+)\\) parse\\(router httpRouter, req \\*http\\.Request\\)"
+      source: "func newParamsParser.+\\(app \\*HTTPApp\\)"
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
-    - path: "routes/handlers/(.+)_params\\.go"
-      source: "func newParams.+\\(app \\*HTTPApp\\)"
-      linters:
-        - revive # some params may be unused. Hard to handle this while gernerating code.
+        - unparam # some params may be unused. Hard to handle this while gernerating code.
 
     # mustache templates are limited and sometimes it's challenging to build
     # a reusable template that can generate code with or without module prefix
