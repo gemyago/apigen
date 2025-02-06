@@ -84,8 +84,8 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysNullableRequiredValidation ActionBuilder[
-	  ArraysArraysNullableRequiredValidationRequest,
-	  Void,
+	  *ArraysArraysNullableRequiredValidationRequest,
+	  void,
 	  func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ArraysArraysNullableRequiredValidationRequest) (error),
 	]
@@ -96,8 +96,8 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysRangeValidation ActionBuilder[
-	  ArraysArraysRangeValidationRequest,
-	  Void,
+	  *ArraysArraysRangeValidationRequest,
+	  void,
 	  func(context.Context, *ArraysArraysRangeValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ArraysArraysRangeValidationRequest) (error),
 	]
@@ -108,8 +108,8 @@ type ArraysControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ArraysRequiredValidation ActionBuilder[
-	  ArraysArraysRequiredValidationRequest,
-	  Void,
+	  *ArraysArraysRequiredValidationRequest,
+	  void,
 	  func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ArraysArraysRequiredValidationRequest) (error),
 	]
@@ -121,16 +121,16 @@ func newArraysControllerBuilderV2(app *HTTPApp) *ArraysControllerBuilderV2 {
 		ArraysNullableRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ArraysArraysNullableRequiredValidationRequest,
-				Void,
+				*ArraysArraysNullableRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ArraysArraysNullableRequiredValidationRequest,
-				Void,
+				*ArraysArraysNullableRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ArraysArraysNullableRequiredValidationRequest,
-				Void,
+				*ArraysArraysNullableRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -142,16 +142,16 @@ func newArraysControllerBuilderV2(app *HTTPApp) *ArraysControllerBuilderV2 {
 		ArraysRangeValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ArraysArraysRangeValidationRequest,
-				Void,
+				*ArraysArraysRangeValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ArraysArraysRangeValidationRequest,
-				Void,
+				*ArraysArraysRangeValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ArraysArraysRangeValidationRequest,
-				Void,
+				*ArraysArraysRangeValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -163,16 +163,16 @@ func newArraysControllerBuilderV2(app *HTTPApp) *ArraysControllerBuilderV2 {
 		ArraysRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ArraysArraysRequiredValidationRequest,
-				Void,
+				*ArraysArraysRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ArraysArraysRequiredValidationRequest,
-				Void,
+				*ArraysArraysRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ArraysArraysRequiredValidationRequest,
-				Void,
+				*ArraysArraysRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,

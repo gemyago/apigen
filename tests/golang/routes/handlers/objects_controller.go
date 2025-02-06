@@ -88,8 +88,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsArrayBodyDirect ActionBuilder[
-	  ObjectsObjectsArrayBodyDirectRequest,
-	  Void,
+	  *ObjectsObjectsArrayBodyDirectRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsArrayBodyDirectRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyDirectRequest) (error),
 	]
@@ -100,8 +100,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsArrayBodyNested ActionBuilder[
-	  ObjectsObjectsArrayBodyNestedRequest,
-	  Void,
+	  *ObjectsObjectsArrayBodyNestedRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsArrayBodyNestedRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyNestedRequest) (error),
 	]
@@ -112,8 +112,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsDeeplyNested ActionBuilder[
-	  ObjectsObjectsDeeplyNestedRequest,
-	  Void,
+	  *ObjectsObjectsDeeplyNestedRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsDeeplyNestedRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsDeeplyNestedRequest) (error),
 	]
@@ -124,8 +124,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsNullableOptionalBody ActionBuilder[
-	  ObjectsObjectsNullableOptionalBodyRequest,
-	  Void,
+	  *ObjectsObjectsNullableOptionalBodyRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsNullableOptionalBodyRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableOptionalBodyRequest) (error),
 	]
@@ -136,8 +136,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsNullableRequiredBody ActionBuilder[
-	  ObjectsObjectsNullableRequiredBodyRequest,
-	  Void,
+	  *ObjectsObjectsNullableRequiredBodyRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsNullableRequiredBodyRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableRequiredBodyRequest) (error),
 	]
@@ -148,8 +148,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsOptionalBody ActionBuilder[
-	  ObjectsObjectsOptionalBodyRequest,
-	  Void,
+	  *ObjectsObjectsOptionalBodyRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsOptionalBodyRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsOptionalBodyRequest) (error),
 	]
@@ -160,8 +160,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsRequiredBody ActionBuilder[
-	  ObjectsObjectsRequiredBodyRequest,
-	  Void,
+	  *ObjectsObjectsRequiredBodyRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsRequiredBodyRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredBodyRequest) (error),
 	]
@@ -172,8 +172,8 @@ type ObjectsControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ObjectsRequiredNestedObjects ActionBuilder[
-	  ObjectsObjectsRequiredNestedObjectsRequest,
-	  Void,
+	  *ObjectsObjectsRequiredNestedObjectsRequest,
+	  void,
 	  func(context.Context, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
 	]
@@ -185,16 +185,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsArrayBodyDirect: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsArrayBodyDirectRequest,
-				Void,
+				*ObjectsObjectsArrayBodyDirectRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsArrayBodyDirectRequest,
-				Void,
+				*ObjectsObjectsArrayBodyDirectRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsArrayBodyDirectRequest,
-				Void,
+				*ObjectsObjectsArrayBodyDirectRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -206,16 +206,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsArrayBodyNested: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsArrayBodyNestedRequest,
-				Void,
+				*ObjectsObjectsArrayBodyNestedRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsArrayBodyNestedRequest,
-				Void,
+				*ObjectsObjectsArrayBodyNestedRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsArrayBodyNestedRequest,
-				Void,
+				*ObjectsObjectsArrayBodyNestedRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -227,16 +227,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsDeeplyNested: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsDeeplyNestedRequest,
-				Void,
+				*ObjectsObjectsDeeplyNestedRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsDeeplyNestedRequest,
-				Void,
+				*ObjectsObjectsDeeplyNestedRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsDeeplyNestedRequest,
-				Void,
+				*ObjectsObjectsDeeplyNestedRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -248,16 +248,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsNullableOptionalBody: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsNullableOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsNullableOptionalBodyRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsNullableOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsNullableOptionalBodyRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsNullableOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsNullableOptionalBodyRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -269,16 +269,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsNullableRequiredBody: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsNullableRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsNullableRequiredBodyRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsNullableRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsNullableRequiredBodyRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsNullableRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsNullableRequiredBodyRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -290,16 +290,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsOptionalBody: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsOptionalBodyRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsOptionalBodyRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsOptionalBodyRequest,
-				Void,
+				*ObjectsObjectsOptionalBodyRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -311,16 +311,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsRequiredBody: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsRequiredBodyRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsRequiredBodyRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsRequiredBodyRequest,
-				Void,
+				*ObjectsObjectsRequiredBodyRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -332,16 +332,16 @@ func newObjectsControllerBuilderV2(app *HTTPApp) *ObjectsControllerBuilderV2 {
 		ObjectsRequiredNestedObjects: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ObjectsObjectsRequiredNestedObjectsRequest,
-				Void,
+				*ObjectsObjectsRequiredNestedObjectsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ObjectsObjectsRequiredNestedObjectsRequest,
-				Void,
+				*ObjectsObjectsRequiredNestedObjectsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ObjectsObjectsRequiredNestedObjectsRequest,
-				Void,
+				*ObjectsObjectsRequiredNestedObjectsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,

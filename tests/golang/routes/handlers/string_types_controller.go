@@ -678,8 +678,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesArrayItemsRangeValidation ActionBuilder[
-	  StringTypesStringTypesArrayItemsRangeValidationRequest,
-	  Void,
+	  *StringTypesStringTypesArrayItemsRangeValidationRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
 	]
@@ -690,8 +690,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesArraysParsing ActionBuilder[
-	  StringTypesStringTypesArraysParsingRequest,
-	  Void,
+	  *StringTypesStringTypesArraysParsingRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesArraysParsingRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArraysParsingRequest) (error),
 	]
@@ -702,8 +702,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesEnums ActionBuilder[
-	  StringTypesStringTypesEnumsRequest,
-	  Void,
+	  *StringTypesStringTypesEnumsRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesEnumsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesEnumsRequest) (error),
 	]
@@ -714,8 +714,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableArrayItems ActionBuilder[
-	  StringTypesStringTypesNullableArrayItemsRequest,
-	  Void,
+	  *StringTypesStringTypesNullableArrayItemsRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesNullableArrayItemsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableArrayItemsRequest) (error),
 	]
@@ -726,8 +726,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableParsing ActionBuilder[
-	  StringTypesStringTypesNullableParsingRequest,
-	  Void,
+	  *StringTypesStringTypesNullableParsingRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesNullableParsingRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableParsingRequest) (error),
 	]
@@ -738,8 +738,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesNullableRequiredValidation ActionBuilder[
-	  StringTypesStringTypesNullableRequiredValidationRequest,
-	  Void,
+	  *StringTypesStringTypesNullableRequiredValidationRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
 	]
@@ -750,8 +750,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesParsing ActionBuilder[
-	  StringTypesStringTypesParsingRequest,
-	  Void,
+	  *StringTypesStringTypesParsingRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesParsingRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesParsingRequest) (error),
 	]
@@ -762,8 +762,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesPatternValidation ActionBuilder[
-	  StringTypesStringTypesPatternValidationRequest,
-	  Void,
+	  *StringTypesStringTypesPatternValidationRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesPatternValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesPatternValidationRequest) (error),
 	]
@@ -774,8 +774,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesRangeValidation ActionBuilder[
-	  StringTypesStringTypesRangeValidationRequest,
-	  Void,
+	  *StringTypesStringTypesRangeValidationRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesRangeValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRangeValidationRequest) (error),
 	]
@@ -786,8 +786,8 @@ type StringTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	StringTypesRequiredValidation ActionBuilder[
-	  StringTypesStringTypesRequiredValidationRequest,
-	  Void,
+	  *StringTypesStringTypesRequiredValidationRequest,
+	  void,
 	  func(context.Context, *StringTypesStringTypesRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRequiredValidationRequest) (error),
 	]
@@ -799,16 +799,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesArrayItemsRangeValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesArrayItemsRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesArrayItemsRangeValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesArrayItemsRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesArrayItemsRangeValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesArrayItemsRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesArrayItemsRangeValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -820,16 +820,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesArraysParsing: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesArraysParsingRequest,
-				Void,
+				*StringTypesStringTypesArraysParsingRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesArraysParsingRequest,
-				Void,
+				*StringTypesStringTypesArraysParsingRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesArraysParsingRequest,
-				Void,
+				*StringTypesStringTypesArraysParsingRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -841,16 +841,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesEnums: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesEnumsRequest,
-				Void,
+				*StringTypesStringTypesEnumsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesEnumsRequest,
-				Void,
+				*StringTypesStringTypesEnumsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesEnumsRequest,
-				Void,
+				*StringTypesStringTypesEnumsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -862,16 +862,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesNullableArrayItems: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableArrayItemsRequest,
-				Void,
+				*StringTypesStringTypesNullableArrayItemsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableArrayItemsRequest,
-				Void,
+				*StringTypesStringTypesNullableArrayItemsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesNullableArrayItemsRequest,
-				Void,
+				*StringTypesStringTypesNullableArrayItemsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -883,16 +883,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesNullableParsing: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableParsingRequest,
-				Void,
+				*StringTypesStringTypesNullableParsingRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableParsingRequest,
-				Void,
+				*StringTypesStringTypesNullableParsingRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesNullableParsingRequest,
-				Void,
+				*StringTypesStringTypesNullableParsingRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -904,16 +904,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesNullableRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesNullableRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesNullableRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesNullableRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesNullableRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesNullableRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -925,16 +925,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesParsing: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesParsingRequest,
-				Void,
+				*StringTypesStringTypesParsingRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesParsingRequest,
-				Void,
+				*StringTypesStringTypesParsingRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesParsingRequest,
-				Void,
+				*StringTypesStringTypesParsingRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -946,16 +946,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesPatternValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesPatternValidationRequest,
-				Void,
+				*StringTypesStringTypesPatternValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesPatternValidationRequest,
-				Void,
+				*StringTypesStringTypesPatternValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesPatternValidationRequest,
-				Void,
+				*StringTypesStringTypesPatternValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -967,16 +967,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesRangeValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesRangeValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesRangeValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesRangeValidationRequest,
-				Void,
+				*StringTypesStringTypesRangeValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -988,16 +988,16 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 		StringTypesRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				StringTypesStringTypesRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				StringTypesStringTypesRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				StringTypesStringTypesRequiredValidationRequest,
-				Void,
+				*StringTypesStringTypesRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,

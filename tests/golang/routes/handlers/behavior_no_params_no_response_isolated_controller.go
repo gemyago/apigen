@@ -26,8 +26,8 @@ type BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoParamsNoResponse ActionBuilder[
-	  Void,
-	  Void,
+	  void,
+	  void,
 	  func(context.Context) (error),
 	  func(http.ResponseWriter, *http.Request) (error),
 	]
@@ -39,16 +39,16 @@ func newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app *HTTPApp) *Beh
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			newHTTPHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			makeActionBuilderParams[
-				Void,
-				Void,
+				void,
+				void,
 			]{
 				defaultStatus: 202,
 				voidResult:    true,

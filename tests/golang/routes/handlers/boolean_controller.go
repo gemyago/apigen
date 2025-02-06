@@ -106,8 +106,8 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanArrayItems ActionBuilder[
-	  BooleanBooleanArrayItemsRequest,
-	  Void,
+	  *BooleanBooleanArrayItemsRequest,
+	  void,
 	  func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
 	]
@@ -118,8 +118,8 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanNullable ActionBuilder[
-	  BooleanBooleanNullableRequest,
-	  Void,
+	  *BooleanBooleanNullableRequest,
+	  void,
 	  func(context.Context, *BooleanBooleanNullableRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
 	]
@@ -130,8 +130,8 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanNullableArrayItems ActionBuilder[
-	  BooleanBooleanNullableArrayItemsRequest,
-	  Void,
+	  *BooleanBooleanNullableArrayItemsRequest,
+	  void,
 	  func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
 	]
@@ -142,8 +142,8 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanParsing ActionBuilder[
-	  BooleanBooleanParsingRequest,
-	  Void,
+	  *BooleanBooleanParsingRequest,
+	  void,
 	  func(context.Context, *BooleanBooleanParsingRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
 	]
@@ -154,8 +154,8 @@ type BooleanControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BooleanRequiredValidation ActionBuilder[
-	  BooleanBooleanRequiredValidationRequest,
-	  Void,
+	  *BooleanBooleanRequiredValidationRequest,
+	  void,
 	  func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
 	]
@@ -167,16 +167,16 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 		BooleanArrayItems: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				BooleanBooleanArrayItemsRequest,
-				Void,
+				*BooleanBooleanArrayItemsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				BooleanBooleanArrayItemsRequest,
-				Void,
+				*BooleanBooleanArrayItemsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				BooleanBooleanArrayItemsRequest,
-				Void,
+				*BooleanBooleanArrayItemsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -188,16 +188,16 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 		BooleanNullable: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				BooleanBooleanNullableRequest,
-				Void,
+				*BooleanBooleanNullableRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				BooleanBooleanNullableRequest,
-				Void,
+				*BooleanBooleanNullableRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				BooleanBooleanNullableRequest,
-				Void,
+				*BooleanBooleanNullableRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -209,16 +209,16 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 		BooleanNullableArrayItems: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				BooleanBooleanNullableArrayItemsRequest,
-				Void,
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				BooleanBooleanNullableArrayItemsRequest,
-				Void,
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				BooleanBooleanNullableArrayItemsRequest,
-				Void,
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -230,16 +230,16 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 		BooleanParsing: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				BooleanBooleanParsingRequest,
-				Void,
+				*BooleanBooleanParsingRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				BooleanBooleanParsingRequest,
-				Void,
+				*BooleanBooleanParsingRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				BooleanBooleanParsingRequest,
-				Void,
+				*BooleanBooleanParsingRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -251,16 +251,16 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 		BooleanRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				BooleanBooleanRequiredValidationRequest,
-				Void,
+				*BooleanBooleanRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				BooleanBooleanRequiredValidationRequest,
-				Void,
+				*BooleanBooleanRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				BooleanBooleanRequiredValidationRequest,
-				Void,
+				*BooleanBooleanRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,

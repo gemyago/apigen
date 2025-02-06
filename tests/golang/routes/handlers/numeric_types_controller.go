@@ -248,8 +248,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesArrayItems ActionBuilder[
-	  NumericTypesNumericTypesArrayItemsRequest,
-	  Void,
+	  *NumericTypesNumericTypesArrayItemsRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesArrayItemsRequest) (error),
 	]
@@ -260,8 +260,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesNullable ActionBuilder[
-	  NumericTypesNumericTypesNullableRequest,
-	  Void,
+	  *NumericTypesNumericTypesNullableRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableRequest) (error),
 	]
@@ -272,8 +272,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesNullableArrayItems ActionBuilder[
-	  NumericTypesNumericTypesNullableArrayItemsRequest,
-	  Void,
+	  *NumericTypesNumericTypesNullableArrayItemsRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
 	]
@@ -284,8 +284,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesParsing ActionBuilder[
-	  NumericTypesNumericTypesParsingRequest,
-	  Void,
+	  *NumericTypesNumericTypesParsingRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesParsingRequest) (error),
 	]
@@ -296,8 +296,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRangeValidation ActionBuilder[
-	  NumericTypesNumericTypesRangeValidationRequest,
-	  Void,
+	  *NumericTypesNumericTypesRangeValidationRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationRequest) (error),
 	]
@@ -308,8 +308,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRangeValidationExclusive ActionBuilder[
-	  NumericTypesNumericTypesRangeValidationExclusiveRequest,
-	  Void,
+	  *NumericTypesNumericTypesRangeValidationExclusiveRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
 	]
@@ -320,8 +320,8 @@ type NumericTypesControllerBuilderV2 struct {
 	//
 	// Response type: none
 	NumericTypesRequiredValidation ActionBuilder[
-	  NumericTypesNumericTypesRequiredValidationRequest,
-	  Void,
+	  *NumericTypesNumericTypesRequiredValidationRequest,
+	  void,
 	  func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRequiredValidationRequest) (error),
 	]
@@ -333,16 +333,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesArrayItems: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesArrayItemsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesArrayItemsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesArrayItemsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -354,16 +354,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesNullable: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesNullableRequest,
-				Void,
+				*NumericTypesNumericTypesNullableRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesNullableRequest,
-				Void,
+				*NumericTypesNumericTypesNullableRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesNullableRequest,
-				Void,
+				*NumericTypesNumericTypesNullableRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -375,16 +375,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesNullableArrayItems: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesNullableArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesNullableArrayItemsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesNullableArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesNullableArrayItemsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesNullableArrayItemsRequest,
-				Void,
+				*NumericTypesNumericTypesNullableArrayItemsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -396,16 +396,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesParsing: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesParsingRequest,
-				Void,
+				*NumericTypesNumericTypesParsingRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesParsingRequest,
-				Void,
+				*NumericTypesNumericTypesParsingRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesParsingRequest,
-				Void,
+				*NumericTypesNumericTypesParsingRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -417,16 +417,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesRangeValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRangeValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRangeValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesRangeValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -438,16 +438,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesRangeValidationExclusive: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRangeValidationExclusiveRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationExclusiveRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRangeValidationExclusiveRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationExclusiveRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesRangeValidationExclusiveRequest,
-				Void,
+				*NumericTypesNumericTypesRangeValidationExclusiveRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -459,16 +459,16 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 		NumericTypesRequiredValidation: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRequiredValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRequiredValidationRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				NumericTypesNumericTypesRequiredValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRequiredValidationRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				NumericTypesNumericTypesRequiredValidationRequest,
-				Void,
+				*NumericTypesNumericTypesRequiredValidationRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,

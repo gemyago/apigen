@@ -40,8 +40,8 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoParamsNoResponse ActionBuilder[
-	  Void,
-	  Void,
+	  void,
+	  void,
 	  func(context.Context) (error),
 	  func(http.ResponseWriter, *http.Request) (error),
 	]
@@ -52,8 +52,8 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorNoParamsWithResponse ActionBuilder[
-	  Void,
-	  BehaviorNoParamsWithResponse202Response,
+	  void,
+	  *BehaviorNoParamsWithResponse202Response,
 	  func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
 	  func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
 	]
@@ -64,8 +64,8 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorNoStatusDefined ActionBuilder[
-	  Void,
-	  Void,
+	  void,
+	  void,
 	  func(context.Context) (error),
 	  func(http.ResponseWriter, *http.Request) (error),
 	]
@@ -76,8 +76,8 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
 	BehaviorWithParamsAndResponse ActionBuilder[
-	  BehaviorBehaviorWithParamsAndResponseRequest,
-	  BehaviorNoParamsWithResponse202Response,
+	  *BehaviorBehaviorWithParamsAndResponseRequest,
+	  *BehaviorNoParamsWithResponse202Response,
 	  func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
 	  func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
 	]
@@ -88,8 +88,8 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Response type: none
 	BehaviorWithStatusDefined ActionBuilder[
-	  Void,
-	  Void,
+	  void,
+	  void,
 	  func(context.Context) (error),
 	  func(http.ResponseWriter, *http.Request) (error),
 	]
@@ -101,16 +101,16 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			newHTTPHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			makeActionBuilderParams[
-				Void,
-				Void,
+				void,
+				void,
 			]{
 				defaultStatus: 202,
 				voidResult:    true,
@@ -122,16 +122,16 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 		BehaviorNoParamsWithResponse: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParams[
-				Void,
-				BehaviorNoParamsWithResponse202Response,
+				void,
+				*BehaviorNoParamsWithResponse202Response,
 			](),
 			newHTTPHandlerAdapterNoParams[
-				Void,
-				BehaviorNoParamsWithResponse202Response,
+				void,
+				*BehaviorNoParamsWithResponse202Response,
 			](),
 			makeActionBuilderParams[
-				Void,
-				BehaviorNoParamsWithResponse202Response,
+				void,
+				*BehaviorNoParamsWithResponse202Response,
 			]{
 				defaultStatus: 202,
 				paramsParser:  makeVoidParamsParserV2(app),
@@ -142,16 +142,16 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 		BehaviorNoStatusDefined: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			newHTTPHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			makeActionBuilderParams[
-				Void,
-				Void,
+				void,
+				void,
 			]{
 				defaultStatus: 200,
 				voidResult:    true,
@@ -163,16 +163,16 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 		BehaviorWithParamsAndResponse: makeActionBuilder(
 			app,
 			newHandlerAdapter[
-				BehaviorBehaviorWithParamsAndResponseRequest,
-				BehaviorNoParamsWithResponse202Response,
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorNoParamsWithResponse202Response,
 			](),
 			newHTTPHandlerAdapter[
-				BehaviorBehaviorWithParamsAndResponseRequest,
-				BehaviorNoParamsWithResponse202Response,
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorNoParamsWithResponse202Response,
 			](),
 			makeActionBuilderParams[
-				BehaviorBehaviorWithParamsAndResponseRequest,
-				BehaviorNoParamsWithResponse202Response,
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorNoParamsWithResponse202Response,
 			]{
 				defaultStatus: 202,
 				paramsParser:  newParamsParserBehaviorBehaviorWithParamsAndResponse(app),
@@ -183,16 +183,16 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 		BehaviorWithStatusDefined: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			newHTTPHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			makeActionBuilderParams[
-				Void,
-				Void,
+				void,
+				void,
 			]{
 				defaultStatus: 202,
 				voidResult:    true,

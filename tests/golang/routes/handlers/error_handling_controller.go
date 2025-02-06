@@ -47,8 +47,8 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingActionErrors ActionBuilder[
-	  Void,
-	  Void,
+	  void,
+	  void,
 	  func(context.Context) (error),
 	  func(http.ResponseWriter, *http.Request) (error),
 	]
@@ -59,8 +59,8 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingParsingErrors ActionBuilder[
-	  ErrorHandlingErrorHandlingParsingErrorsRequest,
-	  Void,
+	  *ErrorHandlingErrorHandlingParsingErrorsRequest,
+	  void,
 	  func(context.Context, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingParsingErrorsRequest) (error),
 	]
@@ -71,8 +71,8 @@ type ErrorHandlingControllerBuilderV2 struct {
 	//
 	// Response type: none
 	ErrorHandlingValidationErrors ActionBuilder[
-	  ErrorHandlingErrorHandlingValidationErrorsRequest,
-	  Void,
+	  *ErrorHandlingErrorHandlingValidationErrorsRequest,
+	  void,
 	  func(context.Context, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
 	  func(http.ResponseWriter, *http.Request, *ErrorHandlingErrorHandlingValidationErrorsRequest) (error),
 	]
@@ -84,16 +84,16 @@ func newErrorHandlingControllerBuilderV2(app *HTTPApp) *ErrorHandlingControllerB
 		ErrorHandlingActionErrors: makeActionBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			newHTTPHandlerAdapterNoParamsNoResponse[
-				Void,
-				Void,
+				void,
+				void,
 			](),
 			makeActionBuilderParams[
-				Void,
-				Void,
+				void,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -105,16 +105,16 @@ func newErrorHandlingControllerBuilderV2(app *HTTPApp) *ErrorHandlingControllerB
 		ErrorHandlingParsingErrors: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ErrorHandlingErrorHandlingParsingErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingParsingErrorsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ErrorHandlingErrorHandlingParsingErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingParsingErrorsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ErrorHandlingErrorHandlingParsingErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingParsingErrorsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
@@ -126,16 +126,16 @@ func newErrorHandlingControllerBuilderV2(app *HTTPApp) *ErrorHandlingControllerB
 		ErrorHandlingValidationErrors: makeActionBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				ErrorHandlingErrorHandlingValidationErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingValidationErrorsRequest,
+				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				ErrorHandlingErrorHandlingValidationErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingValidationErrorsRequest,
+				void,
 			](),
 			makeActionBuilderParams[
-				ErrorHandlingErrorHandlingValidationErrorsRequest,
-				Void,
+				*ErrorHandlingErrorHandlingValidationErrorsRequest,
+				void,
 			]{
 				defaultStatus: 204,
 				voidResult:    true,
