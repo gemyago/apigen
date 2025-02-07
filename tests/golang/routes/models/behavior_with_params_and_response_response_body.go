@@ -13,4 +13,5 @@ var _ = fmt.Sprint
 
 type BehaviorWithParamsAndResponseResponseBody struct { 
 	Field1 string `json:"field1,omitempty"`
+	Field2 *BehaviorWithParamsAndResponseResponseBody `json:"field2,omitempty"`
 }

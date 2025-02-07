@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestBehavior(t *testing.T) {
@@ -67,6 +69,28 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodPost,
 				body:   bytes.NewReader([]byte(body)),
 				path:   "/behavior/with-params-and-response",
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
+				},
+			}
+		})
+		runRouteTestCase(t, "should handle response body serialization errors", setupRouter, func() testCase {
+			resBody := models.BehaviorWithParamsAndResponseResponseBody{
+				Field1: fake.Lorem().Word(),
+			}
+			resBody.Field2 = &resBody // Circular reference will cause serialization error
+			bodyData, err := json.Marshal(resBody)
+			require.Errorf(t, err, "body was marshalled successfully: %v", bodyData)
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.nextResult = &resBody
+					return testActions
+				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return

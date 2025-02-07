@@ -45,3 +45,6 @@ components:
       properties:
         field1: 
           type: string
+        field2:
+          description: Self referencing field to test response serialization failures
+          $ref: "#/components/schemas/BehaviorWithParamsAndResponseResponseBody"
