@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -32,7 +34,7 @@ func TestBehavior(t *testing.T) {
 		return testActions, router.mux
 	}
 
-	t.Run("app", func(t *testing.T) {
+	t.Run("errors", func(t *testing.T) {
 		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodPost,
@@ -51,6 +53,20 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam2": []string{strconv.Itoa(fake.IntBetween(5001, 1000000))}},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
+				},
+			}
+		})
+		runRouteTestCase(t, "should handle request body validation errors", setupRouter, func() testCase {
+			body := fmt.Sprintf(`{"field2":%v}`, fake.IntBetween(5001, 1000000))
+			return testCase{
+				method: http.MethodPost,
+				body:   bytes.NewReader([]byte(body)),
+				path:   "/behavior/with-params-and-response",
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
