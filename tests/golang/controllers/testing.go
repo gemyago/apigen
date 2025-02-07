@@ -212,7 +212,7 @@ type mockActionV2[
 	TParams any,
 	TResult any,
 ] struct {
-	isHttpAction bool
+	isHTTPAction bool
 	nextError    error
 	nextResult   TResult
 	calls        []mockActionCall[TParams]

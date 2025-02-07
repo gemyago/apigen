@@ -19,7 +19,7 @@ func TestObjects(t *testing.T) {
 	fake := faker.New()
 
 	type testCase = routeTestCase[*objectsControllerTestActions]
-	setupRouter := func(tc testCase) (*objectsControllerTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*objectsControllerTestActions, http.Handler) {
 		testActions := &objectsControllerTestActions{}
 		controller := &objectsController{testActions}
 		router := &routerAdapter{

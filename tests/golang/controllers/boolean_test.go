@@ -21,7 +21,7 @@ func TestBoolean(t *testing.T) {
 	fake := faker.New()
 
 	type testCase = routeTestCase[*booleanControllerTestActions]
-	setupRouter := func(tc testCase) (*booleanControllerTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*booleanControllerTestActions, http.Handler) {
 		testActions := &booleanControllerTestActions{}
 		controller := &booleanController{testActions}
 		router := &routerAdapter{

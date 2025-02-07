@@ -48,7 +48,7 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/no-params-no-response",
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
-					testActions.noParamsNoResponse.isHttpAction = true
+					testActions.noParamsNoResponse.isHTTPAction = true
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
@@ -114,7 +114,7 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
-					testActions.noParamsWithResponse.isHttpAction = true
+					testActions.noParamsWithResponse.isHTTPAction = true
 					testActions.noParamsWithResponse.nextResult = wantResponse
 					return testActions
 				},
@@ -171,6 +171,32 @@ func TestBehavior(t *testing.T) {
 			}
 		})
 
+		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-no-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsNoResponse.isHTTPAction = true
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
+					lastCall := testActions.withParamsNoResponse.calls[0]
+					assert.NotNil(t, lastCall.req)
+					assert.NotNil(t, lastCall.res)
+					assert.Equal(t, wantParams, testActions.withParamsNoResponse.calls[0].params)
+				},
+			}
+		})
+
 		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodGet,
@@ -213,6 +239,37 @@ func TestBehavior(t *testing.T) {
 					}
 
 					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
+					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
+			wantResponse := &models.BehaviorNoParamsWithResponse202Response{
+				Field1: fake.Lorem().Word(),
+			}
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.isHTTPAction = true
+					testActions.withParamsAndResponse.nextResult = wantResponse
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+					lastCall := testActions.withParamsAndResponse.calls[0]
+					assert.NotNil(t, lastCall.req)
+					assert.NotNil(t, lastCall.res)
 					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
 					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
 				},

@@ -11,7 +11,7 @@ import (
 
 func TestBehaviorNoParamsNoResponse(t *testing.T) {
 	type testCase = routeTestCase[*behaviorControllerNoParamsNoResponseTestActions]
-	setupRouter := func(tc testCase) (*behaviorControllerNoParamsNoResponseTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*behaviorControllerNoParamsNoResponseTestActions, http.Handler) {
 		testActions := &behaviorControllerNoParamsNoResponseTestActions{}
 		controller := behaviorControllerNoParamsNoResponse{testActions}
 		router := &routerAdapter{

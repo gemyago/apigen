@@ -18,7 +18,7 @@ func TestArrays(t *testing.T) {
 	fake := faker.New()
 
 	type testCase = routeTestCase[*arraysControllerTestActions]
-	setupRouter := func(tc testCase) (*arraysControllerTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*arraysControllerTestActions, http.Handler) {
 		testActions := &arraysControllerTestActions{}
 		controller := &arraysController{testActions}
 		router := &routerAdapter{

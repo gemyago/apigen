@@ -32,7 +32,7 @@ type behaviorController struct {
 func (c *behaviorController) BehaviorNoParamsNoResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.noParamsNoResponse.isHttpAction {
+	if c.testActions.noParamsNoResponse.isHTTPAction {
 		return builder.BehaviorNoParamsNoResponse.HandleWithHTTP(
 			c.testActions.noParamsNoResponse.httpActionNoParamsNoResponse,
 		)
@@ -45,7 +45,7 @@ func (c *behaviorController) BehaviorNoParamsNoResponse(
 func (c *behaviorController) BehaviorNoParamsWithResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.noParamsWithResponse.isHttpAction {
+	if c.testActions.noParamsWithResponse.isHTTPAction {
 		return builder.BehaviorNoParamsWithResponse.HandleWithHTTP(
 			c.testActions.noParamsWithResponse.httpActionNoParamsWithResponse,
 		)
@@ -58,7 +58,7 @@ func (c *behaviorController) BehaviorNoParamsWithResponse(
 func (c *behaviorController) BehaviorWithParamsNoResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.withParamsNoResponse.isHttpAction {
+	if c.testActions.withParamsNoResponse.isHTTPAction {
 		return builder.BehaviorWithParamsNoResponse.HandleWithHTTP(
 			c.testActions.withParamsNoResponse.httpActionWithParamsNoResponse,
 		)
@@ -71,7 +71,7 @@ func (c *behaviorController) BehaviorWithParamsNoResponse(
 func (c *behaviorController) BehaviorWithParamsAndResponse(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.withParamsAndResponse.isHttpAction {
+	if c.testActions.withParamsAndResponse.isHTTPAction {
 		return builder.BehaviorWithParamsAndResponse.HandleWithHTTP(
 			c.testActions.withParamsAndResponse.httpAction,
 		)
@@ -84,7 +84,7 @@ func (c *behaviorController) BehaviorWithParamsAndResponse(
 func (c *behaviorController) BehaviorNoStatusDefined(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.noStatusDefined.isHttpAction {
+	if c.testActions.noStatusDefined.isHTTPAction {
 		return builder.BehaviorNoStatusDefined.HandleWithHTTP(
 			c.testActions.noStatusDefined.httpActionNoParamsNoResponse,
 		)
@@ -97,7 +97,7 @@ func (c *behaviorController) BehaviorNoStatusDefined(
 func (c *behaviorController) BehaviorWithStatusDefined(
 	builder *handlers.BehaviorControllerBuilderV2,
 ) http.Handler {
-	if c.testActions.withStatusDefined.isHttpAction {
+	if c.testActions.withStatusDefined.isHTTPAction {
 		return builder.BehaviorWithStatusDefined.HandleWithHTTP(
 			c.testActions.withStatusDefined.httpActionNoParamsNoResponse,
 		)

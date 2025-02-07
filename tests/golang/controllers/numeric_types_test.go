@@ -21,7 +21,7 @@ func TestNumericTypes(t *testing.T) {
 	fake := faker.New()
 
 	type testCase = routeTestCase[*numericTypesControllerTestActions]
-	setupRouter := func(tc testCase) (*numericTypesControllerTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*numericTypesControllerTestActions, http.Handler) {
 		testActions := &numericTypesControllerTestActions{}
 		controller := &numericTypesController{testActions}
 		router := &routerAdapter{

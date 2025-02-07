@@ -23,7 +23,7 @@ func TestStringTypes(t *testing.T) {
 	fake := faker.New()
 
 	type testCase = routeTestCase[*stringTypesControllerTestActions]
-	setupRouter := func(tc testCase) (*stringTypesControllerTestActions, http.Handler) {
+	setupRouter := func(_ testCase) (*stringTypesControllerTestActions, http.Handler) {
 		testActions := &stringTypesControllerTestActions{}
 		controller := &stringTypesController{testActions: testActions}
 		router := &routerAdapter{
