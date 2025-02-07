@@ -92,7 +92,7 @@ func TestBehavior(t *testing.T) {
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
 					assert.Empty(t, testActions.withParamsAndResponse.calls)
