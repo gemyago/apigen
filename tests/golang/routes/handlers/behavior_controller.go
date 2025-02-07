@@ -29,6 +29,8 @@ type _ func() BehaviorNoParamsWithResponse202Response
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
+	// QueryParam2 is parsed from request query and declared as queryParam2.
+	QueryParam2 int32
 }
 
 // BehaviorBehaviorWithParamsNoResponseRequest represents params for behaviorWithParamsNoResponse operation

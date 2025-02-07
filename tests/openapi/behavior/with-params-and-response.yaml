@@ -8,6 +8,11 @@ get:
       in: query
       schema:
         type: string
+    - name: queryParam2
+      in: query
+      schema:
+        type: integer
+        format: int32
   responses:
     '202':
       description: Request succeeded

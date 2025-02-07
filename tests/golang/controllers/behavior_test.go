@@ -31,6 +31,20 @@ func TestBehavior(t *testing.T) {
 		return testActions, router.mux
 	}
 
+	t.Run("app", func(t *testing.T) {
+		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+				},
+			}
+		})
+	})
+
 	t.Run("noParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
 			return testCase{
