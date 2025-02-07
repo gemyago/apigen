@@ -17,6 +17,7 @@ type _ func() BehaviorNoParamsWithResponse202Response
 type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 	bindQueryParam1 requestParamBinder[[]string, string]
 	bindQueryParam2 requestParamBinder[[]string, int32]
+	bindPayload requestParamBinder[*http.Request, *BehaviorWithParamsAndResponseRequestBody]
 }
 
 func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsAndResponseRequest, error) {
@@ -27,6 +28,8 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 	queryParamsCtx := bindingCtx.Fork("query")
 	p.bindQueryParam1(queryParamsCtx.Fork("queryParam1"), readQueryValue("queryParam1", query), &reqParams.QueryParam1)
 	p.bindQueryParam2(queryParamsCtx.Fork("queryParam2"), readQueryValue("queryParam2", query), &reqParams.QueryParam2)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -46,7 +49,16 @@ func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsPa
 				app.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
+				NewMinMaxValueValidator[int32](0, false, true),
+				NewMinMaxValueValidator[int32](5000, false, false),
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *BehaviorWithParamsAndResponseRequestBody]{
+			required: false,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*BehaviorWithParamsAndResponseRequestBody],
+			),
+			validateValue: NewBehaviorWithParamsAndResponseRequestBodyValidator(),
 		}),
 	}
 }

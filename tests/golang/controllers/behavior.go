@@ -19,7 +19,7 @@ type behaviorControllerTestActions struct {
 	]
 	withParamsAndResponse mockActionV2[
 		*handlers.BehaviorBehaviorWithParamsAndResponseRequest,
-		*models.BehaviorNoParamsWithResponse202Response,
+		*models.BehaviorWithParamsAndResponseResponseBody,
 	]
 	noStatusDefined   mockActionV2[mockVoid, mockVoid]
 	withStatusDefined mockActionV2[mockVoid, mockVoid]

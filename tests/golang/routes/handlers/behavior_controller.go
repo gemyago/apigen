@@ -31,6 +31,8 @@ type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	QueryParam1 string
 	// QueryParam2 is parsed from request query and declared as queryParam2.
 	QueryParam2 int32
+	// Payload is parsed from request body and declared as payload.
+	Payload *BehaviorWithParamsAndResponseRequestBody
 }
 
 // BehaviorBehaviorWithParamsNoResponseRequest represents params for behaviorWithParamsNoResponse operation
@@ -84,12 +86,12 @@ type BehaviorControllerBuilderV2 struct {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorWithParamsAndResponseResponseBody
 	BehaviorWithParamsAndResponse ActionBuilder[
 		*BehaviorBehaviorWithParamsAndResponseRequest,
-		*BehaviorNoParamsWithResponse202Response,
-		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
-		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorNoParamsWithResponse202Response, error),
+		*BehaviorWithParamsAndResponseResponseBody,
+		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
+		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
 	]
 
 	// GET /behavior/with-params-no-response
@@ -186,15 +188,15 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			app,
 			newHandlerAdapter[
 				*BehaviorBehaviorWithParamsAndResponseRequest,
-				*BehaviorNoParamsWithResponse202Response,
+				*BehaviorWithParamsAndResponseResponseBody,
 			](),
 			newHTTPHandlerAdapter[
 				*BehaviorBehaviorWithParamsAndResponseRequest,
-				*BehaviorNoParamsWithResponse202Response,
+				*BehaviorWithParamsAndResponseResponseBody,
 			](),
 			makeActionBuilderParams[
 				*BehaviorBehaviorWithParamsAndResponseRequest,
-				*BehaviorNoParamsWithResponse202Response,
+				*BehaviorWithParamsAndResponseResponseBody,
 			]{
 				defaultStatus: 202,
 				paramsParser:  newParamsParserBehaviorBehaviorWithParamsAndResponse(app),
@@ -271,7 +273,7 @@ type BehaviorControllerV2 interface {
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: BehaviorNoParamsWithResponse202Response
+	// Response type: BehaviorWithParamsAndResponseResponseBody
 	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilderV2) http.Handler
 
 	// GET /behavior/with-params-no-response

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"testing"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -37,6 +38,19 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
+				},
+			}
+		})
+		runRouteTestCase(t, "should handle request path params validation errors", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam2": []string{strconv.Itoa(fake.IntBetween(5001, 1000000))}},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
@@ -328,7 +342,7 @@ func TestBehavior(t *testing.T) {
 			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
 				QueryParam1: fake.Lorem().Word(),
 			}
-			wantResponse := &models.BehaviorNoParamsWithResponse202Response{
+			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
 				Field1: fake.Lorem().Word(),
 			}
 			return testCase{
@@ -355,7 +369,7 @@ func TestBehavior(t *testing.T) {
 			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
 				QueryParam1: fake.Lorem().Word(),
 			}
-			wantResponse := &models.BehaviorNoParamsWithResponse202Response{
+			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
 				Field1: fake.Lorem().Word(),
 			}
 			return testCase{

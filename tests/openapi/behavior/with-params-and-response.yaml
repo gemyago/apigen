@@ -13,13 +13,35 @@ post:
       schema:
         type: integer
         format: int32
+        minimum: 0
+        maximum: 5000
+  requestBody:
+    required: false
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/BehaviorWithParamsAndResponseRequestBody"
   responses:
     '202':
       description: Request succeeded
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              field1: 
-                type: string
+            $ref: "#/components/schemas/BehaviorWithParamsAndResponseResponseBody"
+components:
+  schemas:
+    BehaviorWithParamsAndResponseRequestBody:
+      type: object
+      properties:
+        field1:
+          type: string
+        field2:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 5000
+    BehaviorWithParamsAndResponseResponseBody:
+      type: object
+      properties:
+        field1: 
+          type: string
