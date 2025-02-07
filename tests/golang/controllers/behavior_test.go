@@ -69,6 +69,49 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+		runRouteTestCase(t, "should handle action errors with default handler", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+				},
+			}
+		})
+		runRouteTestCase(t, "should handle action errors with custom handler", setupRouter, func() testCase {
+			wantStatusCode := fake.IntBetween(400, 500)
+			wantErrorBody := fake.Lorem().Word()
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
+				},
+				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+					return append(opts, handlers.WithActionErrorHandler(
+						func(_ *http.Request, w http.ResponseWriter, err error) {
+							w.WriteHeader(wantStatusCode)
+							_, _ = w.Write([]byte(wantErrorBody + ":" + err.Error()))
+						},
+					))
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, wantStatusCode, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Contains(t, recorder.Body.String(), wantErrorBody)
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+				},
+			}
+		})
 	})
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {
