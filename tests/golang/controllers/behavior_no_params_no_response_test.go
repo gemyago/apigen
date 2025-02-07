@@ -10,7 +10,8 @@ import (
 )
 
 func TestBehaviorNoParamsNoResponse(t *testing.T) {
-	setupRouter := func() (*behaviorControllerNoParamsNoResponseTestActions, http.Handler) {
+	type testCase = routeTestCase[*behaviorControllerNoParamsNoResponseTestActions]
+	setupRouter := func(tc testCase) (*behaviorControllerNoParamsNoResponseTestActions, http.Handler) {
 		testActions := &behaviorControllerNoParamsNoResponseTestActions{}
 		controller := behaviorControllerNoParamsNoResponse{testActions}
 		router := &routerAdapter{
@@ -22,8 +23,6 @@ func TestBehaviorNoParamsNoResponse(t *testing.T) {
 		)
 		return testActions, router.mux
 	}
-
-	type testCase = routeTestCase[*behaviorControllerNoParamsNoResponseTestActions]
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {

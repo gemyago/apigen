@@ -20,7 +20,8 @@ import (
 func TestBoolean(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*booleanControllerTestActions, http.Handler) {
+	type testCase = routeTestCase[*booleanControllerTestActions]
+	setupRouter := func(tc testCase) (*booleanControllerTestActions, http.Handler) {
 		testActions := &booleanControllerTestActions{}
 		controller := &booleanController{testActions}
 		router := &routerAdapter{
@@ -45,8 +46,6 @@ func TestBoolean(t *testing.T) {
 		}
 		return res
 	}
-
-	type testCase = routeTestCase[*booleanControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
 		randomReq := func() *handlers.BooleanBooleanParsingRequest {

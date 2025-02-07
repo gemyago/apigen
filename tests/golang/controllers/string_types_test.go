@@ -22,7 +22,8 @@ import (
 func TestStringTypes(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*stringTypesControllerTestActions, http.Handler) {
+	type testCase = routeTestCase[*stringTypesControllerTestActions]
+	setupRouter := func(tc testCase) (*stringTypesControllerTestActions, http.Handler) {
 		testActions := &stringTypesControllerTestActions{}
 		controller := &stringTypesController{testActions: testActions}
 		router := &routerAdapter{
@@ -76,8 +77,6 @@ func TestStringTypes(t *testing.T) {
 			return lo.ToPtr(lo.Must(time.Parse(time.DateOnly, v.Format(time.DateOnly))))
 		})
 	}
-
-	type testCase = routeTestCase[*stringTypesControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
 		randomReq := func(

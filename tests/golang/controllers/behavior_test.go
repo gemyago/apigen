@@ -16,8 +16,10 @@ import (
 func TestBehavior(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*behaviorControllerTestActions, http.Handler) {
-		testActions := &behaviorControllerTestActions{}
+	type testCase = routeTestCase[*behaviorControllerTestActions]
+
+	setupRouter := func(tc testCase) (*behaviorControllerTestActions, http.Handler) {
+		testActions := tc.setupActions(&behaviorControllerTestActions{})
 		controller := &behaviorController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
@@ -25,8 +27,6 @@ func TestBehavior(t *testing.T) {
 		handlers.RegisterBehaviorRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
 		return testActions, router.mux
 	}
-
-	type testCase = routeTestCase[*behaviorControllerTestActions]
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
@@ -47,8 +47,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-no-response",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noParamsNoResponse.isHttpAction = true
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -57,8 +58,8 @@ func TestBehavior(t *testing.T) {
 
 					assert.Len(t, testActions.noParamsNoResponse.calls, 1)
 					lastCall := testActions.noParamsNoResponse.calls[0]
-					assert.Nil(t, lastCall.req)
-					assert.Nil(t, lastCall.res)
+					assert.NotNil(t, lastCall.req)
+					assert.NotNil(t, lastCall.res)
 				},
 			}
 		})
@@ -67,8 +68,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-no-response",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -89,8 +91,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noParamsWithResponse.nextResult = wantResponse
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -110,9 +113,10 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noParamsWithResponse.isHttpAction = true
 					testActions.noParamsWithResponse.nextResult = wantResponse
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -121,8 +125,8 @@ func TestBehavior(t *testing.T) {
 
 					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
 					lastCall := testActions.noParamsWithResponse.calls[0]
-					assert.Nil(t, lastCall.req)
-					assert.Nil(t, lastCall.res)
+					assert.NotNil(t, lastCall.req)
+					assert.NotNil(t, lastCall.res)
 					assert.Equal(t, wantResponse, testActions.noParamsWithResponse.unmarshalResult(t, recorder.Body))
 				},
 			}
@@ -132,8 +136,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noParamsWithResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -171,8 +176,9 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/with-params-no-response",
 				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -197,8 +203,9 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withParamsAndResponse.nextResult = wantResponse
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -217,8 +224,9 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -250,8 +258,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-status-defined",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.noStatusDefined.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
@@ -283,8 +292,9 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodPost,
 				path:   "/behavior/with-status-defined",
-				setupActions: func(testActions *behaviorControllerTestActions) {
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withStatusDefined.nextError = errors.New(fake.Lorem().Word())
+					return testActions
 				},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {

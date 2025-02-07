@@ -62,11 +62,11 @@ type routeTestCase[TActions any] struct {
 	path         string
 	query        url.Values
 	body         io.Reader
-	setupActions func(TActions)
+	setupActions func(TActions) TActions
 	expect       routeTestCaseExpectFn[TActions]
 }
 
-type routeTestCaseSetupFn[TActions any] func() (TActions, http.Handler)
+type routeTestCaseSetupFn[TActions any] func(tc routeTestCase[TActions]) (TActions, http.Handler)
 
 func runRouteTestCase[TActions any](
 	t *testing.T,
@@ -76,10 +76,10 @@ func runRouteTestCase[TActions any](
 ) {
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
-		testActions, router := setupFn()
-		if tc.setupActions != nil {
-			tc.setupActions(testActions)
+		if tc.setupActions == nil {
+			tc.setupActions = func(a TActions) TActions { return a }
 		}
+		testActions, router := setupFn(tc)
 		method := tc.method
 		if method == "" {
 			method = http.MethodGet
