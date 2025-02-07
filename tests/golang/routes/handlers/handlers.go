@@ -16,6 +16,15 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
+// TrackedResponseWriter allows checking if headers or body were written.
+type TrackedResponseWriter interface {
+	// HeaderWritten returns true if headers were written.
+	HeaderWritten() bool
+
+	// BodyWritten returns true if body was written.
+	BodyWritten() bool
+}
+
 type httpRouter interface {
 	// PathValue returns a named path parameter of a given name
 	PathValue(r *http.Request, paramName string) string
@@ -27,15 +36,21 @@ type httpRouter interface {
 // ParsingErrorHandler will process errors during parsing and validation stages
 // The default implementation will respond with 400 status code and standard
 // serialization of ParsingError type.
-type ParsingErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
+// The writer may implement TrackedResponseWriter that can be used to check if
+// headers or body were written.
+type ParsingErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
 
 // ActionErrorHandler will process errors produced by controller actions
 // The default implementation will respond with 500 and no output.
-type ActionErrorHandler func(r *http.Request, w http.ResponseWriter, err error)
+// The writer may implement TrackedResponseWriter that can be used to check if
+// headers or body were written.
+type ActionErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
 
-// ResponseErrorHandler will process errors that may occur while writing response
-// At this stage either logging or panic is possible.
-type ResponseErrorHandler func(r *http.Request, err error)
+// ResponseErrorHandler will process errors that may occur while writing response.
+// The writer may implement TrackedResponseWriter that can be used to check if
+// headers or body were written. If headers are written it then usually reasonable
+// to either log error or panic.
+type ResponseErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
 
 // SlogLogger is a fully compatible with slog and used to allow injecting the instance.
 type SlogLogger interface {
@@ -84,21 +99,24 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 		logger:       slog.Default(),
 		knownParsers: newKnownParsers(),
 	}
-	app.handleActionErrors = func(r *http.Request, w http.ResponseWriter, err error) {
+	app.handleActionErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
-	app.handleResponseErrors = func(r *http.Request, err error) {
+	app.handleResponseErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
+		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
 	}
-	app.handleParsingErrors = func(r *http.Request, w http.ResponseWriter, err error) {
-		w.Header().Add("content-type", "application/json; charset=utf-8")
+	app.handleParsingErrors = func(w http.ResponseWriter, r *http.Request, err error) {
+		w.Header().Add("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusBadRequest)
 		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
 		var aggregatedErr internal.AggregatedBindingError
 		if ok := errors.As(err, &aggregatedErr); ok {
 			if writeErr := json.NewEncoder(w).Encode(aggregatedErr); writeErr != nil {
-				app.handleResponseErrors(r, writeErr)
+				app.handleResponseErrors(w, r, writeErr)
 			}
 			return
 		}
@@ -517,6 +535,41 @@ func newHTTPHandlerAdapterNoParamsNoResponse[
 	}
 }
 
+type actionsResponseWriter struct {
+	targetWriter  http.ResponseWriter
+	headerWritten bool
+	bodyWritten   bool
+	defaultStatus int
+}
+
+func (w *actionsResponseWriter) HeaderWritten() bool {
+	return w.headerWritten
+}
+
+func (w *actionsResponseWriter) BodyWritten() bool {
+	return w.bodyWritten
+}
+
+func (w *actionsResponseWriter) Header() http.Header {
+	return w.targetWriter.Header()
+}
+
+func (w *actionsResponseWriter) WriteHeader(statusCode int) {
+	w.headerWritten = true
+	w.targetWriter.WriteHeader(statusCode)
+}
+
+func (w *actionsResponseWriter) Write(data []byte) (int, error) {
+	if !w.headerWritten {
+		w.WriteHeader(w.defaultStatus)
+	}
+	w.bodyWritten = true
+	return w.targetWriter.Write(data)
+}
+
+var _ TrackedResponseWriter = &actionsResponseWriter{}
+var _ http.ResponseWriter = &actionsResponseWriter{}
+
 func makeActionBuilder[
 	TReq any,
 	TRes any,
@@ -530,15 +583,20 @@ func makeActionBuilder[
 ) ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler] {
 	createHandler := func(handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error)) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			aw := &actionsResponseWriter{
+				targetWriter:  w,
+				defaultStatus: params.defaultStatus,
+			}
+
 			reqParams, err := params.paramsParser.parse(app.router, r)
 			if err != nil {
-				app.handleParsingErrors(r, w, err)
+				app.handleParsingErrors(aw, r, err)
 				return
 			}
 
-			resData, err := handler(w, r, reqParams)
+			resData, err := handler(aw, r, reqParams)
 			if err != nil {
-				app.handleActionErrors(r, w, err)
+				app.handleActionErrors(aw, r, err)
 				return
 			}
 			if params.voidResult {
@@ -547,9 +605,11 @@ func makeActionBuilder[
 			}
 
 			w.Header().Add("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(params.defaultStatus)
-			if encodingErr := json.NewEncoder(w).Encode(resData); encodingErr != nil {
-				app.handleResponseErrors(r, encodingErr)
+			// Not sending the status here. The action writer will send it in case of
+			// success. If error has happened while encoding, then the error handler will have
+			// a chance to set the status.
+			if encodingErr := json.NewEncoder(aw).Encode(resData); encodingErr != nil {
+				app.handleResponseErrors(aw, r, encodingErr)
 			}
 		})
 	}

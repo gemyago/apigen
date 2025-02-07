@@ -95,7 +95,7 @@ func TestBehavior(t *testing.T) {
 					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
-					assert.Empty(t, testActions.withParamsAndResponse.calls)
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
 				},
 			}
 		})
@@ -108,7 +108,7 @@ func TestBehavior(t *testing.T) {
 				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
 				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
 					return append(opts, handlers.WithParsingErrorHandler(
-						func(_ *http.Request, w http.ResponseWriter, err error) {
+						func(w http.ResponseWriter, _ *http.Request, err error) {
 							w.WriteHeader(wantStatusCode)
 							_, _ = w.Write([]byte(wantErrorBody + ":" + err.Error()))
 						},
@@ -151,7 +151,7 @@ func TestBehavior(t *testing.T) {
 				},
 				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
 					return append(opts, handlers.WithActionErrorHandler(
-						func(_ *http.Request, w http.ResponseWriter, err error) {
+						func(w http.ResponseWriter, _ *http.Request, err error) {
 							w.WriteHeader(wantStatusCode)
 							_, _ = w.Write([]byte(wantErrorBody + ":" + err.Error()))
 						},
