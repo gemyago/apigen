@@ -301,6 +301,26 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+
+		runRouteTestCase(t, "should fail with error if http action", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-no-response",
+				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsNoResponse.isHTTPAction = true
+					testActions.withParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
+				},
+			}
+		})
 	})
 
 	t.Run("withParamsAndResponse", func(t *testing.T) {
