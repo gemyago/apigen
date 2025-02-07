@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
@@ -58,12 +59,13 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
-	method       string
-	path         string
-	query        url.Values
-	body         io.Reader
-	setupActions func(TActions) TActions
-	expect       routeTestCaseExpectFn[TActions]
+	method            string
+	path              string
+	query             url.Values
+	body              io.Reader
+	appendHTTPAppOpts func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt
+	setupActions      func(TActions) TActions
+	expect            routeTestCaseExpectFn[TActions]
 }
 
 type routeTestCaseSetupFn[TActions any] func(tc routeTestCase[TActions]) (TActions, http.Handler)
@@ -76,6 +78,13 @@ func runRouteTestCase[TActions any](
 ) {
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
+		if tc.appendHTTPAppOpts == nil {
+			tc.appendHTTPAppOpts = func(
+				opts ...handlers.HTTPAppOpt,
+			) []handlers.HTTPAppOpt {
+				return opts
+			}
+		}
 		if tc.setupActions == nil {
 			tc.setupActions = func(a TActions) TActions { return a }
 		}

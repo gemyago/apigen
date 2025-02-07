@@ -24,7 +24,10 @@ func TestBehavior(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBehaviorRoutesV2(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterBehaviorRoutesV2(
+			controller,
+			handlers.NewHTTPApp(router, tc.appendHTTPAppOpts(handlers.WithLogger(newLogger()))...),
+		)
 		return testActions, router.mux
 	}
 
