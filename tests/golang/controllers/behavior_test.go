@@ -36,10 +36,36 @@ func TestBehavior(t *testing.T) {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+					if !assert.Equal(t, 400, recorder.Code, "Unexpected response: %v", recorder.Body) {
 						return
 					}
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
+				},
+			}
+		})
+		runRouteTestCase(t, "should handle parsing errors with custom handler", setupRouter, func() testCase {
+			wantStatusCode := fake.IntBetween(400, 500)
+			wantErrorBody := fake.Lorem().Word()
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
+				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+					return append(opts, handlers.WithParsingErrorHandler(
+						func(_ *http.Request, w http.ResponseWriter, err error) {
+							w.WriteHeader(wantStatusCode)
+							_, _ = w.Write([]byte(wantErrorBody + ":" + err.Error()))
+						},
+					))
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, wantStatusCode, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+					assert.Contains(t, recorder.Body.String(), wantErrorBody)
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
 				},
 			}
 		})
