@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to test if both params and response defined
   operationId: behaviorWithParamsAndResponse
   tags:

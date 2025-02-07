@@ -25,7 +25,7 @@ type _ func() BehaviorNoParamsWithResponse202Response
 
 // BehaviorBehaviorWithParamsAndResponseRequest represents params for behaviorWithParamsAndResponse operation
 //
-// Request: GET /behavior/with-params-and-response.
+// Request: POST /behavior/with-params-and-response.
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
 	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
@@ -80,7 +80,7 @@ type BehaviorControllerBuilderV2 struct {
 		func(http.ResponseWriter, *http.Request) (error),
 	]
 
-	// GET /behavior/with-params-and-response
+	// POST /behavior/with-params-and-response
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
@@ -181,7 +181,7 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			},
 		),
 
-		// GET /behavior/with-params-and-response
+		// POST /behavior/with-params-and-response
 		BehaviorWithParamsAndResponse: makeActionBuilder(
 			app,
 			newHandlerAdapter[
@@ -267,7 +267,7 @@ type BehaviorControllerV2 interface {
 	// Response type: none
 	BehaviorNoStatusDefined(b *BehaviorControllerBuilderV2) http.Handler
 
-	// GET /behavior/with-params-and-response
+	// POST /behavior/with-params-and-response
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
@@ -294,7 +294,7 @@ func RegisterBehaviorRoutesV2(controller BehaviorControllerV2, app *HTTPApp) {
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder))
-	app.router.HandleRoute("GET", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder))
+	app.router.HandleRoute("POST", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder))
 	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder))
 }

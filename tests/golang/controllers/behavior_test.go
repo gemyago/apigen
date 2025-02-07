@@ -34,7 +34,7 @@ func TestBehavior(t *testing.T) {
 	t.Run("app", func(t *testing.T) {
 		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
 				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
@@ -49,7 +49,7 @@ func TestBehavior(t *testing.T) {
 			wantStatusCode := fake.IntBetween(400, 500)
 			wantErrorBody := fake.Lorem().Word()
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
 				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
@@ -71,7 +71,7 @@ func TestBehavior(t *testing.T) {
 		})
 		runRouteTestCase(t, "should handle action errors with default handler", setupRouter, func() testCase {
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
@@ -89,7 +89,7 @@ func TestBehavior(t *testing.T) {
 			wantStatusCode := fake.IntBetween(400, 500)
 			wantErrorBody := fake.Lorem().Word()
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
 					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
@@ -332,7 +332,7 @@ func TestBehavior(t *testing.T) {
 				Field1: fake.Lorem().Word(),
 			}
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
@@ -359,7 +359,7 @@ func TestBehavior(t *testing.T) {
 				Field1: fake.Lorem().Word(),
 			}
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
@@ -384,7 +384,7 @@ func TestBehavior(t *testing.T) {
 
 		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
 			return testCase{
-				method: http.MethodGet,
+				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
 				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
