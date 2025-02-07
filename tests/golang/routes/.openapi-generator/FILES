@@ -6,8 +6,6 @@ handlers/behavior_no_params_no_response_isolated_params.go
 handlers/behavior_params.go
 handlers/boolean_controller.go
 handlers/boolean_params.go
-handlers/error_handling_controller.go
-handlers/error_handling_params.go
 handlers/handlers.go
 handlers/numeric_types_controller.go
 handlers/numeric_types_params.go

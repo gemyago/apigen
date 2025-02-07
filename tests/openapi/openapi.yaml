@@ -96,11 +96,3 @@ paths:
     $ref: "./behavior/no-status-defined.yaml"
   /behavior/with-status-defined:
     $ref: "./behavior/with-status-defined.yaml"
-
-  # error-handling routes
-  /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
-    $ref: "./error-handling/parsing-errors.yaml"
-  /error-handling/validation-errors:
-    $ref: "./error-handling/validation-errors.yaml"
-  /error-handling/action-errors:
-    $ref: "./error-handling/action-errors.yaml"
