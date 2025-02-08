@@ -70,6 +70,28 @@ type routeTestCase[TActions any] struct {
 
 type routeTestCaseSetupFn[TActions any] func(tc routeTestCase[TActions]) (TActions, http.Handler)
 
+type trackDoubleHeaderWriter struct {
+	headerWriteCount int
+	http.ResponseWriter
+	t *testing.T
+}
+
+func (t *trackDoubleHeaderWriter) WriteHeader(code int) {
+	t.headerWriteCount++
+	t.ResponseWriter.WriteHeader(code)
+	assert.LessOrEqual(t.t, t.headerWriteCount, 1, "WriteHeader called more than once")
+}
+
+func (t *trackDoubleHeaderWriter) Header() http.Header {
+	return t.ResponseWriter.Header()
+}
+
+func (t *trackDoubleHeaderWriter) Write(b []byte) (int, error) {
+	return t.ResponseWriter.Write(b)
+}
+
+var _ http.ResponseWriter = &trackDoubleHeaderWriter{}
+
 func runRouteTestCase[TActions any](
 	t *testing.T,
 	name string,
@@ -106,7 +128,8 @@ func runRouteTestCase[TActions any](
 			testReq.URL.RawQuery = tc.query.Encode()
 		}
 		recorder := httptest.NewRecorder()
-		router.ServeHTTP(recorder, testReq)
+		trackDoubleHeaderWriter := &trackDoubleHeaderWriter{ResponseWriter: recorder, t: t}
+		router.ServeHTTP(trackDoubleHeaderWriter, testReq)
 		tc.expect(t, testActions, recorder)
 	})
 }
@@ -146,7 +169,7 @@ func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeT
 		if !assert.Equal(t, http.StatusBadRequest, recorder.Code, "Unexpected response: %v", recorder.Body) {
 			return
 		}
-		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
+		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("Content-Type"))
 		gotErrors := unmarshalBindingErrors(t, recorder.Body)
 		if !assert.Len(t, gotErrors.Errors, len(wantErrors)) {
 			return
