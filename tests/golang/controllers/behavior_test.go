@@ -204,6 +204,117 @@ func TestBehavior(t *testing.T) {
 		})
 	})
 
+	t.Run("httpActionHandler", func(t *testing.T) {
+		runRouteTestCase(t, "should process the request and return the response", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
+			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
+				Field1: fake.Lorem().Word(),
+			}
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.isHTTPAction = true
+					testActions.withParamsAndResponse.httpActionFn = func(
+						_ http.ResponseWriter,
+						_ *http.Request,
+						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
+						assert.Equal(t, wantParams, params)
+						return wantResponse, nil
+					}
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
+					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
+				},
+			}
+		})
+		runRouteTestCase(t, "should respond with custom status if provided by http action", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
+			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
+				Field1: fake.Lorem().Word(),
+			}
+			wantCustomStatus := fake.IntBetween(200, 299)
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.isHTTPAction = true
+					testActions.withParamsAndResponse.httpActionFn = func(
+						w http.ResponseWriter,
+						_ *http.Request,
+						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
+						assert.Equal(t, wantParams, params)
+						w.WriteHeader(wantCustomStatus)
+						return wantResponse, nil
+					}
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, wantCustomStatus, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
+					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
+				},
+			}
+		})
+		runRouteTestCase(t, "should not write the response if already written", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
+			}
+			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
+				Field1: fake.Lorem().Word(),
+			}
+			wantCustomStatus := fake.IntBetween(200, 299)
+			wantCustomBody := fake.Lorem().Sentence(3)
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsAndResponse.isHTTPAction = true
+					testActions.withParamsAndResponse.httpActionFn = func(
+						w http.ResponseWriter,
+						_ *http.Request,
+						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
+						assert.Equal(t, wantParams, params)
+						w.WriteHeader(wantCustomStatus)
+						_, _ = w.Write([]byte(wantCustomBody))
+						return wantResponse, nil
+					}
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, wantCustomStatus, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
+					assert.Equal(t, wantCustomBody, recorder.Body.String())
+				},
+			}
+		})
+	})
+
 	t.Run("noParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
 			return testCase{

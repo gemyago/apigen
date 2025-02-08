@@ -599,8 +599,14 @@ func makeActionBuilder[
 				app.handleActionErrors(aw, r, err)
 				return
 			}
+
 			if params.voidResult {
-				w.WriteHeader(params.defaultStatus)
+				aw.WriteHeader(params.defaultStatus)
+				return
+			}
+
+			// This means the action handler has written the response itself.
+			if aw.BodyWritten() {
 				return
 			}
 

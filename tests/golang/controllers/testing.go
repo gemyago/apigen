@@ -225,6 +225,9 @@ type mockActionV2[
 	nextError    error
 	nextResult   TResult
 	calls        []mockActionCall[TParams]
+
+	// optional function to use to process the action
+	httpActionFn func(w http.ResponseWriter, r *http.Request, params TParams) (TResult, error)
 }
 
 func (c *mockActionV2[TParams, TResult]) action(
@@ -238,6 +241,9 @@ func (c *mockActionV2[TParams, TResult]) httpAction(
 	w http.ResponseWriter, r *http.Request, params TParams,
 ) (TResult, error) {
 	c.calls = append(c.calls, mockActionCall[TParams]{req: r, res: w, params: params})
+	if c.httpActionFn != nil {
+		return c.httpActionFn(w, r, params)
+	}
 	return c.nextResult, c.nextError
 }
 
