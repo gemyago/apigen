@@ -1,0 +1,13 @@
+get:
+  summary: API to test if both params and response defined
+  operationId: behaviorWithParamsNoResponse
+  tags:
+    - behavior
+  parameters:
+    - name: queryParam1
+      in: query
+      schema:
+        type: string
+  responses:
+    '202':
+      description: Request succeeded

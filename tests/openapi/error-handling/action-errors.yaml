@@ -1,8 +1,0 @@
-get:
-  summary: API to simulate and test action errors
-  operationId: errorHandlingActionErrors
-  tags:
-    - error-handling
-  responses:
-    '204':
-      description: Request succeeded
