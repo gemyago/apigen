@@ -99,6 +99,42 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
+		runRouteTestCase(t,
+			"should handle response body serialization errors with custom handler",
+			setupRouter,
+			func() testCase {
+				resBody := models.BehaviorWithParamsAndResponseResponseBody{
+					Field1: fake.Lorem().Word(),
+				}
+				resBody.Field2 = &resBody // Circular reference will cause serialization error
+				bodyData, err := json.Marshal(resBody)
+				require.Errorf(t, err, "body was marshalled successfully: %v", bodyData)
+				wantErrStatus := fake.IntBetween(500, 599)
+				wantResBody := fake.Lorem().Sentence(3)
+				return testCase{
+					method: http.MethodPost,
+					path:   "/behavior/with-params-and-response",
+					appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+						return append(opts, handlers.WithResponseErrorHandler(
+							func(w http.ResponseWriter, _ *http.Request, _ error) {
+								w.WriteHeader(wantErrStatus)
+								_, _ = w.Write([]byte(wantResBody))
+							},
+						))
+					},
+					setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+						testActions.withParamsAndResponse.nextResult = &resBody
+						return testActions
+					},
+					expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+						if !assert.Equal(t, wantErrStatus, recorder.Code, "Unexpected response: %v", recorder.Body) {
+							return
+						}
+						assert.Len(t, testActions.withParamsAndResponse.calls, 1)
+						assert.Contains(t, recorder.Body.String(), wantResBody)
+					},
+				}
+			})
 		runRouteTestCase(t, "should handle parsing errors with custom handler", setupRouter, func() testCase {
 			wantStatusCode := fake.IntBetween(400, 500)
 			wantErrorBody := fake.Lorem().Word()
