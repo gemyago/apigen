@@ -239,7 +239,7 @@ func TestBehavior(t *testing.T) {
 				},
 			}
 		})
-		runRouteTestCase(t, "should respond with custom status if provided by http action", setupRouter, func() testCase {
+		runRouteTestCase(t, "should respond with custom status", setupRouter, func() testCase {
 			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
 				QueryParam1: fake.Lorem().Word(),
 			}
@@ -272,6 +272,32 @@ func TestBehavior(t *testing.T) {
 					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
 					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
 					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
+				},
+			}
+		})
+		runRouteTestCase(t, "should respond with custom status for void action", setupRouter, func() testCase {
+			wantCustomStatus := fake.IntBetween(200, 299)
+			return testCase{
+				method: http.MethodGet,
+				path:   "/behavior/with-params-no-response",
+				setupActions: func(testActions *behaviorControllerTestActions) *behaviorControllerTestActions {
+					testActions.withParamsNoResponse.isHTTPAction = true
+					testActions.withParamsNoResponse.httpActionFn = func(
+						w http.ResponseWriter,
+						_ *http.Request,
+						_ *handlers.BehaviorBehaviorWithParamsNoResponseRequest,
+					) (mockVoid, error) {
+						w.WriteHeader(wantCustomStatus)
+						return nil, nil
+					}
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *behaviorControllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, wantCustomStatus, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
 				},
 			}
 		})

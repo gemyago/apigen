@@ -601,7 +601,10 @@ func makeActionBuilder[
 			}
 
 			if params.voidResult {
-				aw.WriteHeader(params.defaultStatus)
+				// Do not write header twice
+				if !aw.HeaderWritten() {
+					aw.WriteHeader(params.defaultStatus)
+				}
 				return
 			}
 
