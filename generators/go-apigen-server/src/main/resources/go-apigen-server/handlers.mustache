@@ -137,14 +137,14 @@ type paramsParser[TReqParams any] interface {
 
 type void *int
 
-type voidParamsParserV2 struct{}
+type voidParamsParser struct{}
 
-func (p voidParamsParserV2) parse(_ httpRouter, _ *http.Request) (void, error) {
+func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (void, error) {
 	return void(nil), nil
 }
 
-func makeVoidParamsParserV2(_ *HTTPApp) paramsParser[void] {
-	return voidParamsParserV2{}
+func makeVoidParamsParser(_ *HTTPApp) paramsParser[void] {
+	return voidParamsParser{}
 }
 
 func readPathValue(key string, router httpRouter, req *http.Request) internal.OptionalVal[string] {

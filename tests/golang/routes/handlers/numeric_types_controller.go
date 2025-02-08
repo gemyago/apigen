@@ -241,7 +241,7 @@ type NumericTypesNumericTypesRequiredValidationRequest struct {
 	OptionalNumberInt64InQuery int64
 }
 
-type NumericTypesControllerBuilderV2 struct {
+type NumericTypesControllerBuilder struct {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesArrayItemsRequest,
@@ -327,8 +327,8 @@ type NumericTypesControllerBuilderV2 struct {
 	]
 }
 
-func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBuilderV2 {
-	return &NumericTypesControllerBuilderV2{
+func newNumericTypesControllerBuilder(app *HTTPApp) *NumericTypesControllerBuilder {
+	return &NumericTypesControllerBuilder{
 		// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 		NumericTypesArrayItems: makeActionBuilder(
 			app,
@@ -478,59 +478,59 @@ func newNumericTypesControllerBuilderV2(app *HTTPApp) *NumericTypesControllerBui
 	}
 }
 
-type NumericTypesControllerV2 interface {
+type NumericTypesController interface {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesArrayItemsRequest,
 	//
 	// Response type: none
-	NumericTypesArrayItems(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesArrayItems(b *NumericTypesControllerBuilder) http.Handler
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesNullableRequest,
 	//
 	// Response type: none
-	NumericTypesNullable(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesNullable(b *NumericTypesControllerBuilder) http.Handler
 
 	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesNullableArrayItemsRequest,
 	//
 	// Response type: none
-	NumericTypesNullableArrayItems(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesNullableArrayItems(b *NumericTypesControllerBuilder) http.Handler
 
 	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
 	// Response type: none
-	NumericTypesParsing(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesParsing(b *NumericTypesControllerBuilder) http.Handler
 
 	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationRequest,
 	//
 	// Response type: none
-	NumericTypesRangeValidation(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesRangeValidation(b *NumericTypesControllerBuilder) http.Handler
 
 	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
 	//
 	// Response type: none
-	NumericTypesRangeValidationExclusive(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesRangeValidationExclusive(b *NumericTypesControllerBuilder) http.Handler
 
 	// GET /numeric-types/required-validation
 	//
 	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
 	//
 	// Response type: none
-	NumericTypesRequiredValidation(b *NumericTypesControllerBuilderV2) http.Handler
+	NumericTypesRequiredValidation(b *NumericTypesControllerBuilder) http.Handler
 }
 
-func RegisterNumericTypesRoutesV2(controller NumericTypesControllerV2, app *HTTPApp) {
-	builder := newNumericTypesControllerBuilderV2(app)
+func RegisterNumericTypesRoutes(controller NumericTypesController, app *HTTPApp) {
+	builder := newNumericTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder))
 	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(builder))
 	app.router.HandleRoute("POST", "/numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullableArrayItems(builder))

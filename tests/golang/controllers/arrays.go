@@ -17,7 +17,7 @@ type arraysController struct {
 }
 
 func (c *arraysController) ArraysRequiredValidation(
-	builder *handlers.ArraysControllerBuilderV2,
+	builder *handlers.ArraysControllerBuilder,
 ) http.Handler {
 	return builder.ArraysRequiredValidation.HandleWith(
 		c.testActions.arraysRequiredValidation.action,
@@ -25,7 +25,7 @@ func (c *arraysController) ArraysRequiredValidation(
 }
 
 func (c *arraysController) ArraysNullableRequiredValidation(
-	builder *handlers.ArraysControllerBuilderV2,
+	builder *handlers.ArraysControllerBuilder,
 ) http.Handler {
 	return builder.ArraysNullableRequiredValidation.HandleWith(
 		c.testActions.arraysNullableRequiredValidation.action,
@@ -33,11 +33,11 @@ func (c *arraysController) ArraysNullableRequiredValidation(
 }
 
 func (c *arraysController) ArraysRangeValidation(
-	builder *handlers.ArraysControllerBuilderV2,
+	builder *handlers.ArraysControllerBuilder,
 ) http.Handler {
 	return builder.ArraysRangeValidation.HandleWith(
 		c.testActions.arraysRangeValidation.action,
 	)
 }
 
-var _ handlers.ArraysControllerV2 = &arraysController{}
+var _ handlers.ArraysController = &arraysController{}

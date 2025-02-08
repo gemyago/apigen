@@ -99,7 +99,7 @@ type BooleanBooleanRequiredValidationRequest struct {
 	OptionalBoolParam2InQuery bool
 }
 
-type BooleanControllerBuilderV2 struct {
+type BooleanControllerBuilder struct {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanArrayItemsRequest,
@@ -161,8 +161,8 @@ type BooleanControllerBuilderV2 struct {
 	]
 }
 
-func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
-	return &BooleanControllerBuilderV2{
+func newBooleanControllerBuilder(app *HTTPApp) *BooleanControllerBuilder {
+	return &BooleanControllerBuilder{
 		// POST /boolean/array-items/{boolParam1}/{boolParam2}
 		BooleanArrayItems: makeActionBuilder(
 			app,
@@ -270,45 +270,45 @@ func newBooleanControllerBuilderV2(app *HTTPApp) *BooleanControllerBuilderV2 {
 	}
 }
 
-type BooleanControllerV2 interface {
+type BooleanController interface {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanArrayItems(b *BooleanControllerBuilderV2) http.Handler
+	BooleanArrayItems(b *BooleanControllerBuilder) http.Handler
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanNullableRequest,
 	//
 	// Response type: none
-	BooleanNullable(b *BooleanControllerBuilderV2) http.Handler
+	BooleanNullable(b *BooleanControllerBuilder) http.Handler
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanNullableArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanNullableArrayItems(b *BooleanControllerBuilderV2) http.Handler
+	BooleanNullableArrayItems(b *BooleanControllerBuilder) http.Handler
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
 	//
 	// Response type: none
-	BooleanParsing(b *BooleanControllerBuilderV2) http.Handler
+	BooleanParsing(b *BooleanControllerBuilder) http.Handler
 
 	// POST /boolean/required-validation
 	//
 	// Request type: BooleanBooleanRequiredValidationRequest,
 	//
 	// Response type: none
-	BooleanRequiredValidation(b *BooleanControllerBuilderV2) http.Handler
+	BooleanRequiredValidation(b *BooleanControllerBuilder) http.Handler
 }
 
-func RegisterBooleanRoutesV2(controller BooleanControllerV2, app *HTTPApp) {
-	builder := newBooleanControllerBuilderV2(app)
+func RegisterBooleanRoutes(controller BooleanController, app *HTTPApp) {
+	builder := newBooleanControllerBuilder(app)
 	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder))
 	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder))
 	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(builder))

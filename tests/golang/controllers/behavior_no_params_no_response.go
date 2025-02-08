@@ -16,7 +16,7 @@ type behaviorControllerNoParamsNoResponse struct {
 }
 
 func (c *behaviorControllerNoParamsNoResponse) BehaviorNoParamsNoResponse(
-	builder *handlers.BehaviorNoParamsNoResponseIsolatedControllerBuilderV2,
+	builder *handlers.BehaviorNoParamsNoResponseIsolatedControllerBuilder,
 ) http.Handler {
 	return builder.BehaviorNoParamsNoResponse.HandleWith(
 		func(ctx context.Context) error {
@@ -25,4 +25,4 @@ func (c *behaviorControllerNoParamsNoResponse) BehaviorNoParamsNoResponse(
 	)
 }
 
-var _ handlers.BehaviorNoParamsNoResponseIsolatedControllerV2 = &behaviorControllerNoParamsNoResponse{}
+var _ handlers.BehaviorNoParamsNoResponseIsolatedController = &behaviorControllerNoParamsNoResponse{}

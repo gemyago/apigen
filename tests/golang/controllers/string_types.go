@@ -24,7 +24,7 @@ type stringTypesController struct {
 }
 
 func (c *stringTypesController) StringTypesArrayItemsRangeValidation(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesArrayItemsRangeValidation.HandleWith(
 		c.testActions.stringTypesArrayItemsRangeValidation.action,
@@ -32,31 +32,31 @@ func (c *stringTypesController) StringTypesArrayItemsRangeValidation(
 }
 
 func (c *stringTypesController) StringTypesArraysParsing(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesArraysParsing.HandleWith(c.testActions.stringTypesArraysParsing.action)
 }
 
 func (c *stringTypesController) StringTypesEnums(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesEnums.HandleWith(c.testActions.stringTypesEnums.action)
 }
 
 func (c *stringTypesController) StringTypesNullableArrayItems(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesNullableArrayItems.HandleWith(c.testActions.stringTypesNullableArrayItems.action)
 }
 
 func (c *stringTypesController) StringTypesNullableParsing(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesNullableParsing.HandleWith(c.testActions.stringTypesNullableParsing.action)
 }
 
 func (c *stringTypesController) StringTypesNullableRequiredValidation(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesNullableRequiredValidation.HandleWith(
 		c.testActions.stringTypesNullableRequiredValidation.action,
@@ -64,27 +64,27 @@ func (c *stringTypesController) StringTypesNullableRequiredValidation(
 }
 
 func (c *stringTypesController) StringTypesParsing(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesParsing.HandleWith(c.testActions.stringTypesParsing.action)
 }
 
 func (c *stringTypesController) StringTypesPatternValidation(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesPatternValidation.HandleWith(c.testActions.stringTypesPatternValidation.action)
 }
 
 func (c *stringTypesController) StringTypesRangeValidation(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesRangeValidation.HandleWith(c.testActions.stringTypesRangeValidation.action)
 }
 
 func (c *stringTypesController) StringTypesRequiredValidation(
-	builder *handlers.StringTypesControllerBuilderV2,
+	builder *handlers.StringTypesControllerBuilder,
 ) http.Handler {
 	return builder.StringTypesRequiredValidation.HandleWith(c.testActions.stringTypesRequiredValidation.action)
 }
 
-var _ handlers.StringTypesControllerV2 = &stringTypesController{}
+var _ handlers.StringTypesController = &stringTypesController{}

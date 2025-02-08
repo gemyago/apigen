@@ -21,7 +21,7 @@ type numericTypesController struct {
 }
 
 func (c *numericTypesController) NumericTypesParsing(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesParsing.HandleWith(
 		c.testActions.numericTypesParsing.action,
@@ -29,7 +29,7 @@ func (c *numericTypesController) NumericTypesParsing(
 }
 
 func (c *numericTypesController) NumericTypesArrayItems(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesArrayItems.HandleWith(
 		c.testActions.numericTypesArrayItems.action,
@@ -37,7 +37,7 @@ func (c *numericTypesController) NumericTypesArrayItems(
 }
 
 func (c *numericTypesController) NumericTypesRangeValidation(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesRangeValidation.HandleWith(
 		c.testActions.numericTypesRangeValidation.action,
@@ -45,7 +45,7 @@ func (c *numericTypesController) NumericTypesRangeValidation(
 }
 
 func (c *numericTypesController) NumericTypesRangeValidationExclusive(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesRangeValidationExclusive.HandleWith(
 		c.testActions.numericTypesRangeValidationExclusive.action,
@@ -53,7 +53,7 @@ func (c *numericTypesController) NumericTypesRangeValidationExclusive(
 }
 
 func (c *numericTypesController) NumericTypesRequiredValidation(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesRequiredValidation.HandleWith(
 		c.testActions.numericTypesRequiredValidation.action,
@@ -61,7 +61,7 @@ func (c *numericTypesController) NumericTypesRequiredValidation(
 }
 
 func (c *numericTypesController) NumericTypesNullable(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesNullable.HandleWith(
 		c.testActions.numericTypesNullable.action,
@@ -69,11 +69,11 @@ func (c *numericTypesController) NumericTypesNullable(
 }
 
 func (c *numericTypesController) NumericTypesNullableArrayItems(
-	builder *handlers.NumericTypesControllerBuilderV2,
+	builder *handlers.NumericTypesControllerBuilder,
 ) http.Handler {
 	return builder.NumericTypesNullableArrayItems.HandleWith(
 		c.testActions.numericTypesNullableArrayItems.action,
 	)
 }
 
-var _ handlers.NumericTypesControllerV2 = &numericTypesController{}
+var _ handlers.NumericTypesController = &numericTypesController{}

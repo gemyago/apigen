@@ -38,7 +38,7 @@ type {{>request-type}} struct {
 
 {{/operations}}
 
-type {{classname}}ControllerBuilderV2 struct {
+type {{classname}}ControllerBuilder struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -53,8 +53,8 @@ type {{classname}}ControllerBuilderV2 struct {
 {{/operations}}
 }
 
-func new{{classname}}ControllerBuilderV2(app *HTTPApp) *{{classname}}ControllerBuilderV2 {
-	return &{{classname}}ControllerBuilderV2{
+func new{{classname}}ControllerBuilder(app *HTTPApp) *{{classname}}ControllerBuilder {
+	return &{{classname}}ControllerBuilder{
 		{{#operations}}
 		{{#operation}}
 		// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
@@ -74,7 +74,7 @@ func new{{classname}}ControllerBuilderV2(app *HTTPApp) *{{classname}}ControllerB
 			]{
 				defaultStatus: {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}},{{^returnType}}
 				voidResult:    true,{{/returnType}}
-				paramsParser:  {{#hasParams}}newParamsParser{{baseName}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParserV2{{/hasParams}}(app),
+				paramsParser:  {{#hasParams}}newParamsParser{{baseName}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}(app),
 			},
 		),{{^-last}}
 
@@ -83,18 +83,18 @@ func new{{classname}}ControllerBuilderV2(app *HTTPApp) *{{classname}}ControllerB
 	}
 }
 
-type {{classname}}ControllerV2 interface {
+type {{classname}}Controller interface {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}}(b *{{classname}}ControllerBuilderV2) http.Handler{{^-last}}
+	{{operationId}}(b *{{classname}}ControllerBuilder) http.Handler{{^-last}}
 
 {{/-last}}{{/operation}}
 {{/operations}}
 }
 
-func Register{{baseName}}RoutesV2(controller {{baseName}}ControllerV2, app *HTTPApp) {
-	builder := new{{classname}}ControllerBuilderV2(app)
+func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp) {
+	builder := new{{classname}}ControllerBuilder(app)
 	{{#operations}}
 	{{#operation}}
 	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder))

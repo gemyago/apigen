@@ -22,7 +22,7 @@ type objectsController struct {
 }
 
 func (c *objectsController) ObjectsArrayBodyDirect(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsArrayBodyDirect.HandleWith(
 		c.testActions.objectsArrayParsingBodyDirect.action,
@@ -30,7 +30,7 @@ func (c *objectsController) ObjectsArrayBodyDirect(
 }
 
 func (c *objectsController) ObjectsArrayBodyNested(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsArrayBodyNested.HandleWith(
 		c.testActions.objectsArrayParsingBodyNested.action,
@@ -38,7 +38,7 @@ func (c *objectsController) ObjectsArrayBodyNested(
 }
 
 func (c *objectsController) ObjectsDeeplyNested(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsDeeplyNested.HandleWith(
 		c.testActions.objectsDeeplyNested.action,
@@ -46,7 +46,7 @@ func (c *objectsController) ObjectsDeeplyNested(
 }
 
 func (c *objectsController) ObjectsNullableOptionalBody(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsNullableOptionalBody.HandleWith(
 		c.testActions.objectsNullableOptionalBody.action,
@@ -54,7 +54,7 @@ func (c *objectsController) ObjectsNullableOptionalBody(
 }
 
 func (c *objectsController) ObjectsNullableRequiredBody(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsNullableRequiredBody.HandleWith(
 		c.testActions.objectsNullableRequiredBody.action,
@@ -62,7 +62,7 @@ func (c *objectsController) ObjectsNullableRequiredBody(
 }
 
 func (c *objectsController) ObjectsOptionalBody(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsOptionalBody.HandleWith(
 		c.testActions.objectsOptionalBody.action,
@@ -70,7 +70,7 @@ func (c *objectsController) ObjectsOptionalBody(
 }
 
 func (c *objectsController) ObjectsRequiredBody(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsRequiredBody.HandleWith(
 		c.testActions.objectsRequiredBody.action,
@@ -78,11 +78,11 @@ func (c *objectsController) ObjectsRequiredBody(
 }
 
 func (c *objectsController) ObjectsRequiredNestedObjects(
-	builder *handlers.ObjectsControllerBuilderV2,
+	builder *handlers.ObjectsControllerBuilder,
 ) http.Handler {
 	return builder.ObjectsRequiredNestedObjects.HandleWith(
 		c.testActions.objectsRequiredNestedObjects.action,
 	)
 }
 
-var _ handlers.ObjectsControllerV2 = &objectsController{}
+var _ handlers.ObjectsController = &objectsController{}

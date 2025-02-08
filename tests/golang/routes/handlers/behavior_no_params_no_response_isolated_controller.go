@@ -19,7 +19,7 @@ type _ func() Error
 
 
 
-type BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 struct {
+type BehaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	// GET /behavior/no-params-no-response-isolated
 	//
 	// Request type: none
@@ -33,8 +33,8 @@ type BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 struct {
 	]
 }
 
-func newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app *HTTPApp) *BehaviorNoParamsNoResponseIsolatedControllerBuilderV2 {
-	return &BehaviorNoParamsNoResponseIsolatedControllerBuilderV2{
+func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *BehaviorNoParamsNoResponseIsolatedControllerBuilder {
+	return &BehaviorNoParamsNoResponseIsolatedControllerBuilder{
 		// GET /behavior/no-params-no-response-isolated
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,
@@ -52,22 +52,22 @@ func newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app *HTTPApp) *Beh
 			]{
 				defaultStatus: 202,
 				voidResult:    true,
-				paramsParser:  makeVoidParamsParserV2(app),
+				paramsParser:  makeVoidParamsParser(app),
 			},
 		),
 	}
 }
 
-type BehaviorNoParamsNoResponseIsolatedControllerV2 interface {
+type BehaviorNoParamsNoResponseIsolatedController interface {
 	// GET /behavior/no-params-no-response-isolated
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoParamsNoResponse(b *BehaviorNoParamsNoResponseIsolatedControllerBuilderV2) http.Handler
+	BehaviorNoParamsNoResponse(b *BehaviorNoParamsNoResponseIsolatedControllerBuilder) http.Handler
 }
 
-func RegisterBehaviorNoParamsNoResponseIsolatedRoutesV2(controller BehaviorNoParamsNoResponseIsolatedControllerV2, app *HTTPApp) {
-	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilderV2(app)
+func RegisterBehaviorNoParamsNoResponseIsolatedRoutes(controller BehaviorNoParamsNoResponseIsolatedController, app *HTTPApp) {
+	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app)
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder))
 }

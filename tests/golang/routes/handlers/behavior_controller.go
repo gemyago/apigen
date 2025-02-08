@@ -45,7 +45,7 @@ type BehaviorBehaviorWithParamsNoResponseRequest struct {
 
 
 
-type BehaviorControllerBuilderV2 struct {
+type BehaviorControllerBuilder struct {
 	// GET /behavior/no-params-no-response
 	//
 	// Request type: none
@@ -119,8 +119,8 @@ type BehaviorControllerBuilderV2 struct {
 	]
 }
 
-func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
-	return &BehaviorControllerBuilderV2{
+func newBehaviorControllerBuilder(app *HTTPApp) *BehaviorControllerBuilder {
+	return &BehaviorControllerBuilder{
 		// GET /behavior/no-params-no-response
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,
@@ -138,7 +138,7 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			]{
 				defaultStatus: 202,
 				voidResult:    true,
-				paramsParser:  makeVoidParamsParserV2(app),
+				paramsParser:  makeVoidParamsParser(app),
 			},
 		),
 
@@ -158,7 +158,7 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 				*BehaviorNoParamsWithResponse202Response,
 			]{
 				defaultStatus: 202,
-				paramsParser:  makeVoidParamsParserV2(app),
+				paramsParser:  makeVoidParamsParser(app),
 			},
 		),
 
@@ -179,7 +179,7 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			]{
 				defaultStatus: 200,
 				voidResult:    true,
-				paramsParser:  makeVoidParamsParserV2(app),
+				paramsParser:  makeVoidParamsParser(app),
 			},
 		),
 
@@ -241,58 +241,58 @@ func newBehaviorControllerBuilderV2(app *HTTPApp) *BehaviorControllerBuilderV2 {
 			]{
 				defaultStatus: 202,
 				voidResult:    true,
-				paramsParser:  makeVoidParamsParserV2(app),
+				paramsParser:  makeVoidParamsParser(app),
 			},
 		),
 	}
 }
 
-type BehaviorControllerV2 interface {
+type BehaviorController interface {
 	// GET /behavior/no-params-no-response
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoParamsNoResponse(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorNoParamsNoResponse(b *BehaviorControllerBuilder) http.Handler
 
 	// GET /behavior/no-params-with-response
 	//
 	// Request type: none
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
-	BehaviorNoParamsWithResponse(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorNoParamsWithResponse(b *BehaviorControllerBuilder) http.Handler
 
 	// GET /behavior/no-status-defined
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoStatusDefined(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorNoStatusDefined(b *BehaviorControllerBuilder) http.Handler
 
 	// POST /behavior/with-params-and-response
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
 	// Response type: BehaviorWithParamsAndResponseResponseBody
-	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilder) http.Handler
 
 	// GET /behavior/with-params-no-response
 	//
 	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
 	//
 	// Response type: none
-	BehaviorWithParamsNoResponse(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorWithParamsNoResponse(b *BehaviorControllerBuilder) http.Handler
 
 	// POST /behavior/with-status-defined
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorWithStatusDefined(b *BehaviorControllerBuilderV2) http.Handler
+	BehaviorWithStatusDefined(b *BehaviorControllerBuilder) http.Handler
 }
 
-func RegisterBehaviorRoutesV2(controller BehaviorControllerV2, app *HTTPApp) {
-	builder := newBehaviorControllerBuilderV2(app)
+func RegisterBehaviorRoutes(controller BehaviorController, app *HTTPApp) {
+	builder := newBehaviorControllerBuilder(app)
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder))
 	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder))

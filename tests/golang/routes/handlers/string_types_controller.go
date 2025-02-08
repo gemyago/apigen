@@ -671,7 +671,7 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 	OptionalByteStrInQuery string
 }
 
-type StringTypesControllerBuilderV2 struct {
+type StringTypesControllerBuilder struct {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -793,8 +793,8 @@ type StringTypesControllerBuilderV2 struct {
 	]
 }
 
-func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuilderV2 {
-	return &StringTypesControllerBuilderV2{
+func newStringTypesControllerBuilder(app *HTTPApp) *StringTypesControllerBuilder {
+	return &StringTypesControllerBuilder{
 		// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 		StringTypesArrayItemsRangeValidation: makeActionBuilder(
 			app,
@@ -1007,80 +1007,80 @@ func newStringTypesControllerBuilderV2(app *HTTPApp) *StringTypesControllerBuild
 	}
 }
 
-type StringTypesControllerV2 interface {
+type StringTypesController interface {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
 	//
 	// Response type: none
-	StringTypesArrayItemsRangeValidation(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesArrayItemsRangeValidation(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArraysParsingRequest,
 	//
 	// Response type: none
-	StringTypesArraysParsing(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesArraysParsing(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
 	//
 	// Request type: StringTypesStringTypesEnumsRequest,
 	//
 	// Response type: none
-	StringTypesEnums(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesEnums(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableArrayItemsRequest,
 	//
 	// Response type: none
-	StringTypesNullableArrayItems(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesNullableArrayItems(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesNullableParsingRequest,
 	//
 	// Response type: none
-	StringTypesNullableParsing(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesNullableParsing(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/nullable-required-validation
 	//
 	// Request type: StringTypesStringTypesNullableRequiredValidationRequest,
 	//
 	// Response type: none
-	StringTypesNullableRequiredValidation(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesNullableRequiredValidation(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesParsingRequest,
 	//
 	// Response type: none
-	StringTypesParsing(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesParsing(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
 	//
 	// Request type: StringTypesStringTypesPatternValidationRequest,
 	//
 	// Response type: none
-	StringTypesPatternValidation(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesPatternValidation(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
 	// Response type: none
-	StringTypesRangeValidation(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesRangeValidation(b *StringTypesControllerBuilder) http.Handler
 
 	// POST /string-types/required-validation
 	//
 	// Request type: StringTypesStringTypesRequiredValidationRequest,
 	//
 	// Response type: none
-	StringTypesRequiredValidation(b *StringTypesControllerBuilderV2) http.Handler
+	StringTypesRequiredValidation(b *StringTypesControllerBuilder) http.Handler
 }
 
-func RegisterStringTypesRoutesV2(controller StringTypesControllerV2, app *HTTPApp) {
-	builder := newStringTypesControllerBuilderV2(app)
+func RegisterStringTypesRoutes(controller StringTypesController, app *HTTPApp) {
+	builder := newStringTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder))
 	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder))
 	app.router.HandleRoute("POST", "/string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}", controller.StringTypesEnums(builder))
