@@ -392,3 +392,8 @@ issues:
     # it helps sometimes to just iterate over them.
     - source: "Allowable(\\w+)Values"
       linters: [ gochecknoglobals ]
+
+    - path: "routes/internal/behavior_with_params_and_response_response_body_validation.go"
+      source: "NewBehaviorWithParamsAndResponseResponseBodyValidator"
+      linters:
+        - staticcheck
