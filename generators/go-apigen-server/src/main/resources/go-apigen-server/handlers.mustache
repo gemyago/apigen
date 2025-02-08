@@ -103,12 +103,14 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	}
 	app.handleActionErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 	app.handleResponseErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
 		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 	app.handleParsingErrors = func(w http.ResponseWriter, r *http.Request, err error) {
@@ -601,8 +603,17 @@ func makeActionBuilder[
 				app.handleActionErrors(aw, r, err)
 				return
 			}
+
 			if params.voidResult {
-				w.WriteHeader(params.defaultStatus)
+				// Do not write header twice
+				if !aw.HeaderWritten() {
+					aw.WriteHeader(params.defaultStatus)
+				}
+				return
+			}
+
+			// This means the action handler has written the response itself.
+			if aw.BodyWritten() {
 				return
 			}
 

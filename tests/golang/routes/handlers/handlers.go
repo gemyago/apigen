@@ -101,12 +101,14 @@ func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
 	}
 	app.handleActionErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 	app.handleResponseErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
 		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 	app.handleParsingErrors = func(w http.ResponseWriter, r *http.Request, err error) {
