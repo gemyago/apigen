@@ -409,6 +409,80 @@ type ObjectsController interface {
 	ObjectsRequiredNestedObjects(b *ObjectsControllerBuilder) http.Handler
 }
 
+type ObjectsControllerV3 interface {
+	// POST /objects/arrays
+	//
+	// Request type: ObjectsObjectsArrayBodyDirectRequest,
+	//
+	// Response type: none
+	ObjectsArrayBodyDirect(NoResponseHandlerBuilder[
+		*ObjectsObjectsArrayBodyDirectRequest,
+	]) http.Handler
+
+	// PUT /objects/arrays
+	//
+	// Request type: ObjectsObjectsArrayBodyNestedRequest,
+	//
+	// Response type: none
+	ObjectsArrayBodyNested(NoResponseHandlerBuilder[
+		*ObjectsObjectsArrayBodyNestedRequest,
+	]) http.Handler
+
+	// POST /objects/deeply-nested
+	//
+	// Request type: ObjectsObjectsDeeplyNestedRequest,
+	//
+	// Response type: none
+	ObjectsDeeplyNested(NoResponseHandlerBuilder[
+		*ObjectsObjectsDeeplyNestedRequest,
+	]) http.Handler
+
+	// PUT /objects/nullable-body
+	//
+	// Request type: ObjectsObjectsNullableOptionalBodyRequest,
+	//
+	// Response type: none
+	ObjectsNullableOptionalBody(NoResponseHandlerBuilder[
+		*ObjectsObjectsNullableOptionalBodyRequest,
+	]) http.Handler
+
+	// POST /objects/nullable-body
+	//
+	// Request type: ObjectsObjectsNullableRequiredBodyRequest,
+	//
+	// Response type: none
+	ObjectsNullableRequiredBody(NoResponseHandlerBuilder[
+		*ObjectsObjectsNullableRequiredBodyRequest,
+	]) http.Handler
+
+	// PUT /objects/required-body
+	//
+	// Request type: ObjectsObjectsOptionalBodyRequest,
+	//
+	// Response type: none
+	ObjectsOptionalBody(NoResponseHandlerBuilder[
+		*ObjectsObjectsOptionalBodyRequest,
+	]) http.Handler
+
+	// POST /objects/required-body
+	//
+	// Request type: ObjectsObjectsRequiredBodyRequest,
+	//
+	// Response type: none
+	ObjectsRequiredBody(NoResponseHandlerBuilder[
+		*ObjectsObjectsRequiredBodyRequest,
+	]) http.Handler
+
+	// POST /objects/required-nested-objects
+	//
+	// Request type: ObjectsObjectsRequiredNestedObjectsRequest,
+	//
+	// Response type: none
+	ObjectsRequiredNestedObjects(NoResponseHandlerBuilder[
+		*ObjectsObjectsRequiredNestedObjectsRequest,
+	]) http.Handler
+}
+
 func RegisterObjectsRoutes(controller ObjectsController, app *HTTPApp) {
 	builder := newObjectsControllerBuilder(app)
 	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder))
@@ -419,4 +493,16 @@ func RegisterObjectsRoutes(controller ObjectsController, app *HTTPApp) {
 	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder))
 	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder))
 	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder))
+}
+
+func RegisterObjectsRoutesV3(controller ObjectsControllerV3, app *HTTPApp) {
+	builder := newObjectsControllerBuilder(app)
+	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))
+	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder.ObjectsArrayBodyNested))
+	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(builder.ObjectsDeeplyNested))
+	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(builder.ObjectsNullableOptionalBody))
+	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(builder.ObjectsNullableRequiredBody))
+	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder.ObjectsOptionalBody))
+	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder.ObjectsRequiredBody))
+	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder.ObjectsRequiredNestedObjects))
 }

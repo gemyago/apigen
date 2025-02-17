@@ -29,6 +29,19 @@ type behaviorController struct {
 	testActions *behaviorControllerTestActions
 }
 
+func (c *behaviorController) BehaviorNoParamsNoResponseV3(
+	builder handlers.NoParamsNoResponseHandlerBuilder,
+) http.Handler {
+	if c.testActions.noParamsNoResponse.isHTTPAction {
+		return builder.HandleWithHTTP(
+			c.testActions.noParamsNoResponse.httpActionNoParamsNoResponse,
+		)
+	}
+	return builder.HandleWith(
+		c.testActions.noParamsNoResponse.actionNoParamsNoResponse,
+	)
+}
+
 func (c *behaviorController) BehaviorNoParamsNoResponse(
 	builder *handlers.BehaviorControllerBuilder,
 ) http.Handler {
@@ -55,6 +68,19 @@ func (c *behaviorController) BehaviorNoParamsWithResponse(
 	)
 }
 
+func (c *behaviorController) BehaviorNoParamsWithResponseV3(
+	builder handlers.NoParamsHandlerBuilder[*models.BehaviorNoParamsWithResponse202Response],
+) http.Handler {
+	if c.testActions.noParamsWithResponse.isHTTPAction {
+		return builder.HandleWithHTTP(
+			c.testActions.noParamsWithResponse.httpActionNoParamsWithResponse,
+		)
+	}
+	return builder.HandleWith(
+		c.testActions.noParamsWithResponse.actionNoParamsWithResponse,
+	)
+}
+
 func (c *behaviorController) BehaviorWithParamsNoResponse(
 	builder *handlers.BehaviorControllerBuilder,
 ) http.Handler {
@@ -66,6 +92,18 @@ func (c *behaviorController) BehaviorWithParamsNoResponse(
 	return builder.BehaviorWithParamsNoResponse.HandleWith(
 		c.testActions.withParamsNoResponse.actionWithParamsNoResponse,
 	)
+}
+
+func (c *behaviorController) BehaviorWithParamsAndResponseV3(
+	builder handlers.HandlerBuilder[
+		*handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+		*models.BehaviorWithParamsAndResponseResponseBody,
+	],
+) http.Handler {
+	if c.testActions.withParamsAndResponse.isHTTPAction {
+		return builder.HandleWithHTTP(c.testActions.withParamsAndResponse.httpAction)
+	}
+	return builder.HandleWith(c.testActions.withParamsAndResponse.action)
 }
 
 func (c *behaviorController) BehaviorWithParamsAndResponse(

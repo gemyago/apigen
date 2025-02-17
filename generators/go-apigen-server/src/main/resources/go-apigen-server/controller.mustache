@@ -100,7 +100,7 @@ type {{classname}}ControllerV3 interface {
 	{{operationId}}({{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}HandlerBuilder{{#vendorExtensions.x-apigen-has-params-or-return}}[{{/vendorExtensions.x-apigen-has-params-or-return}}{{#hasParams}}
 		*{{baseName}}{{operationId}}Request,{{/hasParams}}{{#returnType}}
 		*{{.}},{{/returnType}}{{#vendorExtensions.x-apigen-has-params-or-return}}
-	]{{/vendorExtensions.x-apigen-has-params-or-return}}){{^-last}}
+	]{{/vendorExtensions.x-apigen-has-params-or-return}}) http.Handler{{^-last}}
 
 {{/-last}}{{/operation}}
 {{/operations}}
@@ -111,6 +111,15 @@ func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp)
 	{{#operations}}
 	{{#operation}}
 	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder))
+	{{/operation}}
+	{{/operations}}
+}
+
+func Register{{baseName}}RoutesV3(controller {{baseName}}ControllerV3, app *HTTPApp) {
+	builder := new{{classname}}ControllerBuilder(app)
+	{{#operations}}
+	{{#operation}}
+	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder.{{operationId}}))
 	{{/operation}}
 	{{/operations}}
 }

@@ -383,20 +383,60 @@ type ActionBuilder[
 	TPlainHandler ActionHandlerFunc[TReq, TRes],
 	THttpHandler ActionHandlerFunc[TReq, TRes],
 ] struct {
-	// HandleWith creates a new http.Handler from a given action handler.
-	//
-	// The action handler is not supposed to have access to http objects and
-	// in most scenarios can just delegate the work to the application logic layer.
-	// If you need access to http objects use HandleWithHTTP
-	HandleWith func(TPlainHandler) http.Handler
+	app                *HTTPApp
+	handlerAdapter     actionBuilderHandlerAdapter[TReq, TRes, TPlainHandler]
+	httpHandlerAdapter actionBuilderHandlerAdapter[TReq, TRes, THttpHandler]
+	params             makeActionBuilderParams[TReq, TRes]
+}
 
-	// HandleWithHTTP creates a new http.Handler from a given action handler.
-	//
-	// The action handler allows direct access to http.ResponseWriter and *http.Request.
-	// It also provides parsed request parameters and allows sending structured response.
-	// If you need fully customized behavior, feel free not to use the builder and
-	// return the handler directly.
-	HandleWithHTTP func(THttpHandler) http.Handler
+func (ab ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]) createHandler(handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error)) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		aw := &actionsResponseWriter{
+			targetWriter:  w,
+			defaultStatus: ab.params.defaultStatus,
+		}
+
+		reqParams, err := ab.params.paramsParser.parse(ab.app.router, r)
+		if err != nil {
+			ab.app.handleParsingErrors(aw, r, err)
+			return
+		}
+
+		resData, err := handler(aw, r, reqParams)
+		if err != nil {
+			ab.app.handleActionErrors(aw, r, err)
+			return
+		}
+
+		if ab.params.voidResult {
+			// Do not write header twice
+			if !aw.HeaderWritten() {
+				aw.WriteHeader(ab.params.defaultStatus)
+			}
+			return
+		}
+
+		// This means the action handler has written the response itself.
+		if aw.BodyWritten() {
+			return
+		}
+
+		w.Header().Add("Content-Type", "application/json; charset=utf-8")
+		// Not sending the status here. The action writer will send it in case of
+		// success. If error has happened while encoding, then the error handler will have
+		// a chance to set the status.
+		if encodingErr := json.NewEncoder(aw).Encode(resData); encodingErr != nil {
+			ab.app.handleResponseErrors(aw, r, encodingErr)
+		}
+	})
+}
+
+func (ab ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]) HandleWith(inputHandler TPlainHandler) http.Handler {
+	return ab.createHandler(ab.handlerAdapter(inputHandler))
+}
+
+func (ab ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]) HandleWithHTTP(handler THttpHandler) http.Handler {
+	return ab.createHandler(ab.httpHandlerAdapter(handler))
 }
 
 type genericHandlerBuilder[
@@ -438,8 +478,8 @@ type NoParamsHandlerBuilder[TRes any] genericHandlerBuilder[
 type NoResponseHandlerBuilder[TReq any] genericHandlerBuilder[
 	TReq,
 	struct{},
-	func(context.Context, TReq) (struct{}, error),
-	func(http.ResponseWriter, *http.Request, TReq) (struct{}, error),
+	func(context.Context, TReq) error,
+	func(http.ResponseWriter, *http.Request, TReq) error,
 ]
 
 type NoParamsNoResponseHandlerBuilder genericHandlerBuilder[
@@ -635,54 +675,10 @@ func makeActionBuilder[
 	httpHandlerAdapter actionBuilderHandlerAdapter[TReq, TRes, THttpHandler],
 	params makeActionBuilderParams[TReq, TRes],
 ) ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler] {
-	createHandler := func(handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error)) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			aw := &actionsResponseWriter{
-				targetWriter:  w,
-				defaultStatus: params.defaultStatus,
-			}
-
-			reqParams, err := params.paramsParser.parse(app.router, r)
-			if err != nil {
-				app.handleParsingErrors(aw, r, err)
-				return
-			}
-
-			resData, err := handler(aw, r, reqParams)
-			if err != nil {
-				app.handleActionErrors(aw, r, err)
-				return
-			}
-
-			if params.voidResult {
-				// Do not write header twice
-				if !aw.HeaderWritten() {
-					aw.WriteHeader(params.defaultStatus)
-				}
-				return
-			}
-
-			// This means the action handler has written the response itself.
-			if aw.BodyWritten() {
-				return
-			}
-
-			w.Header().Add("Content-Type", "application/json; charset=utf-8")
-			// Not sending the status here. The action writer will send it in case of
-			// success. If error has happened while encoding, then the error handler will have
-			// a chance to set the status.
-			if encodingErr := json.NewEncoder(aw).Encode(resData); encodingErr != nil {
-				app.handleResponseErrors(aw, r, encodingErr)
-			}
-		})
-	}
-
 	return ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]{
-		HandleWith: func(inputHandler TPlainHandler) http.Handler {
-			return createHandler(handlerAdapter(inputHandler))
-		},
-		HandleWithHTTP: func(handler THttpHandler) http.Handler {
-			return createHandler(httpHandlerAdapter(handler))
-		},
+		app:                app,
+		handlerAdapter:     handlerAdapter,
+		httpHandlerAdapter: httpHandlerAdapter,
+		params:             params,
 	}
 }
