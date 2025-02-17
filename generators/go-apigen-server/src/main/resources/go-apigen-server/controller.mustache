@@ -93,6 +93,19 @@ type {{classname}}Controller interface {
 {{/operations}}
 }
 
+type {{classname}}ControllerV3 interface {
+{{#operations}}
+{{#operation}}
+	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
+	{{operationId}}({{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}HandlerBuilder[{{#hasParams}}
+		*{{baseName}}{{operationId}}Request,{{/hasParams}}{{#returnType}}
+		*{{.}},
+	{{/returnType}}]){{^-last}}
+
+{{/-last}}{{/operation}}
+{{/operations}}
+}
+
 func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp) {
 	builder := new{{classname}}ControllerBuilder(app)
 	{{#operations}}

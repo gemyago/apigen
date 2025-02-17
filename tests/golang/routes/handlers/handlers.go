@@ -397,6 +397,56 @@ type ActionBuilder[
 	HandleWithHTTP func(THttpHandler) http.Handler
 }
 
+type genericHandlerBuilder[
+	TReq any,
+	TRes any,
+	TPlainHandler ActionHandlerFunc[TReq, TRes],
+	THttpHandler ActionHandlerFunc[TReq, TRes],
+] interface {
+	// HandleWith creates a new http.Handler from a given func.
+	//
+	// The action handler is not supposed to have access to http objects and
+	// in most scenarios can just delegate the work to the application logic layer.
+	// If you need access to http objects use HandleWithHTTP
+	HandleWith(TPlainHandler) http.Handler
+
+	// HandleWithHTTP creates a new http.Handler from a given func.
+	//
+	// The action handler allows direct access to http.ResponseWriter and *http.Request.
+	// It also provides parsed request parameters and allows sending structured response.
+	// If you need fully customized behavior, feel free not to use the builder and
+	// return the handler directly.
+	HandleWithHTTP(THttpHandler) http.Handler
+}
+
+type HandlerBuilder[TReq any, TRes any] genericHandlerBuilder[
+	TReq,
+	TRes,
+	func(context.Context, TReq) (TRes, error),
+	func(http.ResponseWriter, *http.Request, TReq) (TRes, error),
+]
+
+type NoParamsHandlerBuilder[TRes any] genericHandlerBuilder[
+	struct{},
+	TRes,
+	func(context.Context) (TRes, error),
+	func(http.ResponseWriter, *http.Request) (TRes, error),
+]
+
+type NoResponseHandlerBuilder[TReq any] genericHandlerBuilder[
+	TReq,
+	struct{},
+	func(context.Context, TReq) (struct{}, error),
+	func(http.ResponseWriter, *http.Request, TReq) (struct{}, error),
+]
+
+type NoParamsNoResponseHandlerBuilder genericHandlerBuilder[
+	struct{},
+	struct{},
+	func(context.Context) error,
+	func(http.ResponseWriter, *http.Request) error,
+]
+
 /* TODO: implement this function
 func BuildActionWithTransformers[
 	TDeclaredReq any,
