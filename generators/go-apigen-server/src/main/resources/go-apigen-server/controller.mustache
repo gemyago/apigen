@@ -97,10 +97,10 @@ type {{classname}}ControllerV3 interface {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}}({{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}HandlerBuilder[{{#hasParams}}
+	{{operationId}}({{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}HandlerBuilder{{#vendorExtensions.x-apigen-has-params-or-return}}[{{/vendorExtensions.x-apigen-has-params-or-return}}{{#hasParams}}
 		*{{baseName}}{{operationId}}Request,{{/hasParams}}{{#returnType}}
-		*{{.}},
-	{{/returnType}}]){{^-last}}
+		*{{.}},{{/returnType}}{{#vendorExtensions.x-apigen-has-params-or-return}}
+	]{{/vendorExtensions.x-apigen-has-params-or-return}}){{^-last}}
 
 {{/-last}}{{/operation}}
 {{/operations}}

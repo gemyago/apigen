@@ -27,9 +27,11 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
+import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.servers.Server;
 
 import static org.openapitools.codegen.utils.StringUtils.*;
 import static org.openapitools.codegen.utils.CamelizeOption.LOWERCASE_FIRST_LETTER;
@@ -315,6 +317,15 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     operationsMap.put("importedModels", importedModels);
 
     return operationsMap;
+  }
+
+  @Override
+  public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
+    CodegenOperation op = super.fromOperation(path, httpMethod, operation, servers);
+    if(op.hasParams || !StringUtils.isEmpty(op.returnType)) {
+      op.vendorExtensions.put("x-apigen-has-params-or-return", true);
+    }
+    return op;
   }
 
   private String titleCase(final String input) {
