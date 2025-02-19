@@ -38,6 +38,7 @@ func (c *petsController) CreatePet(
 	})
 }
 
+//nolint:revive,stylecheck // ID will be fixed in scope of https://github.com/gemyago/apigen/issues/30
 func (c *petsController) GetPetById(
 	b handlers.HandlerBuilder[*handlers.PetsGetPetByIdRequest, *models.PetResponse],
 ) http.Handler {
