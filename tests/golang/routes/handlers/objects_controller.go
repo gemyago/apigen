@@ -81,7 +81,7 @@ type ObjectsObjectsRequiredNestedObjectsRequest struct {
 	Payload *SimpleObjectsContainer
 }
 
-type ObjectsControllerBuilder struct {
+type objectsControllerBuilder struct {
 	// POST /objects/arrays
 	//
 	// Request type: ObjectsObjectsArrayBodyDirectRequest,
@@ -179,8 +179,8 @@ type ObjectsControllerBuilder struct {
 	]
 }
 
-func newObjectsControllerBuilder(app *HTTPApp) *ObjectsControllerBuilder {
-	return &ObjectsControllerBuilder{
+func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
+	return &objectsControllerBuilder{
 		// POST /objects/arrays
 		ObjectsArrayBodyDirect: makeActionBuilder(
 			app,

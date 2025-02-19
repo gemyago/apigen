@@ -45,7 +45,7 @@ type BehaviorBehaviorWithParamsNoResponseRequest struct {
 
 
 
-type BehaviorControllerBuilder struct {
+type behaviorControllerBuilder struct {
 	// GET /behavior/no-params-no-response
 	//
 	// Request type: none
@@ -119,8 +119,8 @@ type BehaviorControllerBuilder struct {
 	]
 }
 
-func newBehaviorControllerBuilder(app *HTTPApp) *BehaviorControllerBuilder {
-	return &BehaviorControllerBuilder{
+func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
+	return &behaviorControllerBuilder{
 		// GET /behavior/no-params-no-response
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,

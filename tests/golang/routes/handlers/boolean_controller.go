@@ -99,7 +99,7 @@ type BooleanBooleanRequiredValidationRequest struct {
 	OptionalBoolParam2InQuery bool
 }
 
-type BooleanControllerBuilder struct {
+type booleanControllerBuilder struct {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanArrayItemsRequest,
@@ -161,8 +161,8 @@ type BooleanControllerBuilder struct {
 	]
 }
 
-func newBooleanControllerBuilder(app *HTTPApp) *BooleanControllerBuilder {
-	return &BooleanControllerBuilder{
+func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
+	return &booleanControllerBuilder{
 		// POST /boolean/array-items/{boolParam1}/{boolParam2}
 		BooleanArrayItems: makeActionBuilder(
 			app,

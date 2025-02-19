@@ -241,7 +241,7 @@ type NumericTypesNumericTypesRequiredValidationRequest struct {
 	OptionalNumberInt64InQuery int64
 }
 
-type NumericTypesControllerBuilder struct {
+type numericTypesControllerBuilder struct {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesArrayItemsRequest,
@@ -327,8 +327,8 @@ type NumericTypesControllerBuilder struct {
 	]
 }
 
-func newNumericTypesControllerBuilder(app *HTTPApp) *NumericTypesControllerBuilder {
-	return &NumericTypesControllerBuilder{
+func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuilder {
+	return &numericTypesControllerBuilder{
 		// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 		NumericTypesArrayItems: makeActionBuilder(
 			app,

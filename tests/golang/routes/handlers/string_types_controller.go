@@ -671,7 +671,7 @@ type StringTypesStringTypesRequiredValidationRequest struct {
 	OptionalByteStrInQuery string
 }
 
-type StringTypesControllerBuilder struct {
+type stringTypesControllerBuilder struct {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -793,8 +793,8 @@ type StringTypesControllerBuilder struct {
 	]
 }
 
-func newStringTypesControllerBuilder(app *HTTPApp) *StringTypesControllerBuilder {
-	return &StringTypesControllerBuilder{
+func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder {
+	return &stringTypesControllerBuilder{
 		// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 		StringTypesArrayItemsRangeValidation: makeActionBuilder(
 			app,

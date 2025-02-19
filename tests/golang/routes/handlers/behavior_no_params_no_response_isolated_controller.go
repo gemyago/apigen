@@ -19,7 +19,7 @@ type _ func() Error
 
 
 
-type BehaviorNoParamsNoResponseIsolatedControllerBuilder struct {
+type behaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	// GET /behavior/no-params-no-response-isolated
 	//
 	// Request type: none
@@ -33,8 +33,8 @@ type BehaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	]
 }
 
-func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *BehaviorNoParamsNoResponseIsolatedControllerBuilder {
-	return &BehaviorNoParamsNoResponseIsolatedControllerBuilder{
+func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *behaviorNoParamsNoResponseIsolatedControllerBuilder {
+	return &behaviorNoParamsNoResponseIsolatedControllerBuilder{
 		// GET /behavior/no-params-no-response-isolated
 		BehaviorNoParamsNoResponse: makeActionBuilder(
 			app,

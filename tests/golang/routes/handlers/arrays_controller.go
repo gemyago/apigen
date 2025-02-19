@@ -77,7 +77,7 @@ type ArraysArraysRequiredValidationRequest struct {
 	OptionalSimpleItems2InQuery []string
 }
 
-type ArraysControllerBuilder struct {
+type arraysControllerBuilder struct {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//
 	// Request type: ArraysArraysNullableRequiredValidationRequest,
@@ -115,8 +115,8 @@ type ArraysControllerBuilder struct {
 	]
 }
 
-func newArraysControllerBuilder(app *HTTPApp) *ArraysControllerBuilder {
-	return &ArraysControllerBuilder{
+func newArraysControllerBuilder(app *HTTPApp) *arraysControllerBuilder {
+	return &arraysControllerBuilder{
 		// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 		ArraysNullableRequiredValidation: makeActionBuilder(
 			app,

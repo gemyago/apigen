@@ -38,7 +38,7 @@ type {{>request-type}} struct {
 
 {{/operations}}
 
-type {{classname}}ControllerBuilder struct {
+type {{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder struct {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -53,8 +53,8 @@ type {{classname}}ControllerBuilder struct {
 {{/operations}}
 }
 
-func new{{classname}}ControllerBuilder(app *HTTPApp) *{{classname}}ControllerBuilder {
-	return &{{classname}}ControllerBuilder{
+func new{{classname}}ControllerBuilder(app *HTTPApp) *{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder {
+	return &{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder{
 		{{#operations}}
 		{{#operation}}
 		// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
