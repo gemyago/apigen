@@ -652,11 +652,15 @@ func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) cre
 	})
 }
 
-func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) HandleWith(inputHandler TPlainHandler) http.Handler {
+func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) HandleWith(
+	inputHandler TPlainHandler,
+) http.Handler {
 	return ab.createHandler(ab.handlerAdapter(inputHandler))
 }
 
-func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) HandleWithHTTP(handler THttpHandler) http.Handler {
+func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) HandleWithHTTP(
+	handler THttpHandler,
+) http.Handler {
 	return ab.createHandler(ab.httpHandlerAdapter(handler))
 }
 
