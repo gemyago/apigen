@@ -21,59 +21,59 @@ type numericTypesController struct {
 }
 
 func (c *numericTypesController) NumericTypesParsing(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesParsingRequest],
 ) http.Handler {
-	return builder.NumericTypesParsing.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesParsing.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesArrayItems(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesArrayItemsRequest],
 ) http.Handler {
-	return builder.NumericTypesArrayItems.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesArrayItems.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesRangeValidation(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRangeValidationRequest],
 ) http.Handler {
-	return builder.NumericTypesRangeValidation.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesRangeValidation.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesRangeValidationExclusive(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest],
 ) http.Handler {
-	return builder.NumericTypesRangeValidationExclusive.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesRangeValidationExclusive.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesRequiredValidation(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRequiredValidationRequest],
 ) http.Handler {
-	return builder.NumericTypesRequiredValidation.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesRequiredValidation.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesNullable(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesNullableRequest],
 ) http.Handler {
-	return builder.NumericTypesNullable.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesNullable.action,
 	)
 }
 
 func (c *numericTypesController) NumericTypesNullableArrayItems(
-	builder *handlers.NumericTypesControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesNullableArrayItemsRequest],
 ) http.Handler {
-	return builder.NumericTypesNullableArrayItems.HandleWith(
+	return builder.HandleWith(
 		c.testActions.numericTypesNullableArrayItems.action,
 	)
 }
 
-var _ handlers.NumericTypesController = &numericTypesController{}
+var _ handlers.NumericTypesControllerV3 = &numericTypesController{}

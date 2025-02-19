@@ -22,67 +22,67 @@ type objectsController struct {
 }
 
 func (c *objectsController) ObjectsArrayBodyDirect(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsArrayBodyDirectRequest],
 ) http.Handler {
-	return builder.ObjectsArrayBodyDirect.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsArrayParsingBodyDirect.action,
 	)
 }
 
 func (c *objectsController) ObjectsArrayBodyNested(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsArrayBodyNestedRequest],
 ) http.Handler {
-	return builder.ObjectsArrayBodyNested.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsArrayParsingBodyNested.action,
 	)
 }
 
 func (c *objectsController) ObjectsDeeplyNested(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsDeeplyNestedRequest],
 ) http.Handler {
-	return builder.ObjectsDeeplyNested.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsDeeplyNested.action,
 	)
 }
 
 func (c *objectsController) ObjectsNullableOptionalBody(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsNullableOptionalBodyRequest],
 ) http.Handler {
-	return builder.ObjectsNullableOptionalBody.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsNullableOptionalBody.action,
 	)
 }
 
 func (c *objectsController) ObjectsNullableRequiredBody(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsNullableRequiredBodyRequest],
 ) http.Handler {
-	return builder.ObjectsNullableRequiredBody.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsNullableRequiredBody.action,
 	)
 }
 
 func (c *objectsController) ObjectsOptionalBody(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsOptionalBodyRequest],
 ) http.Handler {
-	return builder.ObjectsOptionalBody.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsOptionalBody.action,
 	)
 }
 
 func (c *objectsController) ObjectsRequiredBody(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsRequiredBodyRequest],
 ) http.Handler {
-	return builder.ObjectsRequiredBody.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsRequiredBody.action,
 	)
 }
 
 func (c *objectsController) ObjectsRequiredNestedObjects(
-	builder *handlers.ObjectsControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsRequiredNestedObjectsRequest],
 ) http.Handler {
-	return builder.ObjectsRequiredNestedObjects.HandleWith(
+	return builder.HandleWith(
 		c.testActions.objectsRequiredNestedObjects.action,
 	)
 }
 
-var _ handlers.ObjectsController = &objectsController{}
+var _ handlers.ObjectsControllerV3 = &objectsController{}
