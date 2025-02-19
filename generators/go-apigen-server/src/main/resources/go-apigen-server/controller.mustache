@@ -83,16 +83,6 @@ func new{{classname}}ControllerBuilder(app *HTTPApp) *{{classname}}ControllerBui
 	}
 }
 
-type {{classname}}Controller interface {
-{{#operations}}
-{{#operation}}
-	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}}(b *{{classname}}ControllerBuilder) http.Handler{{^-last}}
-
-{{/-last}}{{/operation}}
-{{/operations}}
-}
-
 type {{classname}}ControllerV3 interface {
 {{#operations}}
 {{#operation}}
@@ -104,15 +94,6 @@ type {{classname}}ControllerV3 interface {
 
 {{/-last}}{{/operation}}
 {{/operations}}
-}
-
-func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp) {
-	builder := new{{classname}}ControllerBuilder(app)
-	{{#operations}}
-	{{#operation}}
-	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder))
-	{{/operation}}
-	{{/operations}}
 }
 
 func Register{{baseName}}RoutesV3(controller {{baseName}}ControllerV3, app *HTTPApp) {

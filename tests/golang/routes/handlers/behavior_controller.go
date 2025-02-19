@@ -247,50 +247,6 @@ func newBehaviorControllerBuilder(app *HTTPApp) *BehaviorControllerBuilder {
 	}
 }
 
-type BehaviorController interface {
-	// GET /behavior/no-params-no-response
-	//
-	// Request type: none
-	//
-	// Response type: none
-	BehaviorNoParamsNoResponse(b *BehaviorControllerBuilder) http.Handler
-
-	// GET /behavior/no-params-with-response
-	//
-	// Request type: none
-	//
-	// Response type: BehaviorNoParamsWithResponse202Response
-	BehaviorNoParamsWithResponse(b *BehaviorControllerBuilder) http.Handler
-
-	// GET /behavior/no-status-defined
-	//
-	// Request type: none
-	//
-	// Response type: none
-	BehaviorNoStatusDefined(b *BehaviorControllerBuilder) http.Handler
-
-	// POST /behavior/with-params-and-response
-	//
-	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
-	//
-	// Response type: BehaviorWithParamsAndResponseResponseBody
-	BehaviorWithParamsAndResponse(b *BehaviorControllerBuilder) http.Handler
-
-	// GET /behavior/with-params-no-response
-	//
-	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
-	//
-	// Response type: none
-	BehaviorWithParamsNoResponse(b *BehaviorControllerBuilder) http.Handler
-
-	// POST /behavior/with-status-defined
-	//
-	// Request type: none
-	//
-	// Response type: none
-	BehaviorWithStatusDefined(b *BehaviorControllerBuilder) http.Handler
-}
-
 type BehaviorControllerV3 interface {
 	// GET /behavior/no-params-no-response
 	//
@@ -340,16 +296,6 @@ type BehaviorControllerV3 interface {
 	//
 	// Response type: none
 	BehaviorWithStatusDefined(NoParamsNoResponseHandlerBuilder) http.Handler
-}
-
-func RegisterBehaviorRoutes(controller BehaviorController, app *HTTPApp) {
-	builder := newBehaviorControllerBuilder(app)
-	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder))
-	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder))
-	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder))
-	app.router.HandleRoute("POST", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder))
-	app.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder))
-	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder))
 }
 
 func RegisterBehaviorRoutesV3(controller BehaviorControllerV3, app *HTTPApp) {

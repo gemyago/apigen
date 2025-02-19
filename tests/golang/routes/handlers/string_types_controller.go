@@ -1007,78 +1007,6 @@ func newStringTypesControllerBuilder(app *HTTPApp) *StringTypesControllerBuilder
 	}
 }
 
-type StringTypesController interface {
-	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
-	//
-	// Response type: none
-	StringTypesArrayItemsRangeValidation(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesArraysParsingRequest,
-	//
-	// Response type: none
-	StringTypesArraysParsing(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
-	//
-	// Request type: StringTypesStringTypesEnumsRequest,
-	//
-	// Response type: none
-	StringTypesEnums(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesNullableArrayItemsRequest,
-	//
-	// Response type: none
-	StringTypesNullableArrayItems(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesNullableParsingRequest,
-	//
-	// Response type: none
-	StringTypesNullableParsing(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/nullable-required-validation
-	//
-	// Request type: StringTypesStringTypesNullableRequiredValidationRequest,
-	//
-	// Response type: none
-	StringTypesNullableRequiredValidation(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesParsingRequest,
-	//
-	// Response type: none
-	StringTypesParsing(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
-	//
-	// Request type: StringTypesStringTypesPatternValidationRequest,
-	//
-	// Response type: none
-	StringTypesPatternValidation(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-	//
-	// Request type: StringTypesStringTypesRangeValidationRequest,
-	//
-	// Response type: none
-	StringTypesRangeValidation(b *StringTypesControllerBuilder) http.Handler
-
-	// POST /string-types/required-validation
-	//
-	// Request type: StringTypesStringTypesRequiredValidationRequest,
-	//
-	// Response type: none
-	StringTypesRequiredValidation(b *StringTypesControllerBuilder) http.Handler
-}
-
 type StringTypesControllerV3 interface {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
@@ -1169,20 +1097,6 @@ type StringTypesControllerV3 interface {
 	StringTypesRequiredValidation(NoResponseHandlerBuilder[
 		*StringTypesStringTypesRequiredValidationRequest,
 	]) http.Handler
-}
-
-func RegisterStringTypesRoutes(controller StringTypesController, app *HTTPApp) {
-	builder := newStringTypesControllerBuilder(app)
-	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder))
-	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder))
-	app.router.HandleRoute("POST", "/string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}", controller.StringTypesEnums(builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableArrayItems(builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesNullableParsing(builder))
-	app.router.HandleRoute("POST", "/string-types/nullable-required-validation", controller.StringTypesNullableRequiredValidation(builder))
-	app.router.HandleRoute("POST", "/string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesParsing(builder))
-	app.router.HandleRoute("POST", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(builder))
-	app.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(builder))
-	app.router.HandleRoute("POST", "/string-types/required-validation", controller.StringTypesRequiredValidation(builder))
 }
 
 func RegisterStringTypesRoutesV3(controller StringTypesControllerV3, app *HTTPApp) {

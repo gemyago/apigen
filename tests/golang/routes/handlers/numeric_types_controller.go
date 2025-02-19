@@ -478,57 +478,6 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *NumericTypesControllerBuild
 	}
 }
 
-type NumericTypesController interface {
-	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesArrayItemsRequest,
-	//
-	// Response type: none
-	NumericTypesArrayItems(b *NumericTypesControllerBuilder) http.Handler
-
-	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesNullableRequest,
-	//
-	// Response type: none
-	NumericTypesNullable(b *NumericTypesControllerBuilder) http.Handler
-
-	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesNullableArrayItemsRequest,
-	//
-	// Response type: none
-	NumericTypesNullableArrayItems(b *NumericTypesControllerBuilder) http.Handler
-
-	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesParsingRequest,
-	//
-	// Response type: none
-	NumericTypesParsing(b *NumericTypesControllerBuilder) http.Handler
-
-	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesRangeValidationRequest,
-	//
-	// Response type: none
-	NumericTypesRangeValidation(b *NumericTypesControllerBuilder) http.Handler
-
-	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-	//
-	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
-	//
-	// Response type: none
-	NumericTypesRangeValidationExclusive(b *NumericTypesControllerBuilder) http.Handler
-
-	// GET /numeric-types/required-validation
-	//
-	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
-	//
-	// Response type: none
-	NumericTypesRequiredValidation(b *NumericTypesControllerBuilder) http.Handler
-}
-
 type NumericTypesControllerV3 interface {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
@@ -592,17 +541,6 @@ type NumericTypesControllerV3 interface {
 	NumericTypesRequiredValidation(NoResponseHandlerBuilder[
 		*NumericTypesNumericTypesRequiredValidationRequest,
 	]) http.Handler
-}
-
-func RegisterNumericTypesRoutes(controller NumericTypesController, app *HTTPApp) {
-	builder := newNumericTypesControllerBuilder(app)
-	app.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder))
-	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(builder))
-	app.router.HandleRoute("POST", "/numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullableArrayItems(builder))
-	app.router.HandleRoute("POST", "/numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesParsing(builder))
-	app.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(builder))
-	app.router.HandleRoute("POST", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(builder))
-	app.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(builder))
 }
 
 func RegisterNumericTypesRoutesV3(controller NumericTypesControllerV3, app *HTTPApp) {
