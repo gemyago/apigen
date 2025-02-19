@@ -71,6 +71,14 @@ type HTTPApp struct {
 
 type HTTPAppOpt func(app *HTTPApp)
 
+// WithLogger allows to set custom logger for the application.
+// The default logger is slog.Default().
+func WithLogger(logger SlogLogger) HTTPAppOpt {
+	return func(app *HTTPApp) {
+		app.logger = logger
+	}
+}
+
 // WithParsingErrorHandler allows to set custom handler for parsing errors.
 // Parsing errors are errors that occur during request parsing and validation.
 // The default implementation will respond with 400 status code and validation

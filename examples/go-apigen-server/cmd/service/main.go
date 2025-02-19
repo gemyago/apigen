@@ -8,7 +8,6 @@ import (
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/router"
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/app"
 )
 
 func main() {
@@ -18,15 +17,9 @@ func main() {
 
 	port := 8080
 	readHeaderTimeoutSec := 2
-	storage := app.NewStorage()
 
 	// Generated routes need a controller implementation to process requests
-	petsController := v1controllers.NewPetsController(
-		v1controllers.PetsControllerDeps{
-			Commands: app.NewCommands(app.CommandsDeps{Storage: storage}),
-			Queries:  app.NewQueries(app.QueriesDeps{Storage: storage}),
-		},
-	)
+	petsController := v1controllers.NewPetsController()
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),
