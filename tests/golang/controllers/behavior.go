@@ -116,7 +116,7 @@ func (c *behaviorController) BehaviorWithParamsAndResponse(
 func (c *behaviorController) BehaviorWithParamsNoResponse(
 	builder handlers.NoResponseHandlerBuilder[*handlers.BehaviorBehaviorWithParamsNoResponseRequest],
 ) http.Handler {
-	if c.testActions.withParamsAndResponse.isHTTPAction {
+	if c.testActions.withParamsNoResponse.isHTTPAction {
 		return builder.HandleWithHTTP(
 			c.testActions.withParamsNoResponse.httpActionWithParamsNoResponse,
 		)
