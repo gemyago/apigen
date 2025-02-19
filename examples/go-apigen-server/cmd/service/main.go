@@ -10,6 +10,17 @@ import (
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
 )
 
+// Start is using command below:
+// go run ./examples/go-apigen-server/cmd/service/
+//
+// Send requests with curl:
+// Create few pets:
+// - curl -X POST localhost:8080/pets -d '{"id": 1, "name": "dog"}'
+// - curl -X POST localhost:8080/pets -d '{"id": 2, "name": "cat"}'
+// - curl -X POST localhost:8080/pets -d '{"id": 3, "name": "fish"}'
+// List pets: curl localhost:8080/pets?limit=10
+// Get pet by id: curl localhost:8080/pets/1
+
 func main() {
 	// Minimal implementation of the http server startup.
 	// Real world implementation will likely to be more advanced and have

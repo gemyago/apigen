@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/app"
 )
 
 // httpRouter is a ServerMux adapter to use with generated routes.
@@ -27,9 +27,9 @@ func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 func handleActionError(w http.ResponseWriter, _ *http.Request, err error) {
 	code := 500
 	switch {
-	case errors.Is(err, app.ErrNotFound):
+	case errors.Is(err, v1controllers.ErrNotFound):
 		code = 404
-	case errors.Is(err, app.ErrConflict):
+	case errors.Is(err, v1controllers.ErrConflict):
 		code = 409
 	}
 	w.WriteHeader(code)
