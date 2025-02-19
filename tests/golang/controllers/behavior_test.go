@@ -29,7 +29,7 @@ func TestBehavior(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBehaviorRoutes(
+		handlers.RegisterBehaviorRoutesV3(
 			controller,
 			handlers.NewHTTPApp(router, tc.appendHTTPAppOpts(handlers.WithLogger(newLogger()))...),
 		)
