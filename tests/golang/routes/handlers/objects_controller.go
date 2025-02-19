@@ -87,7 +87,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsArrayBodyDirectRequest,
 	//
 	// Response type: none
-	ObjectsArrayBodyDirect ActionBuilder[
+	ObjectsArrayBodyDirect genericHandlerBuilder[
 		*ObjectsObjectsArrayBodyDirectRequest,
 		void,
 		func(context.Context, *ObjectsObjectsArrayBodyDirectRequest) (error),
@@ -99,7 +99,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsArrayBodyNestedRequest,
 	//
 	// Response type: none
-	ObjectsArrayBodyNested ActionBuilder[
+	ObjectsArrayBodyNested genericHandlerBuilder[
 		*ObjectsObjectsArrayBodyNestedRequest,
 		void,
 		func(context.Context, *ObjectsObjectsArrayBodyNestedRequest) (error),
@@ -111,7 +111,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsDeeplyNestedRequest,
 	//
 	// Response type: none
-	ObjectsDeeplyNested ActionBuilder[
+	ObjectsDeeplyNested genericHandlerBuilder[
 		*ObjectsObjectsDeeplyNestedRequest,
 		void,
 		func(context.Context, *ObjectsObjectsDeeplyNestedRequest) (error),
@@ -123,7 +123,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsNullableOptionalBodyRequest,
 	//
 	// Response type: none
-	ObjectsNullableOptionalBody ActionBuilder[
+	ObjectsNullableOptionalBody genericHandlerBuilder[
 		*ObjectsObjectsNullableOptionalBodyRequest,
 		void,
 		func(context.Context, *ObjectsObjectsNullableOptionalBodyRequest) (error),
@@ -135,7 +135,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsNullableRequiredBodyRequest,
 	//
 	// Response type: none
-	ObjectsNullableRequiredBody ActionBuilder[
+	ObjectsNullableRequiredBody genericHandlerBuilder[
 		*ObjectsObjectsNullableRequiredBodyRequest,
 		void,
 		func(context.Context, *ObjectsObjectsNullableRequiredBodyRequest) (error),
@@ -147,7 +147,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsOptionalBodyRequest,
 	//
 	// Response type: none
-	ObjectsOptionalBody ActionBuilder[
+	ObjectsOptionalBody genericHandlerBuilder[
 		*ObjectsObjectsOptionalBodyRequest,
 		void,
 		func(context.Context, *ObjectsObjectsOptionalBodyRequest) (error),
@@ -159,7 +159,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsRequiredBodyRequest,
 	//
 	// Response type: none
-	ObjectsRequiredBody ActionBuilder[
+	ObjectsRequiredBody genericHandlerBuilder[
 		*ObjectsObjectsRequiredBodyRequest,
 		void,
 		func(context.Context, *ObjectsObjectsRequiredBodyRequest) (error),
@@ -171,7 +171,7 @@ type objectsControllerBuilder struct {
 	// Request type: ObjectsObjectsRequiredNestedObjectsRequest,
 	//
 	// Response type: none
-	ObjectsRequiredNestedObjects ActionBuilder[
+	ObjectsRequiredNestedObjects genericHandlerBuilder[
 		*ObjectsObjectsRequiredNestedObjectsRequest,
 		void,
 		func(context.Context, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
@@ -182,7 +182,7 @@ type objectsControllerBuilder struct {
 func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 	return &objectsControllerBuilder{
 		// POST /objects/arrays
-		ObjectsArrayBodyDirect: makeActionBuilder(
+		ObjectsArrayBodyDirect: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsArrayBodyDirectRequest,
@@ -203,7 +203,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// PUT /objects/arrays
-		ObjectsArrayBodyNested: makeActionBuilder(
+		ObjectsArrayBodyNested: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsArrayBodyNestedRequest,
@@ -224,7 +224,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// POST /objects/deeply-nested
-		ObjectsDeeplyNested: makeActionBuilder(
+		ObjectsDeeplyNested: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsDeeplyNestedRequest,
@@ -245,7 +245,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// PUT /objects/nullable-body
-		ObjectsNullableOptionalBody: makeActionBuilder(
+		ObjectsNullableOptionalBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsNullableOptionalBodyRequest,
@@ -266,7 +266,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// POST /objects/nullable-body
-		ObjectsNullableRequiredBody: makeActionBuilder(
+		ObjectsNullableRequiredBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsNullableRequiredBodyRequest,
@@ -287,7 +287,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// PUT /objects/required-body
-		ObjectsOptionalBody: makeActionBuilder(
+		ObjectsOptionalBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsOptionalBodyRequest,
@@ -308,7 +308,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// POST /objects/required-body
-		ObjectsRequiredBody: makeActionBuilder(
+		ObjectsRequiredBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsRequiredBodyRequest,
@@ -329,7 +329,7 @@ func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
 		),
 
 		// POST /objects/required-nested-objects
-		ObjectsRequiredNestedObjects: makeActionBuilder(
+		ObjectsRequiredNestedObjects: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ObjectsObjectsRequiredNestedObjectsRequest,

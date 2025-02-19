@@ -51,7 +51,7 @@ type behaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoParamsNoResponse ActionBuilder[
+	BehaviorNoParamsNoResponse genericHandlerBuilder[
 		void,
 		void,
 		func(context.Context) (error),
@@ -63,7 +63,7 @@ type behaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
-	BehaviorNoParamsWithResponse ActionBuilder[
+	BehaviorNoParamsWithResponse genericHandlerBuilder[
 		void,
 		*BehaviorNoParamsWithResponse202Response,
 		func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
@@ -75,7 +75,7 @@ type behaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoStatusDefined ActionBuilder[
+	BehaviorNoStatusDefined genericHandlerBuilder[
 		void,
 		void,
 		func(context.Context) (error),
@@ -87,7 +87,7 @@ type behaviorControllerBuilder struct {
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
 	// Response type: BehaviorWithParamsAndResponseResponseBody
-	BehaviorWithParamsAndResponse ActionBuilder[
+	BehaviorWithParamsAndResponse genericHandlerBuilder[
 		*BehaviorBehaviorWithParamsAndResponseRequest,
 		*BehaviorWithParamsAndResponseResponseBody,
 		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
@@ -99,7 +99,7 @@ type behaviorControllerBuilder struct {
 	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
 	//
 	// Response type: none
-	BehaviorWithParamsNoResponse ActionBuilder[
+	BehaviorWithParamsNoResponse genericHandlerBuilder[
 		*BehaviorBehaviorWithParamsNoResponseRequest,
 		void,
 		func(context.Context, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
@@ -111,7 +111,7 @@ type behaviorControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorWithStatusDefined ActionBuilder[
+	BehaviorWithStatusDefined genericHandlerBuilder[
 		void,
 		void,
 		func(context.Context) (error),
@@ -122,7 +122,7 @@ type behaviorControllerBuilder struct {
 func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 	return &behaviorControllerBuilder{
 		// GET /behavior/no-params-no-response
-		BehaviorNoParamsNoResponse: makeActionBuilder(
+		BehaviorNoParamsNoResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
 				void,
@@ -143,7 +143,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 		),
 
 		// GET /behavior/no-params-with-response
-		BehaviorNoParamsWithResponse: makeActionBuilder(
+		BehaviorNoParamsWithResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoParams[
 				void,
@@ -163,7 +163,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 		),
 
 		// GET /behavior/no-status-defined
-		BehaviorNoStatusDefined: makeActionBuilder(
+		BehaviorNoStatusDefined: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
 				void,
@@ -184,7 +184,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 		),
 
 		// POST /behavior/with-params-and-response
-		BehaviorWithParamsAndResponse: makeActionBuilder(
+		BehaviorWithParamsAndResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
 				*BehaviorBehaviorWithParamsAndResponseRequest,
@@ -204,7 +204,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 		),
 
 		// GET /behavior/with-params-no-response
-		BehaviorWithParamsNoResponse: makeActionBuilder(
+		BehaviorWithParamsNoResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BehaviorBehaviorWithParamsNoResponseRequest,
@@ -225,7 +225,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
 		),
 
 		// POST /behavior/with-status-defined
-		BehaviorWithStatusDefined: makeActionBuilder(
+		BehaviorWithStatusDefined: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
 				void,

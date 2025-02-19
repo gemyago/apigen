@@ -247,7 +247,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesArrayItemsRequest,
 	//
 	// Response type: none
-	NumericTypesArrayItems ActionBuilder[
+	NumericTypesArrayItems genericHandlerBuilder[
 		*NumericTypesNumericTypesArrayItemsRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
@@ -259,7 +259,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesNullableRequest,
 	//
 	// Response type: none
-	NumericTypesNullable ActionBuilder[
+	NumericTypesNullable genericHandlerBuilder[
 		*NumericTypesNumericTypesNullableRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
@@ -271,7 +271,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesNullableArrayItemsRequest,
 	//
 	// Response type: none
-	NumericTypesNullableArrayItems ActionBuilder[
+	NumericTypesNullableArrayItems genericHandlerBuilder[
 		*NumericTypesNumericTypesNullableArrayItemsRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
@@ -283,7 +283,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesParsingRequest,
 	//
 	// Response type: none
-	NumericTypesParsing ActionBuilder[
+	NumericTypesParsing genericHandlerBuilder[
 		*NumericTypesNumericTypesParsingRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
@@ -295,7 +295,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesRangeValidationRequest,
 	//
 	// Response type: none
-	NumericTypesRangeValidation ActionBuilder[
+	NumericTypesRangeValidation genericHandlerBuilder[
 		*NumericTypesNumericTypesRangeValidationRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
@@ -307,7 +307,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesRangeValidationExclusiveRequest,
 	//
 	// Response type: none
-	NumericTypesRangeValidationExclusive ActionBuilder[
+	NumericTypesRangeValidationExclusive genericHandlerBuilder[
 		*NumericTypesNumericTypesRangeValidationExclusiveRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
@@ -319,7 +319,7 @@ type numericTypesControllerBuilder struct {
 	// Request type: NumericTypesNumericTypesRequiredValidationRequest,
 	//
 	// Response type: none
-	NumericTypesRequiredValidation ActionBuilder[
+	NumericTypesRequiredValidation genericHandlerBuilder[
 		*NumericTypesNumericTypesRequiredValidationRequest,
 		void,
 		func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
@@ -330,7 +330,7 @@ type numericTypesControllerBuilder struct {
 func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuilder {
 	return &numericTypesControllerBuilder{
 		// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesArrayItems: makeActionBuilder(
+		NumericTypesArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesArrayItemsRequest,
@@ -351,7 +351,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesNullable: makeActionBuilder(
+		NumericTypesNullable: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesNullableRequest,
@@ -372,7 +372,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesNullableArrayItems: makeActionBuilder(
+		NumericTypesNullableArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesNullableArrayItemsRequest,
@@ -393,7 +393,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesParsing: makeActionBuilder(
+		NumericTypesParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesParsingRequest,
@@ -414,7 +414,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesRangeValidation: makeActionBuilder(
+		NumericTypesRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesRangeValidationRequest,
@@ -435,7 +435,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
-		NumericTypesRangeValidationExclusive: makeActionBuilder(
+		NumericTypesRangeValidationExclusive: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesRangeValidationExclusiveRequest,
@@ -456,7 +456,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *numericTypesControllerBuild
 		),
 
 		// GET /numeric-types/required-validation
-		NumericTypesRequiredValidation: makeActionBuilder(
+		NumericTypesRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*NumericTypesNumericTypesRequiredValidationRequest,

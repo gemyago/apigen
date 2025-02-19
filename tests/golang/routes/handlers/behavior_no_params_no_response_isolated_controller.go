@@ -25,7 +25,7 @@ type behaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoParamsNoResponse ActionBuilder[
+	BehaviorNoParamsNoResponse genericHandlerBuilder[
 		void,
 		void,
 		func(context.Context) (error),
@@ -36,7 +36,7 @@ type behaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *behaviorNoParamsNoResponseIsolatedControllerBuilder {
 	return &behaviorNoParamsNoResponseIsolatedControllerBuilder{
 		// GET /behavior/no-params-no-response-isolated
-		BehaviorNoParamsNoResponse: makeActionBuilder(
+		BehaviorNoParamsNoResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoParamsNoResponse[
 				void,

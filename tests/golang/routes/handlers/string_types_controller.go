@@ -677,7 +677,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
 	//
 	// Response type: none
-	StringTypesArrayItemsRangeValidation ActionBuilder[
+	StringTypesArrayItemsRangeValidation genericHandlerBuilder[
 		*StringTypesStringTypesArrayItemsRangeValidationRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
@@ -689,7 +689,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesArraysParsingRequest,
 	//
 	// Response type: none
-	StringTypesArraysParsing ActionBuilder[
+	StringTypesArraysParsing genericHandlerBuilder[
 		*StringTypesStringTypesArraysParsingRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesArraysParsingRequest) (error),
@@ -701,7 +701,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesEnumsRequest,
 	//
 	// Response type: none
-	StringTypesEnums ActionBuilder[
+	StringTypesEnums genericHandlerBuilder[
 		*StringTypesStringTypesEnumsRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesEnumsRequest) (error),
@@ -713,7 +713,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesNullableArrayItemsRequest,
 	//
 	// Response type: none
-	StringTypesNullableArrayItems ActionBuilder[
+	StringTypesNullableArrayItems genericHandlerBuilder[
 		*StringTypesStringTypesNullableArrayItemsRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesNullableArrayItemsRequest) (error),
@@ -725,7 +725,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesNullableParsingRequest,
 	//
 	// Response type: none
-	StringTypesNullableParsing ActionBuilder[
+	StringTypesNullableParsing genericHandlerBuilder[
 		*StringTypesStringTypesNullableParsingRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesNullableParsingRequest) (error),
@@ -737,7 +737,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesNullableRequiredValidationRequest,
 	//
 	// Response type: none
-	StringTypesNullableRequiredValidation ActionBuilder[
+	StringTypesNullableRequiredValidation genericHandlerBuilder[
 		*StringTypesStringTypesNullableRequiredValidationRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
@@ -749,7 +749,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesParsingRequest,
 	//
 	// Response type: none
-	StringTypesParsing ActionBuilder[
+	StringTypesParsing genericHandlerBuilder[
 		*StringTypesStringTypesParsingRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesParsingRequest) (error),
@@ -761,7 +761,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesPatternValidationRequest,
 	//
 	// Response type: none
-	StringTypesPatternValidation ActionBuilder[
+	StringTypesPatternValidation genericHandlerBuilder[
 		*StringTypesStringTypesPatternValidationRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesPatternValidationRequest) (error),
@@ -773,7 +773,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesRangeValidationRequest,
 	//
 	// Response type: none
-	StringTypesRangeValidation ActionBuilder[
+	StringTypesRangeValidation genericHandlerBuilder[
 		*StringTypesStringTypesRangeValidationRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesRangeValidationRequest) (error),
@@ -785,7 +785,7 @@ type stringTypesControllerBuilder struct {
 	// Request type: StringTypesStringTypesRequiredValidationRequest,
 	//
 	// Response type: none
-	StringTypesRequiredValidation ActionBuilder[
+	StringTypesRequiredValidation genericHandlerBuilder[
 		*StringTypesStringTypesRequiredValidationRequest,
 		void,
 		func(context.Context, *StringTypesStringTypesRequiredValidationRequest) (error),
@@ -796,7 +796,7 @@ type stringTypesControllerBuilder struct {
 func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder {
 	return &stringTypesControllerBuilder{
 		// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesArrayItemsRangeValidation: makeActionBuilder(
+		StringTypesArrayItemsRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -817,7 +817,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesArraysParsing: makeActionBuilder(
+		StringTypesArraysParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesArraysParsingRequest,
@@ -838,7 +838,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
-		StringTypesEnums: makeActionBuilder(
+		StringTypesEnums: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesEnumsRequest,
@@ -859,7 +859,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesNullableArrayItems: makeActionBuilder(
+		StringTypesNullableArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesNullableArrayItemsRequest,
@@ -880,7 +880,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesNullableParsing: makeActionBuilder(
+		StringTypesNullableParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesNullableParsingRequest,
@@ -901,7 +901,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/nullable-required-validation
-		StringTypesNullableRequiredValidation: makeActionBuilder(
+		StringTypesNullableRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesNullableRequiredValidationRequest,
@@ -922,7 +922,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesParsing: makeActionBuilder(
+		StringTypesParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesParsingRequest,
@@ -943,7 +943,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
-		StringTypesPatternValidation: makeActionBuilder(
+		StringTypesPatternValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesPatternValidationRequest,
@@ -964,7 +964,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
-		StringTypesRangeValidation: makeActionBuilder(
+		StringTypesRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesRangeValidationRequest,
@@ -985,7 +985,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *stringTypesControllerBuilder
 		),
 
 		// POST /string-types/required-validation
-		StringTypesRequiredValidation: makeActionBuilder(
+		StringTypesRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*StringTypesStringTypesRequiredValidationRequest,

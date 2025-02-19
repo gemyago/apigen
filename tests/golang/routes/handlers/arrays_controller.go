@@ -83,7 +83,7 @@ type arraysControllerBuilder struct {
 	// Request type: ArraysArraysNullableRequiredValidationRequest,
 	//
 	// Response type: none
-	ArraysNullableRequiredValidation ActionBuilder[
+	ArraysNullableRequiredValidation genericHandlerBuilder[
 		*ArraysArraysNullableRequiredValidationRequest,
 		void,
 		func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
@@ -95,7 +95,7 @@ type arraysControllerBuilder struct {
 	// Request type: ArraysArraysRangeValidationRequest,
 	//
 	// Response type: none
-	ArraysRangeValidation ActionBuilder[
+	ArraysRangeValidation genericHandlerBuilder[
 		*ArraysArraysRangeValidationRequest,
 		void,
 		func(context.Context, *ArraysArraysRangeValidationRequest) (error),
@@ -107,7 +107,7 @@ type arraysControllerBuilder struct {
 	// Request type: ArraysArraysRequiredValidationRequest,
 	//
 	// Response type: none
-	ArraysRequiredValidation ActionBuilder[
+	ArraysRequiredValidation genericHandlerBuilder[
 		*ArraysArraysRequiredValidationRequest,
 		void,
 		func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
@@ -118,7 +118,7 @@ type arraysControllerBuilder struct {
 func newArraysControllerBuilder(app *HTTPApp) *arraysControllerBuilder {
 	return &arraysControllerBuilder{
 		// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
-		ArraysNullableRequiredValidation: makeActionBuilder(
+		ArraysNullableRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ArraysArraysNullableRequiredValidationRequest,
@@ -139,7 +139,7 @@ func newArraysControllerBuilder(app *HTTPApp) *arraysControllerBuilder {
 		),
 
 		// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
-		ArraysRangeValidation: makeActionBuilder(
+		ArraysRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ArraysArraysRangeValidationRequest,
@@ -160,7 +160,7 @@ func newArraysControllerBuilder(app *HTTPApp) *arraysControllerBuilder {
 		),
 
 		// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
-		ArraysRequiredValidation: makeActionBuilder(
+		ArraysRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*ArraysArraysRequiredValidationRequest,

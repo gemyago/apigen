@@ -51,7 +51,7 @@ type petsControllerBuilder struct {
 	// Request type: PetsCreatePetRequest,
 	//
 	// Response type: none
-	CreatePet ActionBuilder[
+	CreatePet genericHandlerBuilder[
 		*PetsCreatePetRequest,
 		void,
 		func(context.Context, *PetsCreatePetRequest) (error),
@@ -63,7 +63,7 @@ type petsControllerBuilder struct {
 	// Request type: PetsGetPetByIdRequest,
 	//
 	// Response type: PetResponse
-	GetPetById ActionBuilder[
+	GetPetById genericHandlerBuilder[
 		*PetsGetPetByIdRequest,
 		*PetResponse,
 		func(context.Context, *PetsGetPetByIdRequest) (*PetResponse, error),
@@ -75,7 +75,7 @@ type petsControllerBuilder struct {
 	// Request type: PetsListPetsRequest,
 	//
 	// Response type: PetsResponse
-	ListPets ActionBuilder[
+	ListPets genericHandlerBuilder[
 		*PetsListPetsRequest,
 		*PetsResponse,
 		func(context.Context, *PetsListPetsRequest) (*PetsResponse, error),
@@ -86,7 +86,7 @@ type petsControllerBuilder struct {
 func newPetsControllerBuilder(app *HTTPApp) *petsControllerBuilder {
 	return &petsControllerBuilder{
 		// POST /pets
-		CreatePet: makeActionBuilder(
+		CreatePet: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*PetsCreatePetRequest,
@@ -107,7 +107,7 @@ func newPetsControllerBuilder(app *HTTPApp) *petsControllerBuilder {
 		),
 
 		// GET /pets/{petId}
-		GetPetById: makeActionBuilder(
+		GetPetById: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
 				*PetsGetPetByIdRequest,
@@ -127,7 +127,7 @@ func newPetsControllerBuilder(app *HTTPApp) *petsControllerBuilder {
 		),
 
 		// GET /pets
-		ListPets: makeActionBuilder(
+		ListPets: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
 				*PetsListPetsRequest,

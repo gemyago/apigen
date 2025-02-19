@@ -105,7 +105,7 @@ type booleanControllerBuilder struct {
 	// Request type: BooleanBooleanArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanArrayItems ActionBuilder[
+	BooleanArrayItems genericHandlerBuilder[
 		*BooleanBooleanArrayItemsRequest,
 		void,
 		func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
@@ -117,7 +117,7 @@ type booleanControllerBuilder struct {
 	// Request type: BooleanBooleanNullableRequest,
 	//
 	// Response type: none
-	BooleanNullable ActionBuilder[
+	BooleanNullable genericHandlerBuilder[
 		*BooleanBooleanNullableRequest,
 		void,
 		func(context.Context, *BooleanBooleanNullableRequest) (error),
@@ -129,7 +129,7 @@ type booleanControllerBuilder struct {
 	// Request type: BooleanBooleanNullableArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanNullableArrayItems ActionBuilder[
+	BooleanNullableArrayItems genericHandlerBuilder[
 		*BooleanBooleanNullableArrayItemsRequest,
 		void,
 		func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
@@ -141,7 +141,7 @@ type booleanControllerBuilder struct {
 	// Request type: BooleanBooleanParsingRequest,
 	//
 	// Response type: none
-	BooleanParsing ActionBuilder[
+	BooleanParsing genericHandlerBuilder[
 		*BooleanBooleanParsingRequest,
 		void,
 		func(context.Context, *BooleanBooleanParsingRequest) (error),
@@ -153,7 +153,7 @@ type booleanControllerBuilder struct {
 	// Request type: BooleanBooleanRequiredValidationRequest,
 	//
 	// Response type: none
-	BooleanRequiredValidation ActionBuilder[
+	BooleanRequiredValidation genericHandlerBuilder[
 		*BooleanBooleanRequiredValidationRequest,
 		void,
 		func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
@@ -164,7 +164,7 @@ type booleanControllerBuilder struct {
 func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
 	return &booleanControllerBuilder{
 		// POST /boolean/array-items/{boolParam1}/{boolParam2}
-		BooleanArrayItems: makeActionBuilder(
+		BooleanArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BooleanBooleanArrayItemsRequest,
@@ -185,7 +185,7 @@ func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
 		),
 
 		// POST /boolean/nullable/{boolParam1}/{boolParam2}
-		BooleanNullable: makeActionBuilder(
+		BooleanNullable: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BooleanBooleanNullableRequest,
@@ -206,7 +206,7 @@ func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
 		),
 
 		// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
-		BooleanNullableArrayItems: makeActionBuilder(
+		BooleanNullableArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BooleanBooleanNullableArrayItemsRequest,
@@ -227,7 +227,7 @@ func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
 		),
 
 		// POST /boolean/parsing/{boolParam1}/{boolParam2}
-		BooleanParsing: makeActionBuilder(
+		BooleanParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BooleanBooleanParsingRequest,
@@ -248,7 +248,7 @@ func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
 		),
 
 		// POST /boolean/required-validation
-		BooleanRequiredValidation: makeActionBuilder(
+		BooleanRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
 				*BooleanBooleanRequiredValidationRequest,
