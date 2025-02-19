@@ -69,27 +69,42 @@ type HTTPApp struct {
 
 type HTTPAppOpt func(app *HTTPApp)
 
+// WithLogger allows to set custom logger for the application.
+// The default logger is slog.Default().
+func WithLogger(logger SlogLogger) HTTPAppOpt {
+	return func(app *HTTPApp) {
+		app.logger = logger
+	}
+}
+
+// WithParsingErrorHandler allows to set custom handler for parsing errors.
+// Parsing errors are errors that occur during request parsing and validation.
+// The default implementation will respond with 400 status code and validation
+// errors serialized as JSON. No sensitive information is exposed, just field names.
+// The default implementation will also log the error using configured logger.
 func WithParsingErrorHandler(handler ParsingErrorHandler) HTTPAppOpt {
 	return func(app *HTTPApp) {
 		app.handleParsingErrors = handler
 	}
 }
 
+// WithActionErrorHandler allows to set custom handler for action errors.
+// Action errors are errors that occur during controller action execution.
+// The default implementation will respond with 500 status code and no output.
+// The default implementation will also log the error using configured logger.
 func WithActionErrorHandler(handler ActionErrorHandler) HTTPAppOpt {
 	return func(app *HTTPApp) {
 		app.handleActionErrors = handler
 	}
 }
 
+// WithResponseErrorHandler allows to set custom handler for response errors.
+// Response errors are errors that occur while writing response.
+// The default implementation will attempt to respond with 500 status code and no output.
+// The default implementation will also log the error using configured logger.
 func WithResponseErrorHandler(handler ResponseErrorHandler) HTTPAppOpt {
 	return func(app *HTTPApp) {
 		app.handleResponseErrors = handler
-	}
-}
-
-func WithLogger(logger SlogLogger) HTTPAppOpt {
-	return func(app *HTTPApp) {
-		app.logger = logger
 	}
 }
 
@@ -488,25 +503,6 @@ type NoParamsNoResponseHandlerBuilder genericHandlerBuilder[
 	func(context.Context) error,
 	func(http.ResponseWriter, *http.Request) error,
 ]
-
-/* TODO: implement this function
-func BuildActionWithTransformers[
-	TDeclaredReq any,
-	TDeclaredRes any,
-	TDeclaredFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
-	TDeclaredHttpFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
-	TAppReq any,
-	TAppRes any,
-	TAppFn ActionHandlerFunc[TAppReq, TAppRes],
-](
-	actionBuilder ActionBuilder[TDeclaredReq, TDeclaredRes, TDeclaredFn, TDeclaredHttpFn],
-	action TAppFn,
-	inputTransformer func(req *http.Request, input *TDeclaredReq) (*TAppReq, error),
-	outputTransformer func(input *TAppRes) (*TDeclaredRes, error),
-) http.Handler {
-	panic("not implemented")
-}
-*/
 
 type makeActionBuilderParams[
 	TReqParams any,

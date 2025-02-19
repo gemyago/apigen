@@ -506,25 +506,6 @@ type NoParamsNoResponseHandlerBuilder genericHandlerBuilder[
 	func(http.ResponseWriter, *http.Request) error,
 ]
 
-/* TODO: implement this function
-func BuildActionWithTransformers[
-	TDeclaredReq any,
-	TDeclaredRes any,
-	TDeclaredFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
-	TDeclaredHttpFn ActionHandlerFunc[TDeclaredReq, TDeclaredRes],
-	TAppReq any,
-	TAppRes any,
-	TAppFn ActionHandlerFunc[TAppReq, TAppRes],
-](
-	actionBuilder ActionBuilder[TDeclaredReq, TDeclaredRes, TDeclaredFn, TDeclaredHttpFn],
-	action TAppFn,
-	inputTransformer func(req *http.Request, input *TDeclaredReq) (*TAppReq, error),
-	outputTransformer func(input *TAppRes) (*TDeclaredRes, error),
-) http.Handler {
-	panic("not implemented")
-}
-*/
-
 type makeActionBuilderParams[
 	TReqParams any,
 	TResData any,
