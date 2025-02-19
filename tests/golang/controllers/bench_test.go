@@ -41,7 +41,7 @@ func call(ctx *bindingContext) {
 }
 
 func BenchmarkAllocs(b *testing.B) {
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		call(&bindingContext{level: 0, maxLevel: 10, path: stringPathSegment("root")})
 	}
 }

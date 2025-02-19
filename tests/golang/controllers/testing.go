@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
@@ -58,14 +59,38 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
-	method string
-	path   string
-	query  url.Values
-	body   io.Reader
-	expect routeTestCaseExpectFn[TActions]
+	method            string
+	path              string
+	query             url.Values
+	body              io.Reader
+	appendHTTPAppOpts func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt
+	setupActions      func(TActions) TActions
+	expect            routeTestCaseExpectFn[TActions]
 }
 
-type routeTestCaseSetupFn[TActions any] func() (TActions, http.Handler)
+type routeTestCaseSetupFn[TActions any] func(tc routeTestCase[TActions]) (TActions, http.Handler)
+
+type trackDoubleHeaderWriter struct {
+	headerWriteCount int
+	http.ResponseWriter
+	t *testing.T
+}
+
+func (t *trackDoubleHeaderWriter) WriteHeader(code int) {
+	t.headerWriteCount++
+	t.ResponseWriter.WriteHeader(code)
+	assert.LessOrEqual(t.t, t.headerWriteCount, 1, "WriteHeader called more than once")
+}
+
+func (t *trackDoubleHeaderWriter) Header() http.Header {
+	return t.ResponseWriter.Header()
+}
+
+func (t *trackDoubleHeaderWriter) Write(b []byte) (int, error) {
+	return t.ResponseWriter.Write(b)
+}
+
+var _ http.ResponseWriter = &trackDoubleHeaderWriter{}
 
 func runRouteTestCase[TActions any](
 	t *testing.T,
@@ -75,7 +100,17 @@ func runRouteTestCase[TActions any](
 ) {
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
-		testActions, router := setupFn()
+		if tc.appendHTTPAppOpts == nil {
+			tc.appendHTTPAppOpts = func(
+				opts ...handlers.HTTPAppOpt,
+			) []handlers.HTTPAppOpt {
+				return opts
+			}
+		}
+		if tc.setupActions == nil {
+			tc.setupActions = func(a TActions) TActions { return a }
+		}
+		testActions, router := setupFn(tc)
 		method := tc.method
 		if method == "" {
 			method = http.MethodGet
@@ -93,7 +128,8 @@ func runRouteTestCase[TActions any](
 			testReq.URL.RawQuery = tc.query.Encode()
 		}
 		recorder := httptest.NewRecorder()
-		router.ServeHTTP(recorder, testReq)
+		trackDoubleHeaderWriter := &trackDoubleHeaderWriter{ResponseWriter: recorder, t: t}
+		router.ServeHTTP(trackDoubleHeaderWriter, testReq)
 		tc.expect(t, testActions, recorder)
 	})
 }
@@ -133,7 +169,7 @@ func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeT
 		if !assert.Equal(t, http.StatusBadRequest, recorder.Code, "Unexpected response: %v", recorder.Body) {
 			return
 		}
-		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("content-type"))
+		assert.Equal(t, "application/json; charset=utf-8", recorder.Header().Get("Content-Type"))
 		gotErrors := unmarshalBindingErrors(t, recorder.Body)
 		if !assert.Len(t, gotErrors.Errors, len(wantErrors)) {
 			return
@@ -144,16 +180,23 @@ func expectBindingErrors[TActions any](wantErrors []expectedBindingError) routeT
 	}
 }
 
+func unmarshalData[TResult any](
+	t *testing.T,
+	body *bytes.Buffer,
+) TResult {
+	var gotData TResult
+	if err := json.Unmarshal(body.Bytes(), &gotData); !assert.NoError(t, err) {
+		t.FailNow()
+		return gotData
+	}
+	return gotData
+}
+
 func unmarshalBindingErrors(
 	t *testing.T,
 	body *bytes.Buffer,
 ) *aggregatedBindingError {
-	var gotErrors aggregatedBindingError
-	if err := json.Unmarshal(body.Bytes(), &gotErrors); !assert.NoError(t, err) {
-		t.FailNow()
-		return nil
-	}
-	return &gotErrors
+	return unmarshalData[*aggregatedBindingError](t, body)
 }
 
 func assertFieldError(
@@ -177,6 +220,8 @@ func assertFieldError(
 }
 
 type mockActionCall[TParams any] struct {
+	req    *http.Request
+	res    http.ResponseWriter
 	params TParams
 }
 
@@ -191,6 +236,87 @@ func (c *mockAction[TParams]) action(
 		params: params,
 	})
 	return nil
+}
+
+type mockVoid *int
+
+type mockActionV2[
+	TParams any,
+	TResult any,
+] struct {
+	isHTTPAction bool
+	nextError    error
+	nextResult   TResult
+	calls        []mockActionCall[TParams]
+
+	// optional function to use to process the action
+	httpActionFn func(w http.ResponseWriter, r *http.Request, params TParams) (TResult, error)
+}
+
+func (c *mockActionV2[TParams, TResult]) action(
+	_ context.Context, params TParams,
+) (TResult, error) {
+	c.calls = append(c.calls, mockActionCall[TParams]{params: params})
+	return c.nextResult, c.nextError
+}
+
+func (c *mockActionV2[TParams, TResult]) httpAction(
+	w http.ResponseWriter, r *http.Request, params TParams,
+) (TResult, error) {
+	c.calls = append(c.calls, mockActionCall[TParams]{req: r, res: w, params: params})
+	if c.httpActionFn != nil {
+		return c.httpActionFn(w, r, params)
+	}
+	return c.nextResult, c.nextError
+}
+
+func (c *mockActionV2[TParams, TResult]) actionWithParamsNoResponse(
+	ctx context.Context,
+	params TParams,
+) error {
+	_, err := c.action(ctx, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) httpActionWithParamsNoResponse(
+	w http.ResponseWriter, r *http.Request, params TParams,
+) error {
+	_, err := c.httpAction(w, r, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) actionNoParamsNoResponse(
+	ctx context.Context,
+) error {
+	var params TParams
+	_, err := c.action(ctx, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) httpActionNoParamsNoResponse(
+	w http.ResponseWriter, r *http.Request,
+) error {
+	var params TParams
+	_, err := c.httpAction(w, r, params)
+	return err
+}
+
+func (c *mockActionV2[TParams, TResult]) actionNoParamsWithResponse(
+	ctx context.Context,
+) (TResult, error) {
+	var params TParams
+	return c.action(ctx, params)
+}
+
+func (c *mockActionV2[TParams, TResult]) httpActionNoParamsWithResponse(
+	w http.ResponseWriter, r *http.Request,
+) (TResult, error) {
+	var params TParams
+	return c.httpAction(w, r, params)
+}
+
+func (c *mockActionV2[TParams, TResult]) unmarshalResult(t *testing.T, data *bytes.Buffer) TResult {
+	return unmarshalData[TResult](t, data)
 }
 
 func injectValueRandomly[T any](fake faker.Faker, values []T, value T) (int, []T) {

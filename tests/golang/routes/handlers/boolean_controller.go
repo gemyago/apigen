@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -96,130 +99,229 @@ type BooleanBooleanRequiredValidationRequest struct {
 	OptionalBoolParam2InQuery bool
 }
 
-type BooleanController struct {
+type booleanControllerBuilder struct {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanArrayItems httpHandlerFactory
+	BooleanArrayItems genericHandlerBuilder[
+		*BooleanBooleanArrayItemsRequest,
+		void,
+		func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
+	]
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanNullableRequest,
 	//
 	// Response type: none
-	BooleanNullable httpHandlerFactory
+	BooleanNullable genericHandlerBuilder[
+		*BooleanBooleanNullableRequest,
+		void,
+		func(context.Context, *BooleanBooleanNullableRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
+	]
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanNullableArrayItemsRequest,
 	//
 	// Response type: none
-	BooleanNullableArrayItems httpHandlerFactory
+	BooleanNullableArrayItems genericHandlerBuilder[
+		*BooleanBooleanNullableArrayItemsRequest,
+		void,
+		func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
+	]
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanParsingRequest,
 	//
 	// Response type: none
-	BooleanParsing httpHandlerFactory
+	BooleanParsing genericHandlerBuilder[
+		*BooleanBooleanParsingRequest,
+		void,
+		func(context.Context, *BooleanBooleanParsingRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
+	]
 
 	// POST /boolean/required-validation
 	//
 	// Request type: BooleanBooleanRequiredValidationRequest,
 	//
 	// Response type: none
-	BooleanRequiredValidation httpHandlerFactory
+	BooleanRequiredValidation genericHandlerBuilder[
+		*BooleanBooleanRequiredValidationRequest,
+		void,
+		func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
+	]
 }
 
-type BooleanControllerBuilder struct {
-	// POST /boolean/array-items/{boolParam1}/{boolParam2}
-	//
-	// Request type: BooleanBooleanArrayItemsRequest,
-	//
-	// Response type: none
-	HandleBooleanArrayItems actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanArrayItemsRequest]
+func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
+	return &booleanControllerBuilder{
+		// POST /boolean/array-items/{boolParam1}/{boolParam2}
+		BooleanArrayItems: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanArrayItemsRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanArrayItemsRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanArrayItemsRequest,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanArrayItems(app),
+			},
+		),
 
-	// POST /boolean/nullable/{boolParam1}/{boolParam2}
-	//
-	// Request type: BooleanBooleanNullableRequest,
-	//
-	// Response type: none
-	HandleBooleanNullable actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanNullableRequest]
+		// POST /boolean/nullable/{boolParam1}/{boolParam2}
+		BooleanNullable: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanNullableRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanNullableRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanNullableRequest,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanNullable(app),
+			},
+		),
 
-	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
-	//
-	// Request type: BooleanBooleanNullableArrayItemsRequest,
-	//
-	// Response type: none
-	HandleBooleanNullableArrayItems actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanNullableArrayItemsRequest]
+		// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+		BooleanNullableArrayItems: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanNullableArrayItemsRequest,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanNullableArrayItems(app),
+			},
+		),
 
-	// POST /boolean/parsing/{boolParam1}/{boolParam2}
-	//
-	// Request type: BooleanBooleanParsingRequest,
-	//
-	// Response type: none
-	HandleBooleanParsing actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanParsingRequest]
+		// POST /boolean/parsing/{boolParam1}/{boolParam2}
+		BooleanParsing: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanParsingRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanParsingRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanParsingRequest,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanParsing(app),
+			},
+		),
 
-	// POST /boolean/required-validation
-	//
-	// Request type: BooleanBooleanRequiredValidationRequest,
-	//
-	// Response type: none
-	HandleBooleanRequiredValidation actionBuilderVoidResult[*BooleanControllerBuilder, *BooleanBooleanRequiredValidationRequest]
-}
-
-func (c *BooleanControllerBuilder) Finalize() *BooleanController {
-	return &BooleanController{
-		BooleanArrayItems: mustInitializeAction("booleanArrayItems", c.HandleBooleanArrayItems.httpHandlerFactory),
-		BooleanNullable: mustInitializeAction("booleanNullable", c.HandleBooleanNullable.httpHandlerFactory),
-		BooleanNullableArrayItems: mustInitializeAction("booleanNullableArrayItems", c.HandleBooleanNullableArrayItems.httpHandlerFactory),
-		BooleanParsing: mustInitializeAction("booleanParsing", c.HandleBooleanParsing.httpHandlerFactory),
-		BooleanRequiredValidation: mustInitializeAction("booleanRequiredValidation", c.HandleBooleanRequiredValidation.httpHandlerFactory),
+		// POST /boolean/required-validation
+		BooleanRequiredValidation: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanRequiredValidationRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanRequiredValidationRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanRequiredValidationRequest,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanRequiredValidation(app),
+			},
+		),
 	}
 }
 
-func BuildBooleanController() *BooleanControllerBuilder {
-	controllerBuilder := &BooleanControllerBuilder{}
-
+type BooleanController interface {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
-	controllerBuilder.HandleBooleanArrayItems.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBooleanArrayItems.defaultStatusCode = 204
-	controllerBuilder.HandleBooleanArrayItems.voidResult = true
-	controllerBuilder.HandleBooleanArrayItems.paramsParserFactory = newParamsParserBooleanBooleanArrayItems
+	//
+	// Request type: BooleanBooleanArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanArrayItems(NoResponseHandlerBuilder[
+		*BooleanBooleanArrayItemsRequest,
+	]) http.Handler
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
-	controllerBuilder.HandleBooleanNullable.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBooleanNullable.defaultStatusCode = 204
-	controllerBuilder.HandleBooleanNullable.voidResult = true
-	controllerBuilder.HandleBooleanNullable.paramsParserFactory = newParamsParserBooleanBooleanNullable
+	//
+	// Request type: BooleanBooleanNullableRequest,
+	//
+	// Response type: none
+	BooleanNullable(NoResponseHandlerBuilder[
+		*BooleanBooleanNullableRequest,
+	]) http.Handler
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
-	controllerBuilder.HandleBooleanNullableArrayItems.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBooleanNullableArrayItems.defaultStatusCode = 204
-	controllerBuilder.HandleBooleanNullableArrayItems.voidResult = true
-	controllerBuilder.HandleBooleanNullableArrayItems.paramsParserFactory = newParamsParserBooleanBooleanNullableArrayItems
+	//
+	// Request type: BooleanBooleanNullableArrayItemsRequest,
+	//
+	// Response type: none
+	BooleanNullableArrayItems(NoResponseHandlerBuilder[
+		*BooleanBooleanNullableArrayItemsRequest,
+	]) http.Handler
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
-	controllerBuilder.HandleBooleanParsing.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBooleanParsing.defaultStatusCode = 204
-	controllerBuilder.HandleBooleanParsing.voidResult = true
-	controllerBuilder.HandleBooleanParsing.paramsParserFactory = newParamsParserBooleanBooleanParsing
+	//
+	// Request type: BooleanBooleanParsingRequest,
+	//
+	// Response type: none
+	BooleanParsing(NoResponseHandlerBuilder[
+		*BooleanBooleanParsingRequest,
+	]) http.Handler
 
 	// POST /boolean/required-validation
-	controllerBuilder.HandleBooleanRequiredValidation.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBooleanRequiredValidation.defaultStatusCode = 204
-	controllerBuilder.HandleBooleanRequiredValidation.voidResult = true
-	controllerBuilder.HandleBooleanRequiredValidation.paramsParserFactory = newParamsParserBooleanBooleanRequiredValidation
-
-	return controllerBuilder
+	//
+	// Request type: BooleanBooleanRequiredValidationRequest,
+	//
+	// Response type: none
+	BooleanRequiredValidation(NoResponseHandlerBuilder[
+		*BooleanBooleanRequiredValidationRequest,
+	]) http.Handler
 }
 
-func RegisterBooleanRoutes(controller *BooleanController, app *HTTPApp) {
-	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(app))
-	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(app))
-	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(app))
-	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(app))
-	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(app))
+func RegisterBooleanRoutes(controller BooleanController, app *HTTPApp) {
+	builder := newBooleanControllerBuilder(app)
+	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
+	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))
+	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(builder.BooleanNullableArrayItems))
+	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(builder.BooleanParsing))
+	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(builder.BooleanRequiredValidation))
 }

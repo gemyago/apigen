@@ -5,10 +5,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/app"
 )
 
+// httpRouter is a ServerMux adapter to use with generated routes.
 type httpRouter struct {
 	*http.ServeMux
 }
@@ -21,12 +22,14 @@ func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 	a.ServeMux.Handle(method+" "+pathPattern, h)
 }
 
-func handleActionError(_ *http.Request, w http.ResponseWriter, err error) {
+// handleActionError is a custom error handler to process action errors.
+// It's a good place to map errors returned by controller actions to HTTP status codes.
+func handleActionError(w http.ResponseWriter, _ *http.Request, err error) {
 	code := 500
 	switch {
-	case errors.Is(err, app.ErrNotFound):
+	case errors.Is(err, v1controllers.ErrNotFound):
 		code = 404
-	case errors.Is(err, app.ErrConflict):
+	case errors.Is(err, v1controllers.ErrConflict):
 		code = 409
 	}
 	w.WriteHeader(code)
@@ -46,7 +49,7 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 // HandlerDeps holds dependencies of the generated routes
 // usually controller implementations at least.
 type HandlerDeps struct {
-	PetsController *handlers.PetsController
+	PetsController handlers.PetsController
 }
 
 // NewHandler creates an minimal example implementation of the router handler

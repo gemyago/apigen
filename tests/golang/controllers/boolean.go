@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
@@ -12,14 +14,48 @@ type booleanControllerTestActions struct {
 	nullableBooleanArrayItems mockAction[*handlers.BooleanBooleanNullableArrayItemsRequest]
 }
 
-func newBooleanController(
-	testActions *booleanControllerTestActions,
-) *handlers.BooleanController {
-	return handlers.BuildBooleanController().
-		HandleBooleanParsing.With(testActions.booleanParsing.action).
-		HandleBooleanRequiredValidation.With(testActions.booleanRequiredValidation.action).
-		HandleBooleanNullable.With(testActions.booleanNullable.action).
-		HandleBooleanArrayItems.With(testActions.booleanArrayItems.action).
-		HandleBooleanNullableArrayItems.With(testActions.nullableBooleanArrayItems.action).
-		Finalize()
+type booleanController struct {
+	testActions *booleanControllerTestActions
 }
+
+func (c *booleanController) BooleanParsing(
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanParsingRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.booleanParsing.action,
+	)
+}
+
+func (c *booleanController) BooleanRequiredValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanRequiredValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.booleanRequiredValidation.action,
+	)
+}
+
+func (c *booleanController) BooleanNullable(
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.booleanNullable.action,
+	)
+}
+
+func (c *booleanController) BooleanArrayItems(
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanArrayItemsRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.booleanArrayItems.action,
+	)
+}
+
+func (c *booleanController) BooleanNullableArrayItems(
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableArrayItemsRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.nullableBooleanArrayItems.action,
+	)
+}
+
+var _ handlers.BooleanController = &booleanController{}

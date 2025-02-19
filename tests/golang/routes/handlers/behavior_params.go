@@ -16,6 +16,8 @@ type _ func() BehaviorNoParamsWithResponse202Response
 
 type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 	bindQueryParam1 requestParamBinder[[]string, string]
+	bindQueryParam2 requestParamBinder[[]string, int32]
+	bindPayload requestParamBinder[*http.Request, *BehaviorWithParamsAndResponseRequestBody]
 }
 
 func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsAndResponseRequest, error) {
@@ -25,11 +27,58 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
 	p.bindQueryParam1(queryParamsCtx.Fork("queryParam1"), readQueryValue("queryParam1", query), &reqParams.QueryParam1)
+	p.bindQueryParam2(queryParamsCtx.Fork("queryParam2"), readQueryValue("queryParam2", query), &reqParams.QueryParam2)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
 func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsAndResponseRequest] {
 	return &paramsParserBehaviorBehaviorWithParamsAndResponse{
+		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.stringParser,
+			),
+			validateValue: NewSimpleFieldValidator[string](
+			),
+		}),
+		bindQueryParam2: newRequestParamBinder(binderParams[[]string, int32]{
+			required: false,
+			parseValue: parseMultiValueParamAsSoloValue(
+				app.knownParsers.int32Parser,
+			),
+			validateValue: NewSimpleFieldValidator[int32](
+				NewMinMaxValueValidator[int32](0, false, true),
+				NewMinMaxValueValidator[int32](5000, false, false),
+			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *BehaviorWithParamsAndResponseRequestBody]{
+			required: false,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*BehaviorWithParamsAndResponseRequestBody],
+			),
+			validateValue: NewBehaviorWithParamsAndResponseRequestBodyValidator(),
+		}),
+	}
+}
+
+type paramsParserBehaviorBehaviorWithParamsNoResponse struct {
+	bindQueryParam1 requestParamBinder[[]string, string]
+}
+
+func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsNoResponseRequest, error) {
+	bindingCtx := BindingContext{}
+	reqParams := &BehaviorBehaviorWithParamsNoResponseRequest{}
+	// query params
+	query := req.URL.Query()
+	queryParamsCtx := bindingCtx.Fork("query")
+	p.bindQueryParam1(queryParamsCtx.Fork("queryParam1"), readQueryValue("queryParam1", query), &reqParams.QueryParam1)
+	return reqParams, bindingCtx.AggregatedError()
+}
+
+func newParamsParserBehaviorBehaviorWithParamsNoResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsNoResponseRequest] {
+	return &paramsParserBehaviorBehaviorWithParamsNoResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(

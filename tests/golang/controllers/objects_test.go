@@ -18,9 +18,10 @@ import (
 func TestObjects(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*objectsControllerTestActions, http.Handler) {
+	type testCase = routeTestCase[*objectsControllerTestActions]
+	setupRouter := func(_ testCase) (*objectsControllerTestActions, http.Handler) {
 		testActions := &objectsControllerTestActions{}
-		controller := newObjectsController(testActions)
+		controller := &objectsController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
@@ -60,8 +61,6 @@ func TestObjects(t *testing.T) {
 		}
 		return res
 	}
-
-	type testCase = routeTestCase[*objectsControllerTestActions]
 
 	t.Run("nullable-body", func(t *testing.T) {
 		t.Run("required", func(t *testing.T) {

@@ -8,8 +8,18 @@ import (
 
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/router"
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/app"
 )
+
+// Start it using command below:
+// go run ./examples/go-apigen-server/cmd/service/
+//
+// Send requests with curl:
+// Create few pets:
+// - curl -X POST localhost:8080/pets -d '{"id": 1, "name": "dog"}'
+// - curl -X POST localhost:8080/pets -d '{"id": 2, "name": "cat"}'
+// - curl -X POST localhost:8080/pets -d '{"id": 3, "name": "fish"}'
+// List pets: curl localhost:8080/pets?limit=10
+// Get pet by id: curl localhost:8080/pets/1
 
 func main() {
 	// Minimal implementation of the http server startup.
@@ -18,15 +28,9 @@ func main() {
 
 	port := 8080
 	readHeaderTimeoutSec := 2
-	storage := app.NewStorage()
 
 	// Generated routes need a controller implementation to process requests
-	petsController := v1controllers.NewPetsController(
-		v1controllers.PetsControllerDeps{
-			Commands: app.NewCommands(app.CommandsDeps{Storage: storage}),
-			Queries:  app.NewQueries(app.QueriesDeps{Storage: storage}),
-		},
-	)
+	petsController := v1controllers.NewPetsController()
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),

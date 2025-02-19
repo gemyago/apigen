@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 )
 
@@ -17,19 +19,72 @@ type stringTypesControllerTestActions struct {
 	stringTypesEnums                      mockAction[*handlers.StringTypesStringTypesEnumsRequest]
 }
 
-func newStringTypesController(
-	testActions *stringTypesControllerTestActions,
-) *handlers.StringTypesController {
-	return handlers.BuildStringTypesController().
-		HandleStringTypesParsing.With(testActions.stringTypesParsing.action).
-		HandleStringTypesArraysParsing.With(testActions.stringTypesArraysParsing.action).
-		HandleStringTypesNullableParsing.With(testActions.stringTypesNullableParsing.action).
-		HandleStringTypesNullableArrayItems.With(testActions.stringTypesNullableArrayItems.action).
-		HandleStringTypesRangeValidation.With(testActions.stringTypesRangeValidation.action).
-		HandleStringTypesArrayItemsRangeValidation.With(testActions.stringTypesArrayItemsRangeValidation.action).
-		HandleStringTypesPatternValidation.With(testActions.stringTypesPatternValidation.action).
-		HandleStringTypesRequiredValidation.With(testActions.stringTypesRequiredValidation.action).
-		HandleStringTypesNullableRequiredValidation.With(testActions.stringTypesNullableRequiredValidation.action).
-		HandleStringTypesEnums.With(testActions.stringTypesEnums.action).
-		Finalize()
+type stringTypesController struct {
+	testActions *stringTypesControllerTestActions
 }
+
+func (c *stringTypesController) StringTypesArrayItemsRangeValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.stringTypesArrayItemsRangeValidation.action,
+	)
+}
+
+func (c *stringTypesController) StringTypesArraysParsing(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesArraysParsingRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesArraysParsing.action)
+}
+
+func (c *stringTypesController) StringTypesEnums(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesEnumsRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesEnums.action)
+}
+
+func (c *stringTypesController) StringTypesNullableArrayItems(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableArrayItemsRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesNullableArrayItems.action)
+}
+
+func (c *stringTypesController) StringTypesNullableParsing(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableParsingRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesNullableParsing.action)
+}
+
+func (c *stringTypesController) StringTypesNullableRequiredValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableRequiredValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.stringTypesNullableRequiredValidation.action,
+	)
+}
+
+func (c *stringTypesController) StringTypesParsing(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesParsingRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesParsing.action)
+}
+
+func (c *stringTypesController) StringTypesPatternValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesPatternValidationRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesPatternValidation.action)
+}
+
+func (c *stringTypesController) StringTypesRangeValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesRangeValidationRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesRangeValidation.action)
+}
+
+func (c *stringTypesController) StringTypesRequiredValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesRequiredValidationRequest],
+) http.Handler {
+	return builder.HandleWith(c.testActions.stringTypesRequiredValidation.action)
+}
+
+var _ handlers.StringTypesController = &stringTypesController{}

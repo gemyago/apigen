@@ -20,9 +20,10 @@ import (
 func TestNumericTypes(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*numericTypesControllerTestActions, http.Handler) {
+	type testCase = routeTestCase[*numericTypesControllerTestActions]
+	setupRouter := func(_ testCase) (*numericTypesControllerTestActions, http.Handler) {
 		testActions := &numericTypesControllerTestActions{}
-		controller := newNumericTypesController(testActions)
+		controller := &numericTypesController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
@@ -37,8 +38,6 @@ func TestNumericTypes(t *testing.T) {
 	randomFloat64 := func(minVal, maxVal float64) float64 {
 		return fake.Float64(10, int(minVal), int(maxVal))
 	}
-
-	type testCase = routeTestCase[*numericTypesControllerTestActions]
 
 	t.Run("parsing", func(t *testing.T) {
 		randomReq := func() *handlers.NumericTypesNumericTypesParsingRequest {

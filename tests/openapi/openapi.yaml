@@ -88,17 +88,11 @@ paths:
     $ref: "./behavior/no-params-no-response-isolated.yaml"
   /behavior/no-params-with-response:
     $ref: "./behavior/no-params-with-response.yaml"
+  /behavior/with-params-no-response:
+    $ref: "./behavior/with-params-no-response.yaml"
   /behavior/with-params-and-response:
     $ref: "./behavior/with-params-and-response.yaml"
   /behavior/no-status-defined:
     $ref: "./behavior/no-status-defined.yaml"
   /behavior/with-status-defined:
     $ref: "./behavior/with-status-defined.yaml"
-
-  # error-handling routes
-  /error-handling/parsing-errors/{pathParam1}/{pathParam2}:
-    $ref: "./error-handling/parsing-errors.yaml"
-  /error-handling/validation-errors:
-    $ref: "./error-handling/validation-errors.yaml"
-  /error-handling/action-errors:
-    $ref: "./error-handling/action-errors.yaml"

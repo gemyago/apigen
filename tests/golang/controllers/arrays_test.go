@@ -17,9 +17,10 @@ import (
 func TestArrays(t *testing.T) {
 	fake := faker.New()
 
-	setupRouter := func() (*arraysControllerTestActions, http.Handler) {
+	type testCase = routeTestCase[*arraysControllerTestActions]
+	setupRouter := func(_ testCase) (*arraysControllerTestActions, http.Handler) {
 		testActions := &arraysControllerTestActions{}
-		controller := newArraysController(testActions)
+		controller := &arraysController{testActions}
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
@@ -35,8 +36,6 @@ func TestArrays(t *testing.T) {
 		}
 		return strs
 	}
-
-	type testCase = routeTestCase[*arraysControllerTestActions]
 
 	t.Run("required-validation", func(t *testing.T) {
 		randomReq := func(

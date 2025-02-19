@@ -1,6 +1,10 @@
 package controllers
 
-import "github.com/gemyago/apigen/tests/golang/routes/handlers"
+import (
+	"net/http"
+
+	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+)
 
 type arraysControllerTestActions struct {
 	arraysRequiredValidation         mockAction[*handlers.ArraysArraysRequiredValidationRequest]
@@ -8,12 +12,32 @@ type arraysControllerTestActions struct {
 	arraysRangeValidation            mockAction[*handlers.ArraysArraysRangeValidationRequest]
 }
 
-func newArraysController(
-	testActions *arraysControllerTestActions,
-) *handlers.ArraysController {
-	return handlers.BuildArraysController().
-		HandleArraysRequiredValidation.With(testActions.arraysRequiredValidation.action).
-		HandleArraysNullableRequiredValidation.With(testActions.arraysNullableRequiredValidation.action).
-		HandleArraysRangeValidation.With(testActions.arraysRangeValidation.action).
-		Finalize()
+type arraysController struct {
+	testActions *arraysControllerTestActions
 }
+
+func (c *arraysController) ArraysRequiredValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysRequiredValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.arraysRequiredValidation.action,
+	)
+}
+
+func (c *arraysController) ArraysNullableRequiredValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysNullableRequiredValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.arraysNullableRequiredValidation.action,
+	)
+}
+
+func (c *arraysController) ArraysRangeValidation(
+	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysRangeValidationRequest],
+) http.Handler {
+	return builder.HandleWith(
+		c.testActions.arraysRangeValidation.action,
+	)
+}
+
+var _ handlers.ArraysController = &arraysController{}

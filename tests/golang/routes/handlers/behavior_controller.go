@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -22,136 +25,285 @@ type _ func() BehaviorNoParamsWithResponse202Response
 
 // BehaviorBehaviorWithParamsAndResponseRequest represents params for behaviorWithParamsAndResponse operation
 //
-// Request: GET /behavior/with-params-and-response.
+// Request: POST /behavior/with-params-and-response.
 type BehaviorBehaviorWithParamsAndResponseRequest struct {
+	// QueryParam1 is parsed from request query and declared as queryParam1.
+	QueryParam1 string
+	// QueryParam2 is parsed from request query and declared as queryParam2.
+	QueryParam2 int32
+	// Payload is parsed from request body and declared as payload.
+	Payload *BehaviorWithParamsAndResponseRequestBody
+}
+
+// BehaviorBehaviorWithParamsNoResponseRequest represents params for behaviorWithParamsNoResponse operation
+//
+// Request: GET /behavior/with-params-no-response.
+type BehaviorBehaviorWithParamsNoResponseRequest struct {
 	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
 }
 
 
 
-type BehaviorController struct {
+type behaviorControllerBuilder struct {
 	// GET /behavior/no-params-no-response
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoParamsNoResponse httpHandlerFactory
+	BehaviorNoParamsNoResponse genericHandlerBuilder[
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
+	]
 
 	// GET /behavior/no-params-with-response
 	//
 	// Request type: none
 	//
 	// Response type: BehaviorNoParamsWithResponse202Response
-	BehaviorNoParamsWithResponse httpHandlerFactory
+	BehaviorNoParamsWithResponse genericHandlerBuilder[
+		void,
+		*BehaviorNoParamsWithResponse202Response,
+		func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
+		func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
+	]
 
 	// GET /behavior/no-status-defined
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorNoStatusDefined httpHandlerFactory
+	BehaviorNoStatusDefined genericHandlerBuilder[
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
+	]
 
-	// GET /behavior/with-params-and-response
+	// POST /behavior/with-params-and-response
 	//
 	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
 	//
-	// Response type: BehaviorNoParamsWithResponse202Response
-	BehaviorWithParamsAndResponse httpHandlerFactory
+	// Response type: BehaviorWithParamsAndResponseResponseBody
+	BehaviorWithParamsAndResponse genericHandlerBuilder[
+		*BehaviorBehaviorWithParamsAndResponseRequest,
+		*BehaviorWithParamsAndResponseResponseBody,
+		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
+		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
+	]
+
+	// GET /behavior/with-params-no-response
+	//
+	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
+	//
+	// Response type: none
+	BehaviorWithParamsNoResponse genericHandlerBuilder[
+		*BehaviorBehaviorWithParamsNoResponseRequest,
+		void,
+		func(context.Context, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
+		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
+	]
 
 	// POST /behavior/with-status-defined
 	//
 	// Request type: none
 	//
 	// Response type: none
-	BehaviorWithStatusDefined httpHandlerFactory
+	BehaviorWithStatusDefined genericHandlerBuilder[
+		void,
+		void,
+		func(context.Context) (error),
+		func(http.ResponseWriter, *http.Request) (error),
+	]
 }
 
-type BehaviorControllerBuilder struct {
-	// GET /behavior/no-params-no-response
-	//
-	// Request type: none
-	//
-	// Response type: none
-	HandleBehaviorNoParamsNoResponse actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
+func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
+	return &behaviorControllerBuilder{
+		// GET /behavior/no-params-no-response
+		BehaviorNoParamsNoResponse: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			newHTTPHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			makeActionBuilderParams[
+				void,
+				void,
+			]{
+				defaultStatus: 202,
+				voidResult:    true,
+				paramsParser:  makeVoidParamsParser(app),
+			},
+		),
 
-	// GET /behavior/no-params-with-response
-	//
-	// Request type: none
-	//
-	// Response type: BehaviorNoParamsWithResponse202Response
-	HandleBehaviorNoParamsWithResponse actionBuilderNoParams[*BehaviorControllerBuilder, *BehaviorNoParamsWithResponse202Response]
+		// GET /behavior/no-params-with-response
+		BehaviorNoParamsWithResponse: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoParams[
+				void,
+				*BehaviorNoParamsWithResponse202Response,
+			](),
+			newHTTPHandlerAdapterNoParams[
+				void,
+				*BehaviorNoParamsWithResponse202Response,
+			](),
+			makeActionBuilderParams[
+				void,
+				*BehaviorNoParamsWithResponse202Response,
+			]{
+				defaultStatus: 202,
+				paramsParser:  makeVoidParamsParser(app),
+			},
+		),
 
-	// GET /behavior/no-status-defined
-	//
-	// Request type: none
-	//
-	// Response type: none
-	HandleBehaviorNoStatusDefined actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
+		// GET /behavior/no-status-defined
+		BehaviorNoStatusDefined: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			newHTTPHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			makeActionBuilderParams[
+				void,
+				void,
+			]{
+				defaultStatus: 200,
+				voidResult:    true,
+				paramsParser:  makeVoidParamsParser(app),
+			},
+		),
 
-	// GET /behavior/with-params-and-response
-	//
-	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
-	//
-	// Response type: BehaviorNoParamsWithResponse202Response
-	HandleBehaviorWithParamsAndResponse actionBuilder[*BehaviorControllerBuilder, *BehaviorBehaviorWithParamsAndResponseRequest, *BehaviorNoParamsWithResponse202Response]
+		// POST /behavior/with-params-and-response
+		BehaviorWithParamsAndResponse: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapter[
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorWithParamsAndResponseResponseBody,
+			](),
+			newHTTPHandlerAdapter[
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorWithParamsAndResponseResponseBody,
+			](),
+			makeActionBuilderParams[
+				*BehaviorBehaviorWithParamsAndResponseRequest,
+				*BehaviorWithParamsAndResponseResponseBody,
+			]{
+				defaultStatus: 202,
+				paramsParser:  newParamsParserBehaviorBehaviorWithParamsAndResponse(app),
+			},
+		),
 
-	// POST /behavior/with-status-defined
-	//
-	// Request type: none
-	//
-	// Response type: none
-	HandleBehaviorWithStatusDefined actionBuilderNoParamsVoidResult[*BehaviorControllerBuilder]
-}
+		// GET /behavior/with-params-no-response
+		BehaviorWithParamsNoResponse: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BehaviorBehaviorWithParamsNoResponseRequest,
+				void,
+			]{
+				defaultStatus: 202,
+				voidResult:    true,
+				paramsParser:  newParamsParserBehaviorBehaviorWithParamsNoResponse(app),
+			},
+		),
 
-func (c *BehaviorControllerBuilder) Finalize() *BehaviorController {
-	return &BehaviorController{
-		BehaviorNoParamsNoResponse: mustInitializeAction("behaviorNoParamsNoResponse", c.HandleBehaviorNoParamsNoResponse.httpHandlerFactory),
-		BehaviorNoParamsWithResponse: mustInitializeAction("behaviorNoParamsWithResponse", c.HandleBehaviorNoParamsWithResponse.httpHandlerFactory),
-		BehaviorNoStatusDefined: mustInitializeAction("behaviorNoStatusDefined", c.HandleBehaviorNoStatusDefined.httpHandlerFactory),
-		BehaviorWithParamsAndResponse: mustInitializeAction("behaviorWithParamsAndResponse", c.HandleBehaviorWithParamsAndResponse.httpHandlerFactory),
-		BehaviorWithStatusDefined: mustInitializeAction("behaviorWithStatusDefined", c.HandleBehaviorWithStatusDefined.httpHandlerFactory),
+		// POST /behavior/with-status-defined
+		BehaviorWithStatusDefined: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			newHTTPHandlerAdapterNoParamsNoResponse[
+				void,
+				void,
+			](),
+			makeActionBuilderParams[
+				void,
+				void,
+			]{
+				defaultStatus: 202,
+				voidResult:    true,
+				paramsParser:  makeVoidParamsParser(app),
+			},
+		),
 	}
 }
 
-func BuildBehaviorController() *BehaviorControllerBuilder {
-	controllerBuilder := &BehaviorControllerBuilder{}
-
+type BehaviorController interface {
 	// GET /behavior/no-params-no-response
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.defaultStatusCode = 202
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.voidResult = true
-	controllerBuilder.HandleBehaviorNoParamsNoResponse.paramsParserFactory = makeVoidParamsParser
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoParamsNoResponse(NoParamsNoResponseHandlerBuilder) http.Handler
 
 	// GET /behavior/no-params-with-response
-	controllerBuilder.HandleBehaviorNoParamsWithResponse.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorNoParamsWithResponse.defaultStatusCode = 202
-	controllerBuilder.HandleBehaviorNoParamsWithResponse.paramsParserFactory = makeVoidParamsParser
+	//
+	// Request type: none
+	//
+	// Response type: BehaviorNoParamsWithResponse202Response
+	BehaviorNoParamsWithResponse(NoParamsHandlerBuilder[
+		*BehaviorNoParamsWithResponse202Response,
+	]) http.Handler
 
 	// GET /behavior/no-status-defined
-	controllerBuilder.HandleBehaviorNoStatusDefined.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorNoStatusDefined.defaultStatusCode = 200
-	controllerBuilder.HandleBehaviorNoStatusDefined.voidResult = true
-	controllerBuilder.HandleBehaviorNoStatusDefined.paramsParserFactory = makeVoidParamsParser
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorNoStatusDefined(NoParamsNoResponseHandlerBuilder) http.Handler
 
-	// GET /behavior/with-params-and-response
-	controllerBuilder.HandleBehaviorWithParamsAndResponse.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorWithParamsAndResponse.defaultStatusCode = 202
-	controllerBuilder.HandleBehaviorWithParamsAndResponse.paramsParserFactory = newParamsParserBehaviorBehaviorWithParamsAndResponse
+	// POST /behavior/with-params-and-response
+	//
+	// Request type: BehaviorBehaviorWithParamsAndResponseRequest,
+	//
+	// Response type: BehaviorWithParamsAndResponseResponseBody
+	BehaviorWithParamsAndResponse(HandlerBuilder[
+		*BehaviorBehaviorWithParamsAndResponseRequest,
+		*BehaviorWithParamsAndResponseResponseBody,
+	]) http.Handler
+
+	// GET /behavior/with-params-no-response
+	//
+	// Request type: BehaviorBehaviorWithParamsNoResponseRequest,
+	//
+	// Response type: none
+	BehaviorWithParamsNoResponse(NoResponseHandlerBuilder[
+		*BehaviorBehaviorWithParamsNoResponseRequest,
+	]) http.Handler
 
 	// POST /behavior/with-status-defined
-	controllerBuilder.HandleBehaviorWithStatusDefined.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleBehaviorWithStatusDefined.defaultStatusCode = 202
-	controllerBuilder.HandleBehaviorWithStatusDefined.voidResult = true
-	controllerBuilder.HandleBehaviorWithStatusDefined.paramsParserFactory = makeVoidParamsParser
-
-	return controllerBuilder
+	//
+	// Request type: none
+	//
+	// Response type: none
+	BehaviorWithStatusDefined(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorRoutes(controller *BehaviorController, app *HTTPApp) {
-	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(app))
-	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(app))
-	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(app))
-	app.router.HandleRoute("GET", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(app))
-	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(app))
+func RegisterBehaviorRoutes(controller BehaviorController, app *HTTPApp) {
+	builder := newBehaviorControllerBuilder(app)
+	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
+	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder.BehaviorNoParamsWithResponse))
+	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder.BehaviorNoStatusDefined))
+	app.router.HandleRoute("POST", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder.BehaviorWithParamsAndResponse))
+	app.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder.BehaviorWithParamsNoResponse))
+	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder.BehaviorWithStatusDefined))
 }
