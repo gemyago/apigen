@@ -389,7 +389,9 @@ type ActionBuilder[
 	params             makeActionBuilderParams[TReq, TRes]
 }
 
-func (ab ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]) createHandler(handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error)) http.Handler {
+func (ab ActionBuilder[TReq, TRes, TPlainHandler, THttpHandler]) createHandler(
+	handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error),
+) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		aw := &actionsResponseWriter{
 			targetWriter:  w,
