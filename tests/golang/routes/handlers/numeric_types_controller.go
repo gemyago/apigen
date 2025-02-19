@@ -543,7 +543,7 @@ type NumericTypesController interface {
 	]) http.Handler
 }
 
-func RegisterNumericTypesRoutesV3(controller NumericTypesController, app *HTTPApp) {
+func RegisterNumericTypesRoutes(controller NumericTypesController, app *HTTPApp) {
 	builder := newNumericTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder.NumericTypesArrayItems))
 	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(builder.NumericTypesNullable))

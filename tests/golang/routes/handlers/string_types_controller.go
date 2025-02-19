@@ -1099,7 +1099,7 @@ type StringTypesController interface {
 	]) http.Handler
 }
 
-func RegisterStringTypesRoutesV3(controller StringTypesController, app *HTTPApp) {
+func RegisterStringTypesRoutes(controller StringTypesController, app *HTTPApp) {
 	builder := newStringTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder.StringTypesArrayItemsRangeValidation))
 	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder.StringTypesArraysParsing))

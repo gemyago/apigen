@@ -96,7 +96,7 @@ type {{classname}}Controller interface {
 {{/operations}}
 }
 
-func Register{{baseName}}RoutesV3(controller {{baseName}}Controller, app *HTTPApp) {
+func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp) {
 	builder := new{{classname}}ControllerBuilder(app)
 	{{#operations}}
 	{{#operation}}

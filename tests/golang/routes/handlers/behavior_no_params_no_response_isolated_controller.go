@@ -67,7 +67,7 @@ type BehaviorNoParamsNoResponseIsolatedController interface {
 	BehaviorNoParamsNoResponse(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorNoParamsNoResponseIsolatedRoutesV3(controller BehaviorNoParamsNoResponseIsolatedController, app *HTTPApp) {
+func RegisterBehaviorNoParamsNoResponseIsolatedRoutes(controller BehaviorNoParamsNoResponseIsolatedController, app *HTTPApp) {
 	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app)
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
 }

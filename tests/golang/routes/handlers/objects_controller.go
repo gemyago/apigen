@@ -425,7 +425,7 @@ type ObjectsController interface {
 	]) http.Handler
 }
 
-func RegisterObjectsRoutesV3(controller ObjectsController, app *HTTPApp) {
+func RegisterObjectsRoutes(controller ObjectsController, app *HTTPApp) {
 	builder := newObjectsControllerBuilder(app)
 	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))
 	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder.ObjectsArrayBodyNested))

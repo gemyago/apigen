@@ -317,7 +317,7 @@ type BooleanController interface {
 	]) http.Handler
 }
 
-func RegisterBooleanRoutesV3(controller BooleanController, app *HTTPApp) {
+func RegisterBooleanRoutes(controller BooleanController, app *HTTPApp) {
 	builder := newBooleanControllerBuilder(app)
 	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
 	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))

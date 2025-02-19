@@ -211,7 +211,7 @@ type ArraysController interface {
 	]) http.Handler
 }
 
-func RegisterArraysRoutesV3(controller ArraysController, app *HTTPApp) {
+func RegisterArraysRoutes(controller ArraysController, app *HTTPApp) {
 	builder := newArraysControllerBuilder(app)
 	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))
 	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder.ArraysRangeValidation))
