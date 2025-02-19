@@ -10,7 +10,7 @@ import (
 	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
 )
 
-// Start is using command below:
+// Start it using command below:
 // go run ./examples/go-apigen-server/cmd/service/
 //
 // Send requests with curl:
