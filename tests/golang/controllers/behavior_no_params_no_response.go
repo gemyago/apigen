@@ -25,4 +25,4 @@ func (c *behaviorControllerNoParamsNoResponse) BehaviorNoParamsNoResponse(
 	)
 }
 
-var _ handlers.BehaviorNoParamsNoResponseIsolatedControllerV3 = &behaviorControllerNoParamsNoResponse{}
+var _ handlers.BehaviorNoParamsNoResponseIsolatedController = &behaviorControllerNoParamsNoResponse{}

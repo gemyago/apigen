@@ -76,4 +76,4 @@ func (c *numericTypesController) NumericTypesNullableArrayItems(
 	)
 }
 
-var _ handlers.NumericTypesControllerV3 = &numericTypesController{}
+var _ handlers.NumericTypesController = &numericTypesController{}

@@ -40,4 +40,4 @@ func (c *arraysController) ArraysRangeValidation(
 	)
 }
 
-var _ handlers.ArraysControllerV3 = &arraysController{}
+var _ handlers.ArraysController = &arraysController{}

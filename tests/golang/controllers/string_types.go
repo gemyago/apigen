@@ -87,4 +87,4 @@ func (c *stringTypesController) StringTypesRequiredValidation(
 	return builder.HandleWith(c.testActions.stringTypesRequiredValidation.action)
 }
 
-var _ handlers.StringTypesControllerV3 = &stringTypesController{}
+var _ handlers.StringTypesController = &stringTypesController{}

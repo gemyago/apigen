@@ -83,7 +83,7 @@ func new{{classname}}ControllerBuilder(app *HTTPApp) *{{classname}}ControllerBui
 	}
 }
 
-type {{classname}}ControllerV3 interface {
+type {{classname}}Controller interface {
 {{#operations}}
 {{#operation}}
 	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
@@ -96,7 +96,7 @@ type {{classname}}ControllerV3 interface {
 {{/operations}}
 }
 
-func Register{{baseName}}RoutesV3(controller {{baseName}}ControllerV3, app *HTTPApp) {
+func Register{{baseName}}RoutesV3(controller {{baseName}}Controller, app *HTTPApp) {
 	builder := new{{classname}}ControllerBuilder(app)
 	{{#operations}}
 	{{#operation}}

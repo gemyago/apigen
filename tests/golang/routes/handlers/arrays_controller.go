@@ -182,7 +182,7 @@ func newArraysControllerBuilder(app *HTTPApp) *ArraysControllerBuilder {
 	}
 }
 
-type ArraysControllerV3 interface {
+type ArraysController interface {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//
 	// Request type: ArraysArraysNullableRequiredValidationRequest,
@@ -211,7 +211,7 @@ type ArraysControllerV3 interface {
 	]) http.Handler
 }
 
-func RegisterArraysRoutesV3(controller ArraysControllerV3, app *HTTPApp) {
+func RegisterArraysRoutesV3(controller ArraysController, app *HTTPApp) {
 	builder := newArraysControllerBuilder(app)
 	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))
 	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder.ArraysRangeValidation))

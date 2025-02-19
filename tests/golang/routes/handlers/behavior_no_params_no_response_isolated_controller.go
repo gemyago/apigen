@@ -58,7 +58,7 @@ func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *Behav
 	}
 }
 
-type BehaviorNoParamsNoResponseIsolatedControllerV3 interface {
+type BehaviorNoParamsNoResponseIsolatedController interface {
 	// GET /behavior/no-params-no-response-isolated
 	//
 	// Request type: none
@@ -67,7 +67,7 @@ type BehaviorNoParamsNoResponseIsolatedControllerV3 interface {
 	BehaviorNoParamsNoResponse(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorNoParamsNoResponseIsolatedRoutesV3(controller BehaviorNoParamsNoResponseIsolatedControllerV3, app *HTTPApp) {
+func RegisterBehaviorNoParamsNoResponseIsolatedRoutesV3(controller BehaviorNoParamsNoResponseIsolatedController, app *HTTPApp) {
 	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app)
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
 }

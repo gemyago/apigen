@@ -1007,7 +1007,7 @@ func newStringTypesControllerBuilder(app *HTTPApp) *StringTypesControllerBuilder
 	}
 }
 
-type StringTypesControllerV3 interface {
+type StringTypesController interface {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
 	// Request type: StringTypesStringTypesArrayItemsRangeValidationRequest,
@@ -1099,7 +1099,7 @@ type StringTypesControllerV3 interface {
 	]) http.Handler
 }
 
-func RegisterStringTypesRoutesV3(controller StringTypesControllerV3, app *HTTPApp) {
+func RegisterStringTypesRoutesV3(controller StringTypesController, app *HTTPApp) {
 	builder := newStringTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder.StringTypesArrayItemsRangeValidation))
 	app.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder.StringTypesArraysParsing))

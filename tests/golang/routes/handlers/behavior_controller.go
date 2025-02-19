@@ -247,7 +247,7 @@ func newBehaviorControllerBuilder(app *HTTPApp) *BehaviorControllerBuilder {
 	}
 }
 
-type BehaviorControllerV3 interface {
+type BehaviorController interface {
 	// GET /behavior/no-params-no-response
 	//
 	// Request type: none
@@ -298,7 +298,7 @@ type BehaviorControllerV3 interface {
 	BehaviorWithStatusDefined(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorRoutesV3(controller BehaviorControllerV3, app *HTTPApp) {
+func RegisterBehaviorRoutesV3(controller BehaviorController, app *HTTPApp) {
 	builder := newBehaviorControllerBuilder(app)
 	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
 	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder.BehaviorNoParamsWithResponse))

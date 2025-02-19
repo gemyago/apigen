@@ -270,7 +270,7 @@ func newBooleanControllerBuilder(app *HTTPApp) *BooleanControllerBuilder {
 	}
 }
 
-type BooleanControllerV3 interface {
+type BooleanController interface {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
 	// Request type: BooleanBooleanArrayItemsRequest,
@@ -317,7 +317,7 @@ type BooleanControllerV3 interface {
 	]) http.Handler
 }
 
-func RegisterBooleanRoutesV3(controller BooleanControllerV3, app *HTTPApp) {
+func RegisterBooleanRoutesV3(controller BooleanController, app *HTTPApp) {
 	builder := newBooleanControllerBuilder(app)
 	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
 	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))

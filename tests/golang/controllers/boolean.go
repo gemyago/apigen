@@ -58,4 +58,4 @@ func (c *booleanController) BooleanNullableArrayItems(
 	)
 }
 
-var _ handlers.BooleanControllerV3 = &booleanController{}
+var _ handlers.BooleanController = &booleanController{}

@@ -478,7 +478,7 @@ func newNumericTypesControllerBuilder(app *HTTPApp) *NumericTypesControllerBuild
 	}
 }
 
-type NumericTypesControllerV3 interface {
+type NumericTypesController interface {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
 	// Request type: NumericTypesNumericTypesArrayItemsRequest,
@@ -543,7 +543,7 @@ type NumericTypesControllerV3 interface {
 	]) http.Handler
 }
 
-func RegisterNumericTypesRoutesV3(controller NumericTypesControllerV3, app *HTTPApp) {
+func RegisterNumericTypesRoutesV3(controller NumericTypesController, app *HTTPApp) {
 	builder := newNumericTypesControllerBuilder(app)
 	app.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder.NumericTypesArrayItems))
 	app.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(builder.NumericTypesNullable))

@@ -152,4 +152,4 @@ func (c *behaviorController) BehaviorWithStatusDefined(
 	)
 }
 
-var _ handlers.BehaviorControllerV3 = &behaviorController{}
+var _ handlers.BehaviorController = &behaviorController{}

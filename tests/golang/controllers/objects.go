@@ -85,4 +85,4 @@ func (c *objectsController) ObjectsRequiredNestedObjects(
 	)
 }
 
-var _ handlers.ObjectsControllerV3 = &objectsController{}
+var _ handlers.ObjectsController = &objectsController{}
