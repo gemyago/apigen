@@ -3,14 +3,17 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
 )
 
 // Below is to workaround unused imports.
+var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
@@ -42,84 +45,143 @@ type PetsListPetsRequest struct {
 	Offset int64
 }
 
-type PetsController struct {
+type petsControllerBuilder struct {
 	// POST /pets
 	//
 	// Request type: PetsCreatePetRequest,
 	//
 	// Response type: none
-	CreatePet httpHandlerFactory
+	CreatePet ActionBuilder[
+		*PetsCreatePetRequest,
+		void,
+		func(context.Context, *PetsCreatePetRequest) (error),
+		func(http.ResponseWriter, *http.Request, *PetsCreatePetRequest) (error),
+	]
 
 	// GET /pets/{petId}
 	//
 	// Request type: PetsGetPetByIdRequest,
 	//
 	// Response type: PetResponse
-	GetPetById httpHandlerFactory
+	GetPetById ActionBuilder[
+		*PetsGetPetByIdRequest,
+		*PetResponse,
+		func(context.Context, *PetsGetPetByIdRequest) (*PetResponse, error),
+		func(http.ResponseWriter, *http.Request, *PetsGetPetByIdRequest) (*PetResponse, error),
+	]
 
 	// GET /pets
 	//
 	// Request type: PetsListPetsRequest,
 	//
 	// Response type: PetsResponse
-	ListPets httpHandlerFactory
+	ListPets ActionBuilder[
+		*PetsListPetsRequest,
+		*PetsResponse,
+		func(context.Context, *PetsListPetsRequest) (*PetsResponse, error),
+		func(http.ResponseWriter, *http.Request, *PetsListPetsRequest) (*PetsResponse, error),
+	]
 }
 
-type PetsControllerBuilder struct {
-	// POST /pets
-	//
-	// Request type: PetsCreatePetRequest,
-	//
-	// Response type: none
-	HandleCreatePet actionBuilderVoidResult[*PetsControllerBuilder, *PetsCreatePetRequest]
+func newPetsControllerBuilder(app *HTTPApp) *petsControllerBuilder {
+	return &petsControllerBuilder{
+		// POST /pets
+		CreatePet: makeActionBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*PetsCreatePetRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*PetsCreatePetRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*PetsCreatePetRequest,
+				void,
+			]{
+				defaultStatus: 201,
+				voidResult:    true,
+				paramsParser:  newParamsParserPetsCreatePet(app),
+			},
+		),
 
-	// GET /pets/{petId}
-	//
-	// Request type: PetsGetPetByIdRequest,
-	//
-	// Response type: PetResponse
-	HandleGetPetById actionBuilder[*PetsControllerBuilder, *PetsGetPetByIdRequest, *PetResponse]
+		// GET /pets/{petId}
+		GetPetById: makeActionBuilder(
+			app,
+			newHandlerAdapter[
+				*PetsGetPetByIdRequest,
+				*PetResponse,
+			](),
+			newHTTPHandlerAdapter[
+				*PetsGetPetByIdRequest,
+				*PetResponse,
+			](),
+			makeActionBuilderParams[
+				*PetsGetPetByIdRequest,
+				*PetResponse,
+			]{
+				defaultStatus: 200,
+				paramsParser:  newParamsParserPetsGetPetById(app),
+			},
+		),
 
-	// GET /pets
-	//
-	// Request type: PetsListPetsRequest,
-	//
-	// Response type: PetsResponse
-	HandleListPets actionBuilder[*PetsControllerBuilder, *PetsListPetsRequest, *PetsResponse]
-}
-
-func (c *PetsControllerBuilder) Finalize() *PetsController {
-	return &PetsController{
-		CreatePet: mustInitializeAction("createPet", c.HandleCreatePet.httpHandlerFactory),
-		GetPetById: mustInitializeAction("getPetById", c.HandleGetPetById.httpHandlerFactory),
-		ListPets: mustInitializeAction("listPets", c.HandleListPets.httpHandlerFactory),
+		// GET /pets
+		ListPets: makeActionBuilder(
+			app,
+			newHandlerAdapter[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			](),
+			newHTTPHandlerAdapter[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			](),
+			makeActionBuilderParams[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			]{
+				defaultStatus: 200,
+				paramsParser:  newParamsParserPetsListPets(app),
+			},
+		),
 	}
 }
 
-func BuildPetsController() *PetsControllerBuilder {
-	controllerBuilder := &PetsControllerBuilder{}
-
+type PetsController interface {
 	// POST /pets
-	controllerBuilder.HandleCreatePet.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleCreatePet.defaultStatusCode = 201
-	controllerBuilder.HandleCreatePet.voidResult = true
-	controllerBuilder.HandleCreatePet.paramsParserFactory = newParamsParserPetsCreatePet
+	//
+	// Request type: PetsCreatePetRequest,
+	//
+	// Response type: none
+	CreatePet(NoResponseHandlerBuilder[
+		*PetsCreatePetRequest,
+	]) http.Handler
 
 	// GET /pets/{petId}
-	controllerBuilder.HandleGetPetById.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleGetPetById.defaultStatusCode = 200
-	controllerBuilder.HandleGetPetById.paramsParserFactory = newParamsParserPetsGetPetById
+	//
+	// Request type: PetsGetPetByIdRequest,
+	//
+	// Response type: PetResponse
+	GetPetById(HandlerBuilder[
+		*PetsGetPetByIdRequest,
+		*PetResponse,
+	]) http.Handler
 
 	// GET /pets
-	controllerBuilder.HandleListPets.controllerBuilder = controllerBuilder
-	controllerBuilder.HandleListPets.defaultStatusCode = 200
-	controllerBuilder.HandleListPets.paramsParserFactory = newParamsParserPetsListPets
-
-	return controllerBuilder
+	//
+	// Request type: PetsListPetsRequest,
+	//
+	// Response type: PetsResponse
+	ListPets(HandlerBuilder[
+		*PetsListPetsRequest,
+		*PetsResponse,
+	]) http.Handler
 }
 
-func RegisterPetsRoutes(controller *PetsController, app *HTTPApp) {
-	app.router.HandleRoute("POST", "/pets", controller.CreatePet(app))
-	app.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(app))
-	app.router.HandleRoute("GET", "/pets", controller.ListPets(app))
+func RegisterPetsRoutes(controller PetsController, app *HTTPApp) {
+	builder := newPetsControllerBuilder(app)
+	app.router.HandleRoute("POST", "/pets", controller.CreatePet(builder.CreatePet))
+	app.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(builder.GetPetById))
+	app.router.HandleRoute("GET", "/pets", controller.ListPets(builder.ListPets))
 }

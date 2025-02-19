@@ -21,7 +21,7 @@ func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 	a.ServeMux.Handle(method+" "+pathPattern, h)
 }
 
-func handleActionError(_ *http.Request, w http.ResponseWriter, err error) {
+func handleActionError(w http.ResponseWriter, _ *http.Request, err error) {
 	code := 500
 	switch {
 	case errors.Is(err, app.ErrNotFound):
@@ -46,7 +46,7 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 // HandlerDeps holds dependencies of the generated routes
 // usually controller implementations at least.
 type HandlerDeps struct {
-	PetsController *handlers.PetsController
+	PetsController handlers.PetsController
 }
 
 // NewHandler creates an minimal example implementation of the router handler
