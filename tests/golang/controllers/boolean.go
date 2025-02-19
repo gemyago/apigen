@@ -19,43 +19,43 @@ type booleanController struct {
 }
 
 func (c *booleanController) BooleanParsing(
-	builder *handlers.BooleanControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanParsingRequest],
 ) http.Handler {
-	return builder.BooleanParsing.HandleWith(
+	return builder.HandleWith(
 		c.testActions.booleanParsing.action,
 	)
 }
 
 func (c *booleanController) BooleanRequiredValidation(
-	builder *handlers.BooleanControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanRequiredValidationRequest],
 ) http.Handler {
-	return builder.BooleanRequiredValidation.HandleWith(
+	return builder.HandleWith(
 		c.testActions.booleanRequiredValidation.action,
 	)
 }
 
 func (c *booleanController) BooleanNullable(
-	builder *handlers.BooleanControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableRequest],
 ) http.Handler {
-	return builder.BooleanNullable.HandleWith(
+	return builder.HandleWith(
 		c.testActions.booleanNullable.action,
 	)
 }
 
 func (c *booleanController) BooleanArrayItems(
-	builder *handlers.BooleanControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanArrayItemsRequest],
 ) http.Handler {
-	return builder.BooleanArrayItems.HandleWith(
+	return builder.HandleWith(
 		c.testActions.booleanArrayItems.action,
 	)
 }
 
 func (c *booleanController) BooleanNullableArrayItems(
-	builder *handlers.BooleanControllerBuilder,
+	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableArrayItemsRequest],
 ) http.Handler {
-	return builder.BooleanNullableArrayItems.HandleWith(
+	return builder.HandleWith(
 		c.testActions.nullableBooleanArrayItems.action,
 	)
 }
 
-var _ handlers.BooleanController = &booleanController{}
+var _ handlers.BooleanControllerV3 = &booleanController{}
