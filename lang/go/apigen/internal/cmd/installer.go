@@ -82,7 +82,10 @@ func downloadSupportFileIfRequired(
 		params.sourceVersion != *params.metadataVersion ||
 		params.sourceLocation != *params.metadataLocation {
 		logger.InfoContext(ctx, "Downloading support file",
-			slog.String("source", params.sourceLocation),
+			slog.String("metadataVersion", *params.metadataVersion),
+			slog.String("metadataLocation", *params.metadataLocation),
+			slog.String("sourceVersion", params.sourceVersion),
+			slog.String("sourceLocation", params.sourceLocation),
 			slog.String("destination", params.destinationPath),
 		)
 		if err = deps.Downloader(
