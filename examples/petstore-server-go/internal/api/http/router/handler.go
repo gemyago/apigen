@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1controllers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/handlers"
 )
 
 // httpRouter is a ServerMux adapter to use with generated routes.

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	. "github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	. "github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/models"
 )
 
 // Below is to workaround unused imports.

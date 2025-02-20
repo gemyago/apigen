@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1routes/models"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/handlers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/models"
 )
 
 var (

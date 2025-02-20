@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/router"
-	"github.com/gemyago/apigen/examples/go-apigen-server/pkg/api/http/v1controllers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/router"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1controllers"
 )
 
 // Start it using command below:

@@ -1,4 +1,4 @@
-module github.com/gemyago/apigen/examples/go-apigen-server
+module github.com/gemyago/apigen/examples/petstore-server-go
 
 go 1.23
 

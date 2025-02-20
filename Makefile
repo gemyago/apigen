@@ -88,7 +88,7 @@ $(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
 	mvn -B -q -f generators/go-apigen-server/pom.xml package
 	touch $@
 
-examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/petstore.yaml
+examples/petstore-server-go/internal/api/http/v1routes: $(golang_server_jar) examples/petstore.yaml
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
@@ -97,7 +97,7 @@ examples/go-apigen-server/pkg/api/http/v1routes: $(golang_server_jar) examples/p
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
 
-examples/go-apigen-server: examples/go-apigen-server/pkg/api/http/v1routes
+examples/petstore-server-go: examples/petstore-server-go/internal/api/http/v1routes
 
 # generatedCodeComment set to empty to allow linter to lint generated code.
 tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_server_jar)
@@ -111,7 +111,7 @@ tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
 
-generate/golang: examples/go-apigen-server tests/golang/routes
+generate/golang: examples/petstore-server-go tests/golang/routes
 
 bin/golangci-lint: ./.golangci-version
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s $(shell cat $^)
@@ -119,7 +119,7 @@ bin/golangci-lint: ./.golangci-version
 .PHONY: lint/golang
 lint/golang: bin/golangci-lint
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml
-	cd ./examples/go-apigen-server && ../../bin/golangci-lint run --config ../../.golangci.yml
+	cd ./examples/petstore-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
 
 .PHONY: lint
 lint: lint/golang
