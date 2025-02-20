@@ -41,7 +41,7 @@ func newNoopableGeneratorInvoker(
 	return invoker
 }
 
-func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
+func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 	var params GeneratorParams
 	verbose := false
 	noop := false
@@ -84,7 +84,7 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 						RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
 					}),
 				),
-				MetadataReader: resources.NewMetadataReader(rootFS),
+				MetadataReader: resources.NewMetadataReader(embeddedRootFS),
 				GeneratorInvoker: newNoopableGeneratorInvoker(
 					rootLogger,
 					noop,

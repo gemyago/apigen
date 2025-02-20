@@ -7,8 +7,8 @@ import (
 	"github.com/gemyago/apigen/lang/go/apigen/internal/cmd"
 )
 
-func Execute(rootFS fs.ReadFileFS) { // coverage-ignore
-	rootCmd := cmd.NewRootCmd(rootFS)
+func Execute(embeddedRootFS fs.ReadFileFS) { // coverage-ignore
+	rootCmd := cmd.NewRootCmd(embeddedRootFS)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
