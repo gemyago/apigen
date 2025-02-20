@@ -83,7 +83,7 @@ func downloadSupportFileIfRequired(
 	params downloadSupportFileIfRequiredParams,
 ) error {
 	fileExists := true
-	file, err := deps.CwdFS.Open(params.destinationPath[1:])
+	file, err := deps.CwdFS.Open(params.destinationPath)
 	if err != nil {
 		fileExists = false
 	} else {
