@@ -1,6 +1,7 @@
 go 1.23
 
 use ./examples/petstore-server-go
+use ./examples/ping-server-go
 
 use ./
 
