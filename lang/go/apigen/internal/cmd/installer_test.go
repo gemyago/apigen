@@ -47,6 +47,9 @@ func TestSupportFilesInstaller(t *testing.T) {
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
 			CwdFS:      mockFS,
+			Downloader: func(_ context.Context, _, _ string) error {
+				return errors.New("downloader should not be called")
+			},
 		})
 		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
