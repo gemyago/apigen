@@ -40,7 +40,9 @@ type SupportFilesInstaller func(
 type SupportFilesInstallerDeps struct {
 	RootLogger *slog.Logger
 	Downloader ResourceDownloader
-	RootFS     fs.ReadFileFS
+
+	// FS instance relative to the current working directory
+	CwdFS fs.ReadFileFS
 }
 
 func readSupportFilesMetadata(
@@ -55,6 +57,7 @@ func readSupportFilesMetadata(
 		if err = json.Unmarshal(data, &metadata); err != nil {
 			return SupportFilesMetadata{}, fmt.Errorf("failed to unmarshal metadata: %w", err)
 		}
+		return metadata, nil
 	}
 
 	if !os.IsNotExist(err) {
@@ -80,7 +83,7 @@ func downloadSupportFileIfRequired(
 	params downloadSupportFileIfRequiredParams,
 ) error {
 	fileExists := true
-	file, err := deps.RootFS.Open(params.destinationPath[1:])
+	file, err := deps.CwdFS.Open(params.destinationPath[1:])
 	if err != nil {
 		fileExists = false
 	} else {
@@ -144,7 +147,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		}
 
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		metadata, err := readSupportFilesMetadata(ctx, logger, deps.RootFS, metadataFile)
+		metadata, err := readSupportFilesMetadata(ctx, logger, deps.CwdFS, metadataFile)
 		if err != nil {
 			return emptyResult, err
 		}

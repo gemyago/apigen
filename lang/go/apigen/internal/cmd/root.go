@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"io/fs"
 	"log/slog"
 	"os"
@@ -53,7 +54,7 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 		Use:   "apigengo [input] [output]",
 		Short: "Generate HTTP layer from OpenAPI spec",
 		Args:  cobra.ExactArgs(expectedArgsCount),
-		PreRun: func(_ *cobra.Command, _ []string) {
+		PreRunE: func(cmd *cobra.Command, _ []string) error {
 			level := slog.LevelWarn
 			if verbose {
 				level = slog.LevelDebug
@@ -72,6 +73,11 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 
 			rootLogger := slog.New(logHandler)
 
+			cwdFS, ok := os.DirFS(".").(fs.ReadFileFS)
+			if !ok {
+				return errors.New("failed to get current working directory filesystem")
+			}
+
 			generator = NewGenerator(GeneratorDeps{
 				RootLogger:  rootLogger,
 				OsChdirFunc: os.Chdir,
@@ -81,7 +87,7 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 					NewSupportFilesInstaller(SupportFilesInstallerDeps{
 						RootLogger: rootLogger,
 						Downloader: NewResourceDownloader(),
-						RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
+						CwdFS:      cwdFS,
 					}),
 				),
 				MetadataReader: resources.NewMetadataReader(embeddedRootFS),
@@ -98,6 +104,7 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 					}),
 				),
 			})
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			params.input = args[0]

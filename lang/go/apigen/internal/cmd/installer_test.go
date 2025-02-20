@@ -46,7 +46,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     mockFS,
+			CwdFS:      mockFS,
 		})
 		res, err := installer(context.Background(), params)
 		require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     fstest.MapFS{},
+			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
@@ -115,7 +115,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     mockFS,
+			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
@@ -155,7 +155,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     mockFS,
+			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
@@ -188,7 +188,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     mockFS,
+			CwdFS:      mockFS,
 		})
 		_, err := installer(context.Background(), params)
 		require.Error(t, err)
@@ -199,7 +199,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     fstest.MapFS{},
+			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, _, _ string) error {
 				return wantErr
 			},
@@ -213,7 +213,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
-			RootFS:     fstest.MapFS{},
+			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, _ string) error {
 				if source == params.OagSourceLocation {
 					return nil
