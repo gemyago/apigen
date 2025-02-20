@@ -54,7 +54,7 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 		Use:   "apigengo [input] [output]",
 		Short: "Generate HTTP layer from OpenAPI spec",
 		Args:  cobra.ExactArgs(expectedArgsCount),
-		PreRunE: func(cmd *cobra.Command, _ []string) error {
+		PreRunE: func(_ *cobra.Command, _ []string) error {
 			level := slog.LevelWarn
 			if verbose {
 				level = slog.LevelDebug
