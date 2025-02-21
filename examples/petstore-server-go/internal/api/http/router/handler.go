@@ -10,16 +10,18 @@ import (
 )
 
 // httpRouter is a ServerMux adapter to use with generated routes.
-type httpRouter struct {
-	*http.ServeMux
-}
+type httpRouter http.ServeMux
 
-func (httpRouter) PathValue(r *http.Request, paramName string) string {
+func (*httpRouter) PathValue(r *http.Request, paramName string) string {
 	return r.PathValue(paramName)
 }
 
-func (a httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
-	a.ServeMux.Handle(method+" "+pathPattern, h)
+func (router *httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
+	(*http.ServeMux)(router).Handle(method+" "+pathPattern, h)
+}
+
+func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	(*http.ServeMux)(router).ServeHTTP(w, r)
 }
 
 // handleActionError is a custom error handler to process action errors.
@@ -46,6 +48,21 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 	lrw.ResponseWriter.WriteHeader(code)
 }
 
+// Minimalistic access log middleware just to have some logs when running the example.
+func accessLogMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent())
+		defer func() {
+			if r := recover(); r != nil {
+				log.Println("Request panic", r)
+			}
+		}()
+		wrapper := &responseWriterWrapper{ResponseWriter: w, statusCode: http.StatusOK}
+		next.ServeHTTP(wrapper, r)
+		log.Printf("%d %v %v\n", wrapper.statusCode, r.Method, r.URL.String())
+	})
+}
+
 // HandlerDeps holds dependencies of the generated routes
 // usually controller implementations at least.
 type HandlerDeps struct {
@@ -55,33 +72,17 @@ type HandlerDeps struct {
 // NewHandler creates an minimal example implementation of the router handler
 // based on the standard http.ServeMux.
 func NewHandler(deps HandlerDeps) http.Handler {
-	mux := http.NewServeMux()
-
-	// Real world instance of the router handler will likely to have a more advanced setup
-	// that may include various middleware to authenticate, log, trace e.t.c...
-	// Below is a simple access logs on requests processing
-	muxHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent())
-		defer func() {
-			if r := recover(); r != nil {
-				log.Println("Request panic", r)
-			}
-		}()
-		wrapper := &responseWriterWrapper{ResponseWriter: w, statusCode: http.StatusOK}
-		mux.ServeHTTP(wrapper, r)
-		log.Printf("%d %v %v\n", wrapper.statusCode, r.Method, r.URL.String())
-	})
-
-	// The httpApp provides a configuration layer of the generated routes
-	// and also serves as an adapter that allows using different router implementations
-	httpApp := handlers.NewHTTPApp(
-		httpRouter{ServeMux: mux},
+	// Root handler instance is a central place to register all routes
+	rootHandler := handlers.NewRootHandler(
+		(*httpRouter)(http.NewServeMux()),
 		handlers.WithActionErrorHandler(handleActionError),
 	)
 
 	// Register generated Pets routes. There can be multiple different
 	// routes registered into the same httpApp instance.
-	handlers.RegisterPetsRoutes(deps.PetsController, httpApp)
+	rootHandler.RegisterPetsRoutes(deps.PetsController)
 
-	return muxHandler
+	// Root handler is a standard http.Handler so can be used in any
+	// context that expects http.Handler interface.
+	return accessLogMiddleware(rootHandler)
 }

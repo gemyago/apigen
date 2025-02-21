@@ -28,7 +28,7 @@ func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsCreatePet(app *HTTPApp) paramsParser[*PetsCreatePetRequest] {
+func newParamsParserPetsCreatePet(rootHandler *RootHandler) paramsParser[*PetsCreatePetRequest] {
 	return &paramsParserPetsCreatePet{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *Pet]{
 			required: true,
@@ -53,12 +53,12 @@ func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsGetPetById(app *HTTPApp) paramsParser[*PetsGetPetByIdRequest] {
+func newParamsParserPetsGetPetById(rootHandler *RootHandler) paramsParser[*PetsGetPetByIdRequest] {
 	return &paramsParserPetsGetPetById{
 		bindPetId: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 			),
@@ -82,12 +82,12 @@ func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest] {
+func newParamsParserPetsListPets(rootHandler *RootHandler) paramsParser[*PetsListPetsRequest] {
 	return &paramsParserPetsListPets{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](1, false, true),
@@ -97,7 +97,7 @@ func newParamsParserPetsListPets(app *HTTPApp) paramsParser[*PetsListPetsRequest
 		bindOffset: newRequestParamBinder(binderParams[[]string, int64]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](1, false, true),
