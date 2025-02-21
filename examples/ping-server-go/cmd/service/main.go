@@ -50,13 +50,23 @@ func (r *httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
 	mux.Handle(method+" "+pathPattern, h)
 }
 
+func (r *httpRouter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	mux := (*http.ServeMux)(r)
+	mux.ServeHTTP(w, req)
+}
+
 func main() {
 	port := 8080
 	readHeaderTimeoutSec := 2
 
+	// TODO: Rename HTTPApp to something more sensible
+	// Make RegisterPingRoutes be attached to the instance above
+	// Make the adapter implement http.Handler interface so it could be used
+	// directly as handler.
+
 	mux := http.NewServeMux()
 	httpApp := handlers.NewHTTPApp((*httpRouter)(mux))
-	handlers.RegisterPingRoutes(&pingController{}, httpApp)
+	httpApp.RegisterPingRoutes(&pingController{})
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),

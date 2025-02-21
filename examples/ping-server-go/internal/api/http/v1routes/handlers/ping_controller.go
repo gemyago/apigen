@@ -77,7 +77,7 @@ type PingController interface {
 	]) http.Handler
 }
 
-func RegisterPingRoutes(controller PingController, app *HTTPApp) {
+func (app *HTTPApp) RegisterPingRoutes(controller PingController) {
 	builder := newPingControllerBuilder(app)
 	app.router.HandleRoute("GET", "/ping", controller.Ping(builder.Ping))
 }
