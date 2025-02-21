@@ -55,7 +55,7 @@ func TestGeneratorInvoker(t *testing.T) {
 		}
 
 		invoker := NewGeneratorInvoker(GeneratorInvokerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			StdOut:     mockStdOut,
 			StdErr:     mockStdErr,
 			OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {

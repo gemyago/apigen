@@ -47,7 +47,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 			serverGeneratorFile: {Data: []byte{}},
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, _, _ string) error {
 				require.Fail(t, "downloader should not be called")
@@ -66,7 +66,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
@@ -120,7 +120,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
@@ -160,7 +160,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
@@ -193,7 +193,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 			},
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, _, _ string) error {
 				require.Fail(t, "downloader should not be called")
@@ -208,7 +208,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, _, _ string) error {
 				return wantErr
@@ -222,7 +222,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, _ string) error {
 				if source == params.OagSourceLocation {
