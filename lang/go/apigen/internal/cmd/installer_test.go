@@ -18,7 +18,9 @@ import (
 
 func TestSupportFilesInstaller(t *testing.T) {
 	makeRandomGeneratorParams := func(t *testing.T) SupportFilesInstallerParams {
-		supportDir := path.Join(t.TempDir(), "support", faker.Word())
+		// the MapFS can not handle absolute paths, so doing relative paths
+		supportDir := path.Join(t.TempDir(), "support", faker.Word())[1:]
+
 		return SupportFilesInstallerParams{
 			SupportDir:                    supportDir,
 			OagSourceVersion:              "1.2.3-" + faker.Word(),
@@ -40,15 +42,16 @@ func TestSupportFilesInstaller(t *testing.T) {
 		oagCliFile := filepath.Join(params.SupportDir, "openapi-generator-cli.jar")
 		serverGeneratorFile := filepath.Join(params.SupportDir, "server-generator.jar")
 		mockFS := fstest.MapFS{
-			metadataFile[1:]:        {Data: lo.Must(json.Marshal(metadata))},
-			oagCliFile[1:]:          {Data: []byte{}},
-			serverGeneratorFile[1:]: {Data: []byte{}},
+			metadataFile:        {Data: lo.Must(json.Marshal(metadata))},
+			oagCliFile:          {Data: []byte{}},
+			serverGeneratorFile: {Data: []byte{}},
 		}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: DiscardLogger,
 			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, _, _ string) error {
-				return errors.New("downloader should not be called")
+				require.Fail(t, "downloader should not be called")
+				return nil
 			},
 		})
 		res, err := installer(context.Background(), params)
@@ -111,7 +114,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		mockFS := fstest.MapFS{
-			metadataFile[1:]: &fstest.MapFile{
+			metadataFile: &fstest.MapFile{
 				Data: lo.Must(json.Marshal(metadata)),
 			},
 		}
@@ -151,7 +154,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		mockFS := fstest.MapFS{
-			metadataFile[1:]: &fstest.MapFile{
+			metadataFile: &fstest.MapFile{
 				Data: lo.Must(json.Marshal(metadata)),
 			},
 		}
@@ -185,7 +188,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
 		mockFS := fstest.MapFS{
-			metadataFile[1:]: &fstest.MapFile{
+			metadataFile: &fstest.MapFile{
 				Data: []byte("invalid json"),
 			},
 		}
