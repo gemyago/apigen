@@ -18,15 +18,23 @@ import (
 
 func TestSupportFilesInstaller(t *testing.T) {
 	makeRandomGeneratorParams := func(t *testing.T) SupportFilesInstallerParams {
-		// the MapFS can not handle absolute paths, so doing relative paths
-		supportDir := path.Join(t.TempDir(), "support", faker.Word())[1:]
+		// Can not use t.TempDir() because MapFS does not support absolute paths
+		// so provisioning temp dir manually
+		require.NoError(t, os.MkdirAll("tmp", 0o755))
+		tmpDir, err := os.MkdirTemp("tmp", "TestSupportFilesInstaller-root-")
+		require.NoError(t, err)
+		t.Cleanup(func() {
+			assert.NoError(t, os.RemoveAll(tmpDir))
+		})
+
+		supportDir := path.Join(tmpDir, "support", faker.Word())
 
 		return SupportFilesInstallerParams{
 			SupportDir:                    supportDir,
 			OagSourceVersion:              "1.2.3-" + faker.Word(),
-			OagSourceLocation:             "file://" + path.Join(t.TempDir(), "oag-cli-"+faker.Word()+".jar"),
+			OagSourceLocation:             "file://" + path.Join(tmpDir, "oag-cli-"+faker.Word()+".jar"),
 			AppVersion:                    "3.2.1-" + faker.Word(),
-			ServerGeneratorSourceLocation: "file://" + path.Join(t.TempDir(), "generator-"+faker.Word()+".jar"),
+			ServerGeneratorSourceLocation: "file://" + path.Join(tmpDir, "generator-"+faker.Word()+".jar"),
 		}
 	}
 
