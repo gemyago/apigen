@@ -134,6 +134,11 @@ Please have the following tools installed:
 
 Review [Customization](https://openapi-generator.tech/docs/customization) docs of openapi generator cli.
 
+Get deps installed:
+```
+make deps
+```
+
 Build particular generator:
 ```
 mvn -f generators/go-apigen-server/ package
@@ -148,6 +153,18 @@ Run tests
 ```
 make tests
 ```
+
+### Updating OpenAPI generator version
+
+Specify a new version in the [.versions](.versions) and in the `pom.xml` of reach generator (`openapi-generator-version` property).
+
+Regenerate the code:
+```
+make deps
+make generate/golang
+```
+
+Review and commit changes. Run tests.
 
 ## Releasing
 
