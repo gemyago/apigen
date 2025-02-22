@@ -30,12 +30,12 @@ func (p *paramsParserPingPing) parse(router httpRouter, req *http.Request) (*Pin
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPingPing(app *HTTPApp) paramsParser[*PingPingRequest] {
+func newParamsParserPingPing(rootHandler *RootHandler) paramsParser[*PingPingRequest] {
 	return &paramsParserPingPing{
 		bindMessage: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),

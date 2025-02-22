@@ -18,8 +18,7 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-// TrackedResponseWriter allows checking if headers or body were written.
-type TrackedResponseWriter interface {
+type trackedResponseWriter interface {
 	// HeaderWritten returns true if headers were written.
 	HeaderWritten() bool
 
@@ -33,49 +32,39 @@ type httpRouter interface {
 
 	// HandleRoute register a given handler function to handle given route
 	HandleRoute(method, pathPattern string, h http.Handler)
+
+	// ServeHTTP is a standard http.Handler method
+	ServeHTTP(w http.ResponseWriter, r *http.Request)
 }
 
-// ParsingErrorHandler will process errors during parsing and validation stages
-// The default implementation will respond with 400 status code and standard
-// serialization of ParsingError type.
-// The writer may implement TrackedResponseWriter that can be used to check if
-// headers or body were written.
-type ParsingErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
+type errorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
 
-// ActionErrorHandler will process errors produced by controller actions
-// The default implementation will respond with 500 and no output.
-// The writer may implement TrackedResponseWriter that can be used to check if
-// headers or body were written.
-type ActionErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
-
-// ResponseErrorHandler will process errors that may occur while writing response.
-// The writer may implement TrackedResponseWriter that can be used to check if
-// headers or body were written. If headers are written it then usually reasonable
-// to either log error or panic.
-type ResponseErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
-
-// SlogLogger is a fully compatible with slog and used to allow injecting the instance.
-type SlogLogger interface {
+// slogLogger is a fully compatible with slog and used to allow injecting the instance.
+type slogLogger interface {
 	Log(ctx context.Context, level slog.Level, msg string, args ...any)
 	LogAttrs(ctx context.Context, level slog.Level, msg string, attrs ...slog.Attr)
 }
 
-type HTTPApp struct {
+// RootHandler is a central point of the generated HTTP server. It is responsible for
+// registering routes and customizing router behavior.
+// The RootHandler implements http.Handler interface and can be used as a standard
+// http.Handler in any context that expects it.
+type RootHandler struct {
 	router               httpRouter
-	handleParsingErrors  ParsingErrorHandler
-	handleActionErrors   ActionErrorHandler
-	handleResponseErrors ResponseErrorHandler
+	handleParsingErrors  errorHandlerFunc
+	handleActionErrors   errorHandlerFunc
+	handleResponseErrors errorHandlerFunc
 	knownParsers         *knownParsersDef
-	logger               SlogLogger
+	logger               slogLogger
 }
 
-type HTTPAppOpt func(app *HTTPApp)
+type RootHandlerOpt func(*RootHandler)
 
-// WithLogger allows to set custom logger for the application.
+// WithLogger allows to set custom logger for the root handler.
 // The default logger is slog.Default().
-func WithLogger(logger SlogLogger) HTTPAppOpt {
-	return func(app *HTTPApp) {
-		app.logger = logger
+func WithLogger(logger slogLogger) RootHandlerOpt {
+	return func(r *RootHandler) {
+		r.logger = logger
 	}
 }
 
@@ -84,9 +73,9 @@ func WithLogger(logger SlogLogger) HTTPAppOpt {
 // The default implementation will respond with 400 status code and validation
 // errors serialized as JSON. No sensitive information is exposed, just field names.
 // The default implementation will also log the error using configured logger.
-func WithParsingErrorHandler(handler ParsingErrorHandler) HTTPAppOpt {
-	return func(app *HTTPApp) {
-		app.handleParsingErrors = handler
+func WithParsingErrorHandler(handler errorHandlerFunc) RootHandlerOpt {
+	return func(h *RootHandler) {
+		h.handleParsingErrors = handler
 	}
 }
 
@@ -94,9 +83,9 @@ func WithParsingErrorHandler(handler ParsingErrorHandler) HTTPAppOpt {
 // Action errors are errors that occur during controller action execution.
 // The default implementation will respond with 500 status code and no output.
 // The default implementation will also log the error using configured logger.
-func WithActionErrorHandler(handler ActionErrorHandler) HTTPAppOpt {
-	return func(app *HTTPApp) {
-		app.handleActionErrors = handler
+func WithActionErrorHandler(handler errorHandlerFunc) RootHandlerOpt {
+	return func(h *RootHandler) {
+		h.handleActionErrors = handler
 	}
 }
 
@@ -104,46 +93,51 @@ func WithActionErrorHandler(handler ActionErrorHandler) HTTPAppOpt {
 // Response errors are errors that occur while writing response.
 // The default implementation will attempt to respond with 500 status code and no output.
 // The default implementation will also log the error using configured logger.
-func WithResponseErrorHandler(handler ResponseErrorHandler) HTTPAppOpt {
-	return func(app *HTTPApp) {
-		app.handleResponseErrors = handler
+func WithResponseErrorHandler(handler errorHandlerFunc) RootHandlerOpt {
+	return func(h *RootHandler) {
+		h.handleResponseErrors = handler
 	}
 }
 
-func NewHTTPApp(router httpRouter, opts ...HTTPAppOpt) *HTTPApp {
-	app := &HTTPApp{
+// NewRootHandler creates a new instance of the root handler.
+func NewRootHandler(router httpRouter, opts ...RootHandlerOpt) *RootHandler {
+	rootHandler := &RootHandler{
 		router:       router,
 		logger:       slog.Default(),
 		knownParsers: newKnownParsers(),
 	}
-	app.handleActionErrors = func(w http.ResponseWriter, r *http.Request, err error) {
-		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
-		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
+	rootHandler.handleActionErrors = func(w http.ResponseWriter, r *http.Request, err error) {
+		rootHandler.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to process request", slog.Any("error", err))
+		if tw, ok := w.(trackedResponseWriter); ok && !tw.HeaderWritten() {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
-	app.handleResponseErrors = func(w http.ResponseWriter, r *http.Request, err error) {
-		app.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
-		if tw, ok := w.(TrackedResponseWriter); ok && !tw.HeaderWritten() {
+	rootHandler.handleResponseErrors = func(w http.ResponseWriter, r *http.Request, err error) {
+		rootHandler.logger.LogAttrs(r.Context(), slog.LevelError, "Failed to write response", slog.Any("err", err))
+		if tw, ok := w.(trackedResponseWriter); ok && !tw.HeaderWritten() {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
-	app.handleParsingErrors = func(w http.ResponseWriter, r *http.Request, err error) {
+	rootHandler.handleParsingErrors = func(w http.ResponseWriter, r *http.Request, err error) {
 		w.Header().Add("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusBadRequest)
-		app.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
+		rootHandler.logger.LogAttrs(r.Context(), slog.LevelWarn, "Failed to parse request", slog.Any("err", err))
 		var aggregatedErr internal.AggregatedBindingError
 		if ok := errors.As(err, &aggregatedErr); ok {
 			if writeErr := json.NewEncoder(w).Encode(aggregatedErr); writeErr != nil {
-				app.handleResponseErrors(w, r, writeErr)
+				rootHandler.handleResponseErrors(w, r, writeErr)
 			}
 			return
 		}
 	}
 	for _, opt := range opts {
-		opt(app)
+		opt(rootHandler)
 	}
-	return app
+	return rootHandler
+}
+
+func (rootHandler *RootHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	rootHandler.router.ServeHTTP(w, r)
 }
 
 type paramsParser[TReqParams any] interface {
@@ -158,7 +152,7 @@ func (p voidParamsParser) parse(_ httpRouter, _ *http.Request) (void, error) {
 	return void(nil), nil
 }
 
-func makeVoidParamsParser(_ *HTTPApp) paramsParser[void] {
+func makeVoidParamsParser(_ *RootHandler) paramsParser[void] {
 	return voidParamsParser{}
 }
 
@@ -593,7 +587,7 @@ func (w *actionsResponseWriter) Write(data []byte) (int, error) {
 	return w.targetWriter.Write(data)
 }
 
-var _ TrackedResponseWriter = &actionsResponseWriter{}
+var _ trackedResponseWriter = &actionsResponseWriter{}
 var _ http.ResponseWriter = &actionsResponseWriter{}
 
 type genericHandlerBuilderImpl[
@@ -602,7 +596,7 @@ type genericHandlerBuilderImpl[
 	TPlainHandler actionHandlerFunc[TReq, TRes],
 	THttpHandler actionHandlerFunc[TReq, TRes],
 ] struct {
-	app                *HTTPApp
+	rootHandler        *RootHandler
 	handlerAdapter     actionBuilderHandlerAdapter[TReq, TRes, TPlainHandler]
 	httpHandlerAdapter actionBuilderHandlerAdapter[TReq, TRes, THttpHandler]
 	params             makeActionBuilderParams[TReq, TRes]
@@ -617,15 +611,15 @@ func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) cre
 			defaultStatus: ab.params.defaultStatus,
 		}
 
-		reqParams, err := ab.params.paramsParser.parse(ab.app.router, r)
+		reqParams, err := ab.params.paramsParser.parse(ab.rootHandler.router, r)
 		if err != nil {
-			ab.app.handleParsingErrors(aw, r, err)
+			ab.rootHandler.handleParsingErrors(aw, r, err)
 			return
 		}
 
 		resData, err := handler(aw, r, reqParams)
 		if err != nil {
-			ab.app.handleActionErrors(aw, r, err)
+			ab.rootHandler.handleActionErrors(aw, r, err)
 			return
 		}
 
@@ -647,7 +641,7 @@ func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) cre
 		// success. If error has happened while encoding, then the error handler will have
 		// a chance to set the status.
 		if encodingErr := json.NewEncoder(aw).Encode(resData); encodingErr != nil {
-			ab.app.handleResponseErrors(aw, r, encodingErr)
+			ab.rootHandler.handleResponseErrors(aw, r, encodingErr)
 		}
 	})
 }
@@ -670,13 +664,13 @@ func newGenericHandlerBuilder[
 	TPlainHandler actionHandlerFunc[TReq, TRes],
 	THttpHandler actionHandlerFunc[TReq, TRes],
 ](
-	app *HTTPApp,
+	rootHandler *RootHandler,
 	handlerAdapter actionBuilderHandlerAdapter[TReq, TRes, TPlainHandler],
 	httpHandlerAdapter actionBuilderHandlerAdapter[TReq, TRes, THttpHandler],
 	params makeActionBuilderParams[TReq, TRes],
 ) genericHandlerBuilder[TReq, TRes, TPlainHandler, THttpHandler] {
 	return genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]{
-		app:                app,
+		rootHandler:        rootHandler,
 		handlerAdapter:     handlerAdapter,
 		httpHandlerAdapter: httpHandlerAdapter,
 		params:             params,

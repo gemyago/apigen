@@ -35,43 +35,32 @@ func (c *pingController) Ping(b handlers.HandlerBuilder[
 	)
 }
 
-// pingController must implement handlers.PingController interface.
-var _ handlers.PingController = (*pingController)(nil)
-
-// Simple adapter to use http.ServeMux with generated routes.
+// httpRouter is a ServerMux adapter to use with generated routes.
 type httpRouter http.ServeMux
 
 func (*httpRouter) PathValue(r *http.Request, paramName string) string {
 	return r.PathValue(paramName)
 }
 
-func (r *httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
-	mux := (*http.ServeMux)(r)
-	mux.Handle(method+" "+pathPattern, h)
+func (router *httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
+	(*http.ServeMux)(router).Handle(method+" "+pathPattern, h)
 }
 
-func (r *httpRouter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	mux := (*http.ServeMux)(r)
-	mux.ServeHTTP(w, req)
+func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	(*http.ServeMux)(router).ServeHTTP(w, r)
 }
 
 func main() {
 	port := 8080
 	readHeaderTimeoutSec := 2
 
-	// TODO: Rename HTTPApp to something more sensible
-	// Make RegisterPingRoutes be attached to the instance above
-	// Make the adapter implement http.Handler interface so it could be used
-	// directly as handler.
-
-	mux := http.NewServeMux()
-	httpApp := handlers.NewRootHandler((*httpRouter)(mux))
-	httpApp.RegisterPingRoutes(&pingController{})
+	rootHandler := handlers.NewRootHandler((*httpRouter)(http.NewServeMux()))
+	handlers.RegisterPingRoutes(rootHandler, &pingController{})
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),
 		ReadHeaderTimeout: time.Duration(readHeaderTimeoutSec) * time.Second,
-		Handler:           mux,
+		Handler:           rootHandler,
 	}
 	log.Println("Starting server on port:", port)
 	if err := srv.ListenAndServe(); err != nil {

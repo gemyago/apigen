@@ -41,7 +41,7 @@ type pingControllerBuilder struct {
 	]
 }
 
-func newPingControllerBuilder(app *HTTPApp) *pingControllerBuilder {
+func newPingControllerBuilder(app *RootHandler) *pingControllerBuilder {
 	return &pingControllerBuilder{
 		// GET /ping
 		Ping: newGenericHandlerBuilder(
@@ -77,7 +77,11 @@ type PingController interface {
 	]) http.Handler
 }
 
-func (app *HTTPApp) RegisterPingRoutes(controller PingController) {
-	builder := newPingControllerBuilder(app)
-	app.router.HandleRoute("GET", "/ping", controller.Ping(builder.Ping))
+// RegisterPingRoutes will attach the following routes to the root handler:
+// 
+// - GET /ping
+// 
+func RegisterPingRoutes(rootHandler *RootHandler, controller PingController) {
+	builder := newPingControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("GET", "/ping", controller.Ping(builder.Ping))
 }
