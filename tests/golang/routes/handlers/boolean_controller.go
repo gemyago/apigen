@@ -330,11 +330,12 @@ type BooleanController interface {
 // - POST /boolean/required-validation
 // 
 // Routes will use provided controller to handle requests.
-func RegisterBooleanRoutes(rootHandler *RootHandler, controller BooleanController) {
+func(rootHandler *RootHandler) RegisterBooleanRoutes(controller BooleanController) *RootHandler {
 	builder := newBooleanControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
 	rootHandler.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))
 	rootHandler.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(builder.BooleanNullableArrayItems))
 	rootHandler.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(builder.BooleanParsing))
 	rootHandler.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(builder.BooleanRequiredValidation))
+	return rootHandler
 }

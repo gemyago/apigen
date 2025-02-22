@@ -560,7 +560,7 @@ type NumericTypesController interface {
 // - GET /numeric-types/required-validation
 // 
 // Routes will use provided controller to handle requests.
-func RegisterNumericTypesRoutes(rootHandler *RootHandler, controller NumericTypesController) {
+func(rootHandler *RootHandler) RegisterNumericTypesRoutes(controller NumericTypesController) *RootHandler {
 	builder := newNumericTypesControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder.NumericTypesArrayItems))
 	rootHandler.router.HandleRoute("POST", "/numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesNullable(builder.NumericTypesNullable))
@@ -569,4 +569,5 @@ func RegisterNumericTypesRoutes(rootHandler *RootHandler, controller NumericType
 	rootHandler.router.HandleRoute("POST", "/numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidation(builder.NumericTypesRangeValidation))
 	rootHandler.router.HandleRoute("POST", "/numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesRangeValidationExclusive(builder.NumericTypesRangeValidationExclusive))
 	rootHandler.router.HandleRoute("GET", "/numeric-types/required-validation", controller.NumericTypesRequiredValidation(builder.NumericTypesRequiredValidation))
+	return rootHandler
 }

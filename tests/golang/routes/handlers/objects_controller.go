@@ -444,7 +444,7 @@ type ObjectsController interface {
 // - POST /objects/required-nested-objects
 // 
 // Routes will use provided controller to handle requests.
-func RegisterObjectsRoutes(rootHandler *RootHandler, controller ObjectsController) {
+func(rootHandler *RootHandler) RegisterObjectsRoutes(controller ObjectsController) *RootHandler {
 	builder := newObjectsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))
 	rootHandler.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder.ObjectsArrayBodyNested))
@@ -454,4 +454,5 @@ func RegisterObjectsRoutes(rootHandler *RootHandler, controller ObjectsControlle
 	rootHandler.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder.ObjectsOptionalBody))
 	rootHandler.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder.ObjectsRequiredBody))
 	rootHandler.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder.ObjectsRequiredNestedObjects))
+	return rootHandler
 }

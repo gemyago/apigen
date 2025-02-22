@@ -72,7 +72,8 @@ type BehaviorNoParamsNoResponseIsolatedController interface {
 // - GET /behavior/no-params-no-response-isolated
 // 
 // Routes will use provided controller to handle requests.
-func RegisterBehaviorNoParamsNoResponseIsolatedRoutes(rootHandler *RootHandler, controller BehaviorNoParamsNoResponseIsolatedController) {
+func(rootHandler *RootHandler) RegisterBehaviorNoParamsNoResponseIsolatedRoutes(controller BehaviorNoParamsNoResponseIsolatedController) *RootHandler {
 	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
+	return rootHandler
 }

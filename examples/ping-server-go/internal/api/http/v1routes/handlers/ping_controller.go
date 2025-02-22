@@ -82,7 +82,8 @@ type PingController interface {
 // - GET /ping
 // 
 // Routes will use provided controller to handle requests.
-func RegisterPingRoutes(rootHandler *RootHandler, controller PingController) {
+func(rootHandler *RootHandler) RegisterPingRoutes(controller PingController) *RootHandler {
 	builder := newPingControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("GET", "/ping", controller.Ping(builder.Ping))
+	return rootHandler
 }

@@ -21,11 +21,10 @@ func TestArrays(t *testing.T) {
 	setupRouter := func(_ testCase) (*arraysControllerTestActions, http.Handler) {
 		testActions := &arraysControllerTestActions{}
 		controller := &arraysController{testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterArraysRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterArraysRoutes(controller)
+		return testActions, rootHandler
 	}
 
 	randomStrings := func(minItems, maxItems int) []string {

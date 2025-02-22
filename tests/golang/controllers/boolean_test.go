@@ -24,11 +24,10 @@ func TestBoolean(t *testing.T) {
 	setupRouter := func(_ testCase) (*booleanControllerTestActions, http.Handler) {
 		testActions := &booleanControllerTestActions{}
 		controller := &booleanController{testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterBooleanRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterBooleanRoutes(controller)
+		return testActions, rootHandler
 	}
 
 	randomBooleans := func(n int) []bool {

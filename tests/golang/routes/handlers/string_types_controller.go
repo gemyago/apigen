@@ -1122,7 +1122,7 @@ type StringTypesController interface {
 // - POST /string-types/required-validation
 // 
 // Routes will use provided controller to handle requests.
-func RegisterStringTypesRoutes(rootHandler *RootHandler, controller StringTypesController) {
+func(rootHandler *RootHandler) RegisterStringTypesRoutes(controller StringTypesController) *RootHandler {
 	builder := newStringTypesControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder.StringTypesArrayItemsRangeValidation))
 	rootHandler.router.HandleRoute("POST", "/string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArraysParsing(builder.StringTypesArraysParsing))
@@ -1134,4 +1134,5 @@ func RegisterStringTypesRoutes(rootHandler *RootHandler, controller StringTypesC
 	rootHandler.router.HandleRoute("POST", "/string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}", controller.StringTypesPatternValidation(builder.StringTypesPatternValidation))
 	rootHandler.router.HandleRoute("POST", "/string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesRangeValidation(builder.StringTypesRangeValidation))
 	rootHandler.router.HandleRoute("POST", "/string-types/required-validation", controller.StringTypesRequiredValidation(builder.StringTypesRequiredValidation))
+	return rootHandler
 }

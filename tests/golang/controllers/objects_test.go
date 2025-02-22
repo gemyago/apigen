@@ -22,11 +22,10 @@ func TestObjects(t *testing.T) {
 	setupRouter := func(_ testCase) (*objectsControllerTestActions, http.Handler) {
 		testActions := &objectsControllerTestActions{}
 		controller := &objectsController{testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterObjectsRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterObjectsRoutes(controller)
+		return testActions, rootHandler
 	}
 
 	randomSimpleObject := func() *models.SimpleObject {

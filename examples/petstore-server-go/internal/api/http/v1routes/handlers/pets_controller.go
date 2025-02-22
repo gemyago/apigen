@@ -188,9 +188,10 @@ type PetsController interface {
 // - GET /pets
 // 
 // Routes will use provided controller to handle requests.
-func RegisterPetsRoutes(rootHandler *RootHandler, controller PetsController) {
+func(rootHandler *RootHandler) RegisterPetsRoutes(controller PetsController) *RootHandler {
 	builder := newPetsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/pets", controller.CreatePet(builder.CreatePet))
 	rootHandler.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(builder.GetPetById))
 	rootHandler.router.HandleRoute("GET", "/pets", controller.ListPets(builder.ListPets))
+	return rootHandler
 }

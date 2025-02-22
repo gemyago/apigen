@@ -220,9 +220,10 @@ type ArraysController interface {
 // - POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 // 
 // Routes will use provided controller to handle requests.
-func RegisterArraysRoutes(rootHandler *RootHandler, controller ArraysController) {
+func(rootHandler *RootHandler) RegisterArraysRoutes(controller ArraysController) *RootHandler {
 	builder := newArraysControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))
 	rootHandler.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder.ArraysRangeValidation))
 	rootHandler.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(builder.ArraysRequiredValidation))
+	return rootHandler
 }
