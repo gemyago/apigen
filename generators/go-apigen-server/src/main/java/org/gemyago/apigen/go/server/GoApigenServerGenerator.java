@@ -359,6 +359,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     return normalizeAbbreviations(super.toVarName(name));
   }
 
+  @Override
+  public String toApiName(String name) {
+    return normalizeAbbreviations(super.toApiName(name));
+  }
+
   private String normalizeAbbreviations(String name) {
     /**
      * Golang has a convention to upper case abbreviations in names. Most typical

@@ -26,7 +26,7 @@ func TestBehaviorIdNames(t *testing.T) {
 				&routerAdapter{mux: http.NewServeMux()},
 				tc.appendRootHandlerOpts(handlers.WithLogger(newLogger()))...,
 			).
-			RegisterBehaviorIdNamesRoutes(controller)
+			RegisterBehaviorIDNamesRoutes(controller)
 		return testActions, rootHandler
 	}
 
@@ -37,7 +37,7 @@ func TestBehaviorIdNames(t *testing.T) {
 				EndsWithID:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
 			}
-			wantParams := &handlers.BehaviorIdNamesBehaviorNamesWithIDRequest{
+			wantParams := &handlers.BehaviorIDNamesBehaviorNamesWithIDRequest{
 				ID:                    fmt.Sprintf("id-%s", fake.Lorem().Word()),
 				EndsWithID:            fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle:      fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
