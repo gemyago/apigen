@@ -32,7 +32,7 @@ func TestBehaviorIdNames(t *testing.T) {
 
 	t.Run("behaviorNamesWithId", func(t *testing.T) {
 		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
-			wantData := &models.BehaviorNamesWithIdData{
+			wantData := &models.BehaviorNamesWithIDData{
 				ID:               fmt.Sprintf("id-%s", fake.Lorem().Word()),
 				EndsWithID:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
@@ -68,7 +68,7 @@ func TestBehaviorIdNames(t *testing.T) {
 					assert.Len(t, testActions.behaviorNamesWithID.calls, 1)
 					assert.Equal(t, wantParams, testActions.behaviorNamesWithID.calls[0].params)
 
-					gotResponse := unmarshalData[models.BehaviorNamesWithIdData](t, recorder.Body)
+					gotResponse := unmarshalData[models.BehaviorNamesWithIDData](t, recorder.Body)
 					assert.Equal(t, wantData, &gotResponse)
 				},
 			}
