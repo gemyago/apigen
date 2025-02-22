@@ -96,3 +96,5 @@ paths:
     $ref: "./behavior/no-status-defined.yaml"
   /behavior/with-status-defined:
     $ref: "./behavior/with-status-defined.yaml"
+  /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}:
+    $ref: "./behavior/id-names.yaml"

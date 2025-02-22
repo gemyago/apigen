@@ -1,0 +1,49 @@
+get:
+  summary: API to test how names with Id are generated
+  description: |
+    This may be language specific, but some languages have a convention to 
+    uppercase the ID part of a name. This test checks if the generator is 
+    able to handle this.
+  operationId: behaviorNamesWithId
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: endsWithId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: theIdInTheMiddle
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: queryEndsWithId
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: queryTheIdInTheMiddle
+      in: query
+      required: true
+      schema:
+        type: string
+  tags:
+    - behavior-id-names
+  responses:
+    '200':
+      description: Request succeeded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              endsWithId:
+                type: string
+              theIdInTheMiddle:
+                type: string

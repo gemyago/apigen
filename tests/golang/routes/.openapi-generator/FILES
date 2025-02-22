@@ -1,6 +1,8 @@
 handlers/arrays_controller.go
 handlers/arrays_params.go
 handlers/behavior_controller.go
+handlers/behavior_id_names_controller.go
+handlers/behavior_id_names_params.go
 handlers/behavior_no_params_no_response_isolated_controller.go
 handlers/behavior_no_params_no_response_isolated_params.go
 handlers/behavior_params.go
@@ -17,6 +19,7 @@ internal/arrays_nullable_required_validation_request_validation.go
 internal/arrays_range_validation_request_validation.go
 internal/arrays_required_validation_request_validation.go
 internal/basic_string_enum_validation.go
+internal/behavior_names_with_id_200_response_validation.go
 internal/behavior_no_params_with_response_202_response_validation.go
 internal/behavior_with_params_and_response_request_body_validation.go
 internal/behavior_with_params_and_response_response_body_validation.go
@@ -57,6 +60,7 @@ models/arrays_nullable_required_validation_request.go
 models/arrays_range_validation_request.go
 models/arrays_required_validation_request.go
 models/basic_string_enum.go
+models/behavior_names_with_id_200_response.go
 models/behavior_no_params_with_response_202_response.go
 models/behavior_with_params_and_response_request_body.go
 models/behavior_with_params_and_response_response_body.go
