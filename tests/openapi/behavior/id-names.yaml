@@ -1,4 +1,4 @@
-get:
+post:
   summary: API to test how names with Id are generated
   description: |
     This may be language specific, but some languages have a convention to 
@@ -31,6 +31,12 @@ get:
       required: true
       schema:
         type: string
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/BehaviorNamesWithIdData"
   tags:
     - behavior-id-names
   responses:
@@ -39,11 +45,19 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                type: string
-              endsWithId:
-                type: string
-              theIdInTheMiddle:
-                type: string
+            $ref: "#/components/schemas/BehaviorNamesWithIdData"
+components:
+  schemas:
+    BehaviorNamesWithIdData:
+      type: object
+      required:
+        - id
+        - endsWithId
+        - theIdInTheMiddle
+      properties:
+        id:
+          type: string
+        endsWithId:
+          type: string
+        theIdInTheMiddle:
+          type: string

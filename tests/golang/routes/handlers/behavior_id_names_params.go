@@ -12,7 +12,7 @@ import (
 var _ = BindingContext{}
 var _ = http.MethodGet
 var _ = time.Time{}
-type _ func() BehaviorNamesWithId200Response
+type _ func() BehaviorNamesWithIdData
 
 type paramsParserBehaviorIdNamesBehaviorNamesWithId struct {
 	bindId requestParamBinder[string, string]
@@ -20,6 +20,7 @@ type paramsParserBehaviorIdNamesBehaviorNamesWithId struct {
 	bindTheIdInTheMiddle requestParamBinder[string, string]
 	bindQueryEndsWithId requestParamBinder[[]string, string]
 	bindQueryTheIdInTheMiddle requestParamBinder[[]string, string]
+	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIdData]
 }
 
 func (p *paramsParserBehaviorIdNamesBehaviorNamesWithId) parse(router httpRouter, req *http.Request) (*BehaviorIdNamesBehaviorNamesWithIdRequest, error) {
@@ -35,6 +36,8 @@ func (p *paramsParserBehaviorIdNamesBehaviorNamesWithId) parse(router httpRouter
 	queryParamsCtx := bindingCtx.Fork("query")
 	p.bindQueryEndsWithId(queryParamsCtx.Fork("queryEndsWithId"), readQueryValue("queryEndsWithId", query), &reqParams.QueryEndsWithId)
 	p.bindQueryTheIdInTheMiddle(queryParamsCtx.Fork("queryTheIdInTheMiddle"), readQueryValue("queryTheIdInTheMiddle", query), &reqParams.QueryTheIdInTheMiddle)
+	// body params
+	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
@@ -79,6 +82,13 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler)
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
+		}),
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *BehaviorNamesWithIdData]{
+			required: true,
+			parseValue: parseSoloValueParamAsSoloValue(
+				parseJSONPayload[*BehaviorNamesWithIdData],
+			),
+			validateValue: NewBehaviorNamesWithIdDataValidator(),
 		}),
 	}
 }
