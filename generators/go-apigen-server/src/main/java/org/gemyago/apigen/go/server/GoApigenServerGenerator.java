@@ -201,7 +201,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
   @Override
   public void processOpts() {
-    if(!additionalProperties.containsKey(CodegenConstants.ENUM_CLASS_PREFIX)) {
+    if (!additionalProperties.containsKey(CodegenConstants.ENUM_CLASS_PREFIX)) {
       additionalProperties.put(CodegenConstants.ENUM_CLASS_PREFIX, true);
     }
 
@@ -243,7 +243,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     // fromParameter will not dereference the schema to set some properties
     Schema schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
-    if(schema.getNullable() != null) {
+    if (schema.getNullable() != null) {
       codegenParameter.isNullable = schema.getNullable();
     }
 
@@ -293,8 +293,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     OperationMap operations = operationsMap.getOperations();
     for (CodegenOperation op : operations.getOperation()) {
       for (CodegenParameter param : op.allParams) {
-        if(param.isEnum) {
-          param.datatypeWithEnum = operations.getClassname() + op.operationId + camelize(param.datatypeWithEnum.replace("_", "-").toLowerCase());
+        if (param.isEnum) {
+          param.datatypeWithEnum = operations.getClassname() + op.operationId
+              + camelize(param.datatypeWithEnum.replace("_", "-").toLowerCase());
         }
       }
     }
@@ -322,7 +323,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
     CodegenOperation op = super.fromOperation(path, httpMethod, operation, servers);
-    if(op.hasParams || !StringUtils.isEmpty(op.returnType)) {
+    if (op.hasParams || !StringUtils.isEmpty(op.returnType)) {
       op.vendorExtensions.put("x-apigen-has-params-or-return", true);
     }
     return op;
@@ -347,15 +348,23 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
   @Override
   public String sanitizeName(String name, String removeCharRegEx, ArrayList<String> exceptionList) {
+    String result = super.sanitizeName(name, removeCharRegEx, exceptionList);
+
+    // this is one of the few places where we can normalize abbreviations globally
+    return normalizeAbbreviations(result);
+  }
+
+  private String normalizeAbbreviations(String name) {
     /**
-     * Golang has a convention to upper case abbreviations in names. Most typical case is "ID" instead of "Id".
-     * This is the only place that we can do this transformation globally. We may need to parametrize this in the future.
+     * Golang has a convention to upper case abbreviations in names. Most typical
+     * case is "ID" instead of "Id".
+     * This is the only place that we can do this transformation globally. We may
+     * need to parametrize this in the future.
      */
 
-    String result = super.sanitizeName(name, removeCharRegEx, exceptionList);
-    if(result.contains("Id")) {
-      result = result.replace("Id", "ID");
+    if (name.contains("Id")) {
+      return name.replace("Id", "ID");
     }
-    return result;
+    return name;
   }
 }
