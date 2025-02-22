@@ -34,15 +34,15 @@ func TestBehaviorIdNames(t *testing.T) {
 		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
 			wantData := &models.BehaviorNamesWithIdData{
 				Id:               fmt.Sprintf("id-%s", fake.Lorem().Word()),
-				EndsWithId:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
-				TheIdInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
+				EndsWithID:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
+				TheIDInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
 			}
-			wantParams := &handlers.BehaviorIdNamesBehaviorNamesWithIdRequest{
+			wantParams := &handlers.BehaviorIdNamesBehaviorNamesWithIDRequest{
 				Id:                    fmt.Sprintf("id-%s", fake.Lorem().Word()),
-				EndsWithId:            fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
-				TheIdInTheMiddle:      fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
-				QueryEndsWithId:       fmt.Sprintf("query-ends-with-id-%s", fake.Lorem().Word()),
-				QueryTheIdInTheMiddle: fmt.Sprintf("query-the-id-in-the-middle-%s", fake.Lorem().Word()),
+				EndsWithID:            fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
+				TheIDInTheMiddle:      fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
+				QueryEndsWithID:       fmt.Sprintf("query-ends-with-id-%s", fake.Lorem().Word()),
+				QueryTheIDInTheMiddle: fmt.Sprintf("query-the-id-in-the-middle-%s", fake.Lorem().Word()),
 				Payload:               wantData,
 			}
 			return testCase{
@@ -53,11 +53,11 @@ func TestBehaviorIdNames(t *testing.T) {
 				},
 				path: fmt.Sprintf(
 					"/behavior/id-names/%s/%s/%s",
-					wantParams.Id, wantParams.EndsWithId, wantParams.TheIdInTheMiddle,
+					wantParams.Id, wantParams.EndsWithID, wantParams.TheIDInTheMiddle,
 				),
 				query: url.Values{
-					"queryEndsWithId":       []string{wantParams.QueryEndsWithId},
-					"queryTheIdInTheMiddle": []string{wantParams.QueryTheIdInTheMiddle},
+					"queryEndsWithId":       []string{wantParams.QueryEndsWithID},
+					"queryTheIdInTheMiddle": []string{wantParams.QueryTheIDInTheMiddle},
 				},
 				body: marshalJSONDataAsReader(t, wantData),
 				expect: func(t *testing.T, testActions *behaviorIDNamesControllerTestActions, recorder *httptest.ResponseRecorder) {

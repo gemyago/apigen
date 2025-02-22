@@ -10,7 +10,7 @@ import (
 
 type behaviorIDNamesControllerTestActions struct {
 	behaviorNamesWithID mockActionV2[
-		*handlers.BehaviorIdNamesBehaviorNamesWithIdRequest,
+		*handlers.BehaviorIdNamesBehaviorNamesWithIDRequest,
 		*models.BehaviorNamesWithIdData,
 	]
 }
@@ -19,16 +19,16 @@ type behaviorIDNamesController struct {
 	testActions *behaviorIDNamesControllerTestActions
 }
 
-func (c *behaviorIDNamesController) BehaviorNamesWithId(
+func (c *behaviorIDNamesController) BehaviorNamesWithID(
 	builder handlers.HandlerBuilder[
-		*handlers.BehaviorIdNamesBehaviorNamesWithIdRequest,
+		*handlers.BehaviorIdNamesBehaviorNamesWithIDRequest,
 		*models.BehaviorNamesWithIdData,
 	],
 ) http.Handler {
 	return builder.HandleWith(
 		func(
 			ctx context.Context,
-			b *handlers.BehaviorIdNamesBehaviorNamesWithIdRequest,
+			b *handlers.BehaviorIdNamesBehaviorNamesWithIDRequest,
 		) (*models.BehaviorNamesWithIdData, error) {
 			return c.testActions.behaviorNamesWithID.action(ctx, b)
 		},

@@ -38,14 +38,13 @@ func (c *PetsController) CreatePet(
 	})
 }
 
-//nolint:revive,stylecheck // ID will be fixed in scope of https://github.com/gemyago/apigen/issues/30
-func (c *PetsController) GetPetById(
-	b handlers.HandlerBuilder[*handlers.PetsGetPetByIdRequest, *models.PetResponse],
+func (c *PetsController) GetPetByID(
+	b handlers.HandlerBuilder[*handlers.PetsGetPetByIDRequest, *models.PetResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
-		pet, ok := c.petsByID[req.PetId]
+	return b.HandleWith(func(_ context.Context, req *handlers.PetsGetPetByIDRequest) (*models.PetResponse, error) {
+		pet, ok := c.petsByID[req.PetID]
 		if !ok {
-			return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)
+			return nil, fmt.Errorf("pet %d not found: %w", req.PetID, ErrNotFound)
 		}
 		return &models.PetResponse{Data: pet}, nil
 	})
