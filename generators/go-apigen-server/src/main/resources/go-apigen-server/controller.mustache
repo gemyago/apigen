@@ -53,7 +53,7 @@ type {{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder st
 {{/operations}}
 }
 
-func new{{classname}}ControllerBuilder(app *HTTPApp) *{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder {
+func new{{classname}}ControllerBuilder(app *RootHandler) *{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder {
 	return &{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder{
 		{{#operations}}
 		{{#operation}}
@@ -96,11 +96,11 @@ type {{classname}}Controller interface {
 {{/operations}}
 }
 
-func Register{{baseName}}Routes(controller {{baseName}}Controller, app *HTTPApp) {
-	builder := new{{classname}}ControllerBuilder(app)
+func Register{{baseName}}Routes(rootHandler *RootHandler, controller {{baseName}}Controller) {
+	builder := new{{classname}}ControllerBuilder(rootHandler)
 	{{#operations}}
 	{{#operation}}
-	app.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder.{{operationId}}))
+	rootHandler.router.HandleRoute("{{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}}", "{{{path}}}", controller.{{operationId}}(builder.{{operationId}}))
 	{{/operation}}
 	{{/operations}}
 }
