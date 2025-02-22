@@ -66,7 +66,7 @@ func accessLogMiddleware(next http.Handler) http.Handler {
 // HandlerDeps holds dependencies of the generated routes
 // usually controller implementations at least.
 type HandlerDeps struct {
-	PetsController handlers.PetsController
+	PetsController *v1controllers.PetsController
 }
 
 // NewHandler creates an minimal example implementation of the router handler

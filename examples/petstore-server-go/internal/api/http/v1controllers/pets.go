@@ -15,7 +15,7 @@ var (
 	ErrConflict = errors.New("CONFLICT")
 )
 
-type petsController struct {
+type PetsController struct {
 	// In practice (depending on the project structure) controllers should
 	// interact with a application layer and have application layer components as dependencies.
 	// For this example, we are keeping it simple and storing data in memory.
@@ -23,7 +23,7 @@ type petsController struct {
 	petsByID map[int64]*models.Pet
 }
 
-func (c *petsController) CreatePet(
+func (c *PetsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*handlers.PetsCreatePetRequest],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, req *handlers.PetsCreatePetRequest) error {
@@ -39,7 +39,7 @@ func (c *petsController) CreatePet(
 }
 
 //nolint:revive,stylecheck // ID will be fixed in scope of https://github.com/gemyago/apigen/issues/30
-func (c *petsController) GetPetById(
+func (c *PetsController) GetPetById(
 	b handlers.HandlerBuilder[*handlers.PetsGetPetByIdRequest, *models.PetResponse],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
@@ -51,7 +51,7 @@ func (c *petsController) GetPetById(
 	})
 }
 
-func (c *petsController) ListPets(
+func (c *PetsController) ListPets(
 	b handlers.HandlerBuilder[*handlers.PetsListPetsRequest, *models.PetsResponse],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, req *handlers.PetsListPetsRequest) (*models.PetsResponse, error) {
@@ -70,8 +70,11 @@ func (c *petsController) ListPets(
 	})
 }
 
-func NewPetsController() handlers.PetsController {
-	return &petsController{
+// Make sure it implements the interface properly.
+var _ handlers.PetsController = (*PetsController)(nil)
+
+func NewPetsController() *PetsController {
+	return &PetsController{
 		allPets:  []*models.Pet{},
 		petsByID: map[int64]*models.Pet{},
 	}
