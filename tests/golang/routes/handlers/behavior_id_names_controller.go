@@ -15,7 +15,7 @@ var _ = http.MethodGet
 var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
-type _ func() BehaviorNamesWithIdData
+type _ func() BehaviorNamesWithIDData
 
 // BehaviorIDNamesBehaviorNamesWithIDRequest represents params for behaviorNamesWithId operation
 //
@@ -32,7 +32,7 @@ type BehaviorIDNamesBehaviorNamesWithIDRequest struct {
 	// QueryTheIDInTheMiddle is parsed from request query and declared as queryTheIdInTheMiddle.
 	QueryTheIDInTheMiddle string
 	// Payload is parsed from request body and declared as payload.
-	Payload *BehaviorNamesWithIdData
+	Payload *BehaviorNamesWithIDData
 }
 
 type behaviorIDNamesControllerBuilder struct {
@@ -40,12 +40,12 @@ type behaviorIDNamesControllerBuilder struct {
 	//
 	// Request type: BehaviorIDNamesBehaviorNamesWithIDRequest,
 	//
-	// Response type: BehaviorNamesWithIdData
+	// Response type: BehaviorNamesWithIDData
 	BehaviorNamesWithID genericHandlerBuilder[
 		*BehaviorIDNamesBehaviorNamesWithIDRequest,
-		*BehaviorNamesWithIdData,
-		func(context.Context, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIdData, error),
-		func(http.ResponseWriter, *http.Request, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIdData, error),
+		*BehaviorNamesWithIDData,
+		func(context.Context, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIDData, error),
+		func(http.ResponseWriter, *http.Request, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIDData, error),
 	]
 }
 
@@ -56,15 +56,15 @@ func newBehaviorIDNamesControllerBuilder(app *RootHandler) *behaviorIDNamesContr
 			app,
 			newHandlerAdapter[
 				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIdData,
+				*BehaviorNamesWithIDData,
 			](),
 			newHTTPHandlerAdapter[
 				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIdData,
+				*BehaviorNamesWithIDData,
 			](),
 			makeActionBuilderParams[
 				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIdData,
+				*BehaviorNamesWithIDData,
 			]{
 				defaultStatus: 200,
 				paramsParser:  newParamsParserBehaviorIdNamesBehaviorNamesWithID(app),
@@ -78,10 +78,10 @@ type BehaviorIDNamesController interface {
 	//
 	// Request type: BehaviorIDNamesBehaviorNamesWithIDRequest,
 	//
-	// Response type: BehaviorNamesWithIdData
+	// Response type: BehaviorNamesWithIDData
 	BehaviorNamesWithID(HandlerBuilder[
 		*BehaviorIDNamesBehaviorNamesWithIDRequest,
-		*BehaviorNamesWithIdData,
+		*BehaviorNamesWithIDData,
 	]) http.Handler
 }
 

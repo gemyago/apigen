@@ -355,6 +355,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   }
 
   @Override
+  public String toModelName(String name) {
+    return normalizeAbbreviations(super.toModelName(name));
+  }
+
+  @Override
   public String toVarName(String name) {
     return normalizeAbbreviations(super.toVarName(name));
   }

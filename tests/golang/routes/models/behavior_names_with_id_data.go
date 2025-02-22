@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-type BehaviorNamesWithIdData struct { 
+type BehaviorNamesWithIDData struct { 
 	ID string `json:"id"`
 	EndsWithID string `json:"endsWithId"`
 	TheIDInTheMiddle string `json:"theIdInTheMiddle"`

@@ -12,7 +12,7 @@ import (
 var _ = BindingContext{}
 var _ = http.MethodGet
 var _ = time.Time{}
-type _ func() BehaviorNamesWithIdData
+type _ func() BehaviorNamesWithIDData
 
 type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
 	bindID requestParamBinder[string, string]
@@ -20,7 +20,7 @@ type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
 	bindTheIDInTheMiddle requestParamBinder[string, string]
 	bindQueryEndsWithID requestParamBinder[[]string, string]
 	bindQueryTheIDInTheMiddle requestParamBinder[[]string, string]
-	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIdData]
+	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIDData]
 }
 
 func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorIDNamesBehaviorNamesWithIDRequest, error) {
@@ -83,12 +83,12 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithID(rootHandler *RootHandler)
 			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
-		bindPayload: newRequestParamBinder(binderParams[*http.Request, *BehaviorNamesWithIdData]{
+		bindPayload: newRequestParamBinder(binderParams[*http.Request, *BehaviorNamesWithIDData]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseJSONPayload[*BehaviorNamesWithIdData],
+				parseJSONPayload[*BehaviorNamesWithIDData],
 			),
-			validateValue: NewBehaviorNamesWithIdDataValidator(),
+			validateValue: NewBehaviorNamesWithIDDataValidator(),
 		}),
 	}
 }

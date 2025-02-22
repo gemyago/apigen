@@ -8,7 +8,7 @@ import (
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-func NewBehaviorNamesWithIdDataValidator() FieldValidator[*BehaviorNamesWithIdData] {
+func NewBehaviorNamesWithIDDataValidator() FieldValidator[*BehaviorNamesWithIDData] {
 	validateID := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
@@ -19,7 +19,7 @@ func NewBehaviorNamesWithIdDataValidator() FieldValidator[*BehaviorNamesWithIdDa
 		EnsureNonDefault[string],
 	)
 	
-	return func(bindingCtx *BindingContext, value *BehaviorNamesWithIdData) {
+	return func(bindingCtx *BindingContext, value *BehaviorNamesWithIDData) {
 		validateID(bindingCtx.Fork("id"), value.ID)
 		validateEndsWithID(bindingCtx.Fork("endsWithId"), value.EndsWithID)
 		validateTheIDInTheMiddle(bindingCtx.Fork("theIdInTheMiddle"), value.TheIDInTheMiddle)
