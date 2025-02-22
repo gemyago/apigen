@@ -344,4 +344,18 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     codegenParameter.vendorExtensions.put("x-apigen-param-location", location);
     codegenParameter.vendorExtensions.put("x-apigen-param-location-tc", titleCase(location));
   }
+
+  @Override
+  public String sanitizeName(String name, String removeCharRegEx, ArrayList<String> exceptionList) {
+    /**
+     * Golang has a convention to upper case abbreviations in names. Most typical case is "ID" instead of "Id".
+     * This is the only place that we can do this transformation globally. We may need to parametrize this in the future.
+     */
+
+    String result = super.sanitizeName(name, removeCharRegEx, exceptionList);
+    if(result.contains("Id")) {
+      result = result.replace("Id", "ID");
+    }
+    return result;
+  }
 }
