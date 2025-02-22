@@ -14,7 +14,7 @@ var _ = http.MethodGet
 var _ = time.Time{}
 type _ func() BehaviorNamesWithIDData
 
-type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
+type paramsParserBehaviorIDNamesBehaviorNamesWithID struct {
 	bindID requestParamBinder[string, string]
 	bindEndsWithID requestParamBinder[string, string]
 	bindTheIDInTheMiddle requestParamBinder[string, string]
@@ -23,7 +23,7 @@ type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
 	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIDData]
 }
 
-func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorIDNamesBehaviorNamesWithIDRequest, error) {
+func (p *paramsParserBehaviorIDNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorIDNamesBehaviorNamesWithIDRequest, error) {
 	bindingCtx := BindingContext{}
 	reqParams := &BehaviorIDNamesBehaviorNamesWithIDRequest{}
 	// path params
@@ -41,8 +41,8 @@ func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorIdNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorIDNamesBehaviorNamesWithIDRequest] {
-	return &paramsParserBehaviorIdNamesBehaviorNamesWithID{
+func newParamsParserBehaviorIDNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorIDNamesBehaviorNamesWithIDRequest] {
+	return &paramsParserBehaviorIDNamesBehaviorNamesWithID{
 		bindID: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(

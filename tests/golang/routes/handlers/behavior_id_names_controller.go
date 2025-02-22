@@ -67,7 +67,7 @@ func newBehaviorIDNamesControllerBuilder(app *RootHandler) *behaviorIDNamesContr
 				*BehaviorNamesWithIDData,
 			]{
 				defaultStatus: 200,
-				paramsParser:  newParamsParserBehaviorIdNamesBehaviorNamesWithID(app),
+				paramsParser:  newParamsParserBehaviorIDNamesBehaviorNamesWithID(app),
 			},
 		),
 	}

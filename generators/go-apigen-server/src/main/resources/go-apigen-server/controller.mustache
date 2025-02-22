@@ -74,7 +74,7 @@ func new{{classname}}ControllerBuilder(app *RootHandler) *{{#lambda.camelcase}}{
 			]{
 				defaultStatus: {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}},{{^returnType}}
 				voidResult:    true,{{/returnType}}
-				paramsParser:  {{#hasParams}}newParamsParser{{baseName}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}(app),
+				paramsParser:  {{#hasParams}}newParamsParser{{classname}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}(app),
 			},
 		),{{^-last}}
 

@@ -289,6 +289,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> allModels) {
     OperationsMap operationsMap = super.postProcessOperationsWithModels(objs, allModels);
+    operationsMap.put("operations.className", objs.getOperations().get("classname"));
 
     OperationMap operations = operationsMap.getOperations();
     for (CodegenOperation op : operations.getOperation()) {
