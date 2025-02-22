@@ -21,15 +21,15 @@ type _ func() BehaviorNamesWithIdData
 //
 // Request: POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}.
 type BehaviorIdNamesBehaviorNamesWithIDRequest struct {
-	// Id is parsed from request path and declared as id.
-	Id string
-	// EndsWithID is parsed from request path and declared as endsWithID.
+	// ID is parsed from request path and declared as id.
+	ID string
+	// EndsWithID is parsed from request path and declared as endsWithId.
 	EndsWithID string
-	// TheIDInTheMiddle is parsed from request path and declared as theIDInTheMiddle.
+	// TheIDInTheMiddle is parsed from request path and declared as theIdInTheMiddle.
 	TheIDInTheMiddle string
-	// QueryEndsWithID is parsed from request query and declared as queryEndsWithID.
+	// QueryEndsWithID is parsed from request query and declared as queryEndsWithId.
 	QueryEndsWithID string
-	// QueryTheIDInTheMiddle is parsed from request query and declared as queryTheIDInTheMiddle.
+	// QueryTheIDInTheMiddle is parsed from request query and declared as queryTheIdInTheMiddle.
 	QueryTheIDInTheMiddle string
 	// Payload is parsed from request body and declared as payload.
 	Payload *BehaviorNamesWithIdData

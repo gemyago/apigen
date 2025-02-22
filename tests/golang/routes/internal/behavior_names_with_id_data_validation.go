@@ -9,7 +9,7 @@ import (
 var _ = time.Time{}
 
 func NewBehaviorNamesWithIdDataValidator() FieldValidator[*BehaviorNamesWithIdData] {
-	validateId := NewSimpleFieldValidator[string](
+	validateID := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
 	validateEndsWithID := NewSimpleFieldValidator[string](
@@ -20,7 +20,7 @@ func NewBehaviorNamesWithIdDataValidator() FieldValidator[*BehaviorNamesWithIdDa
 	)
 	
 	return func(bindingCtx *BindingContext, value *BehaviorNamesWithIdData) {
-		validateId(bindingCtx.Fork("id"), value.Id)
+		validateID(bindingCtx.Fork("id"), value.ID)
 		validateEndsWithID(bindingCtx.Fork("endsWithId"), value.EndsWithID)
 		validateTheIDInTheMiddle(bindingCtx.Fork("theIdInTheMiddle"), value.TheIDInTheMiddle)
 	}

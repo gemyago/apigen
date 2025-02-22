@@ -27,12 +27,12 @@ func (c *PetsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*handlers.PetsCreatePetRequest],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, req *handlers.PetsCreatePetRequest) error {
-		if _, ok := c.petsByID[req.Payload.Id]; ok {
-			return fmt.Errorf("pet %d already exists: %w", req.Payload.Id, ErrConflict)
+		if _, ok := c.petsByID[req.Payload.ID]; ok {
+			return fmt.Errorf("pet %d already exists: %w", req.Payload.ID, ErrConflict)
 		}
 
 		c.allPets = append(c.allPets, req.Payload)
-		c.petsByID[req.Payload.Id] = req.Payload
+		c.petsByID[req.Payload.ID] = req.Payload
 
 		return nil
 	})

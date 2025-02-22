@@ -15,7 +15,7 @@ var _ = time.Time{}
 type _ func() BehaviorNamesWithIdData
 
 type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
-	bindId requestParamBinder[string, string]
+	bindID requestParamBinder[string, string]
 	bindEndsWithID requestParamBinder[string, string]
 	bindTheIDInTheMiddle requestParamBinder[string, string]
 	bindQueryEndsWithID requestParamBinder[[]string, string]
@@ -28,7 +28,7 @@ func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter
 	reqParams := &BehaviorIdNamesBehaviorNamesWithIDRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
-	p.bindId(pathParamsCtx.Fork("id"), readPathValue("id", router, req), &reqParams.Id)
+	p.bindID(pathParamsCtx.Fork("id"), readPathValue("id", router, req), &reqParams.ID)
 	p.bindEndsWithID(pathParamsCtx.Fork("endsWithId"), readPathValue("endsWithId", router, req), &reqParams.EndsWithID)
 	p.bindTheIDInTheMiddle(pathParamsCtx.Fork("theIdInTheMiddle"), readPathValue("theIdInTheMiddle", router, req), &reqParams.TheIDInTheMiddle)
 	// query params
@@ -43,7 +43,7 @@ func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter
 
 func newParamsParserBehaviorIdNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorIdNamesBehaviorNamesWithIDRequest] {
 	return &paramsParserBehaviorIdNamesBehaviorNamesWithID{
-		bindId: newRequestParamBinder(binderParams[string, string]{
+		bindID: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
 				rootHandler.knownParsers.stringParser,

@@ -12,7 +12,7 @@ var _ = json.Unmarshal
 var _ = fmt.Sprint
 
 type BehaviorNamesWithIdData struct { 
-	Id string `json:"id"`
+	ID string `json:"id"`
 	EndsWithID string `json:"endsWithId"`
 	TheIDInTheMiddle string `json:"theIdInTheMiddle"`
 }

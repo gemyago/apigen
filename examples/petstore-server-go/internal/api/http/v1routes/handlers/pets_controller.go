@@ -31,7 +31,7 @@ type PetsCreatePetRequest struct {
 //
 // Request: GET /pets/{petId}.
 type PetsGetPetByIDRequest struct {
-	// PetID is parsed from request path and declared as petID.
+	// PetID is parsed from request path and declared as petId.
 	PetID int64
 }
 

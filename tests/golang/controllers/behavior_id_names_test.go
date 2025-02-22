@@ -33,12 +33,12 @@ func TestBehaviorIdNames(t *testing.T) {
 	t.Run("behaviorNamesWithId", func(t *testing.T) {
 		runRouteTestCase(t, "should handle parsing errors with default handler", setupRouter, func() testCase {
 			wantData := &models.BehaviorNamesWithIdData{
-				Id:               fmt.Sprintf("id-%s", fake.Lorem().Word()),
+				ID:               fmt.Sprintf("id-%s", fake.Lorem().Word()),
 				EndsWithID:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
 			}
 			wantParams := &handlers.BehaviorIdNamesBehaviorNamesWithIDRequest{
-				Id:                    fmt.Sprintf("id-%s", fake.Lorem().Word()),
+				ID:                    fmt.Sprintf("id-%s", fake.Lorem().Word()),
 				EndsWithID:            fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle:      fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
 				QueryEndsWithID:       fmt.Sprintf("query-ends-with-id-%s", fake.Lorem().Word()),
@@ -53,7 +53,7 @@ func TestBehaviorIdNames(t *testing.T) {
 				},
 				path: fmt.Sprintf(
 					"/behavior/id-names/%s/%s/%s",
-					wantParams.Id, wantParams.EndsWithID, wantParams.TheIDInTheMiddle,
+					wantParams.ID, wantParams.EndsWithID, wantParams.TheIDInTheMiddle,
 				),
 				query: url.Values{
 					"queryEndsWithId":       []string{wantParams.QueryEndsWithID},

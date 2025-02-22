@@ -11,7 +11,7 @@ import (
 var _ = time.Time{}
 
 func NewPetValidator() FieldValidator[*Pet] {
-	validateId := NewSimpleFieldValidator[int64](
+	validateID := NewSimpleFieldValidator[int64](
 		EnsureNonDefault[int64],
 	)
 	validateName := NewSimpleFieldValidator[string](
@@ -21,7 +21,7 @@ func NewPetValidator() FieldValidator[*Pet] {
 	)
 	
 	return func(bindingCtx *BindingContext, value *Pet) {
-		validateId(bindingCtx.Fork("id"), value.Id)
+		validateID(bindingCtx.Fork("id"), value.ID)
 		validateName(bindingCtx.Fork("name"), value.Name)
 		validateComments(bindingCtx.Fork("comments"), value.Comments)
 	}
