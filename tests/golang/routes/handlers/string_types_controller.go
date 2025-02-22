@@ -1121,6 +1121,7 @@ type StringTypesController interface {
 // 
 // - POST /string-types/required-validation
 // 
+// Routes will use provided controller to handle requests.
 func RegisterStringTypesRoutes(rootHandler *RootHandler, controller StringTypesController) {
 	builder := newStringTypesControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}", controller.StringTypesArrayItemsRangeValidation(builder.StringTypesArrayItemsRangeValidation))

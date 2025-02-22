@@ -312,6 +312,7 @@ type BehaviorController interface {
 // 
 // - POST /behavior/with-status-defined
 // 
+// Routes will use provided controller to handle requests.
 func RegisterBehaviorRoutes(rootHandler *RootHandler, controller BehaviorController) {
 	builder := newBehaviorControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))

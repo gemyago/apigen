@@ -100,6 +100,7 @@ type {{classname}}Controller interface {
 // {{#operations}}{{#operation}}
 // - {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
 // {{/operation}}{{/operations}}
+// Routes will use provided controller to handle requests.
 func Register{{baseName}}Routes(rootHandler *RootHandler, controller {{baseName}}Controller) {
 	builder := new{{classname}}ControllerBuilder(rootHandler)
 	{{#operations}}

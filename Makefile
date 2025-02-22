@@ -121,6 +121,7 @@ bin/golangci-lint: ./.golangci-version
 lint/golang: bin/golangci-lint
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml
 	cd ./examples/petstore-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
+	cd ./examples/ping-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
 
 .PHONY: lint
 lint: lint/golang

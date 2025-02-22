@@ -443,6 +443,7 @@ type ObjectsController interface {
 // 
 // - POST /objects/required-nested-objects
 // 
+// Routes will use provided controller to handle requests.
 func RegisterObjectsRoutes(rootHandler *RootHandler, controller ObjectsController) {
 	builder := newObjectsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))

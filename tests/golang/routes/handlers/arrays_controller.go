@@ -219,6 +219,7 @@ type ArraysController interface {
 // 
 // - POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 // 
+// Routes will use provided controller to handle requests.
 func RegisterArraysRoutes(rootHandler *RootHandler, controller ArraysController) {
 	builder := newArraysControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))

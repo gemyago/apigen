@@ -559,6 +559,7 @@ type NumericTypesController interface {
 // 
 // - GET /numeric-types/required-validation
 // 
+// Routes will use provided controller to handle requests.
 func RegisterNumericTypesRoutes(rootHandler *RootHandler, controller NumericTypesController) {
 	builder := newNumericTypesControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}", controller.NumericTypesArrayItems(builder.NumericTypesArrayItems))
