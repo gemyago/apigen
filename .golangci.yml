@@ -370,7 +370,7 @@ issues:
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
     - path: "routes/handlers/(.+)_params\\.go"
-      source: "func newParamsParser.+\\(app \\*HTTPApp\\)"
+      source: "func newParamsParser.+\\(rootHandler \\*RootHandler\\)"
       linters:
         - revive # some params may be unused. Hard to handle this while gernerating code.
         - unparam # some params may be unused. Hard to handle this while gernerating code.
