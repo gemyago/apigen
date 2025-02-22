@@ -12,16 +12,16 @@ func NewBehaviorNamesWithIdDataValidator() FieldValidator[*BehaviorNamesWithIdDa
 	validateId := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
-	validateEndsWithId := NewSimpleFieldValidator[string](
+	validateEndsWithID := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
-	validateTheIdInTheMiddle := NewSimpleFieldValidator[string](
+	validateTheIDInTheMiddle := NewSimpleFieldValidator[string](
 		EnsureNonDefault[string],
 	)
 	
 	return func(bindingCtx *BindingContext, value *BehaviorNamesWithIdData) {
 		validateId(bindingCtx.Fork("id"), value.Id)
-		validateEndsWithId(bindingCtx.Fork("endsWithId"), value.EndsWithId)
-		validateTheIdInTheMiddle(bindingCtx.Fork("theIdInTheMiddle"), value.TheIdInTheMiddle)
+		validateEndsWithID(bindingCtx.Fork("endsWithId"), value.EndsWithID)
+		validateTheIDInTheMiddle(bindingCtx.Fork("theIdInTheMiddle"), value.TheIDInTheMiddle)
 	}
 }

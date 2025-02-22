@@ -17,57 +17,57 @@ var _ = json.Unmarshal
 var _ = fmt.Sprint
 type _ func() BehaviorNamesWithIdData
 
-// BehaviorIdNamesBehaviorNamesWithIdRequest represents params for behaviorNamesWithId operation
+// BehaviorIdNamesBehaviorNamesWithIDRequest represents params for behaviorNamesWithId operation
 //
 // Request: POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}.
-type BehaviorIdNamesBehaviorNamesWithIdRequest struct {
+type BehaviorIdNamesBehaviorNamesWithIDRequest struct {
 	// Id is parsed from request path and declared as id.
 	Id string
-	// EndsWithId is parsed from request path and declared as endsWithId.
-	EndsWithId string
-	// TheIdInTheMiddle is parsed from request path and declared as theIdInTheMiddle.
-	TheIdInTheMiddle string
-	// QueryEndsWithId is parsed from request query and declared as queryEndsWithId.
-	QueryEndsWithId string
-	// QueryTheIdInTheMiddle is parsed from request query and declared as queryTheIdInTheMiddle.
-	QueryTheIdInTheMiddle string
+	// EndsWithID is parsed from request path and declared as endsWithID.
+	EndsWithID string
+	// TheIDInTheMiddle is parsed from request path and declared as theIDInTheMiddle.
+	TheIDInTheMiddle string
+	// QueryEndsWithID is parsed from request query and declared as queryEndsWithID.
+	QueryEndsWithID string
+	// QueryTheIDInTheMiddle is parsed from request query and declared as queryTheIDInTheMiddle.
+	QueryTheIDInTheMiddle string
 	// Payload is parsed from request body and declared as payload.
 	Payload *BehaviorNamesWithIdData
 }
 
-type behaviorIdNamesControllerBuilder struct {
+type behaviorIDNamesControllerBuilder struct {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//
-	// Request type: BehaviorIdNamesBehaviorNamesWithIdRequest,
+	// Request type: BehaviorIdNamesBehaviorNamesWithIDRequest,
 	//
 	// Response type: BehaviorNamesWithIdData
-	BehaviorNamesWithId genericHandlerBuilder[
-		*BehaviorIdNamesBehaviorNamesWithIdRequest,
+	BehaviorNamesWithID genericHandlerBuilder[
+		*BehaviorIdNamesBehaviorNamesWithIDRequest,
 		*BehaviorNamesWithIdData,
-		func(context.Context, *BehaviorIdNamesBehaviorNamesWithIdRequest) (*BehaviorNamesWithIdData, error),
-		func(http.ResponseWriter, *http.Request, *BehaviorIdNamesBehaviorNamesWithIdRequest) (*BehaviorNamesWithIdData, error),
+		func(context.Context, *BehaviorIdNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIdData, error),
+		func(http.ResponseWriter, *http.Request, *BehaviorIdNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIdData, error),
 	]
 }
 
-func newBehaviorIdNamesControllerBuilder(app *RootHandler) *behaviorIdNamesControllerBuilder {
-	return &behaviorIdNamesControllerBuilder{
+func newBehaviorIdNamesControllerBuilder(app *RootHandler) *behaviorIDNamesControllerBuilder {
+	return &behaviorIDNamesControllerBuilder{
 		// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
-		BehaviorNamesWithId: newGenericHandlerBuilder(
+		BehaviorNamesWithID: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*BehaviorIdNamesBehaviorNamesWithIdRequest,
+				*BehaviorIdNamesBehaviorNamesWithIDRequest,
 				*BehaviorNamesWithIdData,
 			](),
 			newHTTPHandlerAdapter[
-				*BehaviorIdNamesBehaviorNamesWithIdRequest,
+				*BehaviorIdNamesBehaviorNamesWithIDRequest,
 				*BehaviorNamesWithIdData,
 			](),
 			makeActionBuilderParams[
-				*BehaviorIdNamesBehaviorNamesWithIdRequest,
+				*BehaviorIdNamesBehaviorNamesWithIDRequest,
 				*BehaviorNamesWithIdData,
 			]{
 				defaultStatus: 200,
-				paramsParser:  newParamsParserBehaviorIdNamesBehaviorNamesWithId(app),
+				paramsParser:  newParamsParserBehaviorIdNamesBehaviorNamesWithID(app),
 			},
 		),
 	}
@@ -76,11 +76,11 @@ func newBehaviorIdNamesControllerBuilder(app *RootHandler) *behaviorIdNamesContr
 type BehaviorIdNamesController interface {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//
-	// Request type: BehaviorIdNamesBehaviorNamesWithIdRequest,
+	// Request type: BehaviorIdNamesBehaviorNamesWithIDRequest,
 	//
 	// Response type: BehaviorNamesWithIdData
-	BehaviorNamesWithId(HandlerBuilder[
-		*BehaviorIdNamesBehaviorNamesWithIdRequest,
+	BehaviorNamesWithID(HandlerBuilder[
+		*BehaviorIdNamesBehaviorNamesWithIDRequest,
 		*BehaviorNamesWithIdData,
 	]) http.Handler
 }
@@ -92,6 +92,6 @@ type BehaviorIdNamesController interface {
 // Routes will use provided controller to handle requests.
 func(rootHandler *RootHandler) RegisterBehaviorIdNamesRoutes(controller BehaviorIdNamesController) *RootHandler {
 	builder := newBehaviorIdNamesControllerBuilder(rootHandler)
-	rootHandler.router.HandleRoute("POST", "/behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}", controller.BehaviorNamesWithId(builder.BehaviorNamesWithId))
+	rootHandler.router.HandleRoute("POST", "/behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}", controller.BehaviorNamesWithID(builder.BehaviorNamesWithID))
 	return rootHandler
 }

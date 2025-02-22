@@ -14,35 +14,35 @@ var _ = http.MethodGet
 var _ = time.Time{}
 type _ func() BehaviorNamesWithIdData
 
-type paramsParserBehaviorIdNamesBehaviorNamesWithId struct {
+type paramsParserBehaviorIdNamesBehaviorNamesWithID struct {
 	bindId requestParamBinder[string, string]
-	bindEndsWithId requestParamBinder[string, string]
-	bindTheIdInTheMiddle requestParamBinder[string, string]
-	bindQueryEndsWithId requestParamBinder[[]string, string]
-	bindQueryTheIdInTheMiddle requestParamBinder[[]string, string]
+	bindEndsWithID requestParamBinder[string, string]
+	bindTheIDInTheMiddle requestParamBinder[string, string]
+	bindQueryEndsWithID requestParamBinder[[]string, string]
+	bindQueryTheIDInTheMiddle requestParamBinder[[]string, string]
 	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIdData]
 }
 
-func (p *paramsParserBehaviorIdNamesBehaviorNamesWithId) parse(router httpRouter, req *http.Request) (*BehaviorIdNamesBehaviorNamesWithIdRequest, error) {
+func (p *paramsParserBehaviorIdNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorIdNamesBehaviorNamesWithIDRequest, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BehaviorIdNamesBehaviorNamesWithIdRequest{}
+	reqParams := &BehaviorIdNamesBehaviorNamesWithIDRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindId(pathParamsCtx.Fork("id"), readPathValue("id", router, req), &reqParams.Id)
-	p.bindEndsWithId(pathParamsCtx.Fork("endsWithId"), readPathValue("endsWithId", router, req), &reqParams.EndsWithId)
-	p.bindTheIdInTheMiddle(pathParamsCtx.Fork("theIdInTheMiddle"), readPathValue("theIdInTheMiddle", router, req), &reqParams.TheIdInTheMiddle)
+	p.bindEndsWithID(pathParamsCtx.Fork("endsWithId"), readPathValue("endsWithId", router, req), &reqParams.EndsWithID)
+	p.bindTheIDInTheMiddle(pathParamsCtx.Fork("theIdInTheMiddle"), readPathValue("theIdInTheMiddle", router, req), &reqParams.TheIDInTheMiddle)
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
-	p.bindQueryEndsWithId(queryParamsCtx.Fork("queryEndsWithId"), readQueryValue("queryEndsWithId", query), &reqParams.QueryEndsWithId)
-	p.bindQueryTheIdInTheMiddle(queryParamsCtx.Fork("queryTheIdInTheMiddle"), readQueryValue("queryTheIdInTheMiddle", query), &reqParams.QueryTheIdInTheMiddle)
+	p.bindQueryEndsWithID(queryParamsCtx.Fork("queryEndsWithId"), readQueryValue("queryEndsWithId", query), &reqParams.QueryEndsWithID)
+	p.bindQueryTheIDInTheMiddle(queryParamsCtx.Fork("queryTheIdInTheMiddle"), readQueryValue("queryTheIdInTheMiddle", query), &reqParams.QueryTheIDInTheMiddle)
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler) paramsParser[*BehaviorIdNamesBehaviorNamesWithIdRequest] {
-	return &paramsParserBehaviorIdNamesBehaviorNamesWithId{
+func newParamsParserBehaviorIdNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorIdNamesBehaviorNamesWithIDRequest] {
+	return &paramsParserBehaviorIdNamesBehaviorNamesWithID{
 		bindId: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
@@ -51,7 +51,7 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler)
 			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
-		bindEndsWithId: newRequestParamBinder(binderParams[string, string]{
+		bindEndsWithID: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
 				rootHandler.knownParsers.stringParser,
@@ -59,7 +59,7 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler)
 			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
-		bindTheIdInTheMiddle: newRequestParamBinder(binderParams[string, string]{
+		bindTheIDInTheMiddle: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
 				rootHandler.knownParsers.stringParser,
@@ -67,7 +67,7 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler)
 			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
-		bindQueryEndsWithId: newRequestParamBinder(binderParams[[]string, string]{
+		bindQueryEndsWithID: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
 				rootHandler.knownParsers.stringParser,
@@ -75,7 +75,7 @@ func newParamsParserBehaviorIdNamesBehaviorNamesWithId(rootHandler *RootHandler)
 			validateValue: NewSimpleFieldValidator[string](
 			),
 		}),
-		bindQueryTheIdInTheMiddle: newRequestParamBinder(binderParams[[]string, string]{
+		bindQueryTheIDInTheMiddle: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
 				rootHandler.knownParsers.stringParser,

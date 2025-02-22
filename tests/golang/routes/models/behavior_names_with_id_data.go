@@ -13,6 +13,6 @@ var _ = fmt.Sprint
 
 type BehaviorNamesWithIdData struct { 
 	Id string `json:"id"`
-	EndsWithId string `json:"endsWithId"`
-	TheIdInTheMiddle string `json:"theIdInTheMiddle"`
+	EndsWithID string `json:"endsWithId"`
+	TheIDInTheMiddle string `json:"theIdInTheMiddle"`
 }
