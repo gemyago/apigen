@@ -27,7 +27,10 @@ func TestBehavior(t *testing.T) {
 		testActions := tc.setupActions(&behaviorControllerTestActions{})
 		controller := &behaviorController{testActions}
 		rootHandler := handlers.
-			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, tc.appendRootHandlerOpts(handlers.WithLogger(newLogger()))...).
+			NewRootHandler(
+				&routerAdapter{mux: http.NewServeMux()},
+				tc.appendRootHandlerOpts(handlers.WithLogger(newLogger()))...,
+			).
 			RegisterBehaviorRoutes(controller)
 		return testActions, rootHandler
 	}
