@@ -65,7 +65,7 @@ func main() {
 	// directly as handler.
 
 	mux := http.NewServeMux()
-	httpApp := handlers.NewHTTPApp((*httpRouter)(mux))
+	httpApp := handlers.NewRootHandler((*httpRouter)(mux))
 	httpApp.RegisterPingRoutes(&pingController{})
 
 	srv := &http.Server{

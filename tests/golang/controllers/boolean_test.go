@@ -27,7 +27,7 @@ func TestBoolean(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterBooleanRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterBooleanRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
 		return testActions, router.mux
 	}
 

@@ -43,12 +43,12 @@ func (p *paramsParserArraysArraysNullableRequiredValidation) parse(router httpRo
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsParser[*ArraysArraysNullableRequiredValidationRequest] {
+func newParamsParserArraysArraysNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysNullableRequiredValidationRequest] {
 	return &paramsParserArraysArraysNullableRequiredValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -60,7 +60,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 		bindSimpleItems2: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -72,7 +72,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 		bindSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -84,7 +84,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 		bindSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -103,7 +103,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 		bindOptionalSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -115,7 +115,7 @@ func newParamsParserArraysArraysNullableRequiredValidation(app *HTTPApp) paramsP
 		bindOptionalSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -156,12 +156,12 @@ func (p *paramsParserArraysArraysRangeValidation) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*ArraysArraysRangeValidationRequest] {
+func newParamsParserArraysArraysRangeValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysRangeValidationRequest] {
 	return &paramsParserArraysArraysRangeValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -175,7 +175,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 		bindSimpleItems2: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -189,7 +189,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 		bindSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -203,7 +203,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 		bindSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -224,7 +224,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 		bindOptionalSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -238,7 +238,7 @@ func newParamsParserArraysArraysRangeValidation(app *HTTPApp) paramsParser[*Arra
 		bindOptionalSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -281,12 +281,12 @@ func (p *paramsParserArraysArraysRequiredValidation) parse(router httpRouter, re
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*ArraysArraysRequiredValidationRequest] {
+func newParamsParserArraysArraysRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysRequiredValidationRequest] {
 	return &paramsParserArraysArraysRequiredValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -298,7 +298,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 		bindSimpleItems2: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -310,7 +310,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 		bindSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -322,7 +322,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 		bindSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -341,7 +341,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 		bindOptionalSimpleItems1InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -353,7 +353,7 @@ func newParamsParserArraysArraysRequiredValidation(app *HTTPApp) paramsParser[*A
 		bindOptionalSimpleItems2InQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](

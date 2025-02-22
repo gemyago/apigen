@@ -55,12 +55,12 @@ func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParser[*NumericTypesNumericTypesArrayItemsRequest] {
+func newParamsParserNumericTypesNumericTypesArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesArrayItemsRequest] {
 	return &paramsParserNumericTypesNumericTypesArrayItems{
 		bindNumberAny: newRequestParamBinder(binderParams[string, []float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float32](
@@ -74,7 +74,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberFloat: newRequestParamBinder(binderParams[string, []float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float32](
@@ -88,7 +88,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberDouble: newRequestParamBinder(binderParams[string, []float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float64](
@@ -102,7 +102,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberInt: newRequestParamBinder(binderParams[string, []int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int32](
@@ -116,7 +116,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberInt32: newRequestParamBinder(binderParams[string, []int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int32](
@@ -130,7 +130,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberInt64: newRequestParamBinder(binderParams[string, []int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int64](
@@ -144,7 +144,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, []float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float32](
@@ -158,7 +158,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, []float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float32](
@@ -172,7 +172,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, []float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]float64](
@@ -186,7 +186,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, []int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int32](
@@ -200,7 +200,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, []int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int32](
@@ -214,7 +214,7 @@ func newParamsParserNumericTypesNumericTypesArrayItems(app *HTTPApp) paramsParse
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, []int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]int64](
@@ -278,12 +278,12 @@ func (p *paramsParserNumericTypesNumericTypesNullable) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[*NumericTypesNumericTypesNullableRequest] {
+func newParamsParserNumericTypesNumericTypesNullable(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesNullableRequest] {
 	return &paramsParserNumericTypesNumericTypesNullable{
 		bindNumberAny: newRequestParamBinder(binderParams[string, *float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float32](
 				SkipNullValidator(NewMinMaxValueValidator[float32](100.01, false, true)),
@@ -293,7 +293,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberFloat: newRequestParamBinder(binderParams[string, *float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float32](
 				SkipNullValidator(NewMinMaxValueValidator[float32](200.02, false, true)),
@@ -303,7 +303,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberDouble: newRequestParamBinder(binderParams[string, *float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float64Parser),
+				parseNullableParam(rootHandler.knownParsers.float64Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float64](
 				SkipNullValidator(NewMinMaxValueValidator[float64](300.03, false, true)),
@@ -313,7 +313,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberInt: newRequestParamBinder(binderParams[string, *int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int32](
 				SkipNullValidator(NewMinMaxValueValidator[int32](400, false, true)),
@@ -323,7 +323,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberInt32: newRequestParamBinder(binderParams[string, *int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int32](
 				SkipNullValidator(NewMinMaxValueValidator[int32](500, false, true)),
@@ -333,7 +333,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberInt64: newRequestParamBinder(binderParams[string, *int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int64Parser),
+				parseNullableParam(rootHandler.knownParsers.int64Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int64](
 				SkipNullValidator(NewMinMaxValueValidator[int64](600, false, true)),
@@ -343,7 +343,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float32](
 				SkipNullValidator(NewMinMaxValueValidator[float32](100.01, false, true)),
@@ -353,7 +353,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float32](
 				SkipNullValidator(NewMinMaxValueValidator[float32](200.02, false, true)),
@@ -363,7 +363,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, *float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float64Parser),
+				parseNullableParam(rootHandler.knownParsers.float64Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float64](
 				SkipNullValidator(NewMinMaxValueValidator[float64](300.03, false, true)),
@@ -373,7 +373,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, *int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int32](
 				SkipNullValidator(NewMinMaxValueValidator[int32](400, false, true)),
@@ -383,7 +383,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, *int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int32](
 				SkipNullValidator(NewMinMaxValueValidator[int32](500, false, true)),
@@ -393,7 +393,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, *int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.int64Parser),
+				parseNullableParam(rootHandler.knownParsers.int64Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*int64](
 				SkipNullValidator(NewMinMaxValueValidator[int64](600, false, true)),
@@ -410,7 +410,7 @@ func newParamsParserNumericTypesNumericTypesNullable(app *HTTPApp) paramsParser[
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, *float32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewSimpleFieldValidator[*float32](
 				SkipNullValidator(NewMinMaxValueValidator[float32](100.01, false, true)),
@@ -461,12 +461,12 @@ func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) paramsParser[*NumericTypesNumericTypesNullableArrayItemsRequest] {
+func newParamsParserNumericTypesNumericTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesNullableArrayItemsRequest] {
 	return &paramsParserNumericTypesNumericTypesNullableArrayItems{
 		bindNumberAny: newRequestParamBinder(binderParams[string, []*float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float32](
@@ -480,7 +480,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberFloat: newRequestParamBinder(binderParams[string, []*float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float32](
@@ -494,7 +494,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberDouble: newRequestParamBinder(binderParams[string, []*float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float64Parser),
+				parseNullableParam(rootHandler.knownParsers.float64Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float64](
@@ -508,7 +508,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberInt: newRequestParamBinder(binderParams[string, []*int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int32](
@@ -522,7 +522,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberInt32: newRequestParamBinder(binderParams[string, []*int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int32](
@@ -536,7 +536,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberInt64: newRequestParamBinder(binderParams[string, []*int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int64Parser),
+				parseNullableParam(rootHandler.knownParsers.int64Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int64](
@@ -550,7 +550,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, []*float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float32](
@@ -564,7 +564,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, []*float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float32Parser),
+				parseNullableParam(rootHandler.knownParsers.float32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float32](
@@ -578,7 +578,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, []*float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.float64Parser),
+				parseNullableParam(rootHandler.knownParsers.float64Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*float64](
@@ -592,7 +592,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, []*int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int32](
@@ -606,7 +606,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, []*int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int32Parser),
+				parseNullableParam(rootHandler.knownParsers.int32Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int32](
@@ -620,7 +620,7 @@ func newParamsParserNumericTypesNumericTypesNullableArrayItems(app *HTTPApp) par
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, []*int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.int64Parser),
+				parseNullableParam(rootHandler.knownParsers.int64Parser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*int64](
@@ -682,12 +682,12 @@ func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, r
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*NumericTypesNumericTypesParsingRequest] {
+func newParamsParserNumericTypesNumericTypesParsing(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesParsingRequest] {
 	return &paramsParserNumericTypesNumericTypesParsing{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -695,7 +695,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -703,7 +703,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 			),
@@ -711,7 +711,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -719,7 +719,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -727,7 +727,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 			),
@@ -735,7 +735,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -743,7 +743,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -751,7 +751,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 			),
@@ -759,7 +759,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -767,7 +767,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -775,7 +775,7 @@ func newParamsParserNumericTypesNumericTypesParsing(app *HTTPApp) paramsParser[*
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 			),
@@ -831,12 +831,12 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationRequest] {
+func newParamsParserNumericTypesNumericTypesRangeValidation(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRangeValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidation{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](100.01, false, true),
@@ -846,7 +846,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](200.02, false, true),
@@ -856,7 +856,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 				NewMinMaxValueValidator[float64](300.03, false, true),
@@ -866,7 +866,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](400, false, true),
@@ -876,7 +876,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](500, false, true),
@@ -886,7 +886,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](600, false, true),
@@ -896,7 +896,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](100.01, false, true),
@@ -906,7 +906,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](200.02, false, true),
@@ -916,7 +916,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 				NewMinMaxValueValidator[float64](300.03, false, true),
@@ -926,7 +926,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](400, false, true),
@@ -936,7 +936,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](500, false, true),
@@ -946,7 +946,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidation(app *HTTPApp) params
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](600, false, true),
@@ -1004,12 +1004,12 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(rou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRangeValidationExclusiveRequest] {
+func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRangeValidationExclusiveRequest] {
 	return &paramsParserNumericTypesNumericTypesRangeValidationExclusive{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](100.01, true, true),
@@ -1019,7 +1019,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberFloat: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](200.02, true, true),
@@ -1029,7 +1029,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberDouble: newRequestParamBinder(binderParams[string, float64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 				NewMinMaxValueValidator[float64](300.03, true, true),
@@ -1039,7 +1039,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberInt: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](400, true, true),
@@ -1049,7 +1049,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberInt32: newRequestParamBinder(binderParams[string, int32]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](500, true, true),
@@ -1059,7 +1059,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberInt64: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](600, true, true),
@@ -1069,7 +1069,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](100.01, true, true),
@@ -1079,7 +1079,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](200.02, true, true),
@@ -1089,7 +1089,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 				NewMinMaxValueValidator[float64](300.03, true, true),
@@ -1099,7 +1099,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](400, true, true),
@@ -1109,7 +1109,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](500, true, true),
@@ -1119,7 +1119,7 @@ func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(app *HTTPAp
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](600, true, true),
@@ -1172,12 +1172,12 @@ func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) paramsParser[*NumericTypesNumericTypesRequiredValidationRequest] {
+func newParamsParserNumericTypesNumericTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRequiredValidationRequest] {
 	return &paramsParserNumericTypesNumericTypesRequiredValidation{
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -1185,7 +1185,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 			),
@@ -1193,7 +1193,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 			),
@@ -1201,7 +1201,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -1209,7 +1209,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 			),
@@ -1217,7 +1217,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 			),
@@ -1225,7 +1225,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](100.01, false, true),
@@ -1234,7 +1234,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberFloatInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float32Parser,
+				rootHandler.knownParsers.float32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float32](
 				NewMinMaxValueValidator[float32](200.02, false, true),
@@ -1243,7 +1243,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberDoubleInQuery: newRequestParamBinder(binderParams[[]string, float64]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.float64Parser,
+				rootHandler.knownParsers.float64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[float64](
 				NewMinMaxValueValidator[float64](300.03, false, true),
@@ -1252,7 +1252,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberIntInQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](400, false, true),
@@ -1261,7 +1261,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberInt32InQuery: newRequestParamBinder(binderParams[[]string, int32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](500, false, true),
@@ -1270,7 +1270,7 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(app *HTTPApp) par
 		bindOptionalNumberInt64InQuery: newRequestParamBinder(binderParams[[]string, int64]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int64Parser,
+				rootHandler.knownParsers.int64Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int64](
 				NewMinMaxValueValidator[int64](600, false, true),

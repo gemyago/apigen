@@ -39,12 +39,12 @@ func (p *paramsParserBooleanBooleanArrayItems) parse(router httpRouter, req *htt
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*BooleanBooleanArrayItemsRequest] {
+func newParamsParserBooleanBooleanArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanArrayItemsRequest] {
 	return &paramsParserBooleanBooleanArrayItems{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, []bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]bool](
@@ -56,7 +56,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 		bindBoolParam2: newRequestParamBinder(binderParams[string, []bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]bool](
@@ -68,7 +68,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, []bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]bool](
@@ -80,7 +80,7 @@ func newParamsParserBooleanBooleanArrayItems(app *HTTPApp) paramsParser[*Boolean
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, []bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]bool](
@@ -126,12 +126,12 @@ func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBooleanNullableRequest] {
+func newParamsParserBooleanBooleanNullable(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableRequest] {
 	return &paramsParserBooleanBooleanNullable{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, *bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewSimpleFieldValidator[*bool](
 			),
@@ -139,7 +139,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 		bindBoolParam2: newRequestParamBinder(binderParams[string, *bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewSimpleFieldValidator[*bool](
 			),
@@ -147,7 +147,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewSimpleFieldValidator[*bool](
 			),
@@ -155,7 +155,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewSimpleFieldValidator[*bool](
 			),
@@ -170,7 +170,7 @@ func newParamsParserBooleanBooleanNullable(app *HTTPApp) paramsParser[*BooleanBo
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, *bool]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewSimpleFieldValidator[*bool](
 			),
@@ -203,12 +203,12 @@ func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[*BooleanBooleanNullableArrayItemsRequest] {
+func newParamsParserBooleanBooleanNullableArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableArrayItemsRequest] {
 	return &paramsParserBooleanBooleanNullableArrayItems{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, []*bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*bool](
@@ -220,7 +220,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 		bindBoolParam2: newRequestParamBinder(binderParams[string, []*bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*bool](
@@ -232,7 +232,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*bool](
@@ -244,7 +244,7 @@ func newParamsParserBooleanBooleanNullableArrayItems(app *HTTPApp) paramsParser[
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, []*bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.boolParser),
+				parseNullableParam(rootHandler.knownParsers.boolParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*bool](
@@ -288,12 +288,12 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBooleanParsingRequest] {
+func newParamsParserBooleanBooleanParsing(rootHandler *RootHandler) paramsParser[*BooleanBooleanParsingRequest] {
 	return &paramsParserBooleanBooleanParsing{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -301,7 +301,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 		bindBoolParam2: newRequestParamBinder(binderParams[string, bool]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -309,7 +309,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -317,7 +317,7 @@ func newParamsParserBooleanBooleanParsing(app *HTTPApp) paramsParser[*BooleanBoo
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -355,12 +355,12 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[*BooleanBooleanRequiredValidationRequest] {
+func newParamsParserBooleanBooleanRequiredValidation(rootHandler *RootHandler) paramsParser[*BooleanBooleanRequiredValidationRequest] {
 	return &paramsParserBooleanBooleanRequiredValidation{
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -368,7 +368,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 		bindBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -383,7 +383,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 		bindOptionalBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),
@@ -391,7 +391,7 @@ func newParamsParserBooleanBooleanRequiredValidation(app *HTTPApp) paramsParser[
 		bindOptionalBoolParam2InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.boolParser,
+				rootHandler.knownParsers.boolParser,
 			),
 			validateValue: NewSimpleFieldValidator[bool](
 			),

@@ -23,8 +23,7 @@ import (
 )
 
 type routerAdapter struct {
-	mux           *http.ServeMux
-	handledErrors []error
+	mux *http.ServeMux
 }
 
 func (r *routerAdapter) PathValue(req *http.Request, paramName string) string {
@@ -35,9 +34,8 @@ func (r *routerAdapter) HandleRoute(method, pathPattern string, h http.Handler) 
 	r.mux.Handle(method+" "+pathPattern, h)
 }
 
-func (r *routerAdapter) HandleError(_ *http.Request, w http.ResponseWriter, err error) {
-	r.handledErrors = append(r.handledErrors, err)
-	w.WriteHeader(http.StatusInternalServerError)
+func (r *routerAdapter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	r.mux.ServeHTTP(w, req)
 }
 
 // openTestLogFile will open a log file in a project root directory.
@@ -59,13 +57,13 @@ func newLogger() *slog.Logger {
 }
 
 type routeTestCase[TActions any] struct {
-	method            string
-	path              string
-	query             url.Values
-	body              io.Reader
-	appendHTTPAppOpts func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt
-	setupActions      func(TActions) TActions
-	expect            routeTestCaseExpectFn[TActions]
+	method                string
+	path                  string
+	query                 url.Values
+	body                  io.Reader
+	appendRootHandlerOpts func(opts ...handlers.RootHandlerOpt) []handlers.RootHandlerOpt
+	setupActions          func(TActions) TActions
+	expect                routeTestCaseExpectFn[TActions]
 }
 
 type routeTestCaseSetupFn[TActions any] func(tc routeTestCase[TActions]) (TActions, http.Handler)
@@ -100,10 +98,10 @@ func runRouteTestCase[TActions any](
 ) {
 	t.Run(name, func(t *testing.T) {
 		tc := tc()
-		if tc.appendHTTPAppOpts == nil {
-			tc.appendHTTPAppOpts = func(
-				opts ...handlers.HTTPAppOpt,
-			) []handlers.HTTPAppOpt {
+		if tc.appendRootHandlerOpts == nil {
+			tc.appendRootHandlerOpts = func(
+				opts ...handlers.RootHandlerOpt,
+			) []handlers.RootHandlerOpt {
 				return opts
 			}
 		}

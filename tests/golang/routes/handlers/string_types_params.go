@@ -51,12 +51,12 @@ func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(rout
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesArrayItemsRangeValidationRequest] {
+func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesArrayItemsRangeValidationRequest] {
 	return &paramsParserStringTypesStringTypesArrayItemsRangeValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -70,7 +70,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -84,7 +84,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindDateStr: newRequestParamBinder(binderParams[string, []time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -96,7 +96,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, []time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -108,7 +108,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindByteStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -122,7 +122,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -136,7 +136,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -150,7 +150,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -162,7 +162,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -174,7 +174,7 @@ func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(app *HTTPApp
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -232,12 +232,12 @@ func (p *paramsParserStringTypesStringTypesArraysParsing) parse(router httpRoute
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsParser[*StringTypesStringTypesArraysParsingRequest] {
+func newParamsParserStringTypesStringTypesArraysParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesArraysParsingRequest] {
 	return &paramsParserStringTypesStringTypesArraysParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -249,7 +249,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -261,7 +261,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindDateStr: newRequestParamBinder(binderParams[string, []time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -273,7 +273,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, []time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -285,7 +285,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindByteStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -297,7 +297,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -309,7 +309,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -321,7 +321,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -333,7 +333,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, []time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]time.Time](
@@ -345,7 +345,7 @@ func newParamsParserStringTypesStringTypesArraysParsing(app *HTTPApp) paramsPars
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, []string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]string](
@@ -405,7 +405,7 @@ func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesEnums(app *HTTPApp) paramsParser[*StringTypesStringTypesEnumsRequest] {
+func newParamsParserStringTypesStringTypesEnums(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesEnumsRequest] {
 	return &paramsParserStringTypesStringTypesEnums{
 		bindInlineEnumParam: newRequestParamBinder(binderParams[string, StringTypesStringTypesEnumsInlineEnumParam]{
 			required: true,
@@ -550,12 +550,12 @@ func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router http
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) paramsParser[*StringTypesStringTypesNullableArrayItemsRequest] {
+func newParamsParserStringTypesStringTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableArrayItemsRequest] {
 	return &paramsParserStringTypesStringTypesNullableArrayItems{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []*string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -570,7 +570,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, []*string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -585,7 +585,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindDateStr: newRequestParamBinder(binderParams[string, []*time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.dateParser),
+				parseNullableParam(rootHandler.knownParsers.dateParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*time.Time](
@@ -597,7 +597,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, []*time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.timeParser),
+				parseNullableParam(rootHandler.knownParsers.timeParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*time.Time](
@@ -609,7 +609,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindByteStr: newRequestParamBinder(binderParams[string, []*string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -623,7 +623,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -638,7 +638,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -653,7 +653,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, []*time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.dateParser),
+				parseNullableParam(rootHandler.knownParsers.dateParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*time.Time](
@@ -665,7 +665,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, []*time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.timeParser),
+				parseNullableParam(rootHandler.knownParsers.timeParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*time.Time](
@@ -677,7 +677,7 @@ func newParamsParserStringTypesStringTypesNullableArrayItems(app *HTTPApp) param
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, []*string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSlice(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewArrayValidator(
 				NewSimpleFieldValidator[[]*string](
@@ -735,12 +735,12 @@ func (p *paramsParserStringTypesStringTypesNullableParsing) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsParser[*StringTypesStringTypesNullableParsingRequest] {
+func newParamsParserStringTypesStringTypesNullableParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableParsingRequest] {
 	return &paramsParserStringTypesStringTypesNullableParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, *string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -748,7 +748,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, *string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -756,7 +756,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindDateStr: newRequestParamBinder(binderParams[string, *time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.dateParser),
+				parseNullableParam(rootHandler.knownParsers.dateParser),
 			),
 			validateValue: NewSimpleFieldValidator[*time.Time](
 			),
@@ -764,7 +764,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, *time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.timeParser),
+				parseNullableParam(rootHandler.knownParsers.timeParser),
 			),
 			validateValue: NewSimpleFieldValidator[*time.Time](
 			),
@@ -772,7 +772,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindByteStr: newRequestParamBinder(binderParams[string, *string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -780,7 +780,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -788,7 +788,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -796,7 +796,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, *time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.dateParser),
+				parseNullableParam(rootHandler.knownParsers.dateParser),
 			),
 			validateValue: NewSimpleFieldValidator[*time.Time](
 			),
@@ -804,7 +804,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, *time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.timeParser),
+				parseNullableParam(rootHandler.knownParsers.timeParser),
 			),
 			validateValue: NewSimpleFieldValidator[*time.Time](
 			),
@@ -812,7 +812,7 @@ func newParamsParserStringTypesStringTypesNullableParsing(app *HTTPApp) paramsPa
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 			),
@@ -846,12 +846,12 @@ func (p *paramsParserStringTypesStringTypesNullableRequiredValidation) parse(rou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesNullableRequiredValidationRequest] {
+func newParamsParserStringTypesStringTypesNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableRequiredValidationRequest] {
 	return &paramsParserStringTypesStringTypesNullableRequiredValidation{
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 				SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
@@ -869,7 +869,7 @@ func newParamsParserStringTypesStringTypesNullableRequiredValidation(app *HTTPAp
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				parseNullableParam(app.knownParsers.stringParser),
+				parseNullableParam(rootHandler.knownParsers.stringParser),
 			),
 			validateValue: NewSimpleFieldValidator[*string](
 				SkipNullValidator(NewMinMaxLengthValidator[string, string](10, true)),
@@ -917,12 +917,12 @@ func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*StringTypesStringTypesParsingRequest] {
+func newParamsParserStringTypesStringTypesParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesParsingRequest] {
 	return &paramsParserStringTypesStringTypesParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -930,7 +930,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -938,7 +938,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -946,7 +946,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -954,7 +954,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindByteStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -962,7 +962,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -970,7 +970,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -978,7 +978,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -986,7 +986,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -994,7 +994,7 @@ func newParamsParserStringTypesStringTypesParsing(app *HTTPApp) paramsParser[*St
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -1042,12 +1042,12 @@ func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesPatternValidationRequest] {
+func newParamsParserStringTypesStringTypesPatternValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesPatternValidationRequest] {
 	return &paramsParserStringTypesStringTypesPatternValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewPatternValidator[string]("^\\d{10}$"),
@@ -1056,7 +1056,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewPatternValidator[string]("^\\d{20}$"),
@@ -1065,7 +1065,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1073,7 +1073,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1081,7 +1081,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewPatternValidator[string]("^\\d{10}$"),
@@ -1090,7 +1090,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewPatternValidator[string]("^\\d{20}$"),
@@ -1099,7 +1099,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1107,7 +1107,7 @@ func newParamsParserStringTypesStringTypesPatternValidation(app *HTTPApp) params
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1159,12 +1159,12 @@ func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesRangeValidationRequest] {
+func newParamsParserStringTypesStringTypesRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesRangeValidationRequest] {
 	return &paramsParserStringTypesStringTypesRangeValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](10, true),
@@ -1174,7 +1174,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindCustomFormatStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](20, true),
@@ -1184,7 +1184,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindDateStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1192,7 +1192,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindDateTimeStr: newRequestParamBinder(binderParams[string, time.Time]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1200,7 +1200,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindByteStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](30, true),
@@ -1210,7 +1210,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](10, true),
@@ -1220,7 +1220,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](20, true),
@@ -1230,7 +1230,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1238,7 +1238,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1246,7 +1246,7 @@ func newParamsParserStringTypesStringTypesRangeValidation(app *HTTPApp) paramsPa
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](30, true),
@@ -1298,12 +1298,12 @@ func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router http
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) paramsParser[*StringTypesStringTypesRequiredValidationRequest] {
+func newParamsParserStringTypesStringTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesRequiredValidationRequest] {
 	return &paramsParserStringTypesStringTypesRequiredValidation{
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](10, true),
@@ -1312,7 +1312,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](20, true),
@@ -1321,7 +1321,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1329,7 +1329,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1337,7 +1337,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindByteStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](30, true),
@@ -1353,7 +1353,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindOptionalUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](10, true),
@@ -1362,7 +1362,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindOptionalCustomFormatStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](20, true),
@@ -1371,7 +1371,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindOptionalDateStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.dateParser,
+				rootHandler.knownParsers.dateParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1379,7 +1379,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindOptionalDateTimeStrInQuery: newRequestParamBinder(binderParams[[]string, time.Time]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.timeParser,
+				rootHandler.knownParsers.timeParser,
 			),
 			validateValue: NewSimpleFieldValidator[time.Time](
 			),
@@ -1387,7 +1387,7 @@ func newParamsParserStringTypesStringTypesRequiredValidation(app *HTTPApp) param
 		bindOptionalByteStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 				NewMinMaxLengthValidator[string, string](30, true),

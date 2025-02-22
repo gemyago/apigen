@@ -26,7 +26,7 @@ func (p *paramsParserObjectsObjectsArrayBodyDirect) parse(router httpRouter, req
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayBodyDirect(app *HTTPApp) paramsParser[*ObjectsObjectsArrayBodyDirectRequest] {
+func newParamsParserObjectsObjectsArrayBodyDirect(rootHandler *RootHandler) paramsParser[*ObjectsObjectsArrayBodyDirectRequest] {
 	return &paramsParserObjectsObjectsArrayBodyDirect{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*ObjectArraysSimpleObject]{
 			required: true,
@@ -54,7 +54,7 @@ func (p *paramsParserObjectsObjectsArrayBodyNested) parse(router httpRouter, req
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayBodyNested(app *HTTPApp) paramsParser[*ObjectsObjectsArrayBodyNestedRequest] {
+func newParamsParserObjectsObjectsArrayBodyNested(rootHandler *RootHandler) paramsParser[*ObjectsObjectsArrayBodyNestedRequest] {
 	return &paramsParserObjectsObjectsArrayBodyNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ObjectsArrayBodyNestedRequest]{
 			required: true,
@@ -78,7 +78,7 @@ func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *h
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsDeeplyNested(app *HTTPApp) paramsParser[*ObjectsObjectsDeeplyNestedRequest] {
+func newParamsParserObjectsObjectsDeeplyNested(rootHandler *RootHandler) paramsParser[*ObjectsObjectsDeeplyNestedRequest] {
 	return &paramsParserObjectsObjectsDeeplyNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ObjectsDeeplyNestedRequest]{
 			required: true,
@@ -102,7 +102,7 @@ func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNullableOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableOptionalBodyRequest] {
+func newParamsParserObjectsObjectsNullableOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsNullableOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsNullableOptionalBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleNullableObject]{
 			required: false,
@@ -126,7 +126,7 @@ func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNullableRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsNullableRequiredBodyRequest] {
+func newParamsParserObjectsObjectsNullableRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsNullableRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsNullableRequiredBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleNullableObject]{
 			required: true,
@@ -150,7 +150,7 @@ func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *h
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsOptionalBody(app *HTTPApp) paramsParser[*ObjectsObjectsOptionalBodyRequest] {
+func newParamsParserObjectsObjectsOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsOptionalBodyRequest] {
 	return &paramsParserObjectsObjectsOptionalBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObject]{
 			required: false,
@@ -174,7 +174,7 @@ func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *h
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsRequiredBody(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredBodyRequest] {
+func newParamsParserObjectsObjectsRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsRequiredBodyRequest] {
 	return &paramsParserObjectsObjectsRequiredBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObject]{
 			required: true,
@@ -198,7 +198,7 @@ func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRoute
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsRequiredNestedObjects(app *HTTPApp) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
+func newParamsParserObjectsObjectsRequiredNestedObjects(rootHandler *RootHandler) paramsParser[*ObjectsObjectsRequiredNestedObjectsRequest] {
 	return &paramsParserObjectsObjectsRequiredNestedObjects{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObjectsContainer]{
 			required: true,

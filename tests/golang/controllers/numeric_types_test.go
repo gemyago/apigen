@@ -27,7 +27,7 @@ func TestNumericTypes(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterNumericTypesRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
 		return testActions, router.mux
 	}
 

@@ -33,12 +33,12 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsAndResponseRequest] {
+func newParamsParserBehaviorBehaviorWithParamsAndResponse(rootHandler *RootHandler) paramsParser[*BehaviorBehaviorWithParamsAndResponseRequest] {
 	return &paramsParserBehaviorBehaviorWithParamsAndResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),
@@ -46,7 +46,7 @@ func newParamsParserBehaviorBehaviorWithParamsAndResponse(app *HTTPApp) paramsPa
 		bindQueryParam2: newRequestParamBinder(binderParams[[]string, int32]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.int32Parser,
+				rootHandler.knownParsers.int32Parser,
 			),
 			validateValue: NewSimpleFieldValidator[int32](
 				NewMinMaxValueValidator[int32](0, false, true),
@@ -77,12 +77,12 @@ func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRout
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorBehaviorWithParamsNoResponse(app *HTTPApp) paramsParser[*BehaviorBehaviorWithParamsNoResponseRequest] {
+func newParamsParserBehaviorBehaviorWithParamsNoResponse(rootHandler *RootHandler) paramsParser[*BehaviorBehaviorWithParamsNoResponseRequest] {
 	return &paramsParserBehaviorBehaviorWithParamsNoResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
 			parseValue: parseMultiValueParamAsSoloValue(
-				app.knownParsers.stringParser,
+				rootHandler.knownParsers.stringParser,
 			),
 			validateValue: NewSimpleFieldValidator[string](
 			),

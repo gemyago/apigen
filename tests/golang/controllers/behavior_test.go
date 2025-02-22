@@ -30,8 +30,8 @@ func TestBehavior(t *testing.T) {
 			mux: http.NewServeMux(),
 		}
 		handlers.RegisterBehaviorRoutes(
+			handlers.NewRootHandler(router, tc.appendRootHandlerOpts(handlers.WithLogger(newLogger()))...),
 			controller,
-			handlers.NewHTTPApp(router, tc.appendHTTPAppOpts(handlers.WithLogger(newLogger()))...),
 		)
 		return testActions, router.mux
 	}
@@ -114,7 +114,7 @@ func TestBehavior(t *testing.T) {
 				return testCase{
 					method: http.MethodPost,
 					path:   "/behavior/with-params-and-response",
-					appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+					appendRootHandlerOpts: func(opts ...handlers.RootHandlerOpt) []handlers.RootHandlerOpt {
 						return append(opts, handlers.WithResponseErrorHandler(
 							func(w http.ResponseWriter, _ *http.Request, _ error) {
 								w.WriteHeader(wantErrStatus)
@@ -142,7 +142,7 @@ func TestBehavior(t *testing.T) {
 				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam2": []string{fake.Lorem().Word()}},
-				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+				appendRootHandlerOpts: func(opts ...handlers.RootHandlerOpt) []handlers.RootHandlerOpt {
 					return append(opts, handlers.WithParsingErrorHandler(
 						func(w http.ResponseWriter, _ *http.Request, err error) {
 							w.WriteHeader(wantStatusCode)
@@ -185,7 +185,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
 					return testActions
 				},
-				appendHTTPAppOpts: func(opts ...handlers.HTTPAppOpt) []handlers.HTTPAppOpt {
+				appendRootHandlerOpts: func(opts ...handlers.RootHandlerOpt) []handlers.RootHandlerOpt {
 					return append(opts, handlers.WithActionErrorHandler(
 						func(w http.ResponseWriter, _ *http.Request, err error) {
 							w.WriteHeader(wantStatusCode)

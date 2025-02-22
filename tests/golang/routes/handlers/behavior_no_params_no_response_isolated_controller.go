@@ -33,7 +33,7 @@ type behaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	]
 }
 
-func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *HTTPApp) *behaviorNoParamsNoResponseIsolatedControllerBuilder {
+func newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app *RootHandler) *behaviorNoParamsNoResponseIsolatedControllerBuilder {
 	return &behaviorNoParamsNoResponseIsolatedControllerBuilder{
 		// GET /behavior/no-params-no-response-isolated
 		BehaviorNoParamsNoResponse: newGenericHandlerBuilder(
@@ -67,7 +67,11 @@ type BehaviorNoParamsNoResponseIsolatedController interface {
 	BehaviorNoParamsNoResponse(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorNoParamsNoResponseIsolatedRoutes(controller BehaviorNoParamsNoResponseIsolatedController, app *HTTPApp) {
-	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(app)
-	app.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
+// RegisterBehaviorNoParamsNoResponseIsolatedRoutes will attach the following routes to the root handler:
+// 
+// - GET /behavior/no-params-no-response-isolated
+// 
+func RegisterBehaviorNoParamsNoResponseIsolatedRoutes(rootHandler *RootHandler, controller BehaviorNoParamsNoResponseIsolatedController) {
+	builder := newBehaviorNoParamsNoResponseIsolatedControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("GET", "/behavior/no-params-no-response-isolated", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
 }

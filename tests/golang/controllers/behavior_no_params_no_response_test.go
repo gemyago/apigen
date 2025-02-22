@@ -18,8 +18,8 @@ func TestBehaviorNoParamsNoResponse(t *testing.T) {
 			mux: http.NewServeMux(),
 		}
 		handlers.RegisterBehaviorNoParamsNoResponseIsolatedRoutes(
+			handlers.NewRootHandler(router, handlers.WithLogger(newLogger())),
 			&controller,
-			handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())),
 		)
 		return testActions, router.mux
 	}

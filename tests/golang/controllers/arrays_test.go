@@ -24,7 +24,7 @@ func TestArrays(t *testing.T) {
 		router := &routerAdapter{
 			mux: http.NewServeMux(),
 		}
-		handlers.RegisterArraysRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
+		handlers.RegisterArraysRoutes(handlers.NewRootHandler(router, handlers.WithLogger(newLogger())), controller)
 		return testActions, router.mux
 	}
 
