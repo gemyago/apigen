@@ -55,7 +55,7 @@ func main() {
 	readHeaderTimeoutSec := 2
 
 	rootHandler := handlers.NewRootHandler((*httpRouter)(http.NewServeMux()))
-	handlers.RegisterPingRoutes(rootHandler, &pingController{})
+	rootHandler.RegisterPingRoutes(&pingController{})
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),

@@ -78,9 +78,8 @@ func NewHandler(deps HandlerDeps) http.Handler {
 		handlers.WithActionErrorHandler(handleActionError),
 	)
 
-	// Register generated Pets routes. There can be multiple different
-	// routes registered into the same rootHandler instance.
-	handlers.RegisterPetsRoutes(rootHandler, deps.PetsController)
+	// Register generated Pets routes.
+	rootHandler.RegisterPetsRoutes(deps.PetsController)
 
 	// Root handler is a standard http.Handler so can be used in any
 	// context that expects http.Handler interface.
