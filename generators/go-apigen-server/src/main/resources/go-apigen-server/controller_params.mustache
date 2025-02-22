@@ -21,13 +21,13 @@ type _ func() {{importedModels.0}}{{/hasImportedModel}}
 {{#operations}}
 {{#operation}}
 {{#hasParams}}
-type paramsParser{{baseName}}{{operationId}} struct {
+type paramsParser{{operations.className}}{{operationId}} struct {
 	{{#allParams}}
 	bind{{nameInPascalCase}} requestParamBinder[{{>params/binder-types}}]
 	{{/allParams}}
 }
 
-func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *http.Request) (*{{>request-type}}, error) {
+func (p *paramsParser{{operations.className}}{{operationId}}) parse(router httpRouter, req *http.Request) (*{{>request-type}}, error) {
 	bindingCtx := BindingContext{}
 	reqParams := &{{>request-type}}{}
 	{{#pathParams}}
@@ -48,8 +48,8 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParser{{baseName}}{{operationId}}(rootHandler *RootHandler) paramsParser[*{{>request-type}}] {
-	return &paramsParser{{baseName}}{{operationId}}{
+func newParamsParser{{operations.className}}{{operationId}}(rootHandler *RootHandler) paramsParser[*{{>request-type}}] {
+	return &paramsParser{{operations.className}}{{operationId}}{
 		{{#allParams}}
 		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{
 			required: {{required}},{{#isBodyParam}}

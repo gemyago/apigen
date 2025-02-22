@@ -27,25 +27,24 @@ func (c *PetsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*handlers.PetsCreatePetRequest],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, req *handlers.PetsCreatePetRequest) error {
-		if _, ok := c.petsByID[req.Payload.Id]; ok {
-			return fmt.Errorf("pet %d already exists: %w", req.Payload.Id, ErrConflict)
+		if _, ok := c.petsByID[req.Payload.ID]; ok {
+			return fmt.Errorf("pet %d already exists: %w", req.Payload.ID, ErrConflict)
 		}
 
 		c.allPets = append(c.allPets, req.Payload)
-		c.petsByID[req.Payload.Id] = req.Payload
+		c.petsByID[req.Payload.ID] = req.Payload
 
 		return nil
 	})
 }
 
-//nolint:revive,stylecheck // ID will be fixed in scope of https://github.com/gemyago/apigen/issues/30
-func (c *PetsController) GetPetById(
-	b handlers.HandlerBuilder[*handlers.PetsGetPetByIdRequest, *models.PetResponse],
+func (c *PetsController) GetPetByID(
+	b handlers.HandlerBuilder[*handlers.PetsGetPetByIDRequest, *models.PetResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *handlers.PetsGetPetByIdRequest) (*models.PetResponse, error) {
-		pet, ok := c.petsByID[req.PetId]
+	return b.HandleWith(func(_ context.Context, req *handlers.PetsGetPetByIDRequest) (*models.PetResponse, error) {
+		pet, ok := c.petsByID[req.PetID]
 		if !ok {
-			return nil, fmt.Errorf("pet %d not found: %w", req.PetId, ErrNotFound)
+			return nil, fmt.Errorf("pet %d not found: %w", req.PetID, ErrNotFound)
 		}
 		return &models.PetResponse{Data: pet}, nil
 	})

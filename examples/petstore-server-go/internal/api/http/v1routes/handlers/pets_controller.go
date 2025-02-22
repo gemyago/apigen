@@ -27,12 +27,12 @@ type PetsCreatePetRequest struct {
 	Payload *Pet
 }
 
-// PetsGetPetByIdRequest represents params for getPetById operation
+// PetsGetPetByIDRequest represents params for getPetById operation
 //
 // Request: GET /pets/{petId}.
-type PetsGetPetByIdRequest struct {
-	// PetId is parsed from request path and declared as petId.
-	PetId int64
+type PetsGetPetByIDRequest struct {
+	// PetID is parsed from request path and declared as petId.
+	PetID int64
 }
 
 // PetsListPetsRequest represents params for listPets operation
@@ -60,14 +60,14 @@ type petsControllerBuilder struct {
 
 	// GET /pets/{petId}
 	//
-	// Request type: PetsGetPetByIdRequest,
+	// Request type: PetsGetPetByIDRequest,
 	//
 	// Response type: PetResponse
-	GetPetById genericHandlerBuilder[
-		*PetsGetPetByIdRequest,
+	GetPetByID genericHandlerBuilder[
+		*PetsGetPetByIDRequest,
 		*PetResponse,
-		func(context.Context, *PetsGetPetByIdRequest) (*PetResponse, error),
-		func(http.ResponseWriter, *http.Request, *PetsGetPetByIdRequest) (*PetResponse, error),
+		func(context.Context, *PetsGetPetByIDRequest) (*PetResponse, error),
+		func(http.ResponseWriter, *http.Request, *PetsGetPetByIDRequest) (*PetResponse, error),
 	]
 
 	// GET /pets
@@ -107,22 +107,22 @@ func newPetsControllerBuilder(app *RootHandler) *petsControllerBuilder {
 		),
 
 		// GET /pets/{petId}
-		GetPetById: newGenericHandlerBuilder(
+		GetPetByID: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*PetsGetPetByIdRequest,
+				*PetsGetPetByIDRequest,
 				*PetResponse,
 			](),
 			newHTTPHandlerAdapter[
-				*PetsGetPetByIdRequest,
+				*PetsGetPetByIDRequest,
 				*PetResponse,
 			](),
 			makeActionBuilderParams[
-				*PetsGetPetByIdRequest,
+				*PetsGetPetByIDRequest,
 				*PetResponse,
 			]{
 				defaultStatus: 200,
-				paramsParser:  newParamsParserPetsGetPetById(app),
+				paramsParser:  newParamsParserPetsGetPetByID(app),
 			},
 		),
 
@@ -160,11 +160,11 @@ type PetsController interface {
 
 	// GET /pets/{petId}
 	//
-	// Request type: PetsGetPetByIdRequest,
+	// Request type: PetsGetPetByIDRequest,
 	//
 	// Response type: PetResponse
-	GetPetById(HandlerBuilder[
-		*PetsGetPetByIdRequest,
+	GetPetByID(HandlerBuilder[
+		*PetsGetPetByIDRequest,
 		*PetResponse,
 	]) http.Handler
 
@@ -191,7 +191,7 @@ type PetsController interface {
 func(rootHandler *RootHandler) RegisterPetsRoutes(controller PetsController) *RootHandler {
 	builder := newPetsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/pets", controller.CreatePet(builder.CreatePet))
-	rootHandler.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(builder.GetPetById))
+	rootHandler.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetByID(builder.GetPetByID))
 	rootHandler.router.HandleRoute("GET", "/pets", controller.ListPets(builder.ListPets))
 	return rootHandler
 }

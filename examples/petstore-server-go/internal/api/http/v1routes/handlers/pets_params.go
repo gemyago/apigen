@@ -40,22 +40,22 @@ func newParamsParserPetsCreatePet(rootHandler *RootHandler) paramsParser[*PetsCr
 	}
 }
 
-type paramsParserPetsGetPetById struct {
-	bindPetId requestParamBinder[string, int64]
+type paramsParserPetsGetPetByID struct {
+	bindPetID requestParamBinder[string, int64]
 }
 
-func (p *paramsParserPetsGetPetById) parse(router httpRouter, req *http.Request) (*PetsGetPetByIdRequest, error) {
+func (p *paramsParserPetsGetPetByID) parse(router httpRouter, req *http.Request) (*PetsGetPetByIDRequest, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &PetsGetPetByIdRequest{}
+	reqParams := &PetsGetPetByIDRequest{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
-	p.bindPetId(pathParamsCtx.Fork("petId"), readPathValue("petId", router, req), &reqParams.PetId)
+	p.bindPetID(pathParamsCtx.Fork("petId"), readPathValue("petId", router, req), &reqParams.PetID)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsGetPetById(rootHandler *RootHandler) paramsParser[*PetsGetPetByIdRequest] {
-	return &paramsParserPetsGetPetById{
-		bindPetId: newRequestParamBinder(binderParams[string, int64]{
+func newParamsParserPetsGetPetByID(rootHandler *RootHandler) paramsParser[*PetsGetPetByIDRequest] {
+	return &paramsParserPetsGetPetByID{
+		bindPetID: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
 			parseValue: parseSoloValueParamAsSoloValue(
 				rootHandler.knownParsers.int64Parser,
