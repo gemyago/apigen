@@ -176,7 +176,7 @@ type PetsController interface {
 	]) http.Handler
 }
 
-func (rootHandler *RootHandler) RegisterPetsRoutes(controller PetsController) {
+func RegisterPetsRoutes(rootHandler *RootHandler, controller PetsController) {
 	builder := newPetsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/pets", controller.CreatePet(builder.CreatePet))
 	rootHandler.router.HandleRoute("GET", "/pets/{petId}", controller.GetPetById(builder.GetPetById))
