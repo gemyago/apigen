@@ -7,8 +7,8 @@ import (
 )
 
 //go:embed .versions
-var rootFS embed.FS
+var embeddedRootFS embed.FS
 
 func main() { // coverage-ignore
-	apigen.Execute(rootFS)
+	apigen.Execute(embeddedRootFS)
 }

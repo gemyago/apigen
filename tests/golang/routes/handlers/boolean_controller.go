@@ -161,7 +161,7 @@ type booleanControllerBuilder struct {
 	]
 }
 
-func newBooleanControllerBuilder(app *HTTPApp) *booleanControllerBuilder {
+func newBooleanControllerBuilder(app *RootHandler) *booleanControllerBuilder {
 	return &booleanControllerBuilder{
 		// POST /boolean/array-items/{boolParam1}/{boolParam2}
 		BooleanArrayItems: newGenericHandlerBuilder(
@@ -317,11 +317,25 @@ type BooleanController interface {
 	]) http.Handler
 }
 
-func RegisterBooleanRoutes(controller BooleanController, app *HTTPApp) {
-	builder := newBooleanControllerBuilder(app)
-	app.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
-	app.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))
-	app.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(builder.BooleanNullableArrayItems))
-	app.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(builder.BooleanParsing))
-	app.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(builder.BooleanRequiredValidation))
+// RegisterBooleanRoutes will attach the following routes to the root handler:
+// 
+// - POST /boolean/array-items/{boolParam1}/{boolParam2}
+// 
+// - POST /boolean/nullable/{boolParam1}/{boolParam2}
+// 
+// - POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+// 
+// - POST /boolean/parsing/{boolParam1}/{boolParam2}
+// 
+// - POST /boolean/required-validation
+// 
+// Routes will use provided controller to handle requests.
+func(rootHandler *RootHandler) RegisterBooleanRoutes(controller BooleanController) *RootHandler {
+	builder := newBooleanControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("POST", "/boolean/array-items/{boolParam1}/{boolParam2}", controller.BooleanArrayItems(builder.BooleanArrayItems))
+	rootHandler.router.HandleRoute("POST", "/boolean/nullable/{boolParam1}/{boolParam2}", controller.BooleanNullable(builder.BooleanNullable))
+	rootHandler.router.HandleRoute("POST", "/boolean/nullable-array-items/{boolParam1}/{boolParam2}", controller.BooleanNullableArrayItems(builder.BooleanNullableArrayItems))
+	rootHandler.router.HandleRoute("POST", "/boolean/parsing/{boolParam1}/{boolParam2}", controller.BooleanParsing(builder.BooleanParsing))
+	rootHandler.router.HandleRoute("POST", "/boolean/required-validation", controller.BooleanRequiredValidation(builder.BooleanRequiredValidation))
+	return rootHandler
 }

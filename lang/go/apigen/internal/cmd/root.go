@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"io/fs"
 	"log/slog"
 	"os"
@@ -41,10 +42,11 @@ func newNoopableGeneratorInvoker(
 	return invoker
 }
 
-func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
+func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 	var params GeneratorParams
 	verbose := false
 	noop := false
+	jsonLogs := false
 
 	var generator Generator
 
@@ -52,14 +54,29 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 		Use:   "apigengo [input] [output]",
 		Short: "Generate HTTP layer from OpenAPI spec",
 		Args:  cobra.ExactArgs(expectedArgsCount),
-		PreRun: func(_ *cobra.Command, _ []string) {
+		PreRunE: func(_ *cobra.Command, _ []string) error {
 			level := slog.LevelWarn
 			if verbose {
 				level = slog.LevelDebug
 			}
-			rootLogger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-				Level: level,
-			}))
+
+			var logHandler slog.Handler
+			if jsonLogs {
+				logHandler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+					Level: level,
+				})
+			} else {
+				logHandler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+					Level: level,
+				})
+			}
+
+			rootLogger := slog.New(logHandler)
+
+			cwdFS, ok := os.DirFS(".").(fs.ReadFileFS)
+			if !ok {
+				return errors.New("failed to get current working directory filesystem")
+			}
 
 			generator = NewGenerator(GeneratorDeps{
 				RootLogger:  rootLogger,
@@ -70,10 +87,10 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 					NewSupportFilesInstaller(SupportFilesInstallerDeps{
 						RootLogger: rootLogger,
 						Downloader: NewResourceDownloader(),
-						RootFS:     os.DirFS("/").(fs.ReadFileFS), //TODO: without the cast?
+						CwdFS:      cwdFS,
 					}),
 				),
-				MetadataReader: resources.NewMetadataReader(rootFS),
+				MetadataReader: resources.NewMetadataReader(embeddedRootFS),
 				GeneratorInvoker: newNoopableGeneratorInvoker(
 					rootLogger,
 					noop,
@@ -87,6 +104,7 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 					}),
 				),
 			})
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			params.input = args[0]
@@ -112,5 +130,11 @@ func NewRootCmd(rootFS fs.ReadFileFS) *cobra.Command {
 			"(can be file or url)")
 	pFlags.BoolVar(&verbose, "verbose", verbose, "Enable verbose output")
 	pFlags.BoolVar(&noop, "noop", noop, "Enable no-op mode")
+	cmd.PersistentFlags().BoolVar(
+		&jsonLogs,
+		"json-logs",
+		false,
+		"Indicates if logs should be in JSON format or text (default)",
+	)
 	return cmd
 }

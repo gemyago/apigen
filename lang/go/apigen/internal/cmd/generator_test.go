@@ -48,7 +48,7 @@ func TestGenerator(t *testing.T) {
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
@@ -99,7 +99,7 @@ func TestGenerator(t *testing.T) {
 
 		invocationOrder := make([]int, 3)
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			OsChdirFunc: func(dir string) error {
 				assert.Equal(t, params.chdir, dir)
 				invocationOrder[0] = 1
@@ -143,7 +143,7 @@ func TestGenerator(t *testing.T) {
 			appVersion:    "4-" + faker.Word(),
 		}
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockMetadataReader,
 			SupportFilesInstaller: func(
 				_ context.Context,
@@ -201,7 +201,7 @@ func TestGenerator(t *testing.T) {
 			appVersion:    "1.2.3-" + faker.Word(),
 		}
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockMetadataReader,
 			SupportFilesInstaller: func(
 				_ context.Context,
@@ -249,7 +249,7 @@ func TestGenerator(t *testing.T) {
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger: DiscardLogger,
+			RootLogger: TestRootLogger,
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
@@ -282,7 +282,7 @@ func TestGenerator(t *testing.T) {
 			oagCliVersionReadErr: wantErr,
 		}
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockMetadataReader,
 		})
 
@@ -302,7 +302,7 @@ func TestGenerator(t *testing.T) {
 			appVersionReadErr: wantErr,
 		}
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockMetadataReader,
 		})
 
@@ -319,7 +319,7 @@ func TestGenerator(t *testing.T) {
 
 		wantErr := errors.New(faker.Sentence())
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockResourceMetadataReader{},
 			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 				return SupportingFilesInstallResult{}, wantErr
@@ -339,7 +339,7 @@ func TestGenerator(t *testing.T) {
 
 		wantErr := errors.New(faker.Sentence())
 		generator := NewGenerator(GeneratorDeps{
-			RootLogger:     DiscardLogger,
+			RootLogger:     TestRootLogger,
 			MetadataReader: &mockResourceMetadataReader{},
 			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 				return SupportingFilesInstallResult{}, nil

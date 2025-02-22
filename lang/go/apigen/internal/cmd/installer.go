@@ -40,18 +40,30 @@ type SupportFilesInstaller func(
 type SupportFilesInstallerDeps struct {
 	RootLogger *slog.Logger
 	Downloader ResourceDownloader
-	RootFS     fs.ReadFileFS
+
+	// FS instance relative to the current working directory
+	CwdFS fs.ReadFileFS
 }
 
-func readSupportFilesMetadata(rootFS fs.ReadFileFS, metadataFile string) (SupportFilesMetadata, error) {
+func readSupportFilesMetadata(
+	ctx context.Context,
+	logger *slog.Logger,
+	rootFS fs.ReadFileFS,
+	metadataFile string,
+) (SupportFilesMetadata, error) {
 	var metadata SupportFilesMetadata
-	if data, err := rootFS.ReadFile(metadataFile[1:]); err == nil {
+	data, err := rootFS.ReadFile(metadataFile)
+	if err == nil {
 		if err = json.Unmarshal(data, &metadata); err != nil {
 			return SupportFilesMetadata{}, fmt.Errorf("failed to unmarshal metadata: %w", err)
 		}
-	} else if !os.IsNotExist(err) {
+		return metadata, nil
+	}
+
+	if !os.IsNotExist(err) {
 		return SupportFilesMetadata{}, fmt.Errorf("failed to read metadata: %w", err)
 	}
+	logger.DebugContext(ctx, "Support metadata file not found", slog.String("file", metadataFile))
 	return metadata, nil
 }
 
@@ -71,7 +83,7 @@ func downloadSupportFileIfRequired(
 	params downloadSupportFileIfRequiredParams,
 ) error {
 	fileExists := true
-	file, err := deps.RootFS.Open(params.destinationPath[1:])
+	file, err := deps.CwdFS.Open(params.destinationPath)
 	if err != nil {
 		fileExists = false
 	} else {
@@ -82,7 +94,10 @@ func downloadSupportFileIfRequired(
 		params.sourceVersion != *params.metadataVersion ||
 		params.sourceLocation != *params.metadataLocation {
 		logger.InfoContext(ctx, "Downloading support file",
-			slog.String("source", params.sourceLocation),
+			slog.String("metadataVersion", *params.metadataVersion),
+			slog.String("metadataLocation", *params.metadataLocation),
+			slog.String("sourceVersion", params.sourceVersion),
+			slog.String("sourceLocation", params.sourceLocation),
 			slog.String("destination", params.destinationPath),
 		)
 		if err = deps.Downloader(
@@ -132,7 +147,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		}
 
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		metadata, err := readSupportFilesMetadata(deps.RootFS, metadataFile)
+		metadata, err := readSupportFilesMetadata(ctx, logger, deps.CwdFS, metadataFile)
 		if err != nil {
 			return emptyResult, err
 		}
@@ -179,7 +194,9 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 				return emptyResult, fmt.Errorf("failed to open metadata file for writing: %w", err)
 			}
 			defer metadataOutput.Close()
-			if err = json.NewEncoder(metadataOutput).Encode(metadata); err != nil {
+			encoder := json.NewEncoder(metadataOutput)
+			encoder.SetIndent("", "  ")
+			if err = encoder.Encode(metadata); err != nil {
 				return emptyResult, fmt.Errorf("failed to write metadata: %w", err)
 			}
 		}

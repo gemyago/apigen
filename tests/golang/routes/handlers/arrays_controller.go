@@ -115,7 +115,7 @@ type arraysControllerBuilder struct {
 	]
 }
 
-func newArraysControllerBuilder(app *HTTPApp) *arraysControllerBuilder {
+func newArraysControllerBuilder(app *RootHandler) *arraysControllerBuilder {
 	return &arraysControllerBuilder{
 		// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 		ArraysNullableRequiredValidation: newGenericHandlerBuilder(
@@ -211,9 +211,19 @@ type ArraysController interface {
 	]) http.Handler
 }
 
-func RegisterArraysRoutes(controller ArraysController, app *HTTPApp) {
-	builder := newArraysControllerBuilder(app)
-	app.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))
-	app.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder.ArraysRangeValidation))
-	app.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(builder.ArraysRequiredValidation))
+// RegisterArraysRoutes will attach the following routes to the root handler:
+// 
+// - POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
+// 
+// - POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
+// 
+// - POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
+// 
+// Routes will use provided controller to handle requests.
+func(rootHandler *RootHandler) RegisterArraysRoutes(controller ArraysController) *RootHandler {
+	builder := newArraysControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("POST", "/arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysNullableRequiredValidation(builder.ArraysNullableRequiredValidation))
+	rootHandler.router.HandleRoute("POST", "/arrays/range-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRangeValidation(builder.ArraysRangeValidation))
+	rootHandler.router.HandleRoute("POST", "/arrays/required-validation/{simpleItems1}/{simpleItems2}", controller.ArraysRequiredValidation(builder.ArraysRequiredValidation))
+	return rootHandler
 }

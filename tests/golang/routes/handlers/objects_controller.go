@@ -179,7 +179,7 @@ type objectsControllerBuilder struct {
 	]
 }
 
-func newObjectsControllerBuilder(app *HTTPApp) *objectsControllerBuilder {
+func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 	return &objectsControllerBuilder{
 		// POST /objects/arrays
 		ObjectsArrayBodyDirect: newGenericHandlerBuilder(
@@ -425,14 +425,34 @@ type ObjectsController interface {
 	]) http.Handler
 }
 
-func RegisterObjectsRoutes(controller ObjectsController, app *HTTPApp) {
-	builder := newObjectsControllerBuilder(app)
-	app.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))
-	app.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder.ObjectsArrayBodyNested))
-	app.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(builder.ObjectsDeeplyNested))
-	app.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(builder.ObjectsNullableOptionalBody))
-	app.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(builder.ObjectsNullableRequiredBody))
-	app.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder.ObjectsOptionalBody))
-	app.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder.ObjectsRequiredBody))
-	app.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder.ObjectsRequiredNestedObjects))
+// RegisterObjectsRoutes will attach the following routes to the root handler:
+// 
+// - POST /objects/arrays
+// 
+// - PUT /objects/arrays
+// 
+// - POST /objects/deeply-nested
+// 
+// - PUT /objects/nullable-body
+// 
+// - POST /objects/nullable-body
+// 
+// - PUT /objects/required-body
+// 
+// - POST /objects/required-body
+// 
+// - POST /objects/required-nested-objects
+// 
+// Routes will use provided controller to handle requests.
+func(rootHandler *RootHandler) RegisterObjectsRoutes(controller ObjectsController) *RootHandler {
+	builder := newObjectsControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("POST", "/objects/arrays", controller.ObjectsArrayBodyDirect(builder.ObjectsArrayBodyDirect))
+	rootHandler.router.HandleRoute("PUT", "/objects/arrays", controller.ObjectsArrayBodyNested(builder.ObjectsArrayBodyNested))
+	rootHandler.router.HandleRoute("POST", "/objects/deeply-nested", controller.ObjectsDeeplyNested(builder.ObjectsDeeplyNested))
+	rootHandler.router.HandleRoute("PUT", "/objects/nullable-body", controller.ObjectsNullableOptionalBody(builder.ObjectsNullableOptionalBody))
+	rootHandler.router.HandleRoute("POST", "/objects/nullable-body", controller.ObjectsNullableRequiredBody(builder.ObjectsNullableRequiredBody))
+	rootHandler.router.HandleRoute("PUT", "/objects/required-body", controller.ObjectsOptionalBody(builder.ObjectsOptionalBody))
+	rootHandler.router.HandleRoute("POST", "/objects/required-body", controller.ObjectsRequiredBody(builder.ObjectsRequiredBody))
+	rootHandler.router.HandleRoute("POST", "/objects/required-nested-objects", controller.ObjectsRequiredNestedObjects(builder.ObjectsRequiredNestedObjects))
+	return rootHandler
 }

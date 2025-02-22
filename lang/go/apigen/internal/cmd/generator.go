@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"os"
 	"regexp"
 )
 
@@ -53,7 +54,12 @@ func NewGenerator(deps GeneratorDeps) Generator {
 
 		if params.supportDir == "" {
 			params.supportDir = params.output + "/.apigen"
-			logger.InfoContext(ctx, "Using default support directory", slog.String("supportDir", params.supportDir))
+			pwd, _ := os.Getwd() // we don't care here if it fails, need it for logging purposes
+			logger.InfoContext(ctx,
+				"Using default support directory",
+				slog.String("supportDir", params.supportDir),
+				slog.String("pwd", pwd),
+			)
 		}
 
 		if params.oagCliVersion == "" {

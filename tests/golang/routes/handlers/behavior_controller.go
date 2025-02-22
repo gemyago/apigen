@@ -119,7 +119,7 @@ type behaviorControllerBuilder struct {
 	]
 }
 
-func newBehaviorControllerBuilder(app *HTTPApp) *behaviorControllerBuilder {
+func newBehaviorControllerBuilder(app *RootHandler) *behaviorControllerBuilder {
 	return &behaviorControllerBuilder{
 		// GET /behavior/no-params-no-response
 		BehaviorNoParamsNoResponse: newGenericHandlerBuilder(
@@ -298,12 +298,28 @@ type BehaviorController interface {
 	BehaviorWithStatusDefined(NoParamsNoResponseHandlerBuilder) http.Handler
 }
 
-func RegisterBehaviorRoutes(controller BehaviorController, app *HTTPApp) {
-	builder := newBehaviorControllerBuilder(app)
-	app.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
-	app.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder.BehaviorNoParamsWithResponse))
-	app.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder.BehaviorNoStatusDefined))
-	app.router.HandleRoute("POST", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder.BehaviorWithParamsAndResponse))
-	app.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder.BehaviorWithParamsNoResponse))
-	app.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder.BehaviorWithStatusDefined))
+// RegisterBehaviorRoutes will attach the following routes to the root handler:
+// 
+// - GET /behavior/no-params-no-response
+// 
+// - GET /behavior/no-params-with-response
+// 
+// - GET /behavior/no-status-defined
+// 
+// - POST /behavior/with-params-and-response
+// 
+// - GET /behavior/with-params-no-response
+// 
+// - POST /behavior/with-status-defined
+// 
+// Routes will use provided controller to handle requests.
+func(rootHandler *RootHandler) RegisterBehaviorRoutes(controller BehaviorController) *RootHandler {
+	builder := newBehaviorControllerBuilder(rootHandler)
+	rootHandler.router.HandleRoute("GET", "/behavior/no-params-no-response", controller.BehaviorNoParamsNoResponse(builder.BehaviorNoParamsNoResponse))
+	rootHandler.router.HandleRoute("GET", "/behavior/no-params-with-response", controller.BehaviorNoParamsWithResponse(builder.BehaviorNoParamsWithResponse))
+	rootHandler.router.HandleRoute("GET", "/behavior/no-status-defined", controller.BehaviorNoStatusDefined(builder.BehaviorNoStatusDefined))
+	rootHandler.router.HandleRoute("POST", "/behavior/with-params-and-response", controller.BehaviorWithParamsAndResponse(builder.BehaviorWithParamsAndResponse))
+	rootHandler.router.HandleRoute("GET", "/behavior/with-params-no-response", controller.BehaviorWithParamsNoResponse(builder.BehaviorWithParamsNoResponse))
+	rootHandler.router.HandleRoute("POST", "/behavior/with-status-defined", controller.BehaviorWithStatusDefined(builder.BehaviorWithStatusDefined))
+	return rootHandler
 }

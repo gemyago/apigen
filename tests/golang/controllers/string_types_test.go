@@ -26,11 +26,10 @@ func TestStringTypes(t *testing.T) {
 	setupRouter := func(_ testCase) (*stringTypesControllerTestActions, http.Handler) {
 		testActions := &stringTypesControllerTestActions{}
 		controller := &stringTypesController{testActions: testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterStringTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterStringTypesRoutes(controller)
+		return testActions, rootHandler
 	}
 
 	randomStrings := func(n, minLength, maxLength int) []string {

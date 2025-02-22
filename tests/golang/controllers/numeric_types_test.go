@@ -24,11 +24,10 @@ func TestNumericTypes(t *testing.T) {
 	setupRouter := func(_ testCase) (*numericTypesControllerTestActions, http.Handler) {
 		testActions := &numericTypesControllerTestActions{}
 		controller := &numericTypesController{testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterNumericTypesRoutes(controller, handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())))
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterNumericTypesRoutes(controller)
+		return testActions, rootHandler
 	}
 
 	randomFloat32 := func(minVal, maxVal float32) float32 {

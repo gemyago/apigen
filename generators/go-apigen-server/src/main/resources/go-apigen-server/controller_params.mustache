@@ -48,7 +48,7 @@ func (p *paramsParser{{baseName}}{{operationId}}) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParser{{baseName}}{{operationId}}(app *HTTPApp) paramsParser[*{{>request-type}}] {
+func newParamsParser{{baseName}}{{operationId}}(rootHandler *RootHandler) paramsParser[*{{>request-type}}] {
 	return &paramsParser{{baseName}}{{operationId}}{
 		{{#allParams}}
 		bind{{nameInPascalCase}}: newRequestParamBinder(binderParams[{{>params/binder-types}}]{

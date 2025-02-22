@@ -14,14 +14,10 @@ func TestBehaviorNoParamsNoResponse(t *testing.T) {
 	setupRouter := func(_ testCase) (*behaviorControllerNoParamsNoResponseTestActions, http.Handler) {
 		testActions := &behaviorControllerNoParamsNoResponseTestActions{}
 		controller := behaviorControllerNoParamsNoResponse{testActions}
-		router := &routerAdapter{
-			mux: http.NewServeMux(),
-		}
-		handlers.RegisterBehaviorNoParamsNoResponseIsolatedRoutes(
-			&controller,
-			handlers.NewHTTPApp(router, handlers.WithLogger(newLogger())),
-		)
-		return testActions, router.mux
+		rootHandler := handlers.
+			NewRootHandler(&routerAdapter{mux: http.NewServeMux()}, handlers.WithLogger(newLogger())).
+			RegisterBehaviorNoParamsNoResponseIsolatedRoutes(&controller)
+		return testActions, rootHandler
 	}
 
 	t.Run("noParamsNoResponse", func(t *testing.T) {
