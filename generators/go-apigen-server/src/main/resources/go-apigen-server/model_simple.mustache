@@ -4,5 +4,5 @@
 type {{classname}} struct { {{#vars}}{{#description}}
 	// {{{.}}}{{/description}}{{#deprecated}}
 	// Deprecated{{/deprecated}}
-	{{name}} {{>models/prop-type}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`{{/vars}}
+	{{name}} {{>models/prop-type}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"`{{/vars}}
 }
