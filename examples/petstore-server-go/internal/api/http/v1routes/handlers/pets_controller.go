@@ -179,6 +179,14 @@ type PetsController interface {
 	]) http.Handler
 }
 
+// RegisterPetsRoutes will attach the following routes to the root handler:
+// 
+// - POST /pets
+// 
+// - GET /pets/{petId}
+// 
+// - GET /pets
+// 
 func RegisterPetsRoutes(rootHandler *RootHandler, controller PetsController) {
 	builder := newPetsControllerBuilder(rootHandler)
 	rootHandler.router.HandleRoute("POST", "/pets", controller.CreatePet(builder.CreatePet))
