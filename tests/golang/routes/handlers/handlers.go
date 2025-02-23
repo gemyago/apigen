@@ -372,32 +372,30 @@ type universalActionHandlerFunc[
 ] func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
 
 // action handlers without http context exposed.
-type handlerActionFunc[TReq any, TRes any] func(context.Context, TReq) (TRes, error)
-type handlerActionFuncNoParams[TReq void, TRes any] func(context.Context) (TRes, error)
-type handlerActionFuncNoResponse[TReq any, TRes void] func(context.Context, TReq) error
-type handlerActionFuncNoParamsNoResponse[TReq void, TRes void] func(context.Context) error
+type handlerActionFunc[TReq any, TRes any] = func(context.Context, TReq) (TRes, error)
+type handlerActionFuncNoParams[TReq void, TRes any] = func(context.Context) (TRes, error)
+type handlerActionFuncNoResponse[TReq any, TRes void] = func(context.Context, TReq) error
+type handlerActionFuncNoParamsNoResponse[TReq void, TRes void] = func(context.Context) error
 
 // action handlers with http context exposed.
-type httpHandlerActionFunc[TReq any, TRes any] func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
-type httpHandlerActionFuncNoParams[TReq void, TRes any] func(http.ResponseWriter, *http.Request) (TRes, error)
-type httpHandlerActionFuncNoResponse[TReq any, TRes void] func(http.ResponseWriter, *http.Request, TReq) error
-type httpHandlerActionFuncNoParamsNoResponse[TReq void, TRes void] func(http.ResponseWriter, *http.Request) error
+type httpHandlerActionFunc[TReq any, TRes any] = func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
+type httpHandlerActionFuncNoParams[TReq void, TRes any] = func(http.ResponseWriter, *http.Request) (TRes, error)
+type httpHandlerActionFuncNoResponse[TReq any, TRes void] = func(http.ResponseWriter, *http.Request, TReq) error
+type httpHandlerActionFuncNoParamsNoResponse[TReq void, TRes void] = func(http.ResponseWriter, *http.Request) error
 
 // handlerActionFuncConstraint represents possible combination of handler action functions.
 // Each function can be with or without parameters and with or without response.
 // Additionally each function can have access to http objects for possible direct manipulation.
 type handlerActionFuncConstraint[TReq any, TRes any] interface {
-	// not using handleActionFuncXXX types here to allow more flexibility in the constraints.
+	handlerActionFunc[TReq, TRes] |
+		handlerActionFuncNoParams[void, TRes] |
+		handlerActionFuncNoResponse[TReq, void] |
+		handlerActionFuncNoParamsNoResponse[void, void] |
 
-	~func(context.Context, TReq) (TRes, error) |
-		~func(context.Context) (TRes, error) |
-		~func(context.Context, TReq) error |
-		~func(context.Context) error |
-
-		~func(http.ResponseWriter, *http.Request, TReq) (TRes, error) |
-		~func(http.ResponseWriter, *http.Request) (TRes, error) |
-		~func(http.ResponseWriter, *http.Request, TReq) error |
-		~func(http.ResponseWriter, *http.Request) error
+		httpHandlerActionFunc[TReq, TRes] |
+		httpHandlerActionFuncNoParams[void, TRes] |
+		httpHandlerActionFuncNoResponse[TReq, void] |
+		httpHandlerActionFuncNoParamsNoResponse[void, void]
 }
 
 type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface {
