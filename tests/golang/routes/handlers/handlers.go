@@ -371,30 +371,33 @@ type universalActionHandlerFunc[
 	TRes any,
 ] func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
 
-// action handlers without http context exposed
+// action handlers without http context exposed.
 type handlerActionFunc[TReq any, TRes any] func(context.Context, TReq) (TRes, error)
-type handlerActionFuncNoParams[TRes any] func(context.Context) (TRes, error)
-type handlerActionFuncNoResponse[TReq any] func(context.Context, TReq) error
-type handlerActionFuncNoParamsNoResponse func(context.Context) error
+type handlerActionFuncNoParams[TReq void, TRes any] func(context.Context) (TRes, error)
+type handlerActionFuncNoResponse[TReq any, TRes void] func(context.Context, TReq) error
+type handlerActionFuncNoParamsNoResponse[TReq void, TRes void] func(context.Context) error
 
-// action handlers with http context exposed
+// action handlers with http context exposed.
 type httpHandlerActionFunc[TReq any, TRes any] func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
-type httpHandlerActionFuncNoParams[TRes any] func(http.ResponseWriter, *http.Request) (TRes, error)
-type httpHandlerActionFuncNoResponse[TReq any] func(http.ResponseWriter, *http.Request, TReq) error
-type httpHandlerActionFuncNoParamsNoResponse func(http.ResponseWriter, *http.Request) error
+type httpHandlerActionFuncNoParams[TReq void, TRes any] func(http.ResponseWriter, *http.Request) (TRes, error)
+type httpHandlerActionFuncNoResponse[TReq any, TRes void] func(http.ResponseWriter, *http.Request, TReq) error
+type httpHandlerActionFuncNoParamsNoResponse[TReq void, TRes void] func(http.ResponseWriter, *http.Request) error
 
 // handlerActionFuncConstraint represents possible combination of handler action functions.
 // Each function can be with or without parameters and with or without response.
 // Additionally each function can have access to http objects for possible direct manipulation.
 type handlerActionFuncConstraint[TReq any, TRes any] interface {
-	handlerActionFunc[TReq, TRes] |
-		handlerActionFuncNoParams[TRes] |
-		handlerActionFuncNoResponse[TReq] |
-		handlerActionFuncNoParamsNoResponse |
-		httpHandlerActionFunc[TReq, TRes] |
-		httpHandlerActionFuncNoParams[TRes] |
-		httpHandlerActionFuncNoResponse[TReq] |
-		httpHandlerActionFuncNoParamsNoResponse
+	// not using handleActionFuncXXX types here to allow more flexibility in the constraints.
+
+	~func(context.Context, TReq) (TRes, error) |
+		~func(context.Context) (TRes, error) |
+		~func(context.Context, TReq) error |
+		~func(context.Context) error |
+
+		~func(http.ResponseWriter, *http.Request, TReq) (TRes, error) |
+		~func(http.ResponseWriter, *http.Request) (TRes, error) |
+		~func(http.ResponseWriter, *http.Request, TReq) error |
+		~func(http.ResponseWriter, *http.Request) error
 }
 
 type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface {
@@ -458,10 +461,10 @@ type HandlerBuilderV2[TReq any, TRes any] genericHandlerBuilderV2[
 ]
 
 type NoParamsHandlerBuilderV2[TRes any] genericHandlerBuilderV2[
-	struct{},
+	void,
 	TRes,
-	handlerActionFuncNoParams[TRes],
-	httpHandlerActionFuncNoParams[TRes],
+	handlerActionFuncNoParams[void, TRes],
+	httpHandlerActionFuncNoParams[void, TRes],
 ]
 
 type genericHandlerBuilder[
@@ -494,24 +497,24 @@ type HandlerBuilder[TReq any, TRes any] genericHandlerBuilder[
 ]
 
 type NoParamsHandlerBuilder[TRes any] genericHandlerBuilder[
-	struct{},
+	void,
 	TRes,
-	handlerActionFuncNoParams[TRes],
-	httpHandlerActionFuncNoParams[TRes],
+	handlerActionFuncNoParams[void, TRes],
+	httpHandlerActionFuncNoParams[void, TRes],
 ]
 
 type NoResponseHandlerBuilder[TReq any] genericHandlerBuilder[
 	TReq,
-	struct{},
-	handlerActionFuncNoResponse[TReq],
-	httpHandlerActionFuncNoResponse[TReq],
+	void,
+	handlerActionFuncNoResponse[TReq, void],
+	httpHandlerActionFuncNoResponse[TReq, void],
 ]
 
 type NoParamsNoResponseHandlerBuilder genericHandlerBuilder[
-	struct{},
-	struct{},
-	handlerActionFuncNoParamsNoResponse,
-	httpHandlerActionFuncNoParamsNoResponse,
+	void,
+	void,
+	handlerActionFuncNoParamsNoResponse[void, void],
+	httpHandlerActionFuncNoParamsNoResponse[void, void],
 ]
 
 type makeActionBuilderParams[
@@ -544,7 +547,7 @@ func newHandlerAdapter[
 func newHandlerAdapterNoParams[
 	TReq any,
 	TRes any,
-	THandler handlerActionFuncNoParams[TRes],
+	THandler handlerActionFuncNoParams[void, TRes],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
@@ -556,7 +559,7 @@ func newHandlerAdapterNoParams[
 func newHandlerAdapterNoResponse[
 	TReq any,
 	TRes any,
-	THandler handlerActionFuncNoResponse[TReq],
+	THandler handlerActionFuncNoResponse[TReq, void],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
@@ -572,7 +575,7 @@ func newHandlerAdapterNoResponse[
 func newHandlerAdapterNoParamsNoResponse[
 	TReq any,
 	TRes any,
-	THandler handlerActionFuncNoParamsNoResponse,
+	THandler handlerActionFuncNoParamsNoResponse[void, void],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
@@ -597,7 +600,7 @@ func newHTTPHandlerAdapter[
 func newHTTPHandlerAdapterNoParams[
 	TReq any,
 	TRes any,
-	THandler httpHandlerActionFuncNoParams[TRes],
+	THandler httpHandlerActionFuncNoParams[void, TRes],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
@@ -609,7 +612,7 @@ func newHTTPHandlerAdapterNoParams[
 func newHTTPHandlerAdapterNoResponse[
 	TReq any,
 	TRes any,
-	THandler httpHandlerActionFuncNoResponse[TReq],
+	THandler httpHandlerActionFuncNoResponse[TReq, void],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
@@ -625,7 +628,7 @@ func newHTTPHandlerAdapterNoResponse[
 func newHTTPHandlerAdapterNoParamsNoResponse[
 	TReq any,
 	TRes any,
-	THandler httpHandlerActionFuncNoParamsNoResponse,
+	THandler httpHandlerActionFuncNoParamsNoResponse[void, void],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -28,8 +27,8 @@ type behaviorNoParamsNoResponseIsolatedControllerBuilder struct {
 	BehaviorNoParamsNoResponse genericHandlerBuilder[
 		void,
 		void,
-		func(context.Context) (error),
-		func(http.ResponseWriter, *http.Request) (error),
+		handlerActionFuncNoParamsNoResponse[void, void],
+		httpHandlerActionFuncNoParamsNoResponse[void, void],
 	]
 }
 

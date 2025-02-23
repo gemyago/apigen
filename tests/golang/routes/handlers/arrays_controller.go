@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -86,8 +85,8 @@ type arraysControllerBuilder struct {
 	ArraysNullableRequiredValidation genericHandlerBuilder[
 		*ArraysArraysNullableRequiredValidationRequest,
 		void,
-		func(context.Context, *ArraysArraysNullableRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ArraysArraysNullableRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*ArraysArraysNullableRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*ArraysArraysNullableRequiredValidationRequest, void],
 	]
 
 	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
@@ -98,8 +97,8 @@ type arraysControllerBuilder struct {
 	ArraysRangeValidation genericHandlerBuilder[
 		*ArraysArraysRangeValidationRequest,
 		void,
-		func(context.Context, *ArraysArraysRangeValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ArraysArraysRangeValidationRequest) (error),
+		handlerActionFuncNoResponse[*ArraysArraysRangeValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*ArraysArraysRangeValidationRequest, void],
 	]
 
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
@@ -110,8 +109,8 @@ type arraysControllerBuilder struct {
 	ArraysRequiredValidation genericHandlerBuilder[
 		*ArraysArraysRequiredValidationRequest,
 		void,
-		func(context.Context, *ArraysArraysRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ArraysArraysRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*ArraysArraysRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*ArraysArraysRequiredValidationRequest, void],
 	]
 }
 

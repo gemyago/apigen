@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -108,8 +107,8 @@ type booleanControllerBuilder struct {
 	BooleanArrayItems genericHandlerBuilder[
 		*BooleanBooleanArrayItemsRequest,
 		void,
-		func(context.Context, *BooleanBooleanArrayItemsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BooleanBooleanArrayItemsRequest) (error),
+		handlerActionFuncNoResponse[*BooleanBooleanArrayItemsRequest, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanArrayItemsRequest, void],
 	]
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
@@ -120,8 +119,8 @@ type booleanControllerBuilder struct {
 	BooleanNullable genericHandlerBuilder[
 		*BooleanBooleanNullableRequest,
 		void,
-		func(context.Context, *BooleanBooleanNullableRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableRequest) (error),
+		handlerActionFuncNoResponse[*BooleanBooleanNullableRequest, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanNullableRequest, void],
 	]
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
@@ -132,8 +131,8 @@ type booleanControllerBuilder struct {
 	BooleanNullableArrayItems genericHandlerBuilder[
 		*BooleanBooleanNullableArrayItemsRequest,
 		void,
-		func(context.Context, *BooleanBooleanNullableArrayItemsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BooleanBooleanNullableArrayItemsRequest) (error),
+		handlerActionFuncNoResponse[*BooleanBooleanNullableArrayItemsRequest, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanNullableArrayItemsRequest, void],
 	]
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
@@ -144,8 +143,8 @@ type booleanControllerBuilder struct {
 	BooleanParsing genericHandlerBuilder[
 		*BooleanBooleanParsingRequest,
 		void,
-		func(context.Context, *BooleanBooleanParsingRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BooleanBooleanParsingRequest) (error),
+		handlerActionFuncNoResponse[*BooleanBooleanParsingRequest, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanParsingRequest, void],
 	]
 
 	// POST /boolean/required-validation
@@ -156,8 +155,8 @@ type booleanControllerBuilder struct {
 	BooleanRequiredValidation genericHandlerBuilder[
 		*BooleanBooleanRequiredValidationRequest,
 		void,
-		func(context.Context, *BooleanBooleanRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BooleanBooleanRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*BooleanBooleanRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanRequiredValidationRequest, void],
 	]
 }
 

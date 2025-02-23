@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -680,8 +679,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesArrayItemsRangeValidation genericHandlerBuilder[
 		*StringTypesStringTypesArrayItemsRangeValidationRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArrayItemsRangeValidationRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesArrayItemsRangeValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesArrayItemsRangeValidationRequest, void],
 	]
 
 	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -692,8 +691,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesArraysParsing genericHandlerBuilder[
 		*StringTypesStringTypesArraysParsingRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesArraysParsingRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesArraysParsingRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesArraysParsingRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesArraysParsingRequest, void],
 	]
 
 	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
@@ -704,8 +703,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesEnums genericHandlerBuilder[
 		*StringTypesStringTypesEnumsRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesEnumsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesEnumsRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesEnumsRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesEnumsRequest, void],
 	]
 
 	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -716,8 +715,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesNullableArrayItems genericHandlerBuilder[
 		*StringTypesStringTypesNullableArrayItemsRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesNullableArrayItemsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableArrayItemsRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesNullableArrayItemsRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableArrayItemsRequest, void],
 	]
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -728,8 +727,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesNullableParsing genericHandlerBuilder[
 		*StringTypesStringTypesNullableParsingRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesNullableParsingRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableParsingRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesNullableParsingRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableParsingRequest, void],
 	]
 
 	// POST /string-types/nullable-required-validation
@@ -740,8 +739,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesNullableRequiredValidation genericHandlerBuilder[
 		*StringTypesStringTypesNullableRequiredValidationRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesNullableRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesNullableRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableRequiredValidationRequest, void],
 	]
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -752,8 +751,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesParsing genericHandlerBuilder[
 		*StringTypesStringTypesParsingRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesParsingRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesParsingRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesParsingRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesParsingRequest, void],
 	]
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
@@ -764,8 +763,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesPatternValidation genericHandlerBuilder[
 		*StringTypesStringTypesPatternValidationRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesPatternValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesPatternValidationRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesPatternValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesPatternValidationRequest, void],
 	]
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
@@ -776,8 +775,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesRangeValidation genericHandlerBuilder[
 		*StringTypesStringTypesRangeValidationRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesRangeValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRangeValidationRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesRangeValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesRangeValidationRequest, void],
 	]
 
 	// POST /string-types/required-validation
@@ -788,8 +787,8 @@ type stringTypesControllerBuilder struct {
 	StringTypesRequiredValidation genericHandlerBuilder[
 		*StringTypesStringTypesRequiredValidationRequest,
 		void,
-		func(context.Context, *StringTypesStringTypesRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *StringTypesStringTypesRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*StringTypesStringTypesRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*StringTypesStringTypesRequiredValidationRequest, void],
 	]
 }
 
