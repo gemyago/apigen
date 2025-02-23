@@ -3,7 +3,6 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -45,8 +44,8 @@ type {{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder st
 	{{operationId}} genericHandlerBuilder[
 		{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
 		{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-		func(context.Context{{#hasParams}}, *{{>request-type}}{{/hasParams}}) ({{#returnType}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{.}}, {{/returnType}}error),
-		func(http.ResponseWriter, *http.Request{{#hasParams}}, *{{>request-type}}{{/hasParams}}) ({{#returnType}}{{^returnTypeIsPrimitive}}*{{/returnTypeIsPrimitive}}{{.}}, {{/returnType}}error),
+		handlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
+		httpHandlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
 	]{{^-last}}
 
 {{/-last}}{{/operation}}
