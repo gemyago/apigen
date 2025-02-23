@@ -366,6 +366,11 @@ func newRequestParamBinder[TRawVal any, TTargetVal any](
 	}
 }
 
+type universalActionHandlerFunc[
+	TReq any,
+	TRes any,
+] func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
+
 // actionHandlerFunc represents possible combination of action handler functions.
 // Each function can be with or without parameters and with or without response.
 // Additionally each function can have access to http objects for possible direct manipulation.
@@ -380,6 +385,37 @@ type actionHandlerFunc[TReq any, TRes any] interface {
 		func(http.ResponseWriter, *http.Request) (TRes, error) | // no params with response
 		func(http.ResponseWriter, *http.Request, TReq) error | // with params no response
 		func(http.ResponseWriter, *http.Request) error // no params no response
+}
+
+type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface {
+	TransformRequest(http.Request, TReq) (TAppReq, error)
+	TransformResponse(context.Context, TAppRes) (TRes, error)
+}
+
+// TransformBuilder can be considered as adapter layer that allows to transform
+// generated HTTP layer models to application layer models and vice versa.
+// Using this builder allows to keep controllers clean and declarative.
+// Usage of the builder is optional. If you prefer to handle the transformation
+// directly in the handler function, feel free to do so.
+func TransformBuilder[
+	TReq any,
+	TAppReq any,
+	TRes any,
+	TAppRes any,
+	TPlainHandler actionHandlerFunc[TReq, TRes],
+	THttpHandler actionHandlerFunc[TReq, TRes],
+	TAppPlainHandler actionHandlerFunc[TAppReq, TAppRes],
+	TAppHttpHandler actionHandlerFunc[TAppReq, TAppRes],
+](
+	builder genericHandlerBuilder[TReq, TRes, TPlainHandler, THttpHandler],
+	transformer handlerTransformer[TReq, TRes, TAppReq, TAppRes],
+) genericHandlerBuilder[
+	TAppReq,
+	TAppRes,
+	TAppPlainHandler,
+	TAppHttpHandler,
+] {
+	panic("not implemented")
 }
 
 type genericHandlerBuilder[
@@ -445,14 +481,14 @@ type actionBuilderHandlerAdapter[
 	TReq any,
 	TRes any,
 	THandler actionHandlerFunc[TReq, TRes],
-] func(THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error)
+] func(THandler) universalActionHandlerFunc[TReq, TRes]
 
 func newHandlerAdapter[
 	TReq any,
 	TRes any,
 	THandler func(context.Context, TReq) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
 			return t(r.Context(), req)
 		}
@@ -464,7 +500,7 @@ func newHandlerAdapterNoParams[
 	TRes any,
 	THandler func(context.Context) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			return t(r.Context())
 		}
@@ -476,7 +512,7 @@ func newHandlerAdapterNoResponse[
 	TRes any,
 	THandler func(context.Context, TReq) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
 			var emptyRes TRes
 			if err := t(r.Context(), req); err != nil {
@@ -492,7 +528,7 @@ func newHandlerAdapterNoParamsNoResponse[
 	TRes any,
 	THandler func(context.Context) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			var emptyRes TRes
 			return emptyRes, t(r.Context())
@@ -505,7 +541,7 @@ func newHTTPHandlerAdapter[
 	TRes any,
 	THandler func(http.ResponseWriter, *http.Request, TReq) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
 			return t(w, r, req)
 		}
@@ -517,7 +553,7 @@ func newHTTPHandlerAdapterNoParams[
 	TRes any,
 	THandler func(http.ResponseWriter, *http.Request) (TRes, error),
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			return t(w, r)
 		}
@@ -529,7 +565,7 @@ func newHTTPHandlerAdapterNoResponse[
 	TRes any,
 	THandler func(http.ResponseWriter, *http.Request, TReq) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
 			var emptyRes TRes
 			if err := t(w, r, req); err != nil {
@@ -545,7 +581,7 @@ func newHTTPHandlerAdapterNoParamsNoResponse[
 	TRes any,
 	THandler func(http.ResponseWriter, *http.Request) error,
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
-	return func(t THandler) func(http.ResponseWriter, *http.Request, TReq) (TRes, error) {
+	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(w http.ResponseWriter, r *http.Request, _ TReq) (TRes, error) {
 			var emptyRes TRes
 			return emptyRes, t(w, r)
@@ -601,7 +637,7 @@ type genericHandlerBuilderImpl[
 }
 
 func (ab genericHandlerBuilderImpl[TReq, TRes, TPlainHandler, THttpHandler]) createHandler(
-	handler func(http.ResponseWriter, *http.Request, TReq) (TRes, error),
+	handler universalActionHandlerFunc[TReq, TRes],
 ) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		aw := &actionsResponseWriter{
