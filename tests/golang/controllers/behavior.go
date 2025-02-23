@@ -55,19 +55,6 @@ func (c *behaviorController) BehaviorNoParamsWithResponse(
 	)
 }
 
-func (c *behaviorController) BehaviorNoParamsWithResponseV3(
-	builder handlers.NoParamsHandlerBuilder[*models.BehaviorNoParamsWithResponse202Response],
-) http.Handler {
-	if c.testActions.noParamsWithResponse.isHTTPAction {
-		return builder.HandleWithHTTP(
-			c.testActions.noParamsWithResponse.httpActionNoParamsWithResponse,
-		)
-	}
-	return builder.HandleWith(
-		c.testActions.noParamsWithResponse.actionNoParamsWithResponse,
-	)
-}
-
 func (c *behaviorController) BehaviorNoResponse(
 	builder handlers.NoResponseHandlerBuilder[*handlers.BehaviorBehaviorWithParamsNoResponseRequest],
 ) http.Handler {

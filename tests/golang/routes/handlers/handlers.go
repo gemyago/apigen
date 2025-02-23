@@ -398,72 +398,35 @@ type handlerActionFuncConstraint[TReq any, TRes any] interface {
 		httpHandlerActionFuncNoParamsNoResponse[void, void]
 }
 
-type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface {
+type handlerRequestTransformer[TReq any, TAppReq any] interface {
 	TransformRequest(http.Request, TReq) (TAppReq, error)
+}
+
+type handlerResponseTransformer[TRes any, TAppRes any] interface {
 	TransformResponse(context.Context, TAppRes) (TRes, error)
 }
 
-// TransformBuilder can be considered as adapter layer that allows to transform
-// generated HTTP layer models to application layer models and vice versa.
-// Using this builder allows to keep controllers clean and declarative.
-// Usage of the builder is optional. If you prefer to handle the transformation
-// directly in the handler function, feel free to do so.
-func TransformBuilder[
-	TReq any,
-	TAppReq any,
-	TRes any,
-	TAppRes any,
-	TPlainHandler handlerActionFuncConstraint[TReq, TRes],
-	THttpHandler handlerActionFuncConstraint[TReq, TRes],
-	TAppPlainHandler handlerActionFuncConstraint[TAppReq, TAppRes],
-	TAppHttpHandler handlerActionFuncConstraint[TAppReq, TAppRes],
+type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface {
+	handlerRequestTransformer[TReq, TAppReq]
+	handlerResponseTransformer[TRes, TAppRes]
+}
+
+// TransformAction can be used to transform generated action handler to satisfy
+// application layer implementation. Use it to reduce boilerplate code in the
+// controller layer and keep controller slim and declarative.
+func TransformAction[
+	TRecGenerated any,
+	TReqApplication any,
+	TResGenerated any,
+	TResApplication any,
+	TActionGenerated func(context.Context, TRecGenerated) (TResGenerated, error),
+	TActionApplication func(context.Context, TReqApplication) (TResApplication, error),
 ](
-	builder genericHandlerBuilder[TReq, TRes, TPlainHandler, THttpHandler],
-	transformer handlerTransformer[TReq, TRes, TAppReq, TAppRes],
-) genericHandlerBuilder[
-	TAppReq,
-	TAppRes,
-	TAppPlainHandler,
-	TAppHttpHandler,
-] {
+	_ TActionApplication,
+	_ handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
+) TActionGenerated {
 	panic("not implemented")
 }
-
-type genericHandlerBuilderV2[
-	TReq any,
-	TRes any,
-	TPlainHandler handlerActionFuncConstraint[TReq, TRes],
-	THttpHandler handlerActionFuncConstraint[TReq, TRes],
-] interface {
-	// HandleWith creates a new http.Handler from a given func.
-	//
-	// The action handler is not supposed to have access to http objects and
-	// in most scenarios can just delegate the work to the application logic layer.
-	// If you need access to http objects use HandleWithHTTP
-	HandleWith(TPlainHandler) http.Handler
-
-	// HandleWithHTTP creates a new http.Handler from a given func.
-	//
-	// The action handler allows direct access to http.ResponseWriter and *http.Request.
-	// It also provides parsed request parameters and allows sending structured response.
-	// If you need fully customized behavior, feel free not to use the builder and
-	// return the handler directly.
-	HandleWithHTTP(THttpHandler) http.Handler
-}
-
-type HandlerBuilderV2[TReq any, TRes any] genericHandlerBuilderV2[
-	TReq,
-	TRes,
-	handlerActionFunc[TReq, TRes],
-	httpHandlerActionFunc[TReq, TRes],
-]
-
-type NoParamsHandlerBuilderV2[TRes any] genericHandlerBuilderV2[
-	void,
-	TRes,
-	handlerActionFuncNoParams[void, TRes],
-	httpHandlerActionFuncNoParams[void, TRes],
-]
 
 type genericHandlerBuilder[
 	TReq any,
