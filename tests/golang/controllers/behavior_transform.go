@@ -35,9 +35,10 @@ type behaviorControllerTransform struct {
 }
 
 type behaviorWithParamsAndResponseTransformer struct {
-	lastReqProvided bool
-	lastCtxProvided bool
-	nextErr         error
+	lastReqProvided          bool
+	lastCtxProvided          bool
+	nextTransformRequestErr  error
+	nextTransformResponseErr error
 }
 
 func (t *behaviorWithParamsAndResponseTransformer) TransformRequest(
@@ -45,7 +46,7 @@ func (t *behaviorWithParamsAndResponseTransformer) TransformRequest(
 	params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
 ) (*transformedBehaviorBehaviorWithParamsAndResponseRequest, error) {
 	t.lastReqProvided = req != nil
-	return (*transformedBehaviorBehaviorWithParamsAndResponseRequest)(params), t.nextErr
+	return (*transformedBehaviorBehaviorWithParamsAndResponseRequest)(params), t.nextTransformRequestErr
 }
 
 func (t *behaviorWithParamsAndResponseTransformer) TransformResponse(
@@ -53,7 +54,7 @@ func (t *behaviorWithParamsAndResponseTransformer) TransformResponse(
 	res *transformedBehaviorWithParamsAndResponseResponseBody,
 ) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
 	t.lastCtxProvided = ctx != nil
-	return (*models.BehaviorWithParamsAndResponseResponseBody)(res), t.nextErr
+	return (*models.BehaviorWithParamsAndResponseResponseBody)(res), t.nextTransformResponseErr
 }
 
 func (c *behaviorControllerTransform) BehaviorNoParamsWithResponse(

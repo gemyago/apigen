@@ -176,13 +176,32 @@ func TestBehaviorTransform(t *testing.T) {
 			}
 		})
 
-		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+		runRouteTestCase(t, "should fail if req transformation fails", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodPost,
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
 				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.withParamsAndResponse.nextError = errors.New(fake.Lorem().Word())
+					testActions.behaviorWithParamsAndResponseTransformer.nextTransformRequestErr = errors.New(fake.Lorem().Word())
+					return testActions
+				},
+				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
+					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
+						return
+					}
+
+					assert.Empty(t, testActions.withParamsAndResponse.calls)
+				},
+			}
+		})
+
+		runRouteTestCase(t, "should fail if res transformation fails", setupRouter, func() testCase {
+			return testCase{
+				method: http.MethodPost,
+				path:   "/behavior/with-params-and-response",
+				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
+				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
+					testActions.behaviorWithParamsAndResponseTransformer.nextTransformResponseErr = errors.New(fake.Lorem().Word())
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
