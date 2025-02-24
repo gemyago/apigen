@@ -1,13 +1,15 @@
-# apigen
+# apigen - Frictionless API generator
 
 [![Test](https://github.com/gemyago/apigen/actions/workflows/test.yml/badge.svg)](https://github.com/gemyago/apigen/actions/workflows/test.yml)
 [![Golang Coverage](https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.svg)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.html)
 
-API Layer Generator from the OpenAPI specification.
+HTTP API Layer Generator for the Go (golang) projects. Write less boilerplate code, focus on the business logic.
 
-This project is using the [OpenAPI Generator](https://github.com/openapitools/openapi-generator) and provides a set of plugins for it. Primary target is a golang, however other languages to be considered in the future.
-
-Project status: **alpha**.
+Features:
+* OpenAPI first approach. Write the spec and generate the code.
+* No runtime dependencies. Generated code is self-contained.
+* No reflection. Code to parse and validate requests is fully generated.
+* Framework agnostic and [http.Handler](https://pkg.go.dev/net/http#Handler) compatible. Use any http router or middleware.
 
 ## TODOs
 
