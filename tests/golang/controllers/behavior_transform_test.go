@@ -169,6 +169,9 @@ func TestBehaviorTransform(t *testing.T) {
 						(*transformedBehaviorWithParamsAndResponseResponseBody)(wantResponse),
 						testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body),
 					)
+
+					assert.True(t, testActions.behaviorWithParamsAndResponseTransformer.lastReqProvided)
+					assert.True(t, testActions.behaviorWithParamsAndResponseTransformer.lastCtxProvided)
 				},
 			}
 		})
