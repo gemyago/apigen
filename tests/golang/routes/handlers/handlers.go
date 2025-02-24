@@ -418,17 +418,17 @@ type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface 
 // Please note that the TransformAction is tightly coupled with the generated code
 // and should not be used outside of the controller layer.
 func TransformAction[
-	TRecGenerated any,
+	TReqGenerated any,
 	TReqApplication any,
 	TResGenerated any,
 	TResApplication any,
-	TActionGenerated func(context.Context, TRecGenerated) (TResGenerated, error),
+	TActionGenerated func(context.Context, TReqGenerated) (TResGenerated, error),
 	TActionApplication func(context.Context, TReqApplication) (TResApplication, error),
 ](
 	appAction TActionApplication,
-	transformer handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
+	transformer handlerTransformer[TReqGenerated, TResGenerated, TReqApplication, TResApplication],
 ) TActionGenerated {
-	return func(ctx context.Context, rec TRecGenerated) (TResGenerated, error) {
+	return func(ctx context.Context, rec TReqGenerated) (TResGenerated, error) {
 		var emptyRes TResGenerated
 		contextualReq, ok := ctx.(contextualRequest)
 		if !ok {
@@ -440,6 +440,27 @@ func TransformAction[
 			return emptyRes, err
 		}
 		res, err := appAction(ctx, req)
+		if err != nil {
+			return emptyRes, err
+		}
+		return transformer.TransformResponse(ctx, res)
+	}
+}
+
+// TransformActionNoParams is a variation of TransformAction for actions without parameters.
+// Please see the TransformAction for more details.
+func TransformActionNoParams[
+	TResGenerated any,
+	TResApplication any,
+	TActionGenerated func(context.Context) (TResGenerated, error),
+	TActionApplication func(context.Context) (TResApplication, error),
+](
+	appAction TActionApplication,
+	transformer handlerResponseTransformer[TResGenerated, TResApplication],
+) TActionGenerated {
+	return func(ctx context.Context) (TResGenerated, error) {
+		var emptyRes TResGenerated
+		res, err := appAction(ctx)
 		if err != nil {
 			return emptyRes, err
 		}

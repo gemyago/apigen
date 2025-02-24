@@ -8,7 +8,7 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
-type transformedBehaviorNoParamsWithResponse202Response = models.BehaviorNoParamsWithResponse202Response
+type transformedBehaviorNoParamsWithResponse202Response models.BehaviorNoParamsWithResponse202Response
 type transformedBehaviorBehaviorWithParamsNoResponseRequest = handlers.BehaviorBehaviorWithParamsNoResponseRequest
 type transformedBehaviorBehaviorWithParamsAndResponseRequest handlers.BehaviorBehaviorWithParamsAndResponseRequest
 type transformedBehaviorWithParamsAndResponseResponseBody models.BehaviorWithParamsAndResponseResponseBody
@@ -26,6 +26,7 @@ type behaviorControllerTransformTestActions struct {
 		*transformedBehaviorBehaviorWithParamsAndResponseRequest,
 		*transformedBehaviorWithParamsAndResponseResponseBody,
 	]
+	behaviorNoParamsWithResponseTransformer
 	behaviorWithParamsAndResponseTransformer
 }
 
@@ -57,12 +58,26 @@ func (t *behaviorWithParamsAndResponseTransformer) TransformResponse(
 	return (*models.BehaviorWithParamsAndResponseResponseBody)(res), t.nextTransformResponseErr
 }
 
+type behaviorNoParamsWithResponseTransformer struct {
+	lastCtxProvided          bool
+	nextTransformResponseErr error
+}
+
+func (t *behaviorNoParamsWithResponseTransformer) TransformResponse(
+	ctx context.Context,
+	res *transformedBehaviorNoParamsWithResponse202Response,
+) (*models.BehaviorNoParamsWithResponse202Response, error) {
+	t.lastCtxProvided = ctx != nil
+	return (*models.BehaviorNoParamsWithResponse202Response)(res), t.nextTransformResponseErr
+}
+
 func (c *behaviorControllerTransform) BehaviorNoParamsWithResponse(
 	builder handlers.NoParamsHandlerBuilder[*models.BehaviorNoParamsWithResponse202Response],
 ) http.Handler {
-	return builder.HandleWith(
+	return builder.HandleWith(handlers.TransformActionNoParams(
 		c.testActions.noParamsWithResponse.actionNoParamsWithResponse,
-	)
+		&c.testActions.behaviorNoParamsWithResponseTransformer,
+	))
 }
 
 func (c *behaviorControllerTransform) BehaviorWithParamsAndResponse(

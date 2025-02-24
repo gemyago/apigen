@@ -11,6 +11,7 @@ import (
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestBehaviorTransform(t *testing.T) {
@@ -43,32 +44,32 @@ func TestBehaviorTransform(t *testing.T) {
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
 				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.noParamsWithResponse.nextResult = wantResponse
+					testActions.noParamsWithResponse.nextResult = (*transformedBehaviorNoParamsWithResponse202Response)(wantResponse)
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
-						return
-					}
-
+					require.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body)
 					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
-					assert.Equal(t, wantResponse, testActions.noParamsWithResponse.unmarshalResult(t, recorder.Body))
+					assert.Equal(t,
+						wantResponse,
+						(*models.BehaviorNoParamsWithResponse202Response)(
+							testActions.noParamsWithResponse.unmarshalResult(t, recorder.Body),
+						),
+					)
 				},
 			}
 		})
 
-		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
+		runRouteTestCase(t, "should fail if res transformation fails", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/no-params-with-response",
 				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.noParamsWithResponse.nextError = errors.New(fake.Lorem().Word())
+					testActions.behaviorNoParamsWithResponseTransformer.nextTransformResponseErr = errors.New(fake.Lorem().Word())
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
-						return
-					}
+					require.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body)
 
 					assert.Len(t, testActions.noParamsWithResponse.calls, 1)
 				},
