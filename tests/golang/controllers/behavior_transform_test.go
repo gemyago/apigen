@@ -149,7 +149,8 @@ func TestBehaviorTransform(t *testing.T) {
 				path:   "/behavior/with-params-and-response",
 				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
 				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.withParamsAndResponse.nextResult = wantResponse
+					testActions.withParamsAndResponse.nextResult =
+						(*transformedBehaviorWithParamsAndResponseResponseBody)(wantResponse)
 					return testActions
 				},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
@@ -158,8 +159,16 @@ func TestBehaviorTransform(t *testing.T) {
 					}
 
 					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
-					assert.Equal(t, wantParams, testActions.withParamsAndResponse.calls[0].params)
-					assert.Equal(t, wantResponse, testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body))
+					assert.Equal(t,
+						wantParams,
+						(*handlers.BehaviorBehaviorWithParamsAndResponseRequest)(
+							testActions.withParamsAndResponse.calls[0].params,
+						),
+					)
+					assert.Equal(t,
+						(*transformedBehaviorWithParamsAndResponseResponseBody)(wantResponse),
+						testActions.withParamsAndResponse.unmarshalResult(t, recorder.Body),
+					)
 				},
 			}
 		})

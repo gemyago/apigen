@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
@@ -9,8 +10,8 @@ import (
 
 type transformedBehaviorNoParamsWithResponse202Response = models.BehaviorNoParamsWithResponse202Response
 type transformedBehaviorBehaviorWithParamsNoResponseRequest = handlers.BehaviorBehaviorWithParamsNoResponseRequest
-type transformedBehaviorBehaviorWithParamsAndResponseRequest = handlers.BehaviorBehaviorWithParamsAndResponseRequest
-type transformedBehaviorWithParamsAndResponseResponseBody = models.BehaviorWithParamsAndResponseResponseBody
+type transformedBehaviorBehaviorWithParamsAndResponseRequest handlers.BehaviorBehaviorWithParamsAndResponseRequest
+type transformedBehaviorWithParamsAndResponseResponseBody models.BehaviorWithParamsAndResponseResponseBody
 
 type behaviorControllerTransformTestActions struct {
 	noParamsWithResponse mockActionV2[
@@ -32,6 +33,22 @@ type behaviorControllerTransform struct {
 	testActions   *behaviorControllerTransformTestActions
 }
 
+type behaviorWithParamsAndResponseTransformer struct{}
+
+func (behaviorWithParamsAndResponseTransformer) TransformRequest(
+	req *http.Request,
+	params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+) (*transformedBehaviorBehaviorWithParamsAndResponseRequest, error) {
+	return (*transformedBehaviorBehaviorWithParamsAndResponseRequest)(params), nil
+}
+
+func (behaviorWithParamsAndResponseTransformer) TransformResponse(
+	_ context.Context,
+	res *transformedBehaviorWithParamsAndResponseResponseBody,
+) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
+	return (*models.BehaviorWithParamsAndResponseResponseBody)(res), nil
+}
+
 func (c *behaviorControllerTransform) BehaviorNoParamsWithResponse(
 	builder handlers.NoParamsHandlerBuilder[*models.BehaviorNoParamsWithResponse202Response],
 ) http.Handler {
@@ -47,7 +64,10 @@ func (c *behaviorControllerTransform) BehaviorWithParamsAndResponse(
 	],
 ) http.Handler {
 	return builder.HandleWith(
-		c.testActions.withParamsAndResponse.action,
+		handlers.TransformAction(
+			c.testActions.withParamsAndResponse.action,
+			behaviorWithParamsAndResponseTransformer{},
+		),
 	)
 }
 
