@@ -426,7 +426,7 @@ func TransformAction[
 	TActionApplication func(context.Context, TReqApplication) (TResApplication, error),
 ](
 	appAction TActionApplication,
-	transformed handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
+	transformer handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
 ) TActionGenerated {
 	return func(ctx context.Context, rec TRecGenerated) (TResGenerated, error) {
 		var emptyRes TResGenerated
@@ -435,7 +435,7 @@ func TransformAction[
 			return emptyRes, errors.New("could not obtain http.Request during request params transformation")
 		}
 
-		req, err := transformed.TransformRequest(contextualReq.req, rec)
+		req, err := transformer.TransformRequest(contextualReq.req, rec)
 		if err != nil {
 			return emptyRes, err
 		}
@@ -443,7 +443,7 @@ func TransformAction[
 		if err != nil {
 			return emptyRes, err
 		}
-		return transformed.TransformResponse(ctx, res)
+		return transformer.TransformResponse(ctx, res)
 	}
 }
 
