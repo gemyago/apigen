@@ -426,8 +426,8 @@ func TransformAction[
 	TReqApplication any,
 	TResGenerated any,
 	TResApplication any,
-	TActionGenerated func(context.Context, TReqGenerated) (TResGenerated, error),
-	TActionApplication func(context.Context, TReqApplication) (TResApplication, error),
+	TActionGenerated handlerActionFunc[TReqGenerated, TResGenerated],
+	TActionApplication handlerActionFunc[TReqApplication, TResApplication],
 ](
 	appAction TActionApplication,
 	transformer handlerTransformer[TReqGenerated, TResGenerated, TReqApplication, TResApplication],
@@ -456,8 +456,8 @@ func TransformAction[
 func TransformNoParamsAction[
 	TResGenerated any,
 	TResApplication any,
-	TActionGenerated func(context.Context) (TResGenerated, error),
-	TActionApplication func(context.Context) (TResApplication, error),
+	TActionGenerated handlerActionFuncNoParams[void, TResGenerated],
+	TActionApplication handlerActionFuncNoParams[void, TResApplication],
 ](
 	appAction TActionApplication,
 	transformer handlerResponseTransformer[TResGenerated, TResApplication],
@@ -477,8 +477,8 @@ func TransformNoParamsAction[
 func TransformNoResponseAction[
 	TReqGenerated any,
 	TReqApplication any,
-	TActionGenerated func(context.Context, TReqGenerated) error,
-	TActionApplication func(context.Context, TReqApplication) error,
+	TActionGenerated handlerActionFuncNoResponse[TReqGenerated, void],
+	TActionApplication handlerActionFuncNoResponse[TReqApplication, void],
 ](
 	appAction TActionApplication,
 	transformer handlerRequestTransformer[TReqGenerated, TReqApplication],
