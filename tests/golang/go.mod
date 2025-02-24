@@ -1,6 +1,6 @@
 module github.com/gemyago/apigen/tests/golang
 
-go 1.23
+go 1.24
 
 require (
 	github.com/jaswdr/faker v1.19.1

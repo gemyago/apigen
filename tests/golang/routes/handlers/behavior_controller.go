@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -54,8 +53,8 @@ type behaviorControllerBuilder struct {
 	BehaviorNoParamsNoResponse genericHandlerBuilder[
 		void,
 		void,
-		func(context.Context) (error),
-		func(http.ResponseWriter, *http.Request) (error),
+		handlerActionFuncNoParamsNoResponse[void, void],
+		httpHandlerActionFuncNoParamsNoResponse[void, void],
 	]
 
 	// GET /behavior/no-params-with-response
@@ -66,8 +65,8 @@ type behaviorControllerBuilder struct {
 	BehaviorNoParamsWithResponse genericHandlerBuilder[
 		void,
 		*BehaviorNoParamsWithResponse202Response,
-		func(context.Context) (*BehaviorNoParamsWithResponse202Response, error),
-		func(http.ResponseWriter, *http.Request) (*BehaviorNoParamsWithResponse202Response, error),
+		handlerActionFuncNoParams[void, *BehaviorNoParamsWithResponse202Response],
+		httpHandlerActionFuncNoParams[void, *BehaviorNoParamsWithResponse202Response],
 	]
 
 	// GET /behavior/no-status-defined
@@ -78,8 +77,8 @@ type behaviorControllerBuilder struct {
 	BehaviorNoStatusDefined genericHandlerBuilder[
 		void,
 		void,
-		func(context.Context) (error),
-		func(http.ResponseWriter, *http.Request) (error),
+		handlerActionFuncNoParamsNoResponse[void, void],
+		httpHandlerActionFuncNoParamsNoResponse[void, void],
 	]
 
 	// POST /behavior/with-params-and-response
@@ -90,8 +89,8 @@ type behaviorControllerBuilder struct {
 	BehaviorWithParamsAndResponse genericHandlerBuilder[
 		*BehaviorBehaviorWithParamsAndResponseRequest,
 		*BehaviorWithParamsAndResponseResponseBody,
-		func(context.Context, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
-		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsAndResponseRequest) (*BehaviorWithParamsAndResponseResponseBody, error),
+		handlerActionFunc[*BehaviorBehaviorWithParamsAndResponseRequest, *BehaviorWithParamsAndResponseResponseBody],
+		httpHandlerActionFunc[*BehaviorBehaviorWithParamsAndResponseRequest, *BehaviorWithParamsAndResponseResponseBody],
 	]
 
 	// GET /behavior/with-params-no-response
@@ -102,8 +101,8 @@ type behaviorControllerBuilder struct {
 	BehaviorWithParamsNoResponse genericHandlerBuilder[
 		*BehaviorBehaviorWithParamsNoResponseRequest,
 		void,
-		func(context.Context, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
-		func(http.ResponseWriter, *http.Request, *BehaviorBehaviorWithParamsNoResponseRequest) (error),
+		handlerActionFuncNoResponse[*BehaviorBehaviorWithParamsNoResponseRequest, void],
+		httpHandlerActionFuncNoResponse[*BehaviorBehaviorWithParamsNoResponseRequest, void],
 	]
 
 	// POST /behavior/with-status-defined
@@ -114,8 +113,8 @@ type behaviorControllerBuilder struct {
 	BehaviorWithStatusDefined genericHandlerBuilder[
 		void,
 		void,
-		func(context.Context) (error),
-		func(http.ResponseWriter, *http.Request) (error),
+		handlerActionFuncNoParamsNoResponse[void, void],
+		httpHandlerActionFuncNoParamsNoResponse[void, void],
 	]
 }
 

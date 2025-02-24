@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -44,8 +43,8 @@ type behaviorIDNamesControllerBuilder struct {
 	BehaviorNamesWithID genericHandlerBuilder[
 		*BehaviorIDNamesBehaviorNamesWithIDRequest,
 		*BehaviorNamesWithIDData,
-		func(context.Context, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIDData, error),
-		func(http.ResponseWriter, *http.Request, *BehaviorIDNamesBehaviorNamesWithIDRequest) (*BehaviorNamesWithIDData, error),
+		handlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDRequest, *BehaviorNamesWithIDData],
+		httpHandlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDRequest, *BehaviorNamesWithIDData],
 	]
 }
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -250,8 +249,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesArrayItems genericHandlerBuilder[
 		*NumericTypesNumericTypesArrayItemsRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesArrayItemsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesArrayItemsRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesArrayItemsRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesArrayItemsRequest, void],
 	]
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -262,8 +261,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesNullable genericHandlerBuilder[
 		*NumericTypesNumericTypesNullableRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesNullableRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesNullableRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesNullableRequest, void],
 	]
 
 	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -274,8 +273,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesNullableArrayItems genericHandlerBuilder[
 		*NumericTypesNumericTypesNullableArrayItemsRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesNullableArrayItemsRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesNullableArrayItemsRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesNullableArrayItemsRequest, void],
 	]
 
 	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -286,8 +285,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesParsing genericHandlerBuilder[
 		*NumericTypesNumericTypesParsingRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesParsingRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesParsingRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesParsingRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesParsingRequest, void],
 	]
 
 	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -298,8 +297,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesRangeValidation genericHandlerBuilder[
 		*NumericTypesNumericTypesRangeValidationRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesRangeValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationRequest, void],
 	]
 
 	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
@@ -310,8 +309,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesRangeValidationExclusive genericHandlerBuilder[
 		*NumericTypesNumericTypesRangeValidationExclusiveRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRangeValidationExclusiveRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationExclusiveRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationExclusiveRequest, void],
 	]
 
 	// GET /numeric-types/required-validation
@@ -322,8 +321,8 @@ type numericTypesControllerBuilder struct {
 	NumericTypesRequiredValidation genericHandlerBuilder[
 		*NumericTypesNumericTypesRequiredValidationRequest,
 		void,
-		func(context.Context, *NumericTypesNumericTypesRequiredValidationRequest) (error),
-		func(http.ResponseWriter, *http.Request, *NumericTypesNumericTypesRequiredValidationRequest) (error),
+		handlerActionFuncNoResponse[*NumericTypesNumericTypesRequiredValidationRequest, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRequiredValidationRequest, void],
 	]
 }
 

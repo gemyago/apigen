@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -90,8 +89,8 @@ type objectsControllerBuilder struct {
 	ObjectsArrayBodyDirect genericHandlerBuilder[
 		*ObjectsObjectsArrayBodyDirectRequest,
 		void,
-		func(context.Context, *ObjectsObjectsArrayBodyDirectRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyDirectRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsArrayBodyDirectRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsArrayBodyDirectRequest, void],
 	]
 
 	// PUT /objects/arrays
@@ -102,8 +101,8 @@ type objectsControllerBuilder struct {
 	ObjectsArrayBodyNested genericHandlerBuilder[
 		*ObjectsObjectsArrayBodyNestedRequest,
 		void,
-		func(context.Context, *ObjectsObjectsArrayBodyNestedRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsArrayBodyNestedRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsArrayBodyNestedRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsArrayBodyNestedRequest, void],
 	]
 
 	// POST /objects/deeply-nested
@@ -114,8 +113,8 @@ type objectsControllerBuilder struct {
 	ObjectsDeeplyNested genericHandlerBuilder[
 		*ObjectsObjectsDeeplyNestedRequest,
 		void,
-		func(context.Context, *ObjectsObjectsDeeplyNestedRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsDeeplyNestedRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsDeeplyNestedRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsDeeplyNestedRequest, void],
 	]
 
 	// PUT /objects/nullable-body
@@ -126,8 +125,8 @@ type objectsControllerBuilder struct {
 	ObjectsNullableOptionalBody genericHandlerBuilder[
 		*ObjectsObjectsNullableOptionalBodyRequest,
 		void,
-		func(context.Context, *ObjectsObjectsNullableOptionalBodyRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableOptionalBodyRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsNullableOptionalBodyRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsNullableOptionalBodyRequest, void],
 	]
 
 	// POST /objects/nullable-body
@@ -138,8 +137,8 @@ type objectsControllerBuilder struct {
 	ObjectsNullableRequiredBody genericHandlerBuilder[
 		*ObjectsObjectsNullableRequiredBodyRequest,
 		void,
-		func(context.Context, *ObjectsObjectsNullableRequiredBodyRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsNullableRequiredBodyRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsNullableRequiredBodyRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsNullableRequiredBodyRequest, void],
 	]
 
 	// PUT /objects/required-body
@@ -150,8 +149,8 @@ type objectsControllerBuilder struct {
 	ObjectsOptionalBody genericHandlerBuilder[
 		*ObjectsObjectsOptionalBodyRequest,
 		void,
-		func(context.Context, *ObjectsObjectsOptionalBodyRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsOptionalBodyRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsOptionalBodyRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsOptionalBodyRequest, void],
 	]
 
 	// POST /objects/required-body
@@ -162,8 +161,8 @@ type objectsControllerBuilder struct {
 	ObjectsRequiredBody genericHandlerBuilder[
 		*ObjectsObjectsRequiredBodyRequest,
 		void,
-		func(context.Context, *ObjectsObjectsRequiredBodyRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredBodyRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsRequiredBodyRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsRequiredBodyRequest, void],
 	]
 
 	// POST /objects/required-nested-objects
@@ -174,8 +173,8 @@ type objectsControllerBuilder struct {
 	ObjectsRequiredNestedObjects genericHandlerBuilder[
 		*ObjectsObjectsRequiredNestedObjectsRequest,
 		void,
-		func(context.Context, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
-		func(http.ResponseWriter, *http.Request, *ObjectsObjectsRequiredNestedObjectsRequest) (error),
+		handlerActionFuncNoResponse[*ObjectsObjectsRequiredNestedObjectsRequest, void],
+		httpHandlerActionFuncNoResponse[*ObjectsObjectsRequiredNestedObjectsRequest, void],
 	]
 }
 
