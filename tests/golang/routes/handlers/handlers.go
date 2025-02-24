@@ -415,6 +415,10 @@ type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface 
 // application layer implementation. Use it to reduce boilerplate code in the
 // controller layer and keep controller slim and declarative.
 //
+// Errors produced during request or response transformation will be handled with
+// action error handler. You can customize error handling using WithActionErrorHandler option
+// when initializing RootHandler with NewRootHandler method.
+//
 // Please note that the TransformAction is tightly coupled with the generated code
 // and should not be used outside of the controller layer.
 func TransformAction[
