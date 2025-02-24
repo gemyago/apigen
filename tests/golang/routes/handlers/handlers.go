@@ -399,7 +399,7 @@ type handlerActionFuncConstraint[TReq any, TRes any] interface {
 }
 
 type handlerRequestTransformer[TReq any, TAppReq any] interface {
-	TransformRequest(http.Request, TReq) (TAppReq, error)
+	TransformRequest(*http.Request, TReq) (TAppReq, error)
 }
 
 type handlerResponseTransformer[TRes any, TAppRes any] interface {
@@ -414,6 +414,9 @@ type handlerTransformer[TReq any, TRes any, TAppReq any, TAppRes any] interface 
 // TransformAction can be used to transform generated action handler to satisfy
 // application layer implementation. Use it to reduce boilerplate code in the
 // controller layer and keep controller slim and declarative.
+//
+// Please note that the TransformAction is tightly coupled with the generated code
+// and should not be used outside of the controller layer.
 func TransformAction[
 	TRecGenerated any,
 	TReqApplication any,
@@ -422,10 +425,26 @@ func TransformAction[
 	TActionGenerated func(context.Context, TRecGenerated) (TResGenerated, error),
 	TActionApplication func(context.Context, TReqApplication) (TResApplication, error),
 ](
-	_ TActionApplication,
-	_ handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
+	appAction TActionApplication,
+	transformed handlerTransformer[TRecGenerated, TResGenerated, TReqApplication, TResApplication],
 ) TActionGenerated {
-	panic("not implemented")
+	return func(ctx context.Context, rec TRecGenerated) (TResGenerated, error) {
+		var emptyRes TResGenerated
+		contextualReq, ok := ctx.(contextualRequest)
+		if !ok {
+			return emptyRes, errors.New("could not obtain http.Request during request params transformation")
+		}
+
+		req, err := transformed.TransformRequest(contextualReq.req, rec)
+		if err != nil {
+			return emptyRes, err
+		}
+		res, err := appAction(ctx, req)
+		if err != nil {
+			return emptyRes, err
+		}
+		return transformed.TransformResponse(ctx, res)
+	}
 }
 
 type genericHandlerBuilder[
@@ -493,14 +512,36 @@ type actionBuilderHandlerAdapter[
 	THandler handlerActionFuncConstraint[TReq, TRes],
 ] func(THandler) universalActionHandlerFunc[TReq, TRes]
 
+// Allows accessing underlying http.Request in certain scenarios (transformers)
+// where just context is available but http.Request is needed.
+type contextualRequest struct{ req *http.Request }
+
+func (cr contextualRequest) Deadline() (time.Time, bool) {
+	return cr.req.Context().Deadline()
+}
+
+func (cr contextualRequest) Done() <-chan struct{} {
+	return cr.req.Context().Done()
+}
+
+func (cr contextualRequest) Err() error {
+	return cr.req.Context().Err()
+}
+
+func (cr contextualRequest) Value(key any) any {
+	return cr.req.Context().Value(key)
+}
+
+var _ context.Context = (*contextualRequest)(nil)
+
 func newHandlerAdapter[
 	TReq any,
 	TRes any,
 	THandler handlerActionFunc[TReq, TRes],
 ]() actionBuilderHandlerAdapter[TReq, TRes, THandler] {
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
-		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
-			return t(r.Context(), req)
+		return func(_ http.ResponseWriter, httpReq *http.Request, req TReq) (TRes, error) {
+			return t(contextualRequest{req: httpReq}, req)
 		}
 	}
 }
