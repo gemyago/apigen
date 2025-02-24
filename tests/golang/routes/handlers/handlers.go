@@ -447,9 +447,9 @@ func TransformAction[
 	}
 }
 
-// TransformActionNoParams is a variation of TransformAction for actions without parameters.
+// TransformNoParamsAction is a variation of TransformAction for actions without parameters.
 // Please see the TransformAction for more details.
-func TransformActionNoParams[
+func TransformNoParamsAction[
 	TResGenerated any,
 	TResApplication any,
 	TActionGenerated func(context.Context) (TResGenerated, error),
@@ -465,6 +465,31 @@ func TransformActionNoParams[
 			return emptyRes, err
 		}
 		return transformer.TransformResponse(ctx, res)
+	}
+}
+
+// TransformNoResponseAction is a variation of TransformAction for actions without response body.
+// Please see the TransformAction for more details.
+func TransformNoResponseAction[
+	TReqGenerated any,
+	TReqApplication any,
+	TActionGenerated func(context.Context, TReqGenerated) error,
+	TActionApplication func(context.Context, TReqApplication) error,
+](
+	appAction TActionApplication,
+	transformer handlerRequestTransformer[TReqGenerated, TReqApplication],
+) TActionGenerated {
+	return func(ctx context.Context, rec TReqGenerated) error {
+		contextualReq, ok := ctx.(contextualRequest)
+		if !ok {
+			return errors.New("could not obtain http.Request during request params transformation")
+		}
+
+		req, err := transformer.TransformRequest(contextualReq.req, rec)
+		if err != nil {
+			return err
+		}
+		return appAction(ctx, req)
 	}
 }
 
@@ -587,7 +612,7 @@ func newHandlerAdapterNoResponse[
 	return func(t THandler) universalActionHandlerFunc[TReq, TRes] {
 		return func(_ http.ResponseWriter, r *http.Request, req TReq) (TRes, error) {
 			var emptyRes TRes
-			if err := t(r.Context(), req); err != nil {
+			if err := t(contextualRequest{req: r}, req); err != nil {
 				return emptyRes, err
 			}
 			return emptyRes, nil

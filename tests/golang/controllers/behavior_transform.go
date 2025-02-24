@@ -9,7 +9,7 @@ import (
 )
 
 type transformedBehaviorNoParamsWithResponse202Response models.BehaviorNoParamsWithResponse202Response
-type transformedBehaviorBehaviorWithParamsNoResponseRequest = handlers.BehaviorBehaviorWithParamsNoResponseRequest
+type transformedBehaviorBehaviorWithParamsNoResponseRequest handlers.BehaviorBehaviorWithParamsNoResponseRequest
 type transformedBehaviorBehaviorWithParamsAndResponseRequest handlers.BehaviorBehaviorWithParamsAndResponseRequest
 type transformedBehaviorWithParamsAndResponseResponseBody models.BehaviorWithParamsAndResponseResponseBody
 
@@ -28,6 +28,7 @@ type behaviorControllerTransformTestActions struct {
 	]
 	behaviorNoParamsWithResponseTransformer
 	behaviorWithParamsAndResponseTransformer
+	behaviorWithParamsNoResponseTransformer
 }
 
 type behaviorControllerTransform struct {
@@ -71,10 +72,23 @@ func (t *behaviorNoParamsWithResponseTransformer) TransformResponse(
 	return (*models.BehaviorNoParamsWithResponse202Response)(res), t.nextTransformResponseErr
 }
 
+type behaviorWithParamsNoResponseTransformer struct {
+	lastReqProvided         bool
+	nextTransformRequestErr error
+}
+
+func (t *behaviorWithParamsNoResponseTransformer) TransformRequest(
+	req *http.Request,
+	params *handlers.BehaviorBehaviorWithParamsNoResponseRequest,
+) (*transformedBehaviorBehaviorWithParamsNoResponseRequest, error) {
+	t.lastReqProvided = req != nil
+	return (*transformedBehaviorBehaviorWithParamsNoResponseRequest)(params), t.nextTransformRequestErr
+}
+
 func (c *behaviorControllerTransform) BehaviorNoParamsWithResponse(
 	builder handlers.NoParamsHandlerBuilder[*models.BehaviorNoParamsWithResponse202Response],
 ) http.Handler {
-	return builder.HandleWith(handlers.TransformActionNoParams(
+	return builder.HandleWith(handlers.TransformNoParamsAction(
 		c.testActions.noParamsWithResponse.actionNoParamsWithResponse,
 		&c.testActions.behaviorNoParamsWithResponseTransformer,
 	))
@@ -95,9 +109,10 @@ func (c *behaviorControllerTransform) BehaviorWithParamsAndResponse(
 func (c *behaviorControllerTransform) BehaviorWithParamsNoResponse(
 	builder handlers.NoResponseHandlerBuilder[*handlers.BehaviorBehaviorWithParamsNoResponseRequest],
 ) http.Handler {
-	return builder.HandleWith(
+	return builder.HandleWith(handlers.TransformNoResponseAction(
 		c.testActions.withParamsNoResponse.actionWithParamsNoResponse,
-	)
+		&c.testActions.behaviorWithParamsNoResponseTransformer,
+	))
 }
 
 func (c *behaviorControllerTransform) BehaviorNoParamsNoResponse(

@@ -87,51 +87,35 @@ func TestBehaviorTransform(t *testing.T) {
 				path:   "/behavior/with-params-no-response",
 				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body) {
-						return
-					}
+					require.Equal(t, 202, recorder.Code, "Unexpected response: %v", recorder.Body)
 
 					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
-					assert.Equal(t, wantParams, testActions.withParamsNoResponse.calls[0].params)
+					assert.Equal(t,
+						wantParams,
+						(*handlers.BehaviorBehaviorWithParamsNoResponseRequest)(
+							testActions.withParamsNoResponse.calls[0].params,
+						),
+					)
 				},
 			}
 		})
 
-		runRouteTestCase(t, "should fail with error", setupRouter, func() testCase {
-			return testCase{
-				method: http.MethodGet,
-				path:   "/behavior/with-params-no-response",
-				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
-				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.withParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
-					return testActions
-				},
-				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
-						return
-					}
-
-					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
-				},
+		runRouteTestCase(t, "should fail if req transformation fails", setupRouter, func() testCase {
+			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+				QueryParam1: fake.Lorem().Word(),
 			}
-		})
-
-		runRouteTestCase(t, "should fail with error if http action", setupRouter, func() testCase {
 			return testCase{
 				method: http.MethodGet,
 				path:   "/behavior/with-params-no-response",
-				query:  url.Values{"queryParam1": []string{fake.Lorem().Word()}},
-				setupActions: func(testActions *controllerTestActions) *controllerTestActions {
-					testActions.withParamsNoResponse.isHTTPAction = true
-					testActions.withParamsNoResponse.nextError = errors.New(fake.Lorem().Word())
-					return testActions
+				query:  url.Values{"queryParam1": []string{wantParams.QueryParam1}},
+				setupActions: func(actions *controllerTestActions) *controllerTestActions {
+					actions.behaviorWithParamsNoResponseTransformer.nextTransformRequestErr = errors.New(fake.Lorem().Word())
+					return actions
 				},
 				expect: func(t *testing.T, testActions *controllerTestActions, recorder *httptest.ResponseRecorder) {
-					if !assert.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body) {
-						return
-					}
+					require.Equal(t, 500, recorder.Code, "Unexpected response: %v", recorder.Body)
 
-					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
+					assert.Empty(t, testActions.withParamsNoResponse.calls)
 				},
 			}
 		})
