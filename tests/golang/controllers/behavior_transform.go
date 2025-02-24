@@ -71,12 +71,10 @@ func (c *behaviorControllerTransform) BehaviorWithParamsAndResponse(
 		*models.BehaviorWithParamsAndResponseResponseBody,
 	],
 ) http.Handler {
-	return builder.HandleWith(
-		handlers.TransformAction(
-			c.testActions.withParamsAndResponse.action,
-			&c.testActions.behaviorWithParamsAndResponseTransformer,
-		),
-	)
+	return builder.HandleWith(handlers.TransformAction(
+		c.testActions.withParamsAndResponse.action,
+		&c.testActions.behaviorWithParamsAndResponseTransformer,
+	))
 }
 
 func (c *behaviorControllerTransform) BehaviorWithParamsNoResponse(
