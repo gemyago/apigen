@@ -170,9 +170,5 @@ Review and commit changes. Run tests.
 
 1. Create a release branch with the version number (e.g. `release/0.1.0`)
 1. Update the version in the [.versions](.versions) file
-1. Propagate the version changes:
-    ```
-    cd lang/go/apigen && go generate ./... && cd -
-    ```
 1. Commit the changes and create the PR
 1. Once the PR is merged, a release will be created automatically by the CI
