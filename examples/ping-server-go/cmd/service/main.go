@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -51,18 +50,16 @@ func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	port := 8080
-	readHeaderTimeoutSec := 2
-
 	rootHandler := handlers.NewRootHandler((*httpRouter)(http.NewServeMux()))
 	rootHandler.RegisterPingRoutes(&pingController{})
 
+	const readHeaderTimeout = 5 * time.Second
 	srv := &http.Server{
-		Addr:              fmt.Sprintf("[::]:%d", port),
-		ReadHeaderTimeout: time.Duration(readHeaderTimeoutSec) * time.Second,
+		Addr:              "[::]:8080",
+		ReadHeaderTimeout: readHeaderTimeout,
 		Handler:           rootHandler,
 	}
-	log.Println("Starting server on port:", port)
+	log.Println("Starting server on port: 8080")
 	if err := srv.ListenAndServe(); err != nil {
 		panic(err)
 	}

@@ -11,33 +11,51 @@ Features:
 * No reflection. Code to parse and validate requests is fully generated.
 * Framework agnostic and [http.Handler](https://pkg.go.dev/net/http#Handler) compatible. Use any http router or middleware.
 
-## TODOs
+## Table of Contents
 
-### General
-* Documentation on generated code structure and suggested patterns
+- [Getting Started](#getting-started)
+- [Basic Concepts](#basic-concepts)
+- [Controllers in depth](#controllers-in-depth)
+- [Supported OpenAPI features](#supported-openapi-features)
 
-### Golang
-* enums
-* simple types directly in body
-* array types directly in body
-* allow handling as plain http handler
-* authentication
-* per route middleware
-* polymorphic models
+## Getting Starteds
 
-### Typescript
-Set of features compatible with golang
-
-## Installation & Usage
-
-### Golang projects
+Generated code requires Go 1.24 or higher.
 
 Install `apigen` cli tool:
 ```bash
 go install github.com/gemyago/apigen
 ```
 
-Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/v1routes.yaml`.
+Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/v1routes.yaml`. You can use below as a starting point:
+```yaml
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Minimalistic API definition
+paths:
+  /ping:
+    get:
+      operationId: ping
+      tags:
+        - ping
+      parameters:
+        - name: message
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+```
 
 Add a golang file with generation instructions. For example: `internal/api/http/v1routes.go`:
 ```go
@@ -48,8 +66,73 @@ Run the generation:
 ```bash
 go generate ./internal/api/http
 ```
+The above will generate the code in the `internal/api/http/v1routes` folder. Commit the generated code to the repository. Some notes on generated folders structure:
+* `handlers` contains required types and interfaces to handle requests.
+* `models` contains data types used in the API.
 
-Folders structure suggested above is not enforced and can be adjusted to your project needs.
+Declare controller that implements the generated interface, for example:
+```go
+type pingController struct{}
+
+func (c *pingController) Ping(b handlers.HandlerBuilder[
+	*handlers.PingPingRequest,
+	*models.Ping200Response,
+]) http.Handler {
+	return b.HandleWith(
+		func(_ context.Context, req *handlers.PingPingRequest) (*models.Ping200Response, error) {
+			message := req.Message
+			if message == "" {
+				message = "pong"
+			}
+			return &models.Ping200Response{Message: message}, nil
+		},
+	)
+}
+```
+
+Define router adapter. For example `http.ServeMux` adapter may look like this:
+```go
+type httpRouter http.ServeMux
+
+func (*httpRouter) PathValue(r *http.Request, paramName string) string {
+	return r.PathValue(paramName)
+}
+
+func (router *httpRouter) HandleRoute(method, pathPattern string, h http.Handler) {
+	(*http.ServeMux)(router).Handle(method+" "+pathPattern, h)
+}
+
+func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	(*http.ServeMux)(router).ServeHTTP(w, r)
+}
+```
+
+Wire everything together:
+```go
+rootHandler := handlers.NewRootHandler((*httpRouter)(http.NewServeMux()))
+rootHandler.RegisterPingRoutes(&pingController{})
+
+const readHeaderTimeout = 5 * time.Second
+srv := &http.Server{
+	Addr:              "[::]:8080",
+	ReadHeaderTimeout: readHeaderTimeout,
+	Handler:           rootHandler,
+}
+log.Println("Starting server on port: 8080")
+if err := srv.ListenAndServe(); err != nil {
+	panic(err)
+}
+```
+
+Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced example can be found [here](./examples/petstore-server-go).
+
+## Basic Concepts
+
+Generated code expects you to provide a controller that implements the generated interface. The controller is an adapter between the generated code and your business logic. Generated code will parse the request, validate parameters and call the corresponding controller method in a type-safe manner.
+
+The controller is generated based on the `tags` in the OpenAPI spec. Prefer defining a single tag per operation. You can tag multiple operations with a same tag in order to group them under the same generated controller. Single OpenAPI spec can define as many tags (controllers) as needed.
+
+## Controllers in depth
 
 ## Supported OpenAPI features
 

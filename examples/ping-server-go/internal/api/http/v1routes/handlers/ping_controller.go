@@ -3,7 +3,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -36,8 +35,8 @@ type pingControllerBuilder struct {
 	Ping genericHandlerBuilder[
 		*PingPingRequest,
 		*Ping200Response,
-		func(context.Context, *PingPingRequest) (*Ping200Response, error),
-		func(http.ResponseWriter, *http.Request, *PingPingRequest) (*Ping200Response, error),
+		handlerActionFunc[*PingPingRequest, *Ping200Response],
+		httpHandlerActionFunc[*PingPingRequest, *Ping200Response],
 	]
 }
 
