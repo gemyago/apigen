@@ -2,24 +2,15 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: Minimalistic API definition
-  description: |
-    Includes a single /ping endpoint
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-servers:
-  - url: http://localhost:8080
 paths:
   /ping:
     get:
-      summary: Send ping request
       operationId: ping
       tags:
         - ping
       parameters:
         - name: message
           in: query
-          description: Message to echo back
           required: false
           schema:
             type: string
@@ -33,4 +24,3 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "pong"
