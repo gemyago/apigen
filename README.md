@@ -150,14 +150,14 @@ func (c *PetsController) GetPetByID(
 }
 ```
 
-The `HandlerBuilder` allows you to create an actual http.Handler that will be used to process requests. In most simplest case you can implement the method in place. However in real-world scenarios you may want to extract the implementation to a separate component and keep your controller clean and declarative. It is not required to use the `HandlerBuilder` and you can return a `http.Handler` directly if your use-case requires it, it allows you to fully bypass the generated code and handle the request processing as required.
+The `HandlerBuilder` allows you to create an actual http.Handler that will be used to process requests. In most simplest case you can implement the method in place. However in real-world scenarios you may want to extract the implementation to a separate component and keep your controller clean and declarative. It is not required to use the `HandlerBuilder` and you can return a `http.Handler` directly if your use-case requires it, this allows you to fully bypass the generated code and handle the request processing as required.
 
 The `HandlerBuilder` has the following methods:
 * `HandleWith` - will bind your application logic to the generated code. The handler function should have the following signature:
   ```go
   func(context.Context, *handlers.PetsGetPetByIDRequest) (*models.PetResponse, error)
   ```
-  This would usually be the most typical way to implement the controller method. You can define the handler in place however it is advised have a separate component [TODO example] that implements the handler function. This approach will help you to keep your controller clean and declarative.
+  This would usually be the most typical way to implement the controller method. You can define the handler in place however it is advised have a separate component that implements the handler function. This approach will help you to keep your controller clean and declarative.
   
 * `HandleWithHTTP` - similar to the above, but allows you to access the underlying http.Request and http.ResponseWriter. The handler function should have the following signature:
   ```go
@@ -188,7 +188,7 @@ The generated code is type safe so you will catch mismatches at compile time.
 
 ## Root Handler
 
-The root handler is an adapter that allows you to attach generated routes to any router of your choice. Once initialized, the root handler is a self contained `http.Handler` and can be used in any scenario where you would use a standard http handler.
+The root handler is an adapter that allows you to attach generated routes to a router of your choice. Once initialized, the root handler is a self contained `http.Handler` and can be used in any scenario where you would use a standard http handler.
 
 The root handler will have `Register[Controller]Routes` methods generated for each controller of your APIs. The method will accept an instance of the controller and will register all routes defined in the OpenAPI spec. Example:
 ```go
@@ -203,7 +203,7 @@ rootHandler.RegisterUsersRoutes(&usersController{})
 
 ### Router adapter
 
-In order to instantiate the root handler you need to provide router adapter implementation that must implement the following interface:
+In order to instantiate the root handler you need to provide router adapter instance that must implement the following interface:
 ```go
 type httpRouter interface {
 	// PathValue returns a named path parameter of a given name
