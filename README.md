@@ -9,7 +9,7 @@ Features:
 * OpenAPI first approach. Write the spec and generate the code.
 * No runtime dependencies. Generated code is self-contained.
 * No reflection. Code to parse and validate requests is fully generated.
-* Framework agnostic and [http.Handler](https://pkg.go.dev/net/http#Handler) compatible. Use any http router or middleware.
+* Framework agnostic and [http.Handler](https://pkg.go.dev/net/http#Handler) compatible.
 
 ## Table of Contents
 
@@ -73,21 +73,21 @@ The above will generate the code in the `internal/api/http/v1routes` folder. Com
 
 Declare controller that implements the generated interface, for example:
 ```go
+func pingHandler(_ context.Context, req *handlers.PingPingRequest) (*models.Ping200Response, error) {
+	message := req.Message
+	if message == "" {
+		message = "pong"
+	}
+	return &models.Ping200Response{Message: message}, nil
+}
+
 type pingController struct{}
 
 func (c *pingController) Ping(b handlers.HandlerBuilder[
 	*handlers.PingPingRequest,
 	*models.Ping200Response,
 ]) http.Handler {
-	return b.HandleWith(
-		func(_ context.Context, req *handlers.PingPingRequest) (*models.Ping200Response, error) {
-			message := req.Message
-			if message == "" {
-				message = "pong"
-			}
-			return &models.Ping200Response{Message: message}, nil
-		},
-	)
+	return b.HandleWith(pingHandler)
 }
 ```
 
