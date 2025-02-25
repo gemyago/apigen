@@ -16,13 +16,16 @@ Features:
 - [Getting Started](#getting-started)
 - [Basic Concepts](#basic-concepts)
 - [Controllers in depth](#controllers-in-depth)
+- [Root Handler](#root-handler)
+  - [Router adapter](#router-adapter)
+  - [Handling errors](#handling-errors)
 - [Supported OpenAPI features](#supported-openapi-features)
 
-## Getting Starteds
+## Getting Started
 
-Generated code requires Go 1.24 or higher.
+The only runtime dependency is a **go 1.24** or higher. The generator is a plugin for the [OpenAPI Generator](https://openapi-generator.tech/) which is Java based and requires Java 11 runtime at a minimum. The java and openapi-generator are only required to generate the code. The generated code is self-contained and does not have any runtime dependencies.
 
-Install `apigen` cli tool:
+To get started, install `apigen` cli tool:
 ```bash
 go install github.com/gemyago/apigen
 ```
@@ -66,9 +69,7 @@ Run the generation:
 ```bash
 go generate ./internal/api/http
 ```
-The above will generate the code in the `internal/api/http/v1routes` folder. Commit the generated code to the repository. Some notes on generated folders structure:
-* `handlers` contains required types and interfaces to handle requests.
-* `models` contains data types used in the API.
+The above will generate the code in the `internal/api/http/v1routes` folder. Commit the generated code to the repository.
 
 Declare controller that implements the generated interface, for example:
 ```go
@@ -130,9 +131,114 @@ Fully functional example based on the above steps can be found [here](./examples
 
 Generated code expects you to provide a controller that implements the generated interface. The controller is an adapter between the generated code and your business logic. Generated code will parse the request, validate parameters and call the corresponding controller method in a type-safe manner.
 
-The controller is generated based on the `tags` in the OpenAPI spec. Prefer defining a single tag per operation. You can tag multiple operations with a same tag in order to group them under the same generated controller. Single OpenAPI spec can define as many tags (controllers) as needed.
+The controller is generated based on the `tags` in the OpenAPI spec. Prefer defining a single tag per operation. You can have multiple operations with a same tag in order to group them under the same generated controller. Single OpenAPI spec can define as many tags (controllers) as needed. Please note that operationIDs in OpenAPI are global and should be unique across the spec. Please see the [Controllers in depth](#controllers-in-depth) section for more details.
+
+The generated code also includes so called `RootHandler`. The root handler is a bridge between your router of choice and the generated code. Please see the [Root Handler](#root-handler) section for more details.
+
+Typically you will need to import generated code from the following packages:
+* `handlers` contains controller interfaces, root handler and other components handle requests.
+* `models` contains data structures corresponding to schemas defined in the OpenAPI spec.
 
 ## Controllers in depth
+
+Controller should implement a set of methods, each corresponding to an operation in the OpenAPI spec. The method signature is as follows:
+```go
+func (c *PetsController) GetPetByID(
+	b handlers.HandlerBuilder[*handlers.PetsGetPetByIDRequest, *models.PetResponse],
+) http.Handler {
+	// Your implementation here
+}
+```
+
+The `HandlerBuilder` allows you to create an actual http.Handler that will be used to process requests. In most simplest case you can implement the method in place. However in real-world scenarios you may want to extract the implementation to a separate component and keep your controller clean and declarative. It is not required to use the `HandlerBuilder` and you can return a `http.Handler` directly if your use-case requires it, it allows you to fully bypass the generated code and handle the request processing as required.
+
+The `HandlerBuilder` has the following methods:
+* `HandleWith` - will bind your application logic to the generated code. The handler function should have the following signature:
+  ```go
+  func(context.Context, *handlers.PetsGetPetByIDRequest) (*models.PetResponse, error)
+  ```
+  This would usually be the most typical way to implement the controller method. You can define the handler in place however it is advised have a separate component [TODO example] that implements the handler function. This approach will help you to keep your controller clean and declarative.
+  
+* `HandleWithHTTP` - similar to the above, but allows you to access the underlying http.Request and http.ResponseWriter. The handler function should have the following signature:
+  ```go
+  func(http.ResponseWriter, *http.Request, *handlers.PetsGetPetByIDRequest)  (*models.PetResponse, error)
+  ```
+  This method is useful when you need to access the underlying http request and response objects. For example, when you need to set custom headers or status codes.
+  
+  **Notes**: 
+    * You may return response that will be automatically written to the response writer.
+    * The generated code will not attempt to write to the response writer if you have already written to it.
+    * You may still return an error. In this case the generated code will handle the error as explained in the [Handling errors](#handling-errors) section.
+
+Due to Go language constraints there are several variations of the `HandlerBuilder`. The variations are:
+* `NoResponseHandlerBuilder` - for operations that do not return a response. The handler function should have the following signature:
+  ```go
+  func(context.Context, *handlers.PetsDeletePetRequest) error
+  ```
+* `NoRequestHandlerBuilder` - for operations that do not have request parameters. The handler function should have the following signature:
+  ```go
+  func(context.Context) (*models.PetResponse, error)
+  ```
+* `NoRequestNoResponseHandlerBuilder` - for operations that do not have request parameters and do not return a response. The handler function should have the following signature:
+  ```go
+  func(context.Context) error
+  ```
+The generated code is type safe so you will catch mismatches at compile time.
+
+
+## Root Handler
+
+The root handler is an adapter that allows you to attach generated routes to any router of your choice. Once initialized, the root handler is a self contained `http.Handler` and can be used in any scenario where you would use a standard http handler.
+
+The root handler will have `Register[Controller]Routes` methods generated for each controller of your APIs. The method will accept an instance of the controller and will register all routes defined in the OpenAPI spec. Example:
+```go
+rootHandler := handlers.NewRootHandler(routerAdapter)
+
+// This will register all routes tagged with "pets" tag
+rootHandler.RegisterPetsRoutes(&petsController{})
+
+// This will register all routes tagged with "users" tag
+rootHandler.RegisterUsersRoutes(&usersController{})
+```
+
+### Router adapter
+
+In order to instantiate the root handler you need to provide router adapter implementation that must implement the following interface:
+```go
+type httpRouter interface {
+	// PathValue returns a named path parameter of a given name
+	PathValue(r *http.Request, paramName string) string
+
+	// HandleRoute register a given handler function to handle given route
+	HandleRoute(method, pathPattern string, h http.Handler)
+
+	// ServeHTTP is a standard http.Handler method
+	ServeHTTP(w http.ResponseWriter, r *http.Request)
+}
+```
+The underlying router should support named path parameters and should be able to operate with standard `http.Handler` interface.
+
+### Handling errors
+
+Errors can occur at various stages of the request processing. The root handler includes a default implementation that operates as follows:
+* Request parsing and validation - default implementation respond with 400 status code and log the error with `warn` level.
+* Controller methods (actions) execution - default implementation respond with 500 status code and log the error with `error` level.
+* Response serialization - default implementation will log the error with `error` level and will attempt to set 500 status code. Setting status code is not guaranteed as the response may have already been written.
+
+You can customize the error handling behavior as well as set a custom logger implementation using the following options when initializing the root handler:
+```go
+NewRootHandler(routerAdapter, 
+  // Set custom logger for the root handler. The default logger is slog.Default().
+  // The provided logger must be compatible with slog interface.
+  WithLogger(logger),
+
+  // Set custom error handler for parsing and validation errors
+  WithParsingErrorHandler(errorHandler),
+
+  // Set custom error handler to process action execution errors
+  WithErrorHandler(errorHandler),
+)
+```
 
 ## Supported OpenAPI features
 
@@ -224,12 +330,12 @@ Get deps installed:
 make deps
 ```
 
-Build particular generator:
+Build the generator:
 ```
 mvn -f generators/go-apigen-server/ package
 ```
 
-Generate code using a particular generator (will build if needed):
+Regenerate test code (will build generator if needed):
 ```
 make generate/golang
 ```
@@ -241,7 +347,7 @@ make tests
 
 ### Updating OpenAPI generator version
 
-Specify a new version in the [.versions](.versions) and in the `pom.xml` of reach generator (`openapi-generator-version` property).
+Specify a new version in the [.versions](.versions) and in the `pom.xml` of the generator (`openapi-generator-version` property).
 
 Regenerate the code:
 ```
