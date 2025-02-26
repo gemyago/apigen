@@ -62,7 +62,7 @@ paths:
 
 Add a golang file with generation instructions. For example: `internal/api/http/v1routes.go`:
 ```go
-//go:generate go run apigen ./v1routes.yaml ./v1routes
+//go:generate go run github.com/gemyago/apigen ./v1routes.yaml ./v1routes
 ```
 
 Run the generation:
