@@ -20,15 +20,15 @@ type paramsParserPetsCreatePet struct {
 	bindPayload requestParamBinder[*http.Request, *Pet]
 }
 
-func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) (*PetsCreatePetRequest, error) {
+func (p *paramsParserPetsCreatePet) parse(router httpRouter, req *http.Request) (*PetsCreatePetParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &PetsCreatePetRequest{}
+	reqParams := &PetsCreatePetParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsCreatePet(rootHandler *RootHandler) paramsParser[*PetsCreatePetRequest] {
+func newParamsParserPetsCreatePet(rootHandler *RootHandler) paramsParser[*PetsCreatePetParams] {
 	return &paramsParserPetsCreatePet{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *Pet]{
 			required: true,
@@ -44,16 +44,16 @@ type paramsParserPetsGetPetByID struct {
 	bindPetID requestParamBinder[string, int64]
 }
 
-func (p *paramsParserPetsGetPetByID) parse(router httpRouter, req *http.Request) (*PetsGetPetByIDRequest, error) {
+func (p *paramsParserPetsGetPetByID) parse(router httpRouter, req *http.Request) (*PetsGetPetByIDParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &PetsGetPetByIDRequest{}
+	reqParams := &PetsGetPetByIDParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindPetID(pathParamsCtx.Fork("petId"), readPathValue("petId", router, req), &reqParams.PetID)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsGetPetByID(rootHandler *RootHandler) paramsParser[*PetsGetPetByIDRequest] {
+func newParamsParserPetsGetPetByID(rootHandler *RootHandler) paramsParser[*PetsGetPetByIDParams] {
 	return &paramsParserPetsGetPetByID{
 		bindPetID: newRequestParamBinder(binderParams[string, int64]{
 			required: true,
@@ -71,9 +71,9 @@ type paramsParserPetsListPets struct {
 	bindOffset requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (*PetsListPetsRequest, error) {
+func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (*PetsListPetsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &PetsListPetsRequest{}
+	reqParams := &PetsListPetsParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -82,7 +82,7 @@ func (p *paramsParserPetsListPets) parse(router httpRouter, req *http.Request) (
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPetsListPets(rootHandler *RootHandler) paramsParser[*PetsListPetsRequest] {
+func newParamsParserPetsListPets(rootHandler *RootHandler) paramsParser[*PetsListPetsParams] {
 	return &paramsParserPetsListPets{
 		bindLimit: newRequestParamBinder(binderParams[[]string, int64]{
 			required: true,
@@ -109,38 +109,38 @@ func newParamsParserPetsListPets(rootHandler *RootHandler) paramsParser[*PetsLis
 type petsControllerBuilder struct {
 	// POST /pets
 	//
-	// Request type: PetsCreatePetRequest,
+	// Request type: PetsCreatePetParams,
 	//
 	// Response type: none
 	CreatePet genericHandlerBuilder[
-		*PetsCreatePetRequest,
+		*PetsCreatePetParams,
 		void,
-		handlerActionFuncNoResponse[*PetsCreatePetRequest, void],
-		httpHandlerActionFuncNoResponse[*PetsCreatePetRequest, void],
+		handlerActionFuncNoResponse[*PetsCreatePetParams, void],
+		httpHandlerActionFuncNoResponse[*PetsCreatePetParams, void],
 	]
 
 	// GET /pets/{petId}
 	//
-	// Request type: PetsGetPetByIDRequest,
+	// Request type: PetsGetPetByIDParams,
 	//
 	// Response type: PetResponse
 	GetPetByID genericHandlerBuilder[
-		*PetsGetPetByIDRequest,
+		*PetsGetPetByIDParams,
 		*PetResponse,
-		handlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
-		httpHandlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
+		handlerActionFunc[*PetsGetPetByIDParams, *PetResponse],
+		httpHandlerActionFunc[*PetsGetPetByIDParams, *PetResponse],
 	]
 
 	// GET /pets
 	//
-	// Request type: PetsListPetsRequest,
+	// Request type: PetsListPetsParams,
 	//
 	// Response type: PetsResponse
 	ListPets genericHandlerBuilder[
-		*PetsListPetsRequest,
+		*PetsListPetsParams,
 		*PetsResponse,
-		handlerActionFunc[*PetsListPetsRequest, *PetsResponse],
-		httpHandlerActionFunc[*PetsListPetsRequest, *PetsResponse],
+		handlerActionFunc[*PetsListPetsParams, *PetsResponse],
+		httpHandlerActionFunc[*PetsListPetsParams, *PetsResponse],
 	]
 }
 
@@ -150,15 +150,15 @@ func newPetsControllerBuilder(app *RootHandler) *petsControllerBuilder {
 		CreatePet: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*PetsCreatePetRequest,
+				*PetsCreatePetParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*PetsCreatePetRequest,
+				*PetsCreatePetParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*PetsCreatePetRequest,
+				*PetsCreatePetParams,
 				void,
 			]{
 				defaultStatus: 201,
@@ -171,15 +171,15 @@ func newPetsControllerBuilder(app *RootHandler) *petsControllerBuilder {
 		GetPetByID: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*PetsGetPetByIDRequest,
+				*PetsGetPetByIDParams,
 				*PetResponse,
 			](),
 			newHTTPHandlerAdapter[
-				*PetsGetPetByIDRequest,
+				*PetsGetPetByIDParams,
 				*PetResponse,
 			](),
 			makeActionBuilderParams[
-				*PetsGetPetByIDRequest,
+				*PetsGetPetByIDParams,
 				*PetResponse,
 			]{
 				defaultStatus: 200,
@@ -191,15 +191,15 @@ func newPetsControllerBuilder(app *RootHandler) *petsControllerBuilder {
 		ListPets: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*PetsListPetsRequest,
+				*PetsListPetsParams,
 				*PetsResponse,
 			](),
 			newHTTPHandlerAdapter[
-				*PetsListPetsRequest,
+				*PetsListPetsParams,
 				*PetsResponse,
 			](),
 			makeActionBuilderParams[
-				*PetsListPetsRequest,
+				*PetsListPetsParams,
 				*PetsResponse,
 			]{
 				defaultStatus: 200,

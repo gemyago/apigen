@@ -13,7 +13,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// PetsCreatePetRequest represents params for createPet operation
+// PetsCreatePetParams represents params for createPet operation
 //
 // Request: POST /pets.
 type PetsCreatePetParams struct {
@@ -21,7 +21,7 @@ type PetsCreatePetParams struct {
 	Payload *Pet
 }
 
-// PetsGetPetByIDRequest represents params for getPetById operation
+// PetsGetPetByIDParams represents params for getPetById operation
 //
 // Request: GET /pets/{petId}.
 type PetsGetPetByIDParams struct {
@@ -29,7 +29,7 @@ type PetsGetPetByIDParams struct {
 	PetID int64
 }
 
-// PetsListPetsRequest represents params for listPets operation
+// PetsListPetsParams represents params for listPets operation
 //
 // Request: GET /pets.
 type PetsListPetsParams struct {

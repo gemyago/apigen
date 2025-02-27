@@ -18,7 +18,7 @@ var _ = fmt.Sprint
 {{#allParams.0}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
 //
 // Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
-type {{>request-params-type}} struct {
+type {{>request-type}} struct {
 	{{#allParams}}
 	// {{nameInPascalCase}} is parsed from request {{vendorExtensions.x-apigen-param-location}} and declared as {{baseName}}.
 	{{nameInPascalCase}} {{>fields/type}}

@@ -3,74 +3,38 @@
 package handlers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 
 	. "github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/models"
 )
 
-// Below is to workaround unused imports.
-var _ = http.MethodGet
-var _ = time.Time{}
-var _ = json.Unmarshal
-var _ = fmt.Sprint
-type _ func() Error
-
-// PetsCreatePetRequest represents params for createPet operation
-//
-// Request: POST /pets.
-type PetsCreatePetRequest struct {
-	// Payload is parsed from request body and declared as payload.
-	Payload *Pet
-}
-
-// PetsGetPetByIDRequest represents params for getPetById operation
-//
-// Request: GET /pets/{petId}.
-type PetsGetPetByIDRequest struct {
-	// PetID is parsed from request path and declared as petId.
-	PetID int64
-}
-
-// PetsListPetsRequest represents params for listPets operation
-//
-// Request: GET /pets.
-type PetsListPetsRequest struct {
-	// Limit is parsed from request query and declared as limit.
-	Limit int64
-	// Offset is parsed from request query and declared as offset.
-	Offset int64
-}
-
 type PetsController interface {
 	// POST /pets
 	//
-	// Request type: PetsCreatePetRequest,
+	// Request type: PetsCreatePetParams,
 	//
 	// Response type: none
 	CreatePet(NoResponseHandlerBuilder[
-		*PetsCreatePetRequest,
+		*PetsCreatePetParams,
 	]) http.Handler
 
 	// GET /pets/{petId}
 	//
-	// Request type: PetsGetPetByIDRequest,
+	// Request type: PetsGetPetByIDParams,
 	//
 	// Response type: PetResponse
 	GetPetByID(HandlerBuilder[
-		*PetsGetPetByIDRequest,
+		*PetsGetPetByIDParams,
 		*PetResponse,
 	]) http.Handler
 
 	// GET /pets
 	//
-	// Request type: PetsListPetsRequest,
+	// Request type: PetsListPetsParams,
 	//
 	// Response type: PetsResponse
 	ListPets(HandlerBuilder[
-		*PetsListPetsRequest,
+		*PetsListPetsParams,
 		*PetsResponse,
 	]) http.Handler
 }
