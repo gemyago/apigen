@@ -110,6 +110,10 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     apiTemplateFiles.put(
         "controller_params.mustache",
         "_params.go");
+    apiTemplateFiles.put(
+        "controller_models.mustache",
+        "_params.go");
+    templateOutputDirs.put("controller_models.mustache", "models");
 
     /**
      * Template Location. This is the location which templates will be read from.
@@ -133,7 +137,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
      * are available in models, apis, and supporting files
      */
     additionalProperties.put("apiVersion", apiVersion);
-    additionalProperties.put("invokerPackage", "Hello World");
 
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
