@@ -3,7 +3,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -54,8 +53,8 @@ type petsControllerBuilder struct {
 	CreatePet genericHandlerBuilder[
 		*PetsCreatePetRequest,
 		void,
-		func(context.Context, *PetsCreatePetRequest) (error),
-		func(http.ResponseWriter, *http.Request, *PetsCreatePetRequest) (error),
+		handlerActionFuncNoResponse[*PetsCreatePetRequest, void],
+		httpHandlerActionFuncNoResponse[*PetsCreatePetRequest, void],
 	]
 
 	// GET /pets/{petId}
@@ -66,8 +65,8 @@ type petsControllerBuilder struct {
 	GetPetByID genericHandlerBuilder[
 		*PetsGetPetByIDRequest,
 		*PetResponse,
-		func(context.Context, *PetsGetPetByIDRequest) (*PetResponse, error),
-		func(http.ResponseWriter, *http.Request, *PetsGetPetByIDRequest) (*PetResponse, error),
+		handlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
+		httpHandlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
 	]
 
 	// GET /pets
@@ -78,8 +77,8 @@ type petsControllerBuilder struct {
 	ListPets genericHandlerBuilder[
 		*PetsListPetsRequest,
 		*PetsResponse,
-		func(context.Context, *PetsListPetsRequest) (*PetsResponse, error),
-		func(http.ResponseWriter, *http.Request, *PetsListPetsRequest) (*PetsResponse, error),
+		handlerActionFunc[*PetsListPetsRequest, *PetsResponse],
+		httpHandlerActionFunc[*PetsListPetsRequest, *PetsResponse],
 	]
 }
 
