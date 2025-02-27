@@ -105,3 +105,106 @@ func newParamsParserPetsListPets(rootHandler *RootHandler) paramsParser[*PetsLis
 		}),
 	}
 }
+
+type petsControllerBuilder struct {
+	// POST /pets
+	//
+	// Request type: PetsCreatePetRequest,
+	//
+	// Response type: none
+	CreatePet genericHandlerBuilder[
+		*PetsCreatePetRequest,
+		void,
+		handlerActionFuncNoResponse[*PetsCreatePetRequest, void],
+		httpHandlerActionFuncNoResponse[*PetsCreatePetRequest, void],
+	]
+
+	// GET /pets/{petId}
+	//
+	// Request type: PetsGetPetByIDRequest,
+	//
+	// Response type: PetResponse
+	GetPetByID genericHandlerBuilder[
+		*PetsGetPetByIDRequest,
+		*PetResponse,
+		handlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
+		httpHandlerActionFunc[*PetsGetPetByIDRequest, *PetResponse],
+	]
+
+	// GET /pets
+	//
+	// Request type: PetsListPetsRequest,
+	//
+	// Response type: PetsResponse
+	ListPets genericHandlerBuilder[
+		*PetsListPetsRequest,
+		*PetsResponse,
+		handlerActionFunc[*PetsListPetsRequest, *PetsResponse],
+		httpHandlerActionFunc[*PetsListPetsRequest, *PetsResponse],
+	]
+}
+
+func newPetsControllerBuilder(app *RootHandler) *petsControllerBuilder {
+	return &petsControllerBuilder{
+		// POST /pets
+		CreatePet: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*PetsCreatePetRequest,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*PetsCreatePetRequest,
+				void,
+			](),
+			makeActionBuilderParams[
+				*PetsCreatePetRequest,
+				void,
+			]{
+				defaultStatus: 201,
+				voidResult:    true,
+				paramsParser:  newParamsParserPetsCreatePet(app),
+			},
+		),
+
+		// GET /pets/{petId}
+		GetPetByID: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapter[
+				*PetsGetPetByIDRequest,
+				*PetResponse,
+			](),
+			newHTTPHandlerAdapter[
+				*PetsGetPetByIDRequest,
+				*PetResponse,
+			](),
+			makeActionBuilderParams[
+				*PetsGetPetByIDRequest,
+				*PetResponse,
+			]{
+				defaultStatus: 200,
+				paramsParser:  newParamsParserPetsGetPetByID(app),
+			},
+		),
+
+		// GET /pets
+		ListPets: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapter[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			](),
+			newHTTPHandlerAdapter[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			](),
+			makeActionBuilderParams[
+				*PetsListPetsRequest,
+				*PetsResponse,
+			]{
+				defaultStatus: 200,
+				paramsParser:  newParamsParserPetsListPets(app),
+			},
+		),
+	}
+}

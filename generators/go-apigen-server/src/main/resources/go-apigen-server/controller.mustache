@@ -37,51 +37,6 @@ type {{>request-type}} struct {
 
 {{/operations}}
 
-type {{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder struct {
-{{#operations}}
-{{#operation}}
-	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}} genericHandlerBuilder[
-		{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-		{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-		handlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
-		httpHandlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
-	]{{^-last}}
-
-{{/-last}}{{/operation}}
-{{/operations}}
-}
-
-func new{{classname}}ControllerBuilder(app *RootHandler) *{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder {
-	return &{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder{
-		{{#operations}}
-		{{#operation}}
-		// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
-		{{operationId}}: newGenericHandlerBuilder(
-			app,
-			newHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			](),
-			newHTTPHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			](),
-			makeActionBuilderParams[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			]{
-				defaultStatus: {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}},{{^returnType}}
-				voidResult:    true,{{/returnType}}
-				paramsParser:  {{#hasParams}}newParamsParser{{classname}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}(app),
-			},
-		),{{^-last}}
-
-{{/-last}}{{/operation}}
-		{{/operations}}
-	}
-}
-
 type {{classname}}Controller interface {
 {{#operations}}
 {{#operation}}
