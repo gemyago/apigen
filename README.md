@@ -11,6 +11,10 @@ Features:
 * No reflection. Code to parse and validate requests is fully generated.
 * Framework agnostic and [http.Handler](https://pkg.go.dev/net/http#Handler) compatible.
 
+Project status: 
+* The generated code is extensively tested and **production ready**
+* The generator itself is in **beta** stage. This means that **minor breaking changes** in the generated code may occur.
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
