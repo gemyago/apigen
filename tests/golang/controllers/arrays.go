@@ -4,12 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 type arraysControllerTestActions struct {
-	arraysRequiredValidation         mockAction[*handlers.ArraysArraysRequiredValidationRequest]
-	arraysNullableRequiredValidation mockAction[*handlers.ArraysArraysNullableRequiredValidationRequest]
-	arraysRangeValidation            mockAction[*handlers.ArraysArraysRangeValidationRequest]
+	arraysRequiredValidation         mockAction[*models.ArraysArraysRequiredValidationParams]
+	arraysNullableRequiredValidation mockAction[*models.ArraysArraysNullableRequiredValidationParams]
+	arraysRangeValidation            mockAction[*models.ArraysArraysRangeValidationParams]
 }
 
 type arraysController struct {
@@ -17,7 +18,7 @@ type arraysController struct {
 }
 
 func (c *arraysController) ArraysRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysRequiredValidation.action,
@@ -25,7 +26,7 @@ func (c *arraysController) ArraysRequiredValidation(
 }
 
 func (c *arraysController) ArraysNullableRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysNullableRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysNullableRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysNullableRequiredValidation.action,
@@ -33,7 +34,7 @@ func (c *arraysController) ArraysNullableRequiredValidation(
 }
 
 func (c *arraysController) ArraysRangeValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ArraysArraysRangeValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysRangeValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysRangeValidation.action,

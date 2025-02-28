@@ -22,9 +22,9 @@ type paramsParserBooleanBooleanArrayItems struct {
 	bindPayload requestParamBinder[*http.Request, *BooleanArrayItemsRequest]
 }
 
-func (p *paramsParserBooleanBooleanArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanArrayItemsRequest, error) {
+func (p *paramsParserBooleanBooleanArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanArrayItemsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BooleanBooleanArrayItemsRequest{}
+	reqParams := &BooleanBooleanArrayItemsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
@@ -39,7 +39,7 @@ func (p *paramsParserBooleanBooleanArrayItems) parse(router httpRouter, req *htt
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanArrayItemsRequest] {
+func newParamsParserBooleanBooleanArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanArrayItemsParams] {
 	return &paramsParserBooleanBooleanArrayItems{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, []bool]{
 			required: true,
@@ -108,9 +108,9 @@ type paramsParserBooleanBooleanNullable struct {
 	bindOptionalBoolParam1InQuery requestParamBinder[[]string, *bool]
 }
 
-func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableRequest, error) {
+func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BooleanBooleanNullableRequest{}
+	reqParams := &BooleanBooleanNullableParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
@@ -126,7 +126,7 @@ func (p *paramsParserBooleanBooleanNullable) parse(router httpRouter, req *http.
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanNullable(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableRequest] {
+func newParamsParserBooleanBooleanNullable(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableParams] {
 	return &paramsParserBooleanBooleanNullable{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, *bool]{
 			required: true,
@@ -186,9 +186,9 @@ type paramsParserBooleanBooleanNullableArrayItems struct {
 	bindPayload requestParamBinder[*http.Request, *BooleanNullableArrayItemsRequest]
 }
 
-func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableArrayItemsRequest, error) {
+func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, req *http.Request) (*BooleanBooleanNullableArrayItemsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BooleanBooleanNullableArrayItemsRequest{}
+	reqParams := &BooleanBooleanNullableArrayItemsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
@@ -203,7 +203,7 @@ func (p *paramsParserBooleanBooleanNullableArrayItems) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanNullableArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableArrayItemsRequest] {
+func newParamsParserBooleanBooleanNullableArrayItems(rootHandler *RootHandler) paramsParser[*BooleanBooleanNullableArrayItemsParams] {
 	return &paramsParserBooleanBooleanNullableArrayItems{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, []*bool]{
 			required: true,
@@ -271,9 +271,9 @@ type paramsParserBooleanBooleanParsing struct {
 	bindPayload requestParamBinder[*http.Request, *BooleanParsingRequest]
 }
 
-func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.Request) (*BooleanBooleanParsingRequest, error) {
+func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.Request) (*BooleanBooleanParsingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BooleanBooleanParsingRequest{}
+	reqParams := &BooleanBooleanParsingParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindBoolParam1(pathParamsCtx.Fork("boolParam1"), readPathValue("boolParam1", router, req), &reqParams.BoolParam1)
@@ -288,7 +288,7 @@ func (p *paramsParserBooleanBooleanParsing) parse(router httpRouter, req *http.R
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanParsing(rootHandler *RootHandler) paramsParser[*BooleanBooleanParsingRequest] {
+func newParamsParserBooleanBooleanParsing(rootHandler *RootHandler) paramsParser[*BooleanBooleanParsingParams] {
 	return &paramsParserBooleanBooleanParsing{
 		bindBoolParam1: newRequestParamBinder(binderParams[string, bool]{
 			required: true,
@@ -340,9 +340,9 @@ type paramsParserBooleanBooleanRequiredValidation struct {
 	bindOptionalBoolParam2InQuery requestParamBinder[[]string, bool]
 }
 
-func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, req *http.Request) (*BooleanBooleanRequiredValidationRequest, error) {
+func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, req *http.Request) (*BooleanBooleanRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BooleanBooleanRequiredValidationRequest{}
+	reqParams := &BooleanBooleanRequiredValidationParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -355,7 +355,7 @@ func (p *paramsParserBooleanBooleanRequiredValidation) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBooleanBooleanRequiredValidation(rootHandler *RootHandler) paramsParser[*BooleanBooleanRequiredValidationRequest] {
+func newParamsParserBooleanBooleanRequiredValidation(rootHandler *RootHandler) paramsParser[*BooleanBooleanRequiredValidationParams] {
 	return &paramsParserBooleanBooleanRequiredValidation{
 		bindBoolParam1InQuery: newRequestParamBinder(binderParams[[]string, bool]{
 			required: true,
@@ -396,5 +396,176 @@ func newParamsParserBooleanBooleanRequiredValidation(rootHandler *RootHandler) p
 			validateValue: NewSimpleFieldValidator[bool](
 			),
 		}),
+	}
+}
+
+type booleanControllerBuilder struct {
+	// POST /boolean/array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanArrayItemsParams,
+	//
+	// Response type: none
+	BooleanArrayItems genericHandlerBuilder[
+		*BooleanBooleanArrayItemsParams,
+		void,
+		handlerActionFuncNoResponse[*BooleanBooleanArrayItemsParams, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanArrayItemsParams, void],
+	]
+
+	// POST /boolean/nullable/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableParams,
+	//
+	// Response type: none
+	BooleanNullable genericHandlerBuilder[
+		*BooleanBooleanNullableParams,
+		void,
+		handlerActionFuncNoResponse[*BooleanBooleanNullableParams, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanNullableParams, void],
+	]
+
+	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanNullableArrayItemsParams,
+	//
+	// Response type: none
+	BooleanNullableArrayItems genericHandlerBuilder[
+		*BooleanBooleanNullableArrayItemsParams,
+		void,
+		handlerActionFuncNoResponse[*BooleanBooleanNullableArrayItemsParams, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanNullableArrayItemsParams, void],
+	]
+
+	// POST /boolean/parsing/{boolParam1}/{boolParam2}
+	//
+	// Request type: BooleanBooleanParsingParams,
+	//
+	// Response type: none
+	BooleanParsing genericHandlerBuilder[
+		*BooleanBooleanParsingParams,
+		void,
+		handlerActionFuncNoResponse[*BooleanBooleanParsingParams, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanParsingParams, void],
+	]
+
+	// POST /boolean/required-validation
+	//
+	// Request type: BooleanBooleanRequiredValidationParams,
+	//
+	// Response type: none
+	BooleanRequiredValidation genericHandlerBuilder[
+		*BooleanBooleanRequiredValidationParams,
+		void,
+		handlerActionFuncNoResponse[*BooleanBooleanRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*BooleanBooleanRequiredValidationParams, void],
+	]
+}
+
+func newBooleanControllerBuilder(app *RootHandler) *booleanControllerBuilder {
+	return &booleanControllerBuilder{
+		// POST /boolean/array-items/{boolParam1}/{boolParam2}
+		BooleanArrayItems: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanArrayItemsParams,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanArrayItemsParams,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanArrayItemsParams,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanArrayItems(app),
+			},
+		),
+
+		// POST /boolean/nullable/{boolParam1}/{boolParam2}
+		BooleanNullable: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanNullableParams,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanNullableParams,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanNullableParams,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanNullable(app),
+			},
+		),
+
+		// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
+		BooleanNullableArrayItems: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanNullableArrayItemsParams,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanNullableArrayItemsParams,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanNullableArrayItemsParams,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanNullableArrayItems(app),
+			},
+		),
+
+		// POST /boolean/parsing/{boolParam1}/{boolParam2}
+		BooleanParsing: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanParsingParams,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanParsingParams,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanParsingParams,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanParsing(app),
+			},
+		),
+
+		// POST /boolean/required-validation
+		BooleanRequiredValidation: newGenericHandlerBuilder(
+			app,
+			newHandlerAdapterNoResponse[
+				*BooleanBooleanRequiredValidationParams,
+				void,
+			](),
+			newHTTPHandlerAdapterNoResponse[
+				*BooleanBooleanRequiredValidationParams,
+				void,
+			](),
+			makeActionBuilderParams[
+				*BooleanBooleanRequiredValidationParams,
+				void,
+			]{
+				defaultStatus: 204,
+				voidResult:    true,
+				paramsParser:  newParamsParserBooleanBooleanRequiredValidation(app),
+			},
+		),
 	}
 }

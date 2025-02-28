@@ -4,14 +4,15 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 type booleanControllerTestActions struct {
-	booleanParsing            mockAction[*handlers.BooleanBooleanParsingRequest]
-	booleanRequiredValidation mockAction[*handlers.BooleanBooleanRequiredValidationRequest]
-	booleanNullable           mockAction[*handlers.BooleanBooleanNullableRequest]
-	booleanArrayItems         mockAction[*handlers.BooleanBooleanArrayItemsRequest]
-	nullableBooleanArrayItems mockAction[*handlers.BooleanBooleanNullableArrayItemsRequest]
+	booleanParsing            mockAction[*models.BooleanBooleanParsingParams]
+	booleanRequiredValidation mockAction[*models.BooleanBooleanRequiredValidationParams]
+	booleanNullable           mockAction[*models.BooleanBooleanNullableParams]
+	booleanArrayItems         mockAction[*models.BooleanBooleanArrayItemsParams]
+	nullableBooleanArrayItems mockAction[*models.BooleanBooleanNullableArrayItemsParams]
 }
 
 type booleanController struct {
@@ -19,7 +20,7 @@ type booleanController struct {
 }
 
 func (c *booleanController) BooleanParsing(
-	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanParsingRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanParsingParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanParsing.action,
@@ -27,7 +28,7 @@ func (c *booleanController) BooleanParsing(
 }
 
 func (c *booleanController) BooleanRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanRequiredValidation.action,
@@ -35,7 +36,7 @@ func (c *booleanController) BooleanRequiredValidation(
 }
 
 func (c *booleanController) BooleanNullable(
-	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanNullableParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanNullable.action,
@@ -43,7 +44,7 @@ func (c *booleanController) BooleanNullable(
 }
 
 func (c *booleanController) BooleanArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanArrayItemsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanArrayItems.action,
@@ -51,7 +52,7 @@ func (c *booleanController) BooleanArrayItems(
 }
 
 func (c *booleanController) BooleanNullableArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*handlers.BooleanBooleanNullableArrayItemsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanNullableArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.nullableBooleanArrayItems.action,

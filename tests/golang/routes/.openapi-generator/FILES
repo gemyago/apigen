@@ -56,15 +56,20 @@ internal/string_types_pattern_validation_request_validation.go
 internal/string_types_range_validation_request_validation.go
 internal/string_types_required_validation_request_validation.go
 internal/validators.go
+models/arrays_controller_params.go
 models/arrays_nullable_required_validation_request.go
 models/arrays_range_validation_request.go
 models/arrays_required_validation_request.go
 models/basic_string_enum.go
+models/behavior_controller_params.go
+models/behavior_id_names_controller_params.go
 models/behavior_names_with_id_data.go
+models/behavior_no_params_no_response_isolated_controller_params.go
 models/behavior_no_params_with_response_202_response.go
 models/behavior_with_params_and_response_request_body.go
 models/behavior_with_params_and_response_response_body.go
 models/boolean_array_items_request.go
+models/boolean_controller_params.go
 models/boolean_nullable_array_items_request.go
 models/boolean_nullable_request.go
 models/boolean_parsing_request.go
@@ -72,6 +77,7 @@ models/boolean_required_validation_request.go
 models/error.go
 models/nullable_string_enum.go
 models/numeric_types_array_items_request.go
+models/numeric_types_controller_params.go
 models/numeric_types_nullable_array_items_request.go
 models/numeric_types_nullable_request.go
 models/numeric_types_parsing_request.go
@@ -80,6 +86,7 @@ models/numeric_types_range_validation_request.go
 models/object_arrays_simple_object.go
 models/object_arrays_simple_objects_container.go
 models/objects_array_body_nested_request.go
+models/objects_controller_params.go
 models/objects_deeply_nested_request.go
 models/objects_deeply_nested_request_container1.go
 models/objects_deeply_nested_request_container2.go
@@ -88,6 +95,7 @@ models/simple_object.go
 models/simple_objects_container.go
 models/string_types_array_items_range_validation_request.go
 models/string_types_arrays_parsing_request.go
+models/string_types_controller_params.go
 models/string_types_enums_request.go
 models/string_types_nullable_array_items_request.go
 models/string_types_nullable_parsing_request.go

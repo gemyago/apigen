@@ -4,17 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 type objectsControllerTestActions struct {
-	objectsArrayParsingBodyDirect mockAction[*handlers.ObjectsObjectsArrayBodyDirectRequest]
-	objectsArrayParsingBodyNested mockAction[*handlers.ObjectsObjectsArrayBodyNestedRequest]
-	objectsDeeplyNested           mockAction[*handlers.ObjectsObjectsDeeplyNestedRequest]
-	objectsNullableOptionalBody   mockAction[*handlers.ObjectsObjectsNullableOptionalBodyRequest]
-	objectsNullableRequiredBody   mockAction[*handlers.ObjectsObjectsNullableRequiredBodyRequest]
-	objectsOptionalBody           mockAction[*handlers.ObjectsObjectsOptionalBodyRequest]
-	objectsRequiredBody           mockAction[*handlers.ObjectsObjectsRequiredBodyRequest]
-	objectsRequiredNestedObjects  mockAction[*handlers.ObjectsObjectsRequiredNestedObjectsRequest]
+	objectsArrayParsingBodyDirect mockAction[*models.ObjectsObjectsArrayBodyDirectParams]
+	objectsArrayParsingBodyNested mockAction[*models.ObjectsObjectsArrayBodyNestedParams]
+	objectsDeeplyNested           mockAction[*models.ObjectsObjectsDeeplyNestedParams]
+	objectsNullableOptionalBody   mockAction[*models.ObjectsObjectsNullableOptionalBodyParams]
+	objectsNullableRequiredBody   mockAction[*models.ObjectsObjectsNullableRequiredBodyParams]
+	objectsOptionalBody           mockAction[*models.ObjectsObjectsOptionalBodyParams]
+	objectsRequiredBody           mockAction[*models.ObjectsObjectsRequiredBodyParams]
+	objectsRequiredNestedObjects  mockAction[*models.ObjectsObjectsRequiredNestedObjectsParams]
 }
 
 type objectsController struct {
@@ -22,7 +23,7 @@ type objectsController struct {
 }
 
 func (c *objectsController) ObjectsArrayBodyDirect(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsArrayBodyDirectRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsArrayBodyDirectParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsArrayParsingBodyDirect.action,
@@ -30,7 +31,7 @@ func (c *objectsController) ObjectsArrayBodyDirect(
 }
 
 func (c *objectsController) ObjectsArrayBodyNested(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsArrayBodyNestedRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsArrayBodyNestedParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsArrayParsingBodyNested.action,
@@ -38,7 +39,7 @@ func (c *objectsController) ObjectsArrayBodyNested(
 }
 
 func (c *objectsController) ObjectsDeeplyNested(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsDeeplyNestedRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsDeeplyNestedParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsDeeplyNested.action,
@@ -46,7 +47,7 @@ func (c *objectsController) ObjectsDeeplyNested(
 }
 
 func (c *objectsController) ObjectsNullableOptionalBody(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsNullableOptionalBodyRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsNullableOptionalBodyParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsNullableOptionalBody.action,
@@ -54,7 +55,7 @@ func (c *objectsController) ObjectsNullableOptionalBody(
 }
 
 func (c *objectsController) ObjectsNullableRequiredBody(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsNullableRequiredBodyRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsNullableRequiredBodyParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsNullableRequiredBody.action,
@@ -62,7 +63,7 @@ func (c *objectsController) ObjectsNullableRequiredBody(
 }
 
 func (c *objectsController) ObjectsOptionalBody(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsOptionalBodyRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsOptionalBodyParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsOptionalBody.action,
@@ -70,7 +71,7 @@ func (c *objectsController) ObjectsOptionalBody(
 }
 
 func (c *objectsController) ObjectsRequiredBody(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsRequiredBodyRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsRequiredBodyParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsRequiredBody.action,
@@ -78,7 +79,7 @@ func (c *objectsController) ObjectsRequiredBody(
 }
 
 func (c *objectsController) ObjectsRequiredNestedObjects(
-	builder handlers.NoResponseHandlerBuilder[*handlers.ObjectsObjectsRequiredNestedObjectsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.ObjectsObjectsRequiredNestedObjectsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.objectsRequiredNestedObjects.action,

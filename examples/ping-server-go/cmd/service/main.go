@@ -17,7 +17,7 @@ import (
 // - curl localhost:8080/ping
 // - curl localhost:8080/ping?message=hello
 
-func pingHandler(_ context.Context, req *handlers.PingPingRequest) (*models.Ping200Response, error) {
+func pingHandler(_ context.Context, req *models.PingPingParams) (*models.Ping200Response, error) {
 	message := req.Message
 	if message == "" {
 		message = "pong"
@@ -28,7 +28,7 @@ func pingHandler(_ context.Context, req *handlers.PingPingRequest) (*models.Ping
 type pingController struct{}
 
 func (c *pingController) Ping(b handlers.HandlerBuilder[
-	*handlers.PingPingRequest,
+	*models.PingPingParams,
 	*models.Ping200Response,
 ]) http.Handler {
 	return b.HandleWith(pingHandler)

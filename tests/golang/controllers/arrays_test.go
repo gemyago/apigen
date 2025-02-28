@@ -38,9 +38,9 @@ func TestArrays(t *testing.T) {
 
 	t.Run("required-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.ArraysArraysRequiredValidationRequest),
-		) *handlers.ArraysArraysRequiredValidationRequest {
-			req := &handlers.ArraysArraysRequiredValidationRequest{
+			opts ...func(*models.ArraysArraysRequiredValidationParams),
+		) *models.ArraysArraysRequiredValidationParams {
+			req := &models.ArraysArraysRequiredValidationParams{
 				// path
 				SimpleItems1: randomStrings(3, 5),
 				SimpleItems2: randomStrings(3, 5),
@@ -65,7 +65,7 @@ func TestArrays(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.ArraysArraysRequiredValidationRequest) url.Values {
+		buildQuery := func(req *models.ArraysArraysRequiredValidationParams) url.Values {
 			query := url.Values{}
 			query["simpleItems1InQuery"] = req.SimpleItems1InQuery
 			query["simpleItems2InQuery"] = req.SimpleItems2InQuery
@@ -74,7 +74,7 @@ func TestArrays(t *testing.T) {
 			return query
 		}
 
-		buildPath := func(req *handlers.ArraysArraysRequiredValidationRequest) string {
+		buildPath := func(req *models.ArraysArraysRequiredValidationParams) string {
 			return fmt.Sprintf(
 				"/arrays/required-validation/%v/%v",
 				strings.Join(req.SimpleItems1, ","),
@@ -102,7 +102,7 @@ func TestArrays(t *testing.T) {
 
 		runRouteTestCase(t, "should allow optional params", setupRouter, func() testCase {
 			originalReq := randomReq(
-				func(req *handlers.ArraysArraysRequiredValidationRequest) {
+				func(req *models.ArraysArraysRequiredValidationParams) {
 					req.OptionalSimpleItems1InQuery = nil
 					req.OptionalSimpleItems2InQuery = nil
 					req.Payload.OptionalSimpleItems1 = nil
@@ -129,7 +129,7 @@ func TestArrays(t *testing.T) {
 
 		runRouteTestCase(t, "should validate required params", setupRouter, func() testCase {
 			originalReq := randomReq(
-				func(req *handlers.ArraysArraysRequiredValidationRequest) {
+				func(req *models.ArraysArraysRequiredValidationParams) {
 					req.Payload.SimpleItems1 = nil
 					req.Payload.SimpleItems2 = nil
 				},
@@ -154,9 +154,9 @@ func TestArrays(t *testing.T) {
 
 	t.Run("nullable-required-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.ArraysArraysNullableRequiredValidationRequest),
-		) *handlers.ArraysArraysNullableRequiredValidationRequest {
-			req := &handlers.ArraysArraysNullableRequiredValidationRequest{
+			opts ...func(*models.ArraysArraysNullableRequiredValidationParams),
+		) *models.ArraysArraysNullableRequiredValidationParams {
+			req := &models.ArraysArraysNullableRequiredValidationParams{
 				// path
 				SimpleItems1: randomStrings(2, 5),
 				SimpleItems2: randomStrings(5, 10),
@@ -181,7 +181,7 @@ func TestArrays(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.ArraysArraysNullableRequiredValidationRequest) url.Values {
+		buildQuery := func(req *models.ArraysArraysNullableRequiredValidationParams) url.Values {
 			query := url.Values{}
 			query["simpleItems1InQuery"] = req.SimpleItems1InQuery
 			query["simpleItems2InQuery"] = req.SimpleItems2InQuery
@@ -190,7 +190,7 @@ func TestArrays(t *testing.T) {
 			return query
 		}
 
-		buildPath := func(req *handlers.ArraysArraysNullableRequiredValidationRequest) string {
+		buildPath := func(req *models.ArraysArraysNullableRequiredValidationParams) string {
 			return fmt.Sprintf(
 				"/arrays/nullable-required-validation/%v/%v",
 				strings.Join(req.SimpleItems1, ","),
@@ -218,7 +218,7 @@ func TestArrays(t *testing.T) {
 
 		runRouteTestCase(t, "should allow optional params", setupRouter, func() testCase {
 			originalReq := randomReq(
-				func(req *handlers.ArraysArraysNullableRequiredValidationRequest) {
+				func(req *models.ArraysArraysNullableRequiredValidationParams) {
 					req.OptionalSimpleItems1InQuery = nil
 					req.OptionalSimpleItems2InQuery = nil
 					req.Payload.OptionalSimpleItems1 = nil
@@ -245,7 +245,7 @@ func TestArrays(t *testing.T) {
 
 		runRouteTestCase(t, "should validate required params", setupRouter, func() testCase {
 			originalReq := randomReq(
-				func(req *handlers.ArraysArraysNullableRequiredValidationRequest) {
+				func(req *models.ArraysArraysNullableRequiredValidationParams) {
 					req.Payload.SimpleItems1 = nil
 					req.Payload.SimpleItems2 = nil
 				},
@@ -270,9 +270,9 @@ func TestArrays(t *testing.T) {
 
 	t.Run("range-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.ArraysArraysRangeValidationRequest),
-		) *handlers.ArraysArraysRangeValidationRequest {
-			req := &handlers.ArraysArraysRangeValidationRequest{
+			opts ...func(*models.ArraysArraysRangeValidationParams),
+		) *models.ArraysArraysRangeValidationParams {
+			req := &models.ArraysArraysRangeValidationParams{
 				// path
 				SimpleItems1: randomStrings(5, 10),
 				SimpleItems2: randomStrings(10, 15),
@@ -297,7 +297,7 @@ func TestArrays(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.ArraysArraysRangeValidationRequest) url.Values {
+		buildQuery := func(req *models.ArraysArraysRangeValidationParams) url.Values {
 			query := url.Values{}
 			query["simpleItems1InQuery"] = req.SimpleItems1InQuery
 			query["simpleItems2InQuery"] = req.SimpleItems2InQuery
@@ -306,7 +306,7 @@ func TestArrays(t *testing.T) {
 			return query
 		}
 
-		buildPath := func(req *handlers.ArraysArraysRangeValidationRequest) string {
+		buildPath := func(req *models.ArraysArraysRangeValidationParams) string {
 			return fmt.Sprintf(
 				"/arrays/range-validation/%v/%v",
 				strings.Join(req.SimpleItems1, ","),
@@ -333,7 +333,7 @@ func TestArrays(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate minItems", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.ArraysArraysRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.ArraysArraysRangeValidationParams) {
 				req.SimpleItems1 = randomStrings(1, 4)
 				req.SimpleItems2 = randomStrings(1, 9)
 				req.SimpleItems1InQuery = randomStrings(1, 4)

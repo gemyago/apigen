@@ -4,16 +4,17 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 type numericTypesControllerTestActions struct {
-	numericTypesParsing                  mockAction[*handlers.NumericTypesNumericTypesParsingRequest]
-	numericTypesArrayItems               mockAction[*handlers.NumericTypesNumericTypesArrayItemsRequest]
-	numericTypesRangeValidation          mockAction[*handlers.NumericTypesNumericTypesRangeValidationRequest]
-	numericTypesRangeValidationExclusive mockAction[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest]
-	numericTypesRequiredValidation       mockAction[*handlers.NumericTypesNumericTypesRequiredValidationRequest]
-	numericTypesNullable                 mockAction[*handlers.NumericTypesNumericTypesNullableRequest]
-	numericTypesNullableArrayItems       mockAction[*handlers.NumericTypesNumericTypesNullableArrayItemsRequest]
+	numericTypesParsing                  mockAction[*models.NumericTypesNumericTypesParsingParams]
+	numericTypesArrayItems               mockAction[*models.NumericTypesNumericTypesArrayItemsParams]
+	numericTypesRangeValidation          mockAction[*models.NumericTypesNumericTypesRangeValidationParams]
+	numericTypesRangeValidationExclusive mockAction[*models.NumericTypesNumericTypesRangeValidationExclusiveParams]
+	numericTypesRequiredValidation       mockAction[*models.NumericTypesNumericTypesRequiredValidationParams]
+	numericTypesNullable                 mockAction[*models.NumericTypesNumericTypesNullableParams]
+	numericTypesNullableArrayItems       mockAction[*models.NumericTypesNumericTypesNullableArrayItemsParams]
 }
 
 type numericTypesController struct {
@@ -21,7 +22,7 @@ type numericTypesController struct {
 }
 
 func (c *numericTypesController) NumericTypesParsing(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesParsingRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesParsingParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesParsing.action,
@@ -29,7 +30,7 @@ func (c *numericTypesController) NumericTypesParsing(
 }
 
 func (c *numericTypesController) NumericTypesArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesArrayItemsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesArrayItems.action,
@@ -37,7 +38,7 @@ func (c *numericTypesController) NumericTypesArrayItems(
 }
 
 func (c *numericTypesController) NumericTypesRangeValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRangeValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesRangeValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesRangeValidation.action,
@@ -45,7 +46,7 @@ func (c *numericTypesController) NumericTypesRangeValidation(
 }
 
 func (c *numericTypesController) NumericTypesRangeValidationExclusive(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRangeValidationExclusiveRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesRangeValidationExclusiveParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesRangeValidationExclusive.action,
@@ -53,7 +54,7 @@ func (c *numericTypesController) NumericTypesRangeValidationExclusive(
 }
 
 func (c *numericTypesController) NumericTypesRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesRequiredValidation.action,
@@ -61,7 +62,7 @@ func (c *numericTypesController) NumericTypesRequiredValidation(
 }
 
 func (c *numericTypesController) NumericTypesNullable(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesNullableRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesNullableParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesNullable.action,
@@ -69,7 +70,7 @@ func (c *numericTypesController) NumericTypesNullable(
 }
 
 func (c *numericTypesController) NumericTypesNullableArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*handlers.NumericTypesNumericTypesNullableArrayItemsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.NumericTypesNumericTypesNullableArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.numericTypesNullableArrayItems.action,

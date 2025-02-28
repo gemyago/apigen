@@ -205,7 +205,7 @@ func TestBehavior(t *testing.T) {
 
 	t.Run("httpActionHandler", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request and return the response", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
@@ -220,7 +220,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsAndResponse.httpActionFn = func(
 						_ http.ResponseWriter,
 						_ *http.Request,
-						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+						params *models.BehaviorBehaviorWithParamsAndResponseParams,
 					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
 						assert.Equal(t, wantParams, params)
 						return wantResponse, nil
@@ -239,7 +239,7 @@ func TestBehavior(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should respond with custom status", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
@@ -255,7 +255,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsAndResponse.httpActionFn = func(
 						w http.ResponseWriter,
 						_ *http.Request,
-						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+						params *models.BehaviorBehaviorWithParamsAndResponseParams,
 					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
 						assert.Equal(t, wantParams, params)
 						w.WriteHeader(wantCustomStatus)
@@ -284,7 +284,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsNoResponse.httpActionFn = func(
 						w http.ResponseWriter,
 						_ *http.Request,
-						_ *handlers.BehaviorBehaviorWithParamsNoResponseRequest,
+						_ *models.BehaviorBehaviorWithParamsNoResponseParams,
 					) (mockVoid, error) {
 						w.WriteHeader(wantCustomStatus)
 						return nil, nil
@@ -301,7 +301,7 @@ func TestBehavior(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should not write the response if already written", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
@@ -318,7 +318,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsAndResponse.httpActionFn = func(
 						w http.ResponseWriter,
 						_ *http.Request,
-						params *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+						params *models.BehaviorBehaviorWithParamsAndResponseParams,
 					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
 						assert.Equal(t, wantParams, params)
 						w.WriteHeader(wantCustomStatus)
@@ -349,7 +349,7 @@ func TestBehavior(t *testing.T) {
 					testActions.withParamsAndResponse.httpActionFn = func(
 						w http.ResponseWriter,
 						_ *http.Request,
-						_ *handlers.BehaviorBehaviorWithParamsAndResponseRequest,
+						_ *models.BehaviorBehaviorWithParamsAndResponseParams,
 					) (*models.BehaviorWithParamsAndResponseResponseBody, error) {
 						w.WriteHeader(wantCustomStatus)
 						_, _ = w.Write([]byte(wantCustomBody))
@@ -494,7 +494,7 @@ func TestBehavior(t *testing.T) {
 
 	t.Run("withParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsNoResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			return testCase{
@@ -513,7 +513,7 @@ func TestBehavior(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsNoResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			return testCase{
@@ -580,7 +580,7 @@ func TestBehavior(t *testing.T) {
 
 	t.Run("withParamsAndResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
@@ -607,7 +607,7 @@ func TestBehavior(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should process the request with http action", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{

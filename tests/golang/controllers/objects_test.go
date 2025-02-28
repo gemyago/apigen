@@ -64,7 +64,7 @@ func TestObjects(t *testing.T) {
 	t.Run("nullable-body", func(t *testing.T) {
 		t.Run("required", func(t *testing.T) {
 			runRouteTestCase(t, "should parse nullable body", setupRouter, func() testCase {
-				originalReq := handlers.ObjectsObjectsNullableRequiredBodyRequest{
+				originalReq := models.ObjectsObjectsNullableRequiredBodyParams{
 					Payload: randomSimpleNullableObject(),
 				}
 				return testCase{
@@ -107,7 +107,7 @@ func TestObjects(t *testing.T) {
 		})
 		t.Run("optional", func(t *testing.T) {
 			runRouteTestCase(t, "should parse nullable body", setupRouter, func() testCase {
-				originalReq := handlers.ObjectsObjectsNullableOptionalBodyRequest{
+				originalReq := models.ObjectsObjectsNullableOptionalBodyParams{
 					Payload: randomSimpleNullableObject(),
 				}
 				return testCase{
@@ -153,7 +153,7 @@ func TestObjects(t *testing.T) {
 	t.Run("required-body", func(t *testing.T) {
 		t.Run("required", func(t *testing.T) {
 			runRouteTestCase(t, "should parse required body", setupRouter, func() testCase {
-				originalReq := handlers.ObjectsObjectsRequiredBodyRequest{
+				originalReq := models.ObjectsObjectsRequiredBodyParams{
 					Payload: randomSimpleObject(),
 				}
 				return testCase{
@@ -183,7 +183,7 @@ func TestObjects(t *testing.T) {
 		})
 		t.Run("optional", func(t *testing.T) {
 			runRouteTestCase(t, "should parse optional body", setupRouter, func() testCase {
-				originalReq := handlers.ObjectsObjectsOptionalBodyRequest{
+				originalReq := models.ObjectsObjectsOptionalBodyParams{
 					Payload: randomSimpleObject(),
 				}
 				return testCase{
@@ -215,7 +215,7 @@ func TestObjects(t *testing.T) {
 
 	t.Run("required-nested-objects", func(t *testing.T) {
 		runRouteTestCase(t, "should parse body", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsRequiredNestedObjectsRequest{
+			originalReq := models.ObjectsObjectsRequiredNestedObjectsParams{
 				Payload: randomSimpleObjectsContainer(),
 			}
 			return testCase{
@@ -231,7 +231,7 @@ func TestObjects(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow missing optional fields", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsRequiredNestedObjectsRequest{
+			originalReq := models.ObjectsObjectsRequiredNestedObjectsParams{
 				Payload: randomSimpleObjectsContainer(
 					func(req *models.SimpleObjectsContainer) {
 						req.OptionalSimpleObject1 = nil
@@ -268,7 +268,7 @@ func TestObjects(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow null values for nullables", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsRequiredNestedObjectsRequest{
+			originalReq := models.ObjectsObjectsRequiredNestedObjectsParams{
 				Payload: randomSimpleObjectsContainer(
 					func(req *models.SimpleObjectsContainer) {
 						req.SimpleNullableObject1 = nil
@@ -324,7 +324,7 @@ func TestObjects(t *testing.T) {
 
 	t.Run("deeply-nested-objects", func(t *testing.T) {
 		runRouteTestCase(t, "should parse body", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsDeeplyNestedRequest{
+			originalReq := models.ObjectsObjectsDeeplyNestedParams{
 				Payload: &models.ObjectsDeeplyNestedRequest{
 					Container1: &models.ObjectsDeeplyNestedRequestContainer1{
 						Container11: randomSimpleObjectsContainer(),
@@ -349,7 +349,7 @@ func TestObjects(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should validate nested objects", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsDeeplyNestedRequest{
+			originalReq := models.ObjectsObjectsDeeplyNestedParams{
 				Payload: &models.ObjectsDeeplyNestedRequest{
 					Container1: &models.ObjectsDeeplyNestedRequestContainer1{
 						Container11: randomSimpleObjectsContainer(),
@@ -410,7 +410,7 @@ func TestObjects(t *testing.T) {
 		}
 
 		runRouteTestCase(t, "should parse direct body array", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsArrayBodyDirectRequest{
+			originalReq := models.ObjectsObjectsArrayBodyDirectParams{
 				Payload: randomObjectArraysSimpleObjects(),
 			}
 			return testCase{
@@ -427,7 +427,7 @@ func TestObjects(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate direct body array items", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsArrayBodyDirectRequest{
+			originalReq := models.ObjectsObjectsArrayBodyDirectParams{
 				Payload: randomObjectArraysSimpleObjects(),
 			}
 			var badIndex int
@@ -450,7 +450,7 @@ func TestObjects(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should parse nested body array", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsArrayBodyNestedRequest{
+			originalReq := models.ObjectsObjectsArrayBodyNestedParams{
 				Payload: &models.ObjectsArrayBodyNestedRequest{
 					NestedArray1: randomObjectArraysSimpleObjects(),
 					NestedArray2: randomObjectArraysSimpleObjects(),
@@ -482,7 +482,7 @@ func TestObjects(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate nested body array", setupRouter, func() testCase {
-			originalReq := handlers.ObjectsObjectsArrayBodyNestedRequest{
+			originalReq := models.ObjectsObjectsArrayBodyNestedParams{
 				Payload: &models.ObjectsArrayBodyNestedRequest{
 					NestedArray1: randomObjectArraysSimpleObjects(),
 					NestedArray2: randomObjectArraysSimpleObjects(),

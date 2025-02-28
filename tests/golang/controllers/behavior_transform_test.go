@@ -79,7 +79,7 @@ func TestBehaviorTransform(t *testing.T) {
 
 	t.Run("withParamsNoResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsNoResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			return testCase{
@@ -92,7 +92,7 @@ func TestBehaviorTransform(t *testing.T) {
 					assert.Len(t, testActions.withParamsNoResponse.calls, 1)
 					assert.Equal(t,
 						wantParams,
-						(*handlers.BehaviorBehaviorWithParamsNoResponseRequest)(
+						(*models.BehaviorBehaviorWithParamsNoResponseParams)(
 							testActions.withParamsNoResponse.calls[0].params,
 						),
 					)
@@ -101,7 +101,7 @@ func TestBehaviorTransform(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should fail if req transformation fails", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsNoResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsNoResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			return testCase{
@@ -123,7 +123,7 @@ func TestBehaviorTransform(t *testing.T) {
 
 	t.Run("withParamsAndResponse", func(t *testing.T) {
 		runRouteTestCase(t, "should process the request", setupRouter, func() testCase {
-			wantParams := &handlers.BehaviorBehaviorWithParamsAndResponseRequest{
+			wantParams := &models.BehaviorBehaviorWithParamsAndResponseParams{
 				QueryParam1: fake.Lorem().Word(),
 			}
 			wantResponse := &models.BehaviorWithParamsAndResponseResponseBody{
@@ -146,7 +146,7 @@ func TestBehaviorTransform(t *testing.T) {
 					assert.Len(t, testActions.withParamsAndResponse.calls, 1)
 					assert.Equal(t,
 						wantParams,
-						(*handlers.BehaviorBehaviorWithParamsAndResponseRequest)(
+						(*models.BehaviorBehaviorWithParamsAndResponseParams)(
 							testActions.withParamsAndResponse.calls[0].params,
 						),
 					)
