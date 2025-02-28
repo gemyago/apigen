@@ -77,8 +77,8 @@ The above will generate the code in the `internal/api/http/v1routes` folder. Com
 
 Declare controller that implements the generated interface, for example:
 ```go
-func pingHandler(_ context.Context, req *models.PingPingParams) (*models.Ping200Response, error) {
-	message := req.Message
+func pingHandler(_ context.Context, params *models.PingParams) (*models.Ping200Response, error) {
+	message := params.Message
 	if message == "" {
 		message = "pong"
 	}
@@ -88,7 +88,7 @@ func pingHandler(_ context.Context, req *models.PingPingParams) (*models.Ping200
 type pingController struct{}
 
 func (c *pingController) Ping(b handlers.HandlerBuilder[
-	*models.PingPingParams,
+	*models.PingParams,
 	*models.Ping200Response,
 ]) http.Handler {
 	return b.HandleWith(pingHandler)
@@ -148,7 +148,7 @@ Typically you will need to import generated code from the following packages:
 Controller should implement a set of methods, each corresponding to an operation in the OpenAPI spec. The method signature is as follows:
 ```go
 func (c *PetsController) GetPetByID(
-	b handlers.HandlerBuilder[*models.PetsGetPetByIDParams, *models.PetResponse],
+	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
 ) http.Handler {
 	// Your implementation here
 }
@@ -159,13 +159,13 @@ The `HandlerBuilder` allows you to create an actual http.Handler that will be us
 The `HandlerBuilder` has the following methods:
 * `HandleWith` - will bind your application logic to the generated code. The handler function should have the following signature:
   ```go
-  func(context.Context, *models.PetsGetPetByIDParams) (*models.PetResponse, error)
+  func(context.Context, *models.GetPetByIDParams) (*models.PetResponse, error)
   ```
   This would usually be the most typical way to implement the controller method. You can define the handler in place however it is advised have a separate component that implements the handler function. This approach will help you to keep your controller clean and declarative.
   
 * `HandleWithHTTP` - similar to the above, but allows you to access the underlying http.Request and http.ResponseWriter. The handler function should have the following signature:
   ```go
-  func(http.ResponseWriter, *http.Request, *models.PetsGetPetByIDParams)  (*models.PetResponse, error)
+  func(http.ResponseWriter, *http.Request, *models.GetPetByIDParams)  (*models.PetResponse, error)
   ```
   This method is useful when you need to access the underlying http request and response objects. For example, when you need to set custom headers or status codes.
   
@@ -177,7 +177,7 @@ The `HandlerBuilder` has the following methods:
 Due to Go language constraints there are several variations of the `HandlerBuilder`. The variations are:
 * `NoResponseHandlerBuilder` - for operations that do not return a response. The handler function should have the following signature:
   ```go
-  func(context.Context, *models.PetsDeletePetParams) error
+  func(context.Context, *models.DeletePetParams) error
   ```
 * `NoRequestHandlerBuilder` - for operations that do not have request parameters. The handler function should have the following signature:
   ```go
