@@ -28,9 +28,9 @@ type paramsParserStringTypesStringTypesArrayItemsRangeValidation struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesArrayItemsRangeValidationRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesArrayItemsRangeValidationParams, error) {
+func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesArrayItemsRangeValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesArrayItemsRangeValidationParams{}
+	reqParams := &StringTypesArrayItemsRangeValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -51,7 +51,7 @@ func (p *paramsParserStringTypesStringTypesArrayItemsRangeValidation) parse(rout
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesArrayItemsRangeValidationParams] {
+func newParamsParserStringTypesStringTypesArrayItemsRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesArrayItemsRangeValidationParams] {
 	return &paramsParserStringTypesStringTypesArrayItemsRangeValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
@@ -209,9 +209,9 @@ type paramsParserStringTypesStringTypesArraysParsing struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesArraysParsingRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesArraysParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesArraysParsingParams, error) {
+func (p *paramsParserStringTypesStringTypesArraysParsing) parse(router httpRouter, req *http.Request) (*StringTypesArraysParsingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesArraysParsingParams{}
+	reqParams := &StringTypesArraysParsingParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -232,7 +232,7 @@ func (p *paramsParserStringTypesStringTypesArraysParsing) parse(router httpRoute
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesArraysParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesArraysParsingParams] {
+func newParamsParserStringTypesStringTypesArraysParsing(rootHandler *RootHandler) paramsParser[*StringTypesArraysParsingParams] {
 	return &paramsParserStringTypesStringTypesArraysParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
@@ -380,9 +380,9 @@ type paramsParserStringTypesStringTypesEnums struct {
 	bindOptionalNullableRefEnumParamInQuery requestParamBinder[[]string, *NullableStringEnum]
 }
 
-func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesEnumsParams, error) {
+func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *http.Request) (*StringTypesEnumsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesEnumsParams{}
+	reqParams := &StringTypesEnumsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindInlineEnumParam(pathParamsCtx.Fork("inlineEnumParam"), readPathValue("inlineEnumParam", router, req), &reqParams.InlineEnumParam)
@@ -405,7 +405,7 @@ func (p *paramsParserStringTypesStringTypesEnums) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesEnums(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesEnumsParams] {
+func newParamsParserStringTypesStringTypesEnums(rootHandler *RootHandler) paramsParser[*StringTypesEnumsParams] {
 	return &paramsParserStringTypesStringTypesEnums{
 		bindInlineEnumParam: newRequestParamBinder(binderParams[string, StringTypesStringTypesEnumsInlineEnumParam]{
 			required: true,
@@ -527,9 +527,9 @@ type paramsParserStringTypesStringTypesNullableArrayItems struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesNullableArrayItemsRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableArrayItemsParams, error) {
+func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*StringTypesNullableArrayItemsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesNullableArrayItemsParams{}
+	reqParams := &StringTypesNullableArrayItemsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -550,7 +550,7 @@ func (p *paramsParserStringTypesStringTypesNullableArrayItems) parse(router http
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableArrayItemsParams] {
+func newParamsParserStringTypesStringTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*StringTypesNullableArrayItemsParams] {
 	return &paramsParserStringTypesStringTypesNullableArrayItems{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, []*string]{
 			required: true,
@@ -712,9 +712,9 @@ type paramsParserStringTypesStringTypesNullableParsing struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesNullableParsingRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesNullableParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableParsingParams, error) {
+func (p *paramsParserStringTypesStringTypesNullableParsing) parse(router httpRouter, req *http.Request) (*StringTypesNullableParsingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesNullableParsingParams{}
+	reqParams := &StringTypesNullableParsingParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -735,7 +735,7 @@ func (p *paramsParserStringTypesStringTypesNullableParsing) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableParsingParams] {
+func newParamsParserStringTypesStringTypesNullableParsing(rootHandler *RootHandler) paramsParser[*StringTypesNullableParsingParams] {
 	return &paramsParserStringTypesStringTypesNullableParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, *string]{
 			required: true,
@@ -833,9 +833,9 @@ type paramsParserStringTypesStringTypesNullableRequiredValidation struct {
 	bindOptionalUnformattedStrInQuery requestParamBinder[[]string, *string]
 }
 
-func (p *paramsParserStringTypesStringTypesNullableRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesNullableRequiredValidationParams, error) {
+func (p *paramsParserStringTypesStringTypesNullableRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesNullableRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesNullableRequiredValidationParams{}
+	reqParams := &StringTypesNullableRequiredValidationParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -846,7 +846,7 @@ func (p *paramsParserStringTypesStringTypesNullableRequiredValidation) parse(rou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesNullableRequiredValidationParams] {
+func newParamsParserStringTypesStringTypesNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesNullableRequiredValidationParams] {
 	return &paramsParserStringTypesStringTypesNullableRequiredValidation{
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, *string]{
 			required: true,
@@ -894,9 +894,9 @@ type paramsParserStringTypesStringTypesParsing struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesParsingRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesParsingParams, error) {
+func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req *http.Request) (*StringTypesParsingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesParsingParams{}
+	reqParams := &StringTypesParsingParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -917,7 +917,7 @@ func (p *paramsParserStringTypesStringTypesParsing) parse(router httpRouter, req
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesParsing(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesParsingParams] {
+func newParamsParserStringTypesStringTypesParsing(rootHandler *RootHandler) paramsParser[*StringTypesParsingParams] {
 	return &paramsParserStringTypesStringTypesParsing{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
@@ -1021,9 +1021,9 @@ type paramsParserStringTypesStringTypesPatternValidation struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesPatternValidationRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesPatternValidationParams, error) {
+func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpRouter, req *http.Request) (*StringTypesPatternValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesPatternValidationParams{}
+	reqParams := &StringTypesPatternValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -1042,7 +1042,7 @@ func (p *paramsParserStringTypesStringTypesPatternValidation) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesPatternValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesPatternValidationParams] {
+func newParamsParserStringTypesStringTypesPatternValidation(rootHandler *RootHandler) paramsParser[*StringTypesPatternValidationParams] {
 	return &paramsParserStringTypesStringTypesPatternValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
@@ -1136,9 +1136,9 @@ type paramsParserStringTypesStringTypesRangeValidation struct {
 	bindPayload requestParamBinder[*http.Request, *StringTypesRangeValidationRequest]
 }
 
-func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRangeValidationParams, error) {
+func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRouter, req *http.Request) (*StringTypesRangeValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesRangeValidationParams{}
+	reqParams := &StringTypesRangeValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindUnformattedStr(pathParamsCtx.Fork("unformattedStr"), readPathValue("unformattedStr", router, req), &reqParams.UnformattedStr)
@@ -1159,7 +1159,7 @@ func (p *paramsParserStringTypesStringTypesRangeValidation) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesRangeValidationParams] {
+func newParamsParserStringTypesStringTypesRangeValidation(rootHandler *RootHandler) paramsParser[*StringTypesRangeValidationParams] {
 	return &paramsParserStringTypesStringTypesRangeValidation{
 		bindUnformattedStr: newRequestParamBinder(binderParams[string, string]{
 			required: true,
@@ -1277,9 +1277,9 @@ type paramsParserStringTypesStringTypesRequiredValidation struct {
 	bindOptionalByteStrInQuery requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesStringTypesRequiredValidationParams, error) {
+func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*StringTypesRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &StringTypesStringTypesRequiredValidationParams{}
+	reqParams := &StringTypesRequiredValidationParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -1298,7 +1298,7 @@ func (p *paramsParserStringTypesStringTypesRequiredValidation) parse(router http
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserStringTypesStringTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesStringTypesRequiredValidationParams] {
+func newParamsParserStringTypesStringTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*StringTypesRequiredValidationParams] {
 	return &paramsParserStringTypesStringTypesRequiredValidation{
 		bindUnformattedStrInQuery: newRequestParamBinder(binderParams[[]string, string]{
 			required: true,
@@ -1399,122 +1399,122 @@ func newParamsParserStringTypesStringTypesRequiredValidation(rootHandler *RootHa
 type stringTypesControllerBuilder struct {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesArrayItemsRangeValidationParams,
+	// Request type: StringTypesArrayItemsRangeValidationParams,
 	//
 	// Response type: none
 	StringTypesArrayItemsRangeValidation genericHandlerBuilder[
-		*StringTypesStringTypesArrayItemsRangeValidationParams,
+		*StringTypesArrayItemsRangeValidationParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesArrayItemsRangeValidationParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesArrayItemsRangeValidationParams, void],
+		handlerActionFuncNoResponse[*StringTypesArrayItemsRangeValidationParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesArrayItemsRangeValidationParams, void],
 	]
 
 	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesArraysParsingParams,
+	// Request type: StringTypesArraysParsingParams,
 	//
 	// Response type: none
 	StringTypesArraysParsing genericHandlerBuilder[
-		*StringTypesStringTypesArraysParsingParams,
+		*StringTypesArraysParsingParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesArraysParsingParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesArraysParsingParams, void],
+		handlerActionFuncNoResponse[*StringTypesArraysParsingParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesArraysParsingParams, void],
 	]
 
 	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
 	//
-	// Request type: StringTypesStringTypesEnumsParams,
+	// Request type: StringTypesEnumsParams,
 	//
 	// Response type: none
 	StringTypesEnums genericHandlerBuilder[
-		*StringTypesStringTypesEnumsParams,
+		*StringTypesEnumsParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesEnumsParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesEnumsParams, void],
+		handlerActionFuncNoResponse[*StringTypesEnumsParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesEnumsParams, void],
 	]
 
 	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesNullableArrayItemsParams,
+	// Request type: StringTypesNullableArrayItemsParams,
 	//
 	// Response type: none
 	StringTypesNullableArrayItems genericHandlerBuilder[
-		*StringTypesStringTypesNullableArrayItemsParams,
+		*StringTypesNullableArrayItemsParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesNullableArrayItemsParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableArrayItemsParams, void],
+		handlerActionFuncNoResponse[*StringTypesNullableArrayItemsParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesNullableArrayItemsParams, void],
 	]
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesNullableParsingParams,
+	// Request type: StringTypesNullableParsingParams,
 	//
 	// Response type: none
 	StringTypesNullableParsing genericHandlerBuilder[
-		*StringTypesStringTypesNullableParsingParams,
+		*StringTypesNullableParsingParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesNullableParsingParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableParsingParams, void],
+		handlerActionFuncNoResponse[*StringTypesNullableParsingParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesNullableParsingParams, void],
 	]
 
 	// POST /string-types/nullable-required-validation
 	//
-	// Request type: StringTypesStringTypesNullableRequiredValidationParams,
+	// Request type: StringTypesNullableRequiredValidationParams,
 	//
 	// Response type: none
 	StringTypesNullableRequiredValidation genericHandlerBuilder[
-		*StringTypesStringTypesNullableRequiredValidationParams,
+		*StringTypesNullableRequiredValidationParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesNullableRequiredValidationParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesNullableRequiredValidationParams, void],
+		handlerActionFuncNoResponse[*StringTypesNullableRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesNullableRequiredValidationParams, void],
 	]
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesParsingParams,
+	// Request type: StringTypesParsingParams,
 	//
 	// Response type: none
 	StringTypesParsing genericHandlerBuilder[
-		*StringTypesStringTypesParsingParams,
+		*StringTypesParsingParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesParsingParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesParsingParams, void],
+		handlerActionFuncNoResponse[*StringTypesParsingParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesParsingParams, void],
 	]
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
 	//
-	// Request type: StringTypesStringTypesPatternValidationParams,
+	// Request type: StringTypesPatternValidationParams,
 	//
 	// Response type: none
 	StringTypesPatternValidation genericHandlerBuilder[
-		*StringTypesStringTypesPatternValidationParams,
+		*StringTypesPatternValidationParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesPatternValidationParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesPatternValidationParams, void],
+		handlerActionFuncNoResponse[*StringTypesPatternValidationParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesPatternValidationParams, void],
 	]
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesRangeValidationParams,
+	// Request type: StringTypesRangeValidationParams,
 	//
 	// Response type: none
 	StringTypesRangeValidation genericHandlerBuilder[
-		*StringTypesStringTypesRangeValidationParams,
+		*StringTypesRangeValidationParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesRangeValidationParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesRangeValidationParams, void],
+		handlerActionFuncNoResponse[*StringTypesRangeValidationParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesRangeValidationParams, void],
 	]
 
 	// POST /string-types/required-validation
 	//
-	// Request type: StringTypesStringTypesRequiredValidationParams,
+	// Request type: StringTypesRequiredValidationParams,
 	//
 	// Response type: none
 	StringTypesRequiredValidation genericHandlerBuilder[
-		*StringTypesStringTypesRequiredValidationParams,
+		*StringTypesRequiredValidationParams,
 		void,
-		handlerActionFuncNoResponse[*StringTypesStringTypesRequiredValidationParams, void],
-		httpHandlerActionFuncNoResponse[*StringTypesStringTypesRequiredValidationParams, void],
+		handlerActionFuncNoResponse[*StringTypesRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*StringTypesRequiredValidationParams, void],
 	]
 }
 
@@ -1524,15 +1524,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesArrayItemsRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesArrayItemsRangeValidationParams,
+				*StringTypesArrayItemsRangeValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesArrayItemsRangeValidationParams,
+				*StringTypesArrayItemsRangeValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesArrayItemsRangeValidationParams,
+				*StringTypesArrayItemsRangeValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1545,15 +1545,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesArraysParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesArraysParsingParams,
+				*StringTypesArraysParsingParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesArraysParsingParams,
+				*StringTypesArraysParsingParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesArraysParsingParams,
+				*StringTypesArraysParsingParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1566,15 +1566,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesEnums: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesEnumsParams,
+				*StringTypesEnumsParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesEnumsParams,
+				*StringTypesEnumsParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesEnumsParams,
+				*StringTypesEnumsParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1587,15 +1587,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesNullableArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableArrayItemsParams,
+				*StringTypesNullableArrayItemsParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableArrayItemsParams,
+				*StringTypesNullableArrayItemsParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesNullableArrayItemsParams,
+				*StringTypesNullableArrayItemsParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1608,15 +1608,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesNullableParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableParsingParams,
+				*StringTypesNullableParsingParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableParsingParams,
+				*StringTypesNullableParsingParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesNullableParsingParams,
+				*StringTypesNullableParsingParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1629,15 +1629,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesNullableRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableRequiredValidationParams,
+				*StringTypesNullableRequiredValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesNullableRequiredValidationParams,
+				*StringTypesNullableRequiredValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesNullableRequiredValidationParams,
+				*StringTypesNullableRequiredValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1650,15 +1650,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesParsingParams,
+				*StringTypesParsingParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesParsingParams,
+				*StringTypesParsingParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesParsingParams,
+				*StringTypesParsingParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1671,15 +1671,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesPatternValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesPatternValidationParams,
+				*StringTypesPatternValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesPatternValidationParams,
+				*StringTypesPatternValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesPatternValidationParams,
+				*StringTypesPatternValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1692,15 +1692,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesRangeValidationParams,
+				*StringTypesRangeValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesRangeValidationParams,
+				*StringTypesRangeValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesRangeValidationParams,
+				*StringTypesRangeValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1713,15 +1713,15 @@ func newStringTypesControllerBuilder(app *RootHandler) *stringTypesControllerBui
 		StringTypesRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*StringTypesStringTypesRequiredValidationParams,
+				*StringTypesRequiredValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*StringTypesStringTypesRequiredValidationParams,
+				*StringTypesRequiredValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*StringTypesStringTypesRequiredValidationParams,
+				*StringTypesRequiredValidationParams,
 				void,
 			]{
 				defaultStatus: 204,

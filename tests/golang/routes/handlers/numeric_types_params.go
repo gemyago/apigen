@@ -30,9 +30,9 @@ type paramsParserNumericTypesNumericTypesArrayItems struct {
 	bindPayload requestParamBinder[*http.Request, *NumericTypesArrayItemsRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesArrayItemsParams, error) {
+func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesArrayItemsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesArrayItemsParams{}
+	reqParams := &NumericTypesArrayItemsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -55,7 +55,7 @@ func (p *paramsParserNumericTypesNumericTypesArrayItems) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesArrayItemsParams] {
+func newParamsParserNumericTypesNumericTypesArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesArrayItemsParams] {
 	return &paramsParserNumericTypesNumericTypesArrayItems{
 		bindNumberAny: newRequestParamBinder(binderParams[string, []float32]{
 			required: true,
@@ -252,9 +252,9 @@ type paramsParserNumericTypesNumericTypesNullable struct {
 	bindOptionalNumberAnyInQuery requestParamBinder[[]string, *float32]
 }
 
-func (p *paramsParserNumericTypesNumericTypesNullable) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesNullableParams, error) {
+func (p *paramsParserNumericTypesNumericTypesNullable) parse(router httpRouter, req *http.Request) (*NumericTypesNullableParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesNullableParams{}
+	reqParams := &NumericTypesNullableParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -278,7 +278,7 @@ func (p *paramsParserNumericTypesNumericTypesNullable) parse(router httpRouter, 
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesNullable(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesNullableParams] {
+func newParamsParserNumericTypesNumericTypesNullable(rootHandler *RootHandler) paramsParser[*NumericTypesNullableParams] {
 	return &paramsParserNumericTypesNumericTypesNullable{
 		bindNumberAny: newRequestParamBinder(binderParams[string, *float32]{
 			required: true,
@@ -436,9 +436,9 @@ type paramsParserNumericTypesNumericTypesNullableArrayItems struct {
 	bindPayload requestParamBinder[*http.Request, *NumericTypesNullableArrayItemsRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesNullableArrayItemsParams, error) {
+func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router httpRouter, req *http.Request) (*NumericTypesNullableArrayItemsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesNullableArrayItemsParams{}
+	reqParams := &NumericTypesNullableArrayItemsParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -461,7 +461,7 @@ func (p *paramsParserNumericTypesNumericTypesNullableArrayItems) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesNullableArrayItemsParams] {
+func newParamsParserNumericTypesNumericTypesNullableArrayItems(rootHandler *RootHandler) paramsParser[*NumericTypesNullableArrayItemsParams] {
 	return &paramsParserNumericTypesNumericTypesNullableArrayItems{
 		bindNumberAny: newRequestParamBinder(binderParams[string, []*float32]{
 			required: true,
@@ -657,9 +657,9 @@ type paramsParserNumericTypesNumericTypesParsing struct {
 	bindPayload requestParamBinder[*http.Request, *NumericTypesParsingRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesParsingParams, error) {
+func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, req *http.Request) (*NumericTypesParsingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesParsingParams{}
+	reqParams := &NumericTypesParsingParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -682,7 +682,7 @@ func (p *paramsParserNumericTypesNumericTypesParsing) parse(router httpRouter, r
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesParsing(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesParsingParams] {
+func newParamsParserNumericTypesNumericTypesParsing(rootHandler *RootHandler) paramsParser[*NumericTypesParsingParams] {
 	return &paramsParserNumericTypesNumericTypesParsing{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
@@ -806,9 +806,9 @@ type paramsParserNumericTypesNumericTypesRangeValidation struct {
 	bindPayload requestParamBinder[*http.Request, *NumericTypesRangeValidationRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationParams, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpRouter, req *http.Request) (*NumericTypesRangeValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesRangeValidationParams{}
+	reqParams := &NumericTypesRangeValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -831,7 +831,7 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidation) parse(router httpR
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRangeValidation(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRangeValidationParams] {
+func newParamsParserNumericTypesNumericTypesRangeValidation(rootHandler *RootHandler) paramsParser[*NumericTypesRangeValidationParams] {
 	return &paramsParserNumericTypesNumericTypesRangeValidation{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
@@ -979,9 +979,9 @@ type paramsParserNumericTypesNumericTypesRangeValidationExclusive struct {
 	bindPayload requestParamBinder[*http.Request, *NumericTypesRangeValidationExclusiveRequest]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRangeValidationExclusiveParams, error) {
+func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(router httpRouter, req *http.Request) (*NumericTypesRangeValidationExclusiveParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesRangeValidationExclusiveParams{}
+	reqParams := &NumericTypesRangeValidationExclusiveParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindNumberAny(pathParamsCtx.Fork("numberAny"), readPathValue("numberAny", router, req), &reqParams.NumberAny)
@@ -1004,7 +1004,7 @@ func (p *paramsParserNumericTypesNumericTypesRangeValidationExclusive) parse(rou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRangeValidationExclusiveParams] {
+func newParamsParserNumericTypesNumericTypesRangeValidationExclusive(rootHandler *RootHandler) paramsParser[*NumericTypesRangeValidationExclusiveParams] {
 	return &paramsParserNumericTypesNumericTypesRangeValidationExclusive{
 		bindNumberAny: newRequestParamBinder(binderParams[string, float32]{
 			required: true,
@@ -1151,9 +1151,9 @@ type paramsParserNumericTypesNumericTypesRequiredValidation struct {
 	bindOptionalNumberInt64InQuery requestParamBinder[[]string, int64]
 }
 
-func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*NumericTypesNumericTypesRequiredValidationParams, error) {
+func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router httpRouter, req *http.Request) (*NumericTypesRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &NumericTypesNumericTypesRequiredValidationParams{}
+	reqParams := &NumericTypesRequiredValidationParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -1172,7 +1172,7 @@ func (p *paramsParserNumericTypesNumericTypesRequiredValidation) parse(router ht
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserNumericTypesNumericTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*NumericTypesNumericTypesRequiredValidationParams] {
+func newParamsParserNumericTypesNumericTypesRequiredValidation(rootHandler *RootHandler) paramsParser[*NumericTypesRequiredValidationParams] {
 	return &paramsParserNumericTypesNumericTypesRequiredValidation{
 		bindNumberAnyInQuery: newRequestParamBinder(binderParams[[]string, float32]{
 			required: true,
@@ -1282,86 +1282,86 @@ func newParamsParserNumericTypesNumericTypesRequiredValidation(rootHandler *Root
 type numericTypesControllerBuilder struct {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesArrayItemsParams,
+	// Request type: NumericTypesArrayItemsParams,
 	//
 	// Response type: none
 	NumericTypesArrayItems genericHandlerBuilder[
-		*NumericTypesNumericTypesArrayItemsParams,
+		*NumericTypesArrayItemsParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesArrayItemsParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesArrayItemsParams, void],
+		handlerActionFuncNoResponse[*NumericTypesArrayItemsParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesArrayItemsParams, void],
 	]
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesNullableParams,
+	// Request type: NumericTypesNullableParams,
 	//
 	// Response type: none
 	NumericTypesNullable genericHandlerBuilder[
-		*NumericTypesNumericTypesNullableParams,
+		*NumericTypesNullableParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesNullableParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesNullableParams, void],
+		handlerActionFuncNoResponse[*NumericTypesNullableParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNullableParams, void],
 	]
 
 	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesNullableArrayItemsParams,
+	// Request type: NumericTypesNullableArrayItemsParams,
 	//
 	// Response type: none
 	NumericTypesNullableArrayItems genericHandlerBuilder[
-		*NumericTypesNumericTypesNullableArrayItemsParams,
+		*NumericTypesNullableArrayItemsParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesNullableArrayItemsParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesNullableArrayItemsParams, void],
+		handlerActionFuncNoResponse[*NumericTypesNullableArrayItemsParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesNullableArrayItemsParams, void],
 	]
 
 	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesParsingParams,
+	// Request type: NumericTypesParsingParams,
 	//
 	// Response type: none
 	NumericTypesParsing genericHandlerBuilder[
-		*NumericTypesNumericTypesParsingParams,
+		*NumericTypesParsingParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesParsingParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesParsingParams, void],
+		handlerActionFuncNoResponse[*NumericTypesParsingParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesParsingParams, void],
 	]
 
 	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesRangeValidationParams,
+	// Request type: NumericTypesRangeValidationParams,
 	//
 	// Response type: none
 	NumericTypesRangeValidation genericHandlerBuilder[
-		*NumericTypesNumericTypesRangeValidationParams,
+		*NumericTypesRangeValidationParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationParams, void],
+		handlerActionFuncNoResponse[*NumericTypesRangeValidationParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesRangeValidationParams, void],
 	]
 
 	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesRangeValidationExclusiveParams,
+	// Request type: NumericTypesRangeValidationExclusiveParams,
 	//
 	// Response type: none
 	NumericTypesRangeValidationExclusive genericHandlerBuilder[
-		*NumericTypesNumericTypesRangeValidationExclusiveParams,
+		*NumericTypesRangeValidationExclusiveParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationExclusiveParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRangeValidationExclusiveParams, void],
+		handlerActionFuncNoResponse[*NumericTypesRangeValidationExclusiveParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesRangeValidationExclusiveParams, void],
 	]
 
 	// GET /numeric-types/required-validation
 	//
-	// Request type: NumericTypesNumericTypesRequiredValidationParams,
+	// Request type: NumericTypesRequiredValidationParams,
 	//
 	// Response type: none
 	NumericTypesRequiredValidation genericHandlerBuilder[
-		*NumericTypesNumericTypesRequiredValidationParams,
+		*NumericTypesRequiredValidationParams,
 		void,
-		handlerActionFuncNoResponse[*NumericTypesNumericTypesRequiredValidationParams, void],
-		httpHandlerActionFuncNoResponse[*NumericTypesNumericTypesRequiredValidationParams, void],
+		handlerActionFuncNoResponse[*NumericTypesRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*NumericTypesRequiredValidationParams, void],
 	]
 }
 
@@ -1371,15 +1371,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesArrayItemsParams,
+				*NumericTypesArrayItemsParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesArrayItemsParams,
+				*NumericTypesArrayItemsParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesArrayItemsParams,
+				*NumericTypesArrayItemsParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1392,15 +1392,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesNullable: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesNullableParams,
+				*NumericTypesNullableParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesNullableParams,
+				*NumericTypesNullableParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesNullableParams,
+				*NumericTypesNullableParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1413,15 +1413,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesNullableArrayItems: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesNullableArrayItemsParams,
+				*NumericTypesNullableArrayItemsParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesNullableArrayItemsParams,
+				*NumericTypesNullableArrayItemsParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesNullableArrayItemsParams,
+				*NumericTypesNullableArrayItemsParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1434,15 +1434,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesParsing: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesParsingParams,
+				*NumericTypesParsingParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesParsingParams,
+				*NumericTypesParsingParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesParsingParams,
+				*NumericTypesParsingParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1455,15 +1455,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRangeValidationParams,
+				*NumericTypesRangeValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRangeValidationParams,
+				*NumericTypesRangeValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesRangeValidationParams,
+				*NumericTypesRangeValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1476,15 +1476,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesRangeValidationExclusive: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRangeValidationExclusiveParams,
+				*NumericTypesRangeValidationExclusiveParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRangeValidationExclusiveParams,
+				*NumericTypesRangeValidationExclusiveParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesRangeValidationExclusiveParams,
+				*NumericTypesRangeValidationExclusiveParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -1497,15 +1497,15 @@ func newNumericTypesControllerBuilder(app *RootHandler) *numericTypesControllerB
 		NumericTypesRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRequiredValidationParams,
+				*NumericTypesRequiredValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*NumericTypesNumericTypesRequiredValidationParams,
+				*NumericTypesRequiredValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*NumericTypesNumericTypesRequiredValidationParams,
+				*NumericTypesRequiredValidationParams,
 				void,
 			]{
 				defaultStatus: 204,

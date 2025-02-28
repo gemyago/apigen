@@ -13,10 +13,10 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// PingPingParams represents params for ping operation
+// PingParams represents params for ping operation
 //
 // Request: GET /ping.
-type PingPingParams struct {
+type PingParams struct {
 	// Message is parsed from request query and declared as message.
 	Message string
 }

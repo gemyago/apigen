@@ -14,30 +14,30 @@ type _ func() Error
 type PetsController interface {
 	// POST /pets
 	//
-	// Request type: PetsCreatePetParams,
+	// Request type: CreatePetParams,
 	//
 	// Response type: none
 	CreatePet(NoResponseHandlerBuilder[
-		*PetsCreatePetParams,
+		*CreatePetParams,
 	]) http.Handler
 
 	// GET /pets/{petId}
 	//
-	// Request type: PetsGetPetByIDParams,
+	// Request type: GetPetByIDParams,
 	//
 	// Response type: PetResponse
 	GetPetByID(HandlerBuilder[
-		*PetsGetPetByIDParams,
+		*GetPetByIDParams,
 		*PetResponse,
 	]) http.Handler
 
 	// GET /pets
 	//
-	// Request type: PetsListPetsParams,
+	// Request type: ListPetsParams,
 	//
 	// Response type: PetsResponse
 	ListPets(HandlerBuilder[
-		*PetsListPetsParams,
+		*ListPetsParams,
 		*PetsResponse,
 	]) http.Handler
 }

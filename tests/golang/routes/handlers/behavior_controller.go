@@ -35,21 +35,21 @@ type BehaviorController interface {
 
 	// POST /behavior/with-params-and-response
 	//
-	// Request type: BehaviorBehaviorWithParamsAndResponseParams,
+	// Request type: BehaviorWithParamsAndResponseParams,
 	//
 	// Response type: BehaviorWithParamsAndResponseResponseBody
 	BehaviorWithParamsAndResponse(HandlerBuilder[
-		*BehaviorBehaviorWithParamsAndResponseParams,
+		*BehaviorWithParamsAndResponseParams,
 		*BehaviorWithParamsAndResponseResponseBody,
 	]) http.Handler
 
 	// GET /behavior/with-params-no-response
 	//
-	// Request type: BehaviorBehaviorWithParamsNoResponseParams,
+	// Request type: BehaviorWithParamsNoResponseParams,
 	//
 	// Response type: none
 	BehaviorWithParamsNoResponse(NoResponseHandlerBuilder[
-		*BehaviorBehaviorWithParamsNoResponseParams,
+		*BehaviorWithParamsNoResponseParams,
 	]) http.Handler
 
 	// POST /behavior/with-status-defined

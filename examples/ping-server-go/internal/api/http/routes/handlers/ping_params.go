@@ -20,9 +20,9 @@ type paramsParserPingPing struct {
 	bindMessage requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserPingPing) parse(router httpRouter, req *http.Request) (*PingPingParams, error) {
+func (p *paramsParserPingPing) parse(router httpRouter, req *http.Request) (*PingParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &PingPingParams{}
+	reqParams := &PingParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -30,7 +30,7 @@ func (p *paramsParserPingPing) parse(router httpRouter, req *http.Request) (*Pin
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserPingPing(rootHandler *RootHandler) paramsParser[*PingPingParams] {
+func newParamsParserPingPing(rootHandler *RootHandler) paramsParser[*PingParams] {
 	return &paramsParserPingPing{
 		bindMessage: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
@@ -46,14 +46,14 @@ func newParamsParserPingPing(rootHandler *RootHandler) paramsParser[*PingPingPar
 type pingControllerBuilder struct {
 	// GET /ping
 	//
-	// Request type: PingPingParams,
+	// Request type: PingParams,
 	//
 	// Response type: Ping200Response
 	Ping genericHandlerBuilder[
-		*PingPingParams,
+		*PingParams,
 		*Ping200Response,
-		handlerActionFunc[*PingPingParams, *Ping200Response],
-		httpHandlerActionFunc[*PingPingParams, *Ping200Response],
+		handlerActionFunc[*PingParams, *Ping200Response],
+		httpHandlerActionFunc[*PingParams, *Ping200Response],
 	]
 }
 
@@ -63,15 +63,15 @@ func newPingControllerBuilder(app *RootHandler) *pingControllerBuilder {
 		Ping: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*PingPingParams,
+				*PingParams,
 				*Ping200Response,
 			](),
 			newHTTPHandlerAdapter[
-				*PingPingParams,
+				*PingParams,
 				*Ping200Response,
 			](),
 			makeActionBuilderParams[
-				*PingPingParams,
+				*PingParams,
 				*Ping200Response,
 			]{
 				defaultStatus: 200,

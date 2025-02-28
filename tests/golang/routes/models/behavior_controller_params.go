@@ -17,10 +17,10 @@ var _ = fmt.Sprint
 
 
 
-// BehaviorBehaviorWithParamsAndResponseParams represents params for behaviorWithParamsAndResponse operation
+// BehaviorWithParamsAndResponseParams represents params for behaviorWithParamsAndResponse operation
 //
 // Request: POST /behavior/with-params-and-response.
-type BehaviorBehaviorWithParamsAndResponseParams struct {
+type BehaviorWithParamsAndResponseParams struct {
 	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
 	// QueryParam2 is parsed from request query and declared as queryParam2.
@@ -29,10 +29,10 @@ type BehaviorBehaviorWithParamsAndResponseParams struct {
 	Payload *BehaviorWithParamsAndResponseRequestBody
 }
 
-// BehaviorBehaviorWithParamsNoResponseParams represents params for behaviorWithParamsNoResponse operation
+// BehaviorWithParamsNoResponseParams represents params for behaviorWithParamsNoResponse operation
 //
 // Request: GET /behavior/with-params-no-response.
-type BehaviorBehaviorWithParamsNoResponseParams struct {
+type BehaviorWithParamsNoResponseParams struct {
 	// QueryParam1 is parsed from request query and declared as queryParam1.
 	QueryParam1 string
 }

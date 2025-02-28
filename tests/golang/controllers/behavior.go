@@ -14,11 +14,11 @@ type behaviorControllerTestActions struct {
 		*models.BehaviorNoParamsWithResponse202Response,
 	]
 	withParamsNoResponse mockActionV2[
-		*models.BehaviorBehaviorWithParamsNoResponseParams,
+		*models.BehaviorWithParamsNoResponseParams,
 		mockVoid,
 	]
 	withParamsAndResponse mockActionV2[
-		*models.BehaviorBehaviorWithParamsAndResponseParams,
+		*models.BehaviorWithParamsAndResponseParams,
 		*models.BehaviorWithParamsAndResponseResponseBody,
 	]
 	noStatusDefined   mockActionV2[mockVoid, mockVoid]
@@ -57,7 +57,7 @@ func (c *behaviorController) BehaviorNoParamsWithResponse(
 
 func (c *behaviorController) BehaviorWithParamsAndResponse(
 	builder handlers.HandlerBuilder[
-		*models.BehaviorBehaviorWithParamsAndResponseParams,
+		*models.BehaviorWithParamsAndResponseParams,
 		*models.BehaviorWithParamsAndResponseResponseBody,
 	],
 ) http.Handler {
@@ -72,7 +72,7 @@ func (c *behaviorController) BehaviorWithParamsAndResponse(
 }
 
 func (c *behaviorController) BehaviorWithParamsNoResponse(
-	builder handlers.NoResponseHandlerBuilder[*models.BehaviorBehaviorWithParamsNoResponseParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BehaviorWithParamsNoResponseParams],
 ) http.Handler {
 	if c.testActions.withParamsNoResponse.isHTTPAction {
 		return builder.HandleWithHTTP(

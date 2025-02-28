@@ -11,10 +11,10 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BooleanBooleanArrayItemsParams represents params for booleanArrayItems operation
+// BooleanArrayItemsParams represents params for booleanArrayItems operation
 //
 // Request: POST /boolean/array-items/{boolParam1}/{boolParam2}.
-type BooleanBooleanArrayItemsParams struct {
+type BooleanArrayItemsParams struct {
 	// BoolParam1 is parsed from request path and declared as boolParam1.
 	BoolParam1 []bool
 	// BoolParam2 is parsed from request path and declared as boolParam2.
@@ -27,10 +27,10 @@ type BooleanBooleanArrayItemsParams struct {
 	Payload *BooleanArrayItemsRequest
 }
 
-// BooleanBooleanNullableParams represents params for booleanNullable operation
+// BooleanNullableParams represents params for booleanNullable operation
 //
 // Request: POST /boolean/nullable/{boolParam1}/{boolParam2}.
-type BooleanBooleanNullableParams struct {
+type BooleanNullableParams struct {
 	// BoolParam1 is parsed from request path and declared as boolParam1.
 	BoolParam1 *bool
 	// BoolParam2 is parsed from request path and declared as boolParam2.
@@ -45,10 +45,10 @@ type BooleanBooleanNullableParams struct {
 	OptionalBoolParam1InQuery *bool
 }
 
-// BooleanBooleanNullableArrayItemsParams represents params for booleanNullableArrayItems operation
+// BooleanNullableArrayItemsParams represents params for booleanNullableArrayItems operation
 //
 // Request: POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}.
-type BooleanBooleanNullableArrayItemsParams struct {
+type BooleanNullableArrayItemsParams struct {
 	// BoolParam1 is parsed from request path and declared as boolParam1.
 	BoolParam1 []*bool
 	// BoolParam2 is parsed from request path and declared as boolParam2.
@@ -61,10 +61,10 @@ type BooleanBooleanNullableArrayItemsParams struct {
 	Payload *BooleanNullableArrayItemsRequest
 }
 
-// BooleanBooleanParsingParams represents params for booleanParsing operation
+// BooleanParsingParams represents params for booleanParsing operation
 //
 // Request: POST /boolean/parsing/{boolParam1}/{boolParam2}.
-type BooleanBooleanParsingParams struct {
+type BooleanParsingParams struct {
 	// BoolParam1 is parsed from request path and declared as boolParam1.
 	BoolParam1 bool
 	// BoolParam2 is parsed from request path and declared as boolParam2.
@@ -77,10 +77,10 @@ type BooleanBooleanParsingParams struct {
 	Payload *BooleanParsingRequest
 }
 
-// BooleanBooleanRequiredValidationParams represents params for booleanRequiredValidation operation
+// BooleanRequiredValidationParams represents params for booleanRequiredValidation operation
 //
 // Request: POST /boolean/required-validation.
-type BooleanBooleanRequiredValidationParams struct {
+type BooleanRequiredValidationParams struct {
 	// BoolParam1InQuery is parsed from request query and declared as boolParam1InQuery.
 	BoolParam1InQuery bool
 	// BoolParam2InQuery is parsed from request query and declared as boolParam2InQuery.

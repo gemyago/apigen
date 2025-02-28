@@ -24,9 +24,9 @@ type paramsParserArraysArraysNullableRequiredValidation struct {
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
 
-func (p *paramsParserArraysArraysNullableRequiredValidation) parse(router httpRouter, req *http.Request) (*ArraysArraysNullableRequiredValidationParams, error) {
+func (p *paramsParserArraysArraysNullableRequiredValidation) parse(router httpRouter, req *http.Request) (*ArraysNullableRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ArraysArraysNullableRequiredValidationParams{}
+	reqParams := &ArraysNullableRequiredValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindSimpleItems1(pathParamsCtx.Fork("simpleItems1"), readPathValue("simpleItems1", router, req), &reqParams.SimpleItems1)
@@ -43,7 +43,7 @@ func (p *paramsParserArraysArraysNullableRequiredValidation) parse(router httpRo
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysNullableRequiredValidationParams] {
+func newParamsParserArraysArraysNullableRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysNullableRequiredValidationParams] {
 	return &paramsParserArraysArraysNullableRequiredValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
@@ -137,9 +137,9 @@ type paramsParserArraysArraysRangeValidation struct {
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
 
-func (p *paramsParserArraysArraysRangeValidation) parse(router httpRouter, req *http.Request) (*ArraysArraysRangeValidationParams, error) {
+func (p *paramsParserArraysArraysRangeValidation) parse(router httpRouter, req *http.Request) (*ArraysRangeValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ArraysArraysRangeValidationParams{}
+	reqParams := &ArraysRangeValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindSimpleItems1(pathParamsCtx.Fork("simpleItems1"), readPathValue("simpleItems1", router, req), &reqParams.SimpleItems1)
@@ -156,7 +156,7 @@ func (p *paramsParserArraysArraysRangeValidation) parse(router httpRouter, req *
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysRangeValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysRangeValidationParams] {
+func newParamsParserArraysArraysRangeValidation(rootHandler *RootHandler) paramsParser[*ArraysRangeValidationParams] {
 	return &paramsParserArraysArraysRangeValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
@@ -262,9 +262,9 @@ type paramsParserArraysArraysRequiredValidation struct {
 	bindOptionalSimpleItems2InQuery requestParamBinder[[]string, []string]
 }
 
-func (p *paramsParserArraysArraysRequiredValidation) parse(router httpRouter, req *http.Request) (*ArraysArraysRequiredValidationParams, error) {
+func (p *paramsParserArraysArraysRequiredValidation) parse(router httpRouter, req *http.Request) (*ArraysRequiredValidationParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ArraysArraysRequiredValidationParams{}
+	reqParams := &ArraysRequiredValidationParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindSimpleItems1(pathParamsCtx.Fork("simpleItems1"), readPathValue("simpleItems1", router, req), &reqParams.SimpleItems1)
@@ -281,7 +281,7 @@ func (p *paramsParserArraysArraysRequiredValidation) parse(router httpRouter, re
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserArraysArraysRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysArraysRequiredValidationParams] {
+func newParamsParserArraysArraysRequiredValidation(rootHandler *RootHandler) paramsParser[*ArraysRequiredValidationParams] {
 	return &paramsParserArraysArraysRequiredValidation{
 		bindSimpleItems1: newRequestParamBinder(binderParams[string, []string]{
 			required: true,
@@ -368,38 +368,38 @@ func newParamsParserArraysArraysRequiredValidation(rootHandler *RootHandler) par
 type arraysControllerBuilder struct {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysNullableRequiredValidationParams,
+	// Request type: ArraysNullableRequiredValidationParams,
 	//
 	// Response type: none
 	ArraysNullableRequiredValidation genericHandlerBuilder[
-		*ArraysArraysNullableRequiredValidationParams,
+		*ArraysNullableRequiredValidationParams,
 		void,
-		handlerActionFuncNoResponse[*ArraysArraysNullableRequiredValidationParams, void],
-		httpHandlerActionFuncNoResponse[*ArraysArraysNullableRequiredValidationParams, void],
+		handlerActionFuncNoResponse[*ArraysNullableRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*ArraysNullableRequiredValidationParams, void],
 	]
 
 	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysRangeValidationParams,
+	// Request type: ArraysRangeValidationParams,
 	//
 	// Response type: none
 	ArraysRangeValidation genericHandlerBuilder[
-		*ArraysArraysRangeValidationParams,
+		*ArraysRangeValidationParams,
 		void,
-		handlerActionFuncNoResponse[*ArraysArraysRangeValidationParams, void],
-		httpHandlerActionFuncNoResponse[*ArraysArraysRangeValidationParams, void],
+		handlerActionFuncNoResponse[*ArraysRangeValidationParams, void],
+		httpHandlerActionFuncNoResponse[*ArraysRangeValidationParams, void],
 	]
 
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysRequiredValidationParams,
+	// Request type: ArraysRequiredValidationParams,
 	//
 	// Response type: none
 	ArraysRequiredValidation genericHandlerBuilder[
-		*ArraysArraysRequiredValidationParams,
+		*ArraysRequiredValidationParams,
 		void,
-		handlerActionFuncNoResponse[*ArraysArraysRequiredValidationParams, void],
-		httpHandlerActionFuncNoResponse[*ArraysArraysRequiredValidationParams, void],
+		handlerActionFuncNoResponse[*ArraysRequiredValidationParams, void],
+		httpHandlerActionFuncNoResponse[*ArraysRequiredValidationParams, void],
 	]
 }
 
@@ -409,15 +409,15 @@ func newArraysControllerBuilder(app *RootHandler) *arraysControllerBuilder {
 		ArraysNullableRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ArraysArraysNullableRequiredValidationParams,
+				*ArraysNullableRequiredValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ArraysArraysNullableRequiredValidationParams,
+				*ArraysNullableRequiredValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ArraysArraysNullableRequiredValidationParams,
+				*ArraysNullableRequiredValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -430,15 +430,15 @@ func newArraysControllerBuilder(app *RootHandler) *arraysControllerBuilder {
 		ArraysRangeValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ArraysArraysRangeValidationParams,
+				*ArraysRangeValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ArraysArraysRangeValidationParams,
+				*ArraysRangeValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ArraysArraysRangeValidationParams,
+				*ArraysRangeValidationParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -451,15 +451,15 @@ func newArraysControllerBuilder(app *RootHandler) *arraysControllerBuilder {
 		ArraysRequiredValidation: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ArraysArraysRequiredValidationParams,
+				*ArraysRequiredValidationParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ArraysArraysRequiredValidationParams,
+				*ArraysRequiredValidationParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ArraysArraysRequiredValidationParams,
+				*ArraysRequiredValidationParams,
 				void,
 			]{
 				defaultStatus: 204,

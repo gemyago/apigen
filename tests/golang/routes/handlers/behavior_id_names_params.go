@@ -23,9 +23,9 @@ type paramsParserBehaviorIDNamesBehaviorNamesWithID struct {
 	bindPayload requestParamBinder[*http.Request, *BehaviorNamesWithIDData]
 }
 
-func (p *paramsParserBehaviorIDNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorIDNamesBehaviorNamesWithIDParams, error) {
+func (p *paramsParserBehaviorIDNamesBehaviorNamesWithID) parse(router httpRouter, req *http.Request) (*BehaviorNamesWithIDParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BehaviorIDNamesBehaviorNamesWithIDParams{}
+	reqParams := &BehaviorNamesWithIDParams{}
 	// path params
 	pathParamsCtx := bindingCtx.Fork("path")
 	p.bindID(pathParamsCtx.Fork("id"), readPathValue("id", router, req), &reqParams.ID)
@@ -41,7 +41,7 @@ func (p *paramsParserBehaviorIDNamesBehaviorNamesWithID) parse(router httpRouter
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorIDNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorIDNamesBehaviorNamesWithIDParams] {
+func newParamsParserBehaviorIDNamesBehaviorNamesWithID(rootHandler *RootHandler) paramsParser[*BehaviorNamesWithIDParams] {
 	return &paramsParserBehaviorIDNamesBehaviorNamesWithID{
 		bindID: newRequestParamBinder(binderParams[string, string]{
 			required: true,
@@ -96,14 +96,14 @@ func newParamsParserBehaviorIDNamesBehaviorNamesWithID(rootHandler *RootHandler)
 type behaviorIDNamesControllerBuilder struct {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//
-	// Request type: BehaviorIDNamesBehaviorNamesWithIDParams,
+	// Request type: BehaviorNamesWithIDParams,
 	//
 	// Response type: BehaviorNamesWithIDData
 	BehaviorNamesWithID genericHandlerBuilder[
-		*BehaviorIDNamesBehaviorNamesWithIDParams,
+		*BehaviorNamesWithIDParams,
 		*BehaviorNamesWithIDData,
-		handlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDParams, *BehaviorNamesWithIDData],
-		httpHandlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDParams, *BehaviorNamesWithIDData],
+		handlerActionFunc[*BehaviorNamesWithIDParams, *BehaviorNamesWithIDData],
+		httpHandlerActionFunc[*BehaviorNamesWithIDParams, *BehaviorNamesWithIDData],
 	]
 }
 
@@ -113,15 +113,15 @@ func newBehaviorIDNamesControllerBuilder(app *RootHandler) *behaviorIDNamesContr
 		BehaviorNamesWithID: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*BehaviorIDNamesBehaviorNamesWithIDParams,
+				*BehaviorNamesWithIDParams,
 				*BehaviorNamesWithIDData,
 			](),
 			newHTTPHandlerAdapter[
-				*BehaviorIDNamesBehaviorNamesWithIDParams,
+				*BehaviorNamesWithIDParams,
 				*BehaviorNamesWithIDData,
 			](),
 			makeActionBuilderParams[
-				*BehaviorIDNamesBehaviorNamesWithIDParams,
+				*BehaviorNamesWithIDParams,
 				*BehaviorNamesWithIDData,
 			]{
 				defaultStatus: 200,

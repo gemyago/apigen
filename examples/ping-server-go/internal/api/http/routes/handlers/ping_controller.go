@@ -14,11 +14,11 @@ type _ func() Ping200Response
 type PingController interface {
 	// GET /ping
 	//
-	// Request type: PingPingParams,
+	// Request type: PingParams,
 	//
 	// Response type: Ping200Response
 	Ping(HandlerBuilder[
-		*PingPingParams,
+		*PingParams,
 		*Ping200Response,
 	]) http.Handler
 }

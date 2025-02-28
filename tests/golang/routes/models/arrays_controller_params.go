@@ -11,10 +11,10 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ArraysArraysNullableRequiredValidationParams represents params for arraysNullableRequiredValidation operation
+// ArraysNullableRequiredValidationParams represents params for arraysNullableRequiredValidation operation
 //
 // Request: POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}.
-type ArraysArraysNullableRequiredValidationParams struct {
+type ArraysNullableRequiredValidationParams struct {
 	// SimpleItems1 is parsed from request path and declared as simpleItems1.
 	SimpleItems1 []string
 	// SimpleItems2 is parsed from request path and declared as simpleItems2.
@@ -31,10 +31,10 @@ type ArraysArraysNullableRequiredValidationParams struct {
 	OptionalSimpleItems2InQuery []string
 }
 
-// ArraysArraysRangeValidationParams represents params for arraysRangeValidation operation
+// ArraysRangeValidationParams represents params for arraysRangeValidation operation
 //
 // Request: POST /arrays/range-validation/{simpleItems1}/{simpleItems2}.
-type ArraysArraysRangeValidationParams struct {
+type ArraysRangeValidationParams struct {
 	// SimpleItems1 is parsed from request path and declared as simpleItems1.
 	SimpleItems1 []string
 	// SimpleItems2 is parsed from request path and declared as simpleItems2.
@@ -51,10 +51,10 @@ type ArraysArraysRangeValidationParams struct {
 	OptionalSimpleItems2InQuery []string
 }
 
-// ArraysArraysRequiredValidationParams represents params for arraysRequiredValidation operation
+// ArraysRequiredValidationParams represents params for arraysRequiredValidation operation
 //
 // Request: POST /arrays/required-validation/{simpleItems1}/{simpleItems2}.
-type ArraysArraysRequiredValidationParams struct {
+type ArraysRequiredValidationParams struct {
 	// SimpleItems1 is parsed from request path and declared as simpleItems1.
 	SimpleItems1 []string
 	// SimpleItems2 is parsed from request path and declared as simpleItems2.

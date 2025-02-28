@@ -12,47 +12,47 @@ type _ func() BooleanArrayItemsRequest
 type BooleanController interface {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//
-	// Request type: BooleanBooleanArrayItemsParams,
+	// Request type: BooleanArrayItemsParams,
 	//
 	// Response type: none
 	BooleanArrayItems(NoResponseHandlerBuilder[
-		*BooleanBooleanArrayItemsParams,
+		*BooleanArrayItemsParams,
 	]) http.Handler
 
 	// POST /boolean/nullable/{boolParam1}/{boolParam2}
 	//
-	// Request type: BooleanBooleanNullableParams,
+	// Request type: BooleanNullableParams,
 	//
 	// Response type: none
 	BooleanNullable(NoResponseHandlerBuilder[
-		*BooleanBooleanNullableParams,
+		*BooleanNullableParams,
 	]) http.Handler
 
 	// POST /boolean/nullable-array-items/{boolParam1}/{boolParam2}
 	//
-	// Request type: BooleanBooleanNullableArrayItemsParams,
+	// Request type: BooleanNullableArrayItemsParams,
 	//
 	// Response type: none
 	BooleanNullableArrayItems(NoResponseHandlerBuilder[
-		*BooleanBooleanNullableArrayItemsParams,
+		*BooleanNullableArrayItemsParams,
 	]) http.Handler
 
 	// POST /boolean/parsing/{boolParam1}/{boolParam2}
 	//
-	// Request type: BooleanBooleanParsingParams,
+	// Request type: BooleanParsingParams,
 	//
 	// Response type: none
 	BooleanParsing(NoResponseHandlerBuilder[
-		*BooleanBooleanParsingParams,
+		*BooleanParsingParams,
 	]) http.Handler
 
 	// POST /boolean/required-validation
 	//
-	// Request type: BooleanBooleanRequiredValidationParams,
+	// Request type: BooleanRequiredValidationParams,
 	//
 	// Response type: none
 	BooleanRequiredValidation(NoResponseHandlerBuilder[
-		*BooleanBooleanRequiredValidationParams,
+		*BooleanRequiredValidationParams,
 	]) http.Handler
 }
 

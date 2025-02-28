@@ -401,10 +401,10 @@ var AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryVa
 	StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryVALUE3,
 }
 
-// StringTypesStringTypesArrayItemsRangeValidationParams represents params for stringTypesArrayItemsRangeValidation operation
+// StringTypesArrayItemsRangeValidationParams represents params for stringTypesArrayItemsRangeValidation operation
 //
 // Request: POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesArrayItemsRangeValidationParams struct {
+type StringTypesArrayItemsRangeValidationParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -429,10 +429,10 @@ type StringTypesStringTypesArrayItemsRangeValidationParams struct {
 	Payload *StringTypesArrayItemsRangeValidationRequest
 }
 
-// StringTypesStringTypesArraysParsingParams represents params for stringTypesArraysParsing operation
+// StringTypesArraysParsingParams represents params for stringTypesArraysParsing operation
 //
 // Request: POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesArraysParsingParams struct {
+type StringTypesArraysParsingParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -457,10 +457,10 @@ type StringTypesStringTypesArraysParsingParams struct {
 	Payload *StringTypesArraysParsingRequest
 }
 
-// StringTypesStringTypesEnumsParams represents params for stringTypesEnums operation
+// StringTypesEnumsParams represents params for stringTypesEnums operation
 //
 // Request: POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}.
-type StringTypesStringTypesEnumsParams struct {
+type StringTypesEnumsParams struct {
 	// InlineEnumParam is parsed from request path and declared as inlineEnumParam.
 	InlineEnumParam StringTypesStringTypesEnumsInlineEnumParam
 	// NullableInlineEnumParam is parsed from request path and declared as nullableInlineEnumParam.
@@ -489,10 +489,10 @@ type StringTypesStringTypesEnumsParams struct {
 	OptionalNullableRefEnumParamInQuery *NullableStringEnum
 }
 
-// StringTypesStringTypesNullableArrayItemsParams represents params for stringTypesNullableArrayItems operation
+// StringTypesNullableArrayItemsParams represents params for stringTypesNullableArrayItems operation
 //
 // Request: POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesNullableArrayItemsParams struct {
+type StringTypesNullableArrayItemsParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr []*string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -517,10 +517,10 @@ type StringTypesStringTypesNullableArrayItemsParams struct {
 	Payload *StringTypesNullableArrayItemsRequest
 }
 
-// StringTypesStringTypesNullableParsingParams represents params for stringTypesNullableParsing operation
+// StringTypesNullableParsingParams represents params for stringTypesNullableParsing operation
 //
 // Request: POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesNullableParsingParams struct {
+type StringTypesNullableParsingParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr *string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -545,10 +545,10 @@ type StringTypesStringTypesNullableParsingParams struct {
 	Payload *StringTypesNullableParsingRequest
 }
 
-// StringTypesStringTypesNullableRequiredValidationParams represents params for stringTypesNullableRequiredValidation operation
+// StringTypesNullableRequiredValidationParams represents params for stringTypesNullableRequiredValidation operation
 //
 // Request: POST /string-types/nullable-required-validation.
-type StringTypesStringTypesNullableRequiredValidationParams struct {
+type StringTypesNullableRequiredValidationParams struct {
 	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery *string
 	// Payload is parsed from request body and declared as payload.
@@ -557,10 +557,10 @@ type StringTypesStringTypesNullableRequiredValidationParams struct {
 	OptionalUnformattedStrInQuery *string
 }
 
-// StringTypesStringTypesParsingParams represents params for stringTypesParsing operation
+// StringTypesParsingParams represents params for stringTypesParsing operation
 //
 // Request: POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesParsingParams struct {
+type StringTypesParsingParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -585,10 +585,10 @@ type StringTypesStringTypesParsingParams struct {
 	Payload *StringTypesParsingRequest
 }
 
-// StringTypesStringTypesPatternValidationParams represents params for stringTypesPatternValidation operation
+// StringTypesPatternValidationParams represents params for stringTypesPatternValidation operation
 //
 // Request: POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}.
-type StringTypesStringTypesPatternValidationParams struct {
+type StringTypesPatternValidationParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -609,10 +609,10 @@ type StringTypesStringTypesPatternValidationParams struct {
 	Payload *StringTypesPatternValidationRequest
 }
 
-// StringTypesStringTypesRangeValidationParams represents params for stringTypesRangeValidation operation
+// StringTypesRangeValidationParams represents params for stringTypesRangeValidation operation
 //
 // Request: POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}.
-type StringTypesStringTypesRangeValidationParams struct {
+type StringTypesRangeValidationParams struct {
 	// UnformattedStr is parsed from request path and declared as unformattedStr.
 	UnformattedStr string
 	// CustomFormatStr is parsed from request path and declared as customFormatStr.
@@ -637,10 +637,10 @@ type StringTypesStringTypesRangeValidationParams struct {
 	Payload *StringTypesRangeValidationRequest
 }
 
-// StringTypesStringTypesRequiredValidationParams represents params for stringTypesRequiredValidation operation
+// StringTypesRequiredValidationParams represents params for stringTypesRequiredValidation operation
 //
 // Request: POST /string-types/required-validation.
-type StringTypesStringTypesRequiredValidationParams struct {
+type StringTypesRequiredValidationParams struct {
 	// UnformattedStrInQuery is parsed from request query and declared as unformattedStrInQuery.
 	UnformattedStrInQuery string
 	// CustomFormatStrInQuery is parsed from request query and declared as customFormatStrInQuery.

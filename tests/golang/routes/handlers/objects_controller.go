@@ -12,74 +12,74 @@ type _ func() ObjectArraysSimpleObject
 type ObjectsController interface {
 	// POST /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayBodyDirectParams,
+	// Request type: ObjectsArrayBodyDirectParams,
 	//
 	// Response type: none
 	ObjectsArrayBodyDirect(NoResponseHandlerBuilder[
-		*ObjectsObjectsArrayBodyDirectParams,
+		*ObjectsArrayBodyDirectParams,
 	]) http.Handler
 
 	// PUT /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayBodyNestedParams,
+	// Request type: ObjectsArrayBodyNestedParams,
 	//
 	// Response type: none
 	ObjectsArrayBodyNested(NoResponseHandlerBuilder[
-		*ObjectsObjectsArrayBodyNestedParams,
+		*ObjectsArrayBodyNestedParams,
 	]) http.Handler
 
 	// POST /objects/deeply-nested
 	//
-	// Request type: ObjectsObjectsDeeplyNestedParams,
+	// Request type: ObjectsDeeplyNestedParams,
 	//
 	// Response type: none
 	ObjectsDeeplyNested(NoResponseHandlerBuilder[
-		*ObjectsObjectsDeeplyNestedParams,
+		*ObjectsDeeplyNestedParams,
 	]) http.Handler
 
 	// PUT /objects/nullable-body
 	//
-	// Request type: ObjectsObjectsNullableOptionalBodyParams,
+	// Request type: ObjectsNullableOptionalBodyParams,
 	//
 	// Response type: none
 	ObjectsNullableOptionalBody(NoResponseHandlerBuilder[
-		*ObjectsObjectsNullableOptionalBodyParams,
+		*ObjectsNullableOptionalBodyParams,
 	]) http.Handler
 
 	// POST /objects/nullable-body
 	//
-	// Request type: ObjectsObjectsNullableRequiredBodyParams,
+	// Request type: ObjectsNullableRequiredBodyParams,
 	//
 	// Response type: none
 	ObjectsNullableRequiredBody(NoResponseHandlerBuilder[
-		*ObjectsObjectsNullableRequiredBodyParams,
+		*ObjectsNullableRequiredBodyParams,
 	]) http.Handler
 
 	// PUT /objects/required-body
 	//
-	// Request type: ObjectsObjectsOptionalBodyParams,
+	// Request type: ObjectsOptionalBodyParams,
 	//
 	// Response type: none
 	ObjectsOptionalBody(NoResponseHandlerBuilder[
-		*ObjectsObjectsOptionalBodyParams,
+		*ObjectsOptionalBodyParams,
 	]) http.Handler
 
 	// POST /objects/required-body
 	//
-	// Request type: ObjectsObjectsRequiredBodyParams,
+	// Request type: ObjectsRequiredBodyParams,
 	//
 	// Response type: none
 	ObjectsRequiredBody(NoResponseHandlerBuilder[
-		*ObjectsObjectsRequiredBodyParams,
+		*ObjectsRequiredBodyParams,
 	]) http.Handler
 
 	// POST /objects/required-nested-objects
 	//
-	// Request type: ObjectsObjectsRequiredNestedObjectsParams,
+	// Request type: ObjectsRequiredNestedObjectsParams,
 	//
 	// Response type: none
 	ObjectsRequiredNestedObjects(NoResponseHandlerBuilder[
-		*ObjectsObjectsRequiredNestedObjectsParams,
+		*ObjectsRequiredNestedObjectsParams,
 	]) http.Handler
 }
 

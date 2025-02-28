@@ -11,10 +11,10 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// NumericTypesNumericTypesArrayItemsParams represents params for numericTypesArrayItems operation
+// NumericTypesArrayItemsParams represents params for numericTypesArrayItems operation
 //
 // Request: POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesArrayItemsParams struct {
+type NumericTypesArrayItemsParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny []float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -43,10 +43,10 @@ type NumericTypesNumericTypesArrayItemsParams struct {
 	Payload *NumericTypesArrayItemsRequest
 }
 
-// NumericTypesNumericTypesNullableParams represents params for numericTypesNullable operation
+// NumericTypesNullableParams represents params for numericTypesNullable operation
 //
 // Request: POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesNullableParams struct {
+type NumericTypesNullableParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny *float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -77,10 +77,10 @@ type NumericTypesNumericTypesNullableParams struct {
 	OptionalNumberAnyInQuery *float32
 }
 
-// NumericTypesNumericTypesNullableArrayItemsParams represents params for numericTypesNullableArrayItems operation
+// NumericTypesNullableArrayItemsParams represents params for numericTypesNullableArrayItems operation
 //
 // Request: POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesNullableArrayItemsParams struct {
+type NumericTypesNullableArrayItemsParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny []*float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -109,10 +109,10 @@ type NumericTypesNumericTypesNullableArrayItemsParams struct {
 	Payload *NumericTypesNullableArrayItemsRequest
 }
 
-// NumericTypesNumericTypesParsingParams represents params for numericTypesParsing operation
+// NumericTypesParsingParams represents params for numericTypesParsing operation
 //
 // Request: POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesParsingParams struct {
+type NumericTypesParsingParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -141,10 +141,10 @@ type NumericTypesNumericTypesParsingParams struct {
 	Payload *NumericTypesParsingRequest
 }
 
-// NumericTypesNumericTypesRangeValidationParams represents params for numericTypesRangeValidation operation
+// NumericTypesRangeValidationParams represents params for numericTypesRangeValidation operation
 //
 // Request: POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesRangeValidationParams struct {
+type NumericTypesRangeValidationParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -173,10 +173,10 @@ type NumericTypesNumericTypesRangeValidationParams struct {
 	Payload *NumericTypesRangeValidationRequest
 }
 
-// NumericTypesNumericTypesRangeValidationExclusiveParams represents params for numericTypesRangeValidationExclusive operation
+// NumericTypesRangeValidationExclusiveParams represents params for numericTypesRangeValidationExclusive operation
 //
 // Request: POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}.
-type NumericTypesNumericTypesRangeValidationExclusiveParams struct {
+type NumericTypesRangeValidationExclusiveParams struct {
 	// NumberAny is parsed from request path and declared as numberAny.
 	NumberAny float32
 	// NumberFloat is parsed from request path and declared as numberFloat.
@@ -205,10 +205,10 @@ type NumericTypesNumericTypesRangeValidationExclusiveParams struct {
 	Payload *NumericTypesRangeValidationExclusiveRequest
 }
 
-// NumericTypesNumericTypesRequiredValidationParams represents params for numericTypesRequiredValidation operation
+// NumericTypesRequiredValidationParams represents params for numericTypesRequiredValidation operation
 //
 // Request: GET /numeric-types/required-validation.
-type NumericTypesNumericTypesRequiredValidationParams struct {
+type NumericTypesRequiredValidationParams struct {
 	// NumberAnyInQuery is parsed from request query and declared as numberAnyInQuery.
 	NumberAnyInQuery float32
 	// NumberFloatInQuery is parsed from request query and declared as numberFloatInQuery.

@@ -12,11 +12,11 @@ type _ func() BehaviorNamesWithIDData
 type BehaviorIDNamesController interface {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//
-	// Request type: BehaviorIDNamesBehaviorNamesWithIDParams,
+	// Request type: BehaviorNamesWithIDParams,
 	//
 	// Response type: BehaviorNamesWithIDData
 	BehaviorNamesWithID(HandlerBuilder[
-		*BehaviorIDNamesBehaviorNamesWithIDParams,
+		*BehaviorNamesWithIDParams,
 		*BehaviorNamesWithIDData,
 	]) http.Handler
 }

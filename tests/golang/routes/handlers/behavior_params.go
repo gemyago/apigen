@@ -20,9 +20,9 @@ type paramsParserBehaviorBehaviorWithParamsAndResponse struct {
 	bindPayload requestParamBinder[*http.Request, *BehaviorWithParamsAndResponseRequestBody]
 }
 
-func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsAndResponseParams, error) {
+func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRouter, req *http.Request) (*BehaviorWithParamsAndResponseParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BehaviorBehaviorWithParamsAndResponseParams{}
+	reqParams := &BehaviorWithParamsAndResponseParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -33,7 +33,7 @@ func (p *paramsParserBehaviorBehaviorWithParamsAndResponse) parse(router httpRou
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorBehaviorWithParamsAndResponse(rootHandler *RootHandler) paramsParser[*BehaviorBehaviorWithParamsAndResponseParams] {
+func newParamsParserBehaviorBehaviorWithParamsAndResponse(rootHandler *RootHandler) paramsParser[*BehaviorWithParamsAndResponseParams] {
 	return &paramsParserBehaviorBehaviorWithParamsAndResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
@@ -67,9 +67,9 @@ type paramsParserBehaviorBehaviorWithParamsNoResponse struct {
 	bindQueryParam1 requestParamBinder[[]string, string]
 }
 
-func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRouter, req *http.Request) (*BehaviorBehaviorWithParamsNoResponseParams, error) {
+func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRouter, req *http.Request) (*BehaviorWithParamsNoResponseParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &BehaviorBehaviorWithParamsNoResponseParams{}
+	reqParams := &BehaviorWithParamsNoResponseParams{}
 	// query params
 	query := req.URL.Query()
 	queryParamsCtx := bindingCtx.Fork("query")
@@ -77,7 +77,7 @@ func (p *paramsParserBehaviorBehaviorWithParamsNoResponse) parse(router httpRout
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserBehaviorBehaviorWithParamsNoResponse(rootHandler *RootHandler) paramsParser[*BehaviorBehaviorWithParamsNoResponseParams] {
+func newParamsParserBehaviorBehaviorWithParamsNoResponse(rootHandler *RootHandler) paramsParser[*BehaviorWithParamsNoResponseParams] {
 	return &paramsParserBehaviorBehaviorWithParamsNoResponse{
 		bindQueryParam1: newRequestParamBinder(binderParams[[]string, string]{
 			required: false,
@@ -131,26 +131,26 @@ type behaviorControllerBuilder struct {
 
 	// POST /behavior/with-params-and-response
 	//
-	// Request type: BehaviorBehaviorWithParamsAndResponseParams,
+	// Request type: BehaviorWithParamsAndResponseParams,
 	//
 	// Response type: BehaviorWithParamsAndResponseResponseBody
 	BehaviorWithParamsAndResponse genericHandlerBuilder[
-		*BehaviorBehaviorWithParamsAndResponseParams,
+		*BehaviorWithParamsAndResponseParams,
 		*BehaviorWithParamsAndResponseResponseBody,
-		handlerActionFunc[*BehaviorBehaviorWithParamsAndResponseParams, *BehaviorWithParamsAndResponseResponseBody],
-		httpHandlerActionFunc[*BehaviorBehaviorWithParamsAndResponseParams, *BehaviorWithParamsAndResponseResponseBody],
+		handlerActionFunc[*BehaviorWithParamsAndResponseParams, *BehaviorWithParamsAndResponseResponseBody],
+		httpHandlerActionFunc[*BehaviorWithParamsAndResponseParams, *BehaviorWithParamsAndResponseResponseBody],
 	]
 
 	// GET /behavior/with-params-no-response
 	//
-	// Request type: BehaviorBehaviorWithParamsNoResponseParams,
+	// Request type: BehaviorWithParamsNoResponseParams,
 	//
 	// Response type: none
 	BehaviorWithParamsNoResponse genericHandlerBuilder[
-		*BehaviorBehaviorWithParamsNoResponseParams,
+		*BehaviorWithParamsNoResponseParams,
 		void,
-		handlerActionFuncNoResponse[*BehaviorBehaviorWithParamsNoResponseParams, void],
-		httpHandlerActionFuncNoResponse[*BehaviorBehaviorWithParamsNoResponseParams, void],
+		handlerActionFuncNoResponse[*BehaviorWithParamsNoResponseParams, void],
+		httpHandlerActionFuncNoResponse[*BehaviorWithParamsNoResponseParams, void],
 	]
 
 	// POST /behavior/with-status-defined
@@ -234,15 +234,15 @@ func newBehaviorControllerBuilder(app *RootHandler) *behaviorControllerBuilder {
 		BehaviorWithParamsAndResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapter[
-				*BehaviorBehaviorWithParamsAndResponseParams,
+				*BehaviorWithParamsAndResponseParams,
 				*BehaviorWithParamsAndResponseResponseBody,
 			](),
 			newHTTPHandlerAdapter[
-				*BehaviorBehaviorWithParamsAndResponseParams,
+				*BehaviorWithParamsAndResponseParams,
 				*BehaviorWithParamsAndResponseResponseBody,
 			](),
 			makeActionBuilderParams[
-				*BehaviorBehaviorWithParamsAndResponseParams,
+				*BehaviorWithParamsAndResponseParams,
 				*BehaviorWithParamsAndResponseResponseBody,
 			]{
 				defaultStatus: 202,
@@ -254,15 +254,15 @@ func newBehaviorControllerBuilder(app *RootHandler) *behaviorControllerBuilder {
 		BehaviorWithParamsNoResponse: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*BehaviorBehaviorWithParamsNoResponseParams,
+				*BehaviorWithParamsNoResponseParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*BehaviorBehaviorWithParamsNoResponseParams,
+				*BehaviorWithParamsNoResponseParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*BehaviorBehaviorWithParamsNoResponseParams,
+				*BehaviorWithParamsNoResponseParams,
 				void,
 			]{
 				defaultStatus: 202,

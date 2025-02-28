@@ -8,11 +8,11 @@ import (
 )
 
 type booleanControllerTestActions struct {
-	booleanParsing            mockAction[*models.BooleanBooleanParsingParams]
-	booleanRequiredValidation mockAction[*models.BooleanBooleanRequiredValidationParams]
-	booleanNullable           mockAction[*models.BooleanBooleanNullableParams]
-	booleanArrayItems         mockAction[*models.BooleanBooleanArrayItemsParams]
-	nullableBooleanArrayItems mockAction[*models.BooleanBooleanNullableArrayItemsParams]
+	booleanParsing            mockAction[*models.BooleanParsingParams]
+	booleanRequiredValidation mockAction[*models.BooleanRequiredValidationParams]
+	booleanNullable           mockAction[*models.BooleanNullableParams]
+	booleanArrayItems         mockAction[*models.BooleanArrayItemsParams]
+	nullableBooleanArrayItems mockAction[*models.BooleanNullableArrayItemsParams]
 }
 
 type booleanController struct {
@@ -20,7 +20,7 @@ type booleanController struct {
 }
 
 func (c *booleanController) BooleanParsing(
-	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanParsingParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanParsingParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanParsing.action,
@@ -28,7 +28,7 @@ func (c *booleanController) BooleanParsing(
 }
 
 func (c *booleanController) BooleanRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanRequiredValidationParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanRequiredValidation.action,
@@ -36,7 +36,7 @@ func (c *booleanController) BooleanRequiredValidation(
 }
 
 func (c *booleanController) BooleanNullable(
-	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanNullableParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanNullableParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanNullable.action,
@@ -44,7 +44,7 @@ func (c *booleanController) BooleanNullable(
 }
 
 func (c *booleanController) BooleanArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanArrayItemsParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.booleanArrayItems.action,
@@ -52,7 +52,7 @@ func (c *booleanController) BooleanArrayItems(
 }
 
 func (c *booleanController) BooleanNullableArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*models.BooleanBooleanNullableArrayItemsParams],
+	builder handlers.NoResponseHandlerBuilder[*models.BooleanNullableArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.nullableBooleanArrayItems.action,

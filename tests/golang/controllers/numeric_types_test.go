@@ -39,8 +39,8 @@ func TestNumericTypes(t *testing.T) {
 	}
 
 	t.Run("parsing", func(t *testing.T) {
-		randomReq := func() *models.NumericTypesNumericTypesParsingParams {
-			return &models.NumericTypesNumericTypesParsingParams{
+		randomReq := func() *models.NumericTypesParsingParams {
+			return &models.NumericTypesParsingParams{
 				// path
 				NumberAny:    fake.Float32(10, 1, 100),
 				NumberFloat:  fake.Float32(10, 1, 100),
@@ -139,9 +139,9 @@ func TestNumericTypes(t *testing.T) {
 
 	t.Run("array-items", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*models.NumericTypesNumericTypesArrayItemsParams),
-		) *models.NumericTypesNumericTypesArrayItemsParams {
-			res := &models.NumericTypesNumericTypesArrayItemsParams{
+			opts ...func(*models.NumericTypesArrayItemsParams),
+		) *models.NumericTypesArrayItemsParams {
+			res := &models.NumericTypesArrayItemsParams{
 				// path
 				NumberAny:    randomNumbers(5, randomFloat32, 101, 200),
 				NumberFloat:  randomNumbers(5, randomFloat32, 201, 300),
@@ -174,7 +174,7 @@ func TestNumericTypes(t *testing.T) {
 			return res
 		}
 
-		buildPath := func(wantReq *models.NumericTypesNumericTypesArrayItemsParams) string {
+		buildPath := func(wantReq *models.NumericTypesArrayItemsParams) string {
 			return fmt.Sprintf(
 				"/numeric-types/array-items/%v/%v/%v/%v/%v/%v",
 				strings.Join(numbersToString(wantReq.NumberAny), ","),
@@ -186,7 +186,7 @@ func TestNumericTypes(t *testing.T) {
 			)
 		}
 
-		buildQuery := func(wantReq *models.NumericTypesNumericTypesArrayItemsParams) url.Values {
+		buildQuery := func(wantReq *models.NumericTypesArrayItemsParams) url.Values {
 			query := url.Values{}
 			query["numberAnyInQuery"] = numbersToString(wantReq.NumberAnyInQuery)
 			query["numberFloatInQuery"] = numbersToString(wantReq.NumberFloatInQuery)
@@ -265,7 +265,7 @@ func TestNumericTypes(t *testing.T) {
 		runRouteTestCase(t, "should fail if invalid values", setupRouter,
 			func() routeTestCase[*numericTypesControllerTestActions] {
 				badIndices := make([]int, 18)
-				wantReq := randomReq(func(req *models.NumericTypesNumericTypesArrayItemsParams) {
+				wantReq := randomReq(func(req *models.NumericTypesArrayItemsParams) {
 					badIndices[0], req.NumberAny = injectValueRandomly(fake, req.NumberAny, fake.Float32(10, 1, 100))
 					badIndices[1], req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, fake.Float32(10, 301, 500))
 					badIndices[2], req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, fake.Float64(10, 1, 300))
@@ -342,9 +342,9 @@ func TestNumericTypes(t *testing.T) {
 
 	t.Run("nullable-array-items", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*models.NumericTypesNumericTypesNullableArrayItemsParams),
-		) *models.NumericTypesNumericTypesNullableArrayItemsParams {
-			res := &models.NumericTypesNumericTypesNullableArrayItemsParams{
+			opts ...func(*models.NumericTypesNullableArrayItemsParams),
+		) *models.NumericTypesNullableArrayItemsParams {
+			res := &models.NumericTypesNullableArrayItemsParams{
 				// path
 				NumberAny:    lo.ToSlicePtr(randomNumbers(5, randomFloat32, 101, 200)),
 				NumberFloat:  lo.ToSlicePtr(randomNumbers(5, randomFloat32, 201, 300)),
@@ -377,7 +377,7 @@ func TestNumericTypes(t *testing.T) {
 			return res
 		}
 
-		buildPath := func(wantReq *models.NumericTypesNumericTypesNullableArrayItemsParams) string {
+		buildPath := func(wantReq *models.NumericTypesNullableArrayItemsParams) string {
 			return fmt.Sprintf(
 				"/numeric-types/nullable-array-items/%v/%v/%v/%v/%v/%v",
 				strings.Join(fromNullableItems(wantReq.NumberAny), ","),
@@ -389,7 +389,7 @@ func TestNumericTypes(t *testing.T) {
 			)
 		}
 
-		buildQuery := func(wantReq *models.NumericTypesNumericTypesNullableArrayItemsParams) url.Values {
+		buildQuery := func(wantReq *models.NumericTypesNullableArrayItemsParams) url.Values {
 			query := url.Values{}
 			query["numberAnyInQuery"] = fromNullableItems(wantReq.NumberAnyInQuery)
 			query["numberFloatInQuery"] = fromNullableItems(wantReq.NumberFloatInQuery)
@@ -417,7 +417,7 @@ func TestNumericTypes(t *testing.T) {
 
 		runRouteTestCase(t, "should parse and bind valid null values", setupRouter,
 			func() routeTestCase[*numericTypesControllerTestActions] {
-				wantReq := randomReq(func(req *models.NumericTypesNumericTypesNullableArrayItemsParams) {
+				wantReq := randomReq(func(req *models.NumericTypesNullableArrayItemsParams) {
 					_, req.NumberAny = injectValueRandomly(fake, req.NumberAny, nil)
 					_, req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, nil)
 					_, req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, nil)
@@ -480,7 +480,7 @@ func TestNumericTypes(t *testing.T) {
 		runRouteTestCase(t, "should fail if invalid values", setupRouter,
 			func() routeTestCase[*numericTypesControllerTestActions] {
 				badIndices := make([]int, 18)
-				wantReq := randomReq(func(req *models.NumericTypesNumericTypesNullableArrayItemsParams) {
+				wantReq := randomReq(func(req *models.NumericTypesNullableArrayItemsParams) {
 					badIndices[0], req.NumberAny = injectValueRandomly(fake, req.NumberAny, lo.ToPtr(fake.Float32(10, 1, 100)))
 					badIndices[1], req.NumberFloat = injectValueRandomly(fake, req.NumberFloat, lo.ToPtr(fake.Float32(10, 301, 500)))
 					badIndices[2], req.NumberDouble = injectValueRandomly(fake, req.NumberDouble, lo.ToPtr(fake.Float64(10, 1, 300)))
@@ -562,7 +562,7 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("range-validation", func(t *testing.T) {
-		buildQuery := func(wantReq *models.NumericTypesNumericTypesRangeValidationParams) url.Values {
+		buildQuery := func(wantReq *models.NumericTypesRangeValidationParams) url.Values {
 			query := url.Values{}
 			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
@@ -574,7 +574,7 @@ func TestNumericTypes(t *testing.T) {
 		}
 
 		runRouteTestCase(t, "should validate min range", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationParams{
+			wantReq := &models.NumericTypesRangeValidationParams{
 				// path
 				NumberAny:    fake.Float32(5, 10, 100),
 				NumberFloat:  fake.Float32(5, 20, 200),
@@ -638,7 +638,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow min inclusive values by default", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationParams{
+			wantReq := &models.NumericTypesRangeValidationParams{
 				// path
 				NumberAny:    100.01,
 				NumberFloat:  200.02,
@@ -681,7 +681,7 @@ func TestNumericTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate max range", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationParams{
+			wantReq := &models.NumericTypesRangeValidationParams{
 				// path
 				NumberAny:    fake.Float32(5, 201, 1000),
 				NumberFloat:  fake.Float32(5, 302, 1000),
@@ -746,7 +746,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow max inclusive values by default", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationParams{
+			wantReq := &models.NumericTypesRangeValidationParams{
 				// path
 				NumberAny:    200.02,
 				NumberFloat:  300.03,
@@ -790,7 +790,7 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("range-validation-exclusive", func(t *testing.T) {
-		buildQuery := func(wantReq *models.NumericTypesNumericTypesRangeValidationExclusiveParams) url.Values {
+		buildQuery := func(wantReq *models.NumericTypesRangeValidationExclusiveParams) url.Values {
 			query := url.Values{}
 			query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 			query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
@@ -802,7 +802,7 @@ func TestNumericTypes(t *testing.T) {
 		}
 
 		runRouteTestCase(t, "should not allow min inclusive values", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationExclusiveParams{
+			wantReq := &models.NumericTypesRangeValidationExclusiveParams{
 				// path
 				NumberAny:    100.01,
 				NumberFloat:  200.02,
@@ -867,7 +867,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should not allow max inclusive values", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRangeValidationExclusiveParams{
+			wantReq := &models.NumericTypesRangeValidationExclusiveParams{
 				// path
 				NumberAny:    200.02,
 				NumberFloat:  300.03,
@@ -934,7 +934,7 @@ func TestNumericTypes(t *testing.T) {
 
 	t.Run("required-validation", func(t *testing.T) {
 		runRouteTestCase(t, "should ignore missing optional params", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRequiredValidationParams{
+			wantReq := &models.NumericTypesRequiredValidationParams{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
 				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
@@ -944,7 +944,7 @@ func TestNumericTypes(t *testing.T) {
 				NumberInt64InQuery:  fake.Int64Between(700, 1000),
 			}
 
-			buildQuery := func(wantReq *models.NumericTypesNumericTypesRequiredValidationParams) url.Values {
+			buildQuery := func(wantReq *models.NumericTypesRequiredValidationParams) url.Values {
 				query := url.Values{}
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
@@ -965,7 +965,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should parse optional params", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRequiredValidationParams{
+			wantReq := &models.NumericTypesRequiredValidationParams{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
 				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
@@ -982,7 +982,7 @@ func TestNumericTypes(t *testing.T) {
 				OptionalNumberInt64InQuery:  fake.Int64Between(600, 1000),
 			}
 
-			buildQuery := func(wantReq *models.NumericTypesNumericTypesRequiredValidationParams) url.Values {
+			buildQuery := func(wantReq *models.NumericTypesRequiredValidationParams) url.Values {
 				query := url.Values{}
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
@@ -1009,7 +1009,7 @@ func TestNumericTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should validate optional params", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesRequiredValidationParams{
+			wantReq := &models.NumericTypesRequiredValidationParams{
 				// query
 				NumberAnyInQuery:    fake.Float32(5, 201, 1000),
 				NumberFloatInQuery:  fake.Float32(5, 302, 1000),
@@ -1026,7 +1026,7 @@ func TestNumericTypes(t *testing.T) {
 				OptionalNumberInt64InQuery:  fake.Int64Between(1, 599),
 			}
 
-			buildQuery := func(wantReq *models.NumericTypesNumericTypesRequiredValidationParams) url.Values {
+			buildQuery := func(wantReq *models.NumericTypesRequiredValidationParams) url.Values {
 				query := url.Values{}
 				query.Add("numberAnyInQuery", fmt.Sprint(wantReq.NumberAnyInQuery))
 				query.Add("numberFloatInQuery", fmt.Sprint(wantReq.NumberFloatInQuery))
@@ -1116,7 +1116,7 @@ func TestNumericTypes(t *testing.T) {
 	})
 
 	t.Run("nullable", func(t *testing.T) {
-		buildQuery := func(wantReq *models.NumericTypesNumericTypesNullableParams) url.Values {
+		buildQuery := func(wantReq *models.NumericTypesNullableParams) url.Values {
 			query := url.Values{}
 			query.Add("numberAnyInQuery", fmt.Sprint(lo.FromPtr(wantReq.NumberAnyInQuery)))
 			query.Add("optionalNumberAnyInQuery", fmt.Sprint(lo.FromPtr(wantReq.OptionalNumberAnyInQuery)))
@@ -1129,7 +1129,7 @@ func TestNumericTypes(t *testing.T) {
 		}
 
 		runRouteTestCase(t, "should bind valid values", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesNullableParams{
+			wantReq := &models.NumericTypesNullableParams{
 				// path
 				NumberAny:    lo.ToPtr(fake.Float32(5, 100, 200)),
 				NumberFloat:  lo.ToPtr(fake.Float32(5, 200, 300)),
@@ -1175,7 +1175,7 @@ func TestNumericTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate invalid values", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesNullableParams{
+			wantReq := &models.NumericTypesNullableParams{
 				// path
 				NumberAny:    lo.ToPtr(fake.Float32(5, 201, 1000)),
 				NumberFloat:  lo.ToPtr(fake.Float32(5, 302, 1000)),
@@ -1245,7 +1245,7 @@ func TestNumericTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should accept null values", setupRouter, func() testCase {
-			wantReq := &models.NumericTypesNumericTypesNullableParams{
+			wantReq := &models.NumericTypesNullableParams{
 				Payload: &models.NumericTypesNullableRequest{},
 			}
 			query := url.Values{}

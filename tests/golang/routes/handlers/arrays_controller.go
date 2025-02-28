@@ -12,29 +12,29 @@ type _ func() ArraysNullableRequiredValidationRequest
 type ArraysController interface {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysNullableRequiredValidationParams,
+	// Request type: ArraysNullableRequiredValidationParams,
 	//
 	// Response type: none
 	ArraysNullableRequiredValidation(NoResponseHandlerBuilder[
-		*ArraysArraysNullableRequiredValidationParams,
+		*ArraysNullableRequiredValidationParams,
 	]) http.Handler
 
 	// POST /arrays/range-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysRangeValidationParams,
+	// Request type: ArraysRangeValidationParams,
 	//
 	// Response type: none
 	ArraysRangeValidation(NoResponseHandlerBuilder[
-		*ArraysArraysRangeValidationParams,
+		*ArraysRangeValidationParams,
 	]) http.Handler
 
 	// POST /arrays/required-validation/{simpleItems1}/{simpleItems2}
 	//
-	// Request type: ArraysArraysRequiredValidationParams,
+	// Request type: ArraysRequiredValidationParams,
 	//
 	// Response type: none
 	ArraysRequiredValidation(NoResponseHandlerBuilder[
-		*ArraysArraysRequiredValidationParams,
+		*ArraysRequiredValidationParams,
 	]) http.Handler
 }
 

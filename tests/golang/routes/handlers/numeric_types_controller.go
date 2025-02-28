@@ -12,65 +12,65 @@ type _ func() NumericTypesArrayItemsRequest
 type NumericTypesController interface {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesArrayItemsParams,
+	// Request type: NumericTypesArrayItemsParams,
 	//
 	// Response type: none
 	NumericTypesArrayItems(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesArrayItemsParams,
+		*NumericTypesArrayItemsParams,
 	]) http.Handler
 
 	// POST /numeric-types/nullable/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesNullableParams,
+	// Request type: NumericTypesNullableParams,
 	//
 	// Response type: none
 	NumericTypesNullable(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesNullableParams,
+		*NumericTypesNullableParams,
 	]) http.Handler
 
 	// POST /numeric-types/nullable-array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesNullableArrayItemsParams,
+	// Request type: NumericTypesNullableArrayItemsParams,
 	//
 	// Response type: none
 	NumericTypesNullableArrayItems(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesNullableArrayItemsParams,
+		*NumericTypesNullableArrayItemsParams,
 	]) http.Handler
 
 	// POST /numeric-types/parsing/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesParsingParams,
+	// Request type: NumericTypesParsingParams,
 	//
 	// Response type: none
 	NumericTypesParsing(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesParsingParams,
+		*NumericTypesParsingParams,
 	]) http.Handler
 
 	// POST /numeric-types/range-validation/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesRangeValidationParams,
+	// Request type: NumericTypesRangeValidationParams,
 	//
 	// Response type: none
 	NumericTypesRangeValidation(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesRangeValidationParams,
+		*NumericTypesRangeValidationParams,
 	]) http.Handler
 
 	// POST /numeric-types/range-validation-exclusive/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//
-	// Request type: NumericTypesNumericTypesRangeValidationExclusiveParams,
+	// Request type: NumericTypesRangeValidationExclusiveParams,
 	//
 	// Response type: none
 	NumericTypesRangeValidationExclusive(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesRangeValidationExclusiveParams,
+		*NumericTypesRangeValidationExclusiveParams,
 	]) http.Handler
 
 	// GET /numeric-types/required-validation
 	//
-	// Request type: NumericTypesNumericTypesRequiredValidationParams,
+	// Request type: NumericTypesRequiredValidationParams,
 	//
 	// Response type: none
 	NumericTypesRequiredValidation(NoResponseHandlerBuilder[
-		*NumericTypesNumericTypesRequiredValidationParams,
+		*NumericTypesRequiredValidationParams,
 	]) http.Handler
 }
 

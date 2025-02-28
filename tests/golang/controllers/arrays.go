@@ -8,9 +8,9 @@ import (
 )
 
 type arraysControllerTestActions struct {
-	arraysRequiredValidation         mockAction[*models.ArraysArraysRequiredValidationParams]
-	arraysNullableRequiredValidation mockAction[*models.ArraysArraysNullableRequiredValidationParams]
-	arraysRangeValidation            mockAction[*models.ArraysArraysRangeValidationParams]
+	arraysRequiredValidation         mockAction[*models.ArraysRequiredValidationParams]
+	arraysNullableRequiredValidation mockAction[*models.ArraysNullableRequiredValidationParams]
+	arraysRangeValidation            mockAction[*models.ArraysRangeValidationParams]
 }
 
 type arraysController struct {
@@ -18,7 +18,7 @@ type arraysController struct {
 }
 
 func (c *arraysController) ArraysRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysRequiredValidationParams],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysRequiredValidation.action,
@@ -26,7 +26,7 @@ func (c *arraysController) ArraysRequiredValidation(
 }
 
 func (c *arraysController) ArraysNullableRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysNullableRequiredValidationParams],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysNullableRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysNullableRequiredValidation.action,
@@ -34,7 +34,7 @@ func (c *arraysController) ArraysNullableRequiredValidation(
 }
 
 func (c *arraysController) ArraysRangeValidation(
-	builder handlers.NoResponseHandlerBuilder[*models.ArraysArraysRangeValidationParams],
+	builder handlers.NoResponseHandlerBuilder[*models.ArraysRangeValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.arraysRangeValidation.action,

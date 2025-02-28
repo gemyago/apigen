@@ -11,10 +11,10 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BehaviorIDNamesBehaviorNamesWithIDParams represents params for behaviorNamesWithId operation
+// BehaviorNamesWithIDParams represents params for behaviorNamesWithId operation
 //
 // Request: POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}.
-type BehaviorIDNamesBehaviorNamesWithIDParams struct {
+type BehaviorNamesWithIDParams struct {
 	// ID is parsed from request path and declared as id.
 	ID string
 	// EndsWithID is parsed from request path and declared as endsWithId.

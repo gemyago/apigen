@@ -24,9 +24,9 @@ type PetsController struct {
 }
 
 func (c *PetsController) CreatePet(
-	b handlers.NoResponseHandlerBuilder[*models.PetsCreatePetParams],
+	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.PetsCreatePetParams) error {
+	return b.HandleWith(func(_ context.Context, req *models.CreatePetParams) error {
 		if _, ok := c.petsByID[req.Payload.ID]; ok {
 			return fmt.Errorf("pet %d already exists: %w", req.Payload.ID, ErrConflict)
 		}
@@ -39,9 +39,9 @@ func (c *PetsController) CreatePet(
 }
 
 func (c *PetsController) GetPetByID(
-	b handlers.HandlerBuilder[*models.PetsGetPetByIDParams, *models.PetResponse],
+	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.PetsGetPetByIDParams) (*models.PetResponse, error) {
+	return b.HandleWith(func(_ context.Context, req *models.GetPetByIDParams) (*models.PetResponse, error) {
 		pet, ok := c.petsByID[req.PetID]
 		if !ok {
 			return nil, fmt.Errorf("pet %d not found: %w", req.PetID, ErrNotFound)
@@ -51,9 +51,9 @@ func (c *PetsController) GetPetByID(
 }
 
 func (c *PetsController) ListPets(
-	b handlers.HandlerBuilder[*models.PetsListPetsParams, *models.PetsResponse],
+	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.PetsListPetsParams) (*models.PetsResponse, error) {
+	return b.HandleWith(func(_ context.Context, req *models.ListPetsParams) (*models.PetsResponse, error) {
 		allPetsLen := int64(len(c.allPets))
 		limit := req.Limit
 		offset := req.Offset

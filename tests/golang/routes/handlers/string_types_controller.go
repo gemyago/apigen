@@ -12,92 +12,92 @@ type _ func() BasicStringEnum
 type StringTypesController interface {
 	// POST /string-types/array-items-range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesArrayItemsRangeValidationParams,
+	// Request type: StringTypesArrayItemsRangeValidationParams,
 	//
 	// Response type: none
 	StringTypesArrayItemsRangeValidation(NoResponseHandlerBuilder[
-		*StringTypesStringTypesArrayItemsRangeValidationParams,
+		*StringTypesArrayItemsRangeValidationParams,
 	]) http.Handler
 
 	// POST /string-types/arrays-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesArraysParsingParams,
+	// Request type: StringTypesArraysParsingParams,
 	//
 	// Response type: none
 	StringTypesArraysParsing(NoResponseHandlerBuilder[
-		*StringTypesStringTypesArraysParsingParams,
+		*StringTypesArraysParsingParams,
 	]) http.Handler
 
 	// POST /string-types/enums/{inlineEnumParam}/{nullableInlineEnumParam}/{refEnumParam}/{nullableRefEnumParam}
 	//
-	// Request type: StringTypesStringTypesEnumsParams,
+	// Request type: StringTypesEnumsParams,
 	//
 	// Response type: none
 	StringTypesEnums(NoResponseHandlerBuilder[
-		*StringTypesStringTypesEnumsParams,
+		*StringTypesEnumsParams,
 	]) http.Handler
 
 	// POST /string-types/nullable-array-items/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesNullableArrayItemsParams,
+	// Request type: StringTypesNullableArrayItemsParams,
 	//
 	// Response type: none
 	StringTypesNullableArrayItems(NoResponseHandlerBuilder[
-		*StringTypesStringTypesNullableArrayItemsParams,
+		*StringTypesNullableArrayItemsParams,
 	]) http.Handler
 
 	// POST /string-types/nullable-parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesNullableParsingParams,
+	// Request type: StringTypesNullableParsingParams,
 	//
 	// Response type: none
 	StringTypesNullableParsing(NoResponseHandlerBuilder[
-		*StringTypesStringTypesNullableParsingParams,
+		*StringTypesNullableParsingParams,
 	]) http.Handler
 
 	// POST /string-types/nullable-required-validation
 	//
-	// Request type: StringTypesStringTypesNullableRequiredValidationParams,
+	// Request type: StringTypesNullableRequiredValidationParams,
 	//
 	// Response type: none
 	StringTypesNullableRequiredValidation(NoResponseHandlerBuilder[
-		*StringTypesStringTypesNullableRequiredValidationParams,
+		*StringTypesNullableRequiredValidationParams,
 	]) http.Handler
 
 	// POST /string-types/parsing/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesParsingParams,
+	// Request type: StringTypesParsingParams,
 	//
 	// Response type: none
 	StringTypesParsing(NoResponseHandlerBuilder[
-		*StringTypesStringTypesParsingParams,
+		*StringTypesParsingParams,
 	]) http.Handler
 
 	// POST /string-types/pattern-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}
 	//
-	// Request type: StringTypesStringTypesPatternValidationParams,
+	// Request type: StringTypesPatternValidationParams,
 	//
 	// Response type: none
 	StringTypesPatternValidation(NoResponseHandlerBuilder[
-		*StringTypesStringTypesPatternValidationParams,
+		*StringTypesPatternValidationParams,
 	]) http.Handler
 
 	// POST /string-types/range-validation/{unformattedStr}/{customFormatStr}/{dateStr}/{dateTimeStr}/{byteStr}
 	//
-	// Request type: StringTypesStringTypesRangeValidationParams,
+	// Request type: StringTypesRangeValidationParams,
 	//
 	// Response type: none
 	StringTypesRangeValidation(NoResponseHandlerBuilder[
-		*StringTypesStringTypesRangeValidationParams,
+		*StringTypesRangeValidationParams,
 	]) http.Handler
 
 	// POST /string-types/required-validation
 	//
-	// Request type: StringTypesStringTypesRequiredValidationParams,
+	// Request type: StringTypesRequiredValidationParams,
 	//
 	// Response type: none
 	StringTypesRequiredValidation(NoResponseHandlerBuilder[
-		*StringTypesStringTypesRequiredValidationParams,
+		*StringTypesRequiredValidationParams,
 	]) http.Handler
 }
 

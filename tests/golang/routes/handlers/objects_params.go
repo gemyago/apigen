@@ -18,15 +18,15 @@ type paramsParserObjectsObjectsArrayBodyDirect struct {
 	bindPayload requestParamBinder[*http.Request, []*ObjectArraysSimpleObject]
 }
 
-func (p *paramsParserObjectsObjectsArrayBodyDirect) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyDirectParams, error) {
+func (p *paramsParserObjectsObjectsArrayBodyDirect) parse(router httpRouter, req *http.Request) (*ObjectsArrayBodyDirectParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsArrayBodyDirectParams{}
+	reqParams := &ObjectsArrayBodyDirectParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayBodyDirect(rootHandler *RootHandler) paramsParser[*ObjectsObjectsArrayBodyDirectParams] {
+func newParamsParserObjectsObjectsArrayBodyDirect(rootHandler *RootHandler) paramsParser[*ObjectsArrayBodyDirectParams] {
 	return &paramsParserObjectsObjectsArrayBodyDirect{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, []*ObjectArraysSimpleObject]{
 			required: true,
@@ -46,15 +46,15 @@ type paramsParserObjectsObjectsArrayBodyNested struct {
 	bindPayload requestParamBinder[*http.Request, *ObjectsArrayBodyNestedRequest]
 }
 
-func (p *paramsParserObjectsObjectsArrayBodyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsArrayBodyNestedParams, error) {
+func (p *paramsParserObjectsObjectsArrayBodyNested) parse(router httpRouter, req *http.Request) (*ObjectsArrayBodyNestedParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsArrayBodyNestedParams{}
+	reqParams := &ObjectsArrayBodyNestedParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsArrayBodyNested(rootHandler *RootHandler) paramsParser[*ObjectsObjectsArrayBodyNestedParams] {
+func newParamsParserObjectsObjectsArrayBodyNested(rootHandler *RootHandler) paramsParser[*ObjectsArrayBodyNestedParams] {
 	return &paramsParserObjectsObjectsArrayBodyNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ObjectsArrayBodyNestedRequest]{
 			required: true,
@@ -70,15 +70,15 @@ type paramsParserObjectsObjectsDeeplyNested struct {
 	bindPayload requestParamBinder[*http.Request, *ObjectsDeeplyNestedRequest]
 }
 
-func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *http.Request) (*ObjectsObjectsDeeplyNestedParams, error) {
+func (p *paramsParserObjectsObjectsDeeplyNested) parse(router httpRouter, req *http.Request) (*ObjectsDeeplyNestedParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsDeeplyNestedParams{}
+	reqParams := &ObjectsDeeplyNestedParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsDeeplyNested(rootHandler *RootHandler) paramsParser[*ObjectsObjectsDeeplyNestedParams] {
+func newParamsParserObjectsObjectsDeeplyNested(rootHandler *RootHandler) paramsParser[*ObjectsDeeplyNestedParams] {
 	return &paramsParserObjectsObjectsDeeplyNested{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *ObjectsDeeplyNestedRequest]{
 			required: true,
@@ -94,15 +94,15 @@ type paramsParserObjectsObjectsNullableOptionalBody struct {
 	bindPayload requestParamBinder[*http.Request, *SimpleNullableObject]
 }
 
-func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableOptionalBodyParams, error) {
+func (p *paramsParserObjectsObjectsNullableOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsNullableOptionalBodyParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsNullableOptionalBodyParams{}
+	reqParams := &ObjectsNullableOptionalBodyParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNullableOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsNullableOptionalBodyParams] {
+func newParamsParserObjectsObjectsNullableOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsNullableOptionalBodyParams] {
 	return &paramsParserObjectsObjectsNullableOptionalBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleNullableObject]{
 			required: false,
@@ -118,15 +118,15 @@ type paramsParserObjectsObjectsNullableRequiredBody struct {
 	bindPayload requestParamBinder[*http.Request, *SimpleNullableObject]
 }
 
-func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsNullableRequiredBodyParams, error) {
+func (p *paramsParserObjectsObjectsNullableRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsNullableRequiredBodyParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsNullableRequiredBodyParams{}
+	reqParams := &ObjectsNullableRequiredBodyParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsNullableRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsNullableRequiredBodyParams] {
+func newParamsParserObjectsObjectsNullableRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsNullableRequiredBodyParams] {
 	return &paramsParserObjectsObjectsNullableRequiredBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleNullableObject]{
 			required: true,
@@ -142,15 +142,15 @@ type paramsParserObjectsObjectsOptionalBody struct {
 	bindPayload requestParamBinder[*http.Request, *SimpleObject]
 }
 
-func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsOptionalBodyParams, error) {
+func (p *paramsParserObjectsObjectsOptionalBody) parse(router httpRouter, req *http.Request) (*ObjectsOptionalBodyParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsOptionalBodyParams{}
+	reqParams := &ObjectsOptionalBodyParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsOptionalBodyParams] {
+func newParamsParserObjectsObjectsOptionalBody(rootHandler *RootHandler) paramsParser[*ObjectsOptionalBodyParams] {
 	return &paramsParserObjectsObjectsOptionalBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObject]{
 			required: false,
@@ -166,15 +166,15 @@ type paramsParserObjectsObjectsRequiredBody struct {
 	bindPayload requestParamBinder[*http.Request, *SimpleObject]
 }
 
-func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredBodyParams, error) {
+func (p *paramsParserObjectsObjectsRequiredBody) parse(router httpRouter, req *http.Request) (*ObjectsRequiredBodyParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsRequiredBodyParams{}
+	reqParams := &ObjectsRequiredBodyParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsObjectsRequiredBodyParams] {
+func newParamsParserObjectsObjectsRequiredBody(rootHandler *RootHandler) paramsParser[*ObjectsRequiredBodyParams] {
 	return &paramsParserObjectsObjectsRequiredBody{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObject]{
 			required: true,
@@ -190,15 +190,15 @@ type paramsParserObjectsObjectsRequiredNestedObjects struct {
 	bindPayload requestParamBinder[*http.Request, *SimpleObjectsContainer]
 }
 
-func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsObjectsRequiredNestedObjectsParams, error) {
+func (p *paramsParserObjectsObjectsRequiredNestedObjects) parse(router httpRouter, req *http.Request) (*ObjectsRequiredNestedObjectsParams, error) {
 	bindingCtx := BindingContext{}
-	reqParams := &ObjectsObjectsRequiredNestedObjectsParams{}
+	reqParams := &ObjectsRequiredNestedObjectsParams{}
 	// body params
 	p.bindPayload(bindingCtx.Fork("body"), readRequestBodyValue(req), &reqParams.Payload)
 	return reqParams, bindingCtx.AggregatedError()
 }
 
-func newParamsParserObjectsObjectsRequiredNestedObjects(rootHandler *RootHandler) paramsParser[*ObjectsObjectsRequiredNestedObjectsParams] {
+func newParamsParserObjectsObjectsRequiredNestedObjects(rootHandler *RootHandler) paramsParser[*ObjectsRequiredNestedObjectsParams] {
 	return &paramsParserObjectsObjectsRequiredNestedObjects{
 		bindPayload: newRequestParamBinder(binderParams[*http.Request, *SimpleObjectsContainer]{
 			required: true,
@@ -213,98 +213,98 @@ func newParamsParserObjectsObjectsRequiredNestedObjects(rootHandler *RootHandler
 type objectsControllerBuilder struct {
 	// POST /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayBodyDirectParams,
+	// Request type: ObjectsArrayBodyDirectParams,
 	//
 	// Response type: none
 	ObjectsArrayBodyDirect genericHandlerBuilder[
-		*ObjectsObjectsArrayBodyDirectParams,
+		*ObjectsArrayBodyDirectParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsArrayBodyDirectParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsArrayBodyDirectParams, void],
+		handlerActionFuncNoResponse[*ObjectsArrayBodyDirectParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsArrayBodyDirectParams, void],
 	]
 
 	// PUT /objects/arrays
 	//
-	// Request type: ObjectsObjectsArrayBodyNestedParams,
+	// Request type: ObjectsArrayBodyNestedParams,
 	//
 	// Response type: none
 	ObjectsArrayBodyNested genericHandlerBuilder[
-		*ObjectsObjectsArrayBodyNestedParams,
+		*ObjectsArrayBodyNestedParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsArrayBodyNestedParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsArrayBodyNestedParams, void],
+		handlerActionFuncNoResponse[*ObjectsArrayBodyNestedParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsArrayBodyNestedParams, void],
 	]
 
 	// POST /objects/deeply-nested
 	//
-	// Request type: ObjectsObjectsDeeplyNestedParams,
+	// Request type: ObjectsDeeplyNestedParams,
 	//
 	// Response type: none
 	ObjectsDeeplyNested genericHandlerBuilder[
-		*ObjectsObjectsDeeplyNestedParams,
+		*ObjectsDeeplyNestedParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsDeeplyNestedParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsDeeplyNestedParams, void],
+		handlerActionFuncNoResponse[*ObjectsDeeplyNestedParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsDeeplyNestedParams, void],
 	]
 
 	// PUT /objects/nullable-body
 	//
-	// Request type: ObjectsObjectsNullableOptionalBodyParams,
+	// Request type: ObjectsNullableOptionalBodyParams,
 	//
 	// Response type: none
 	ObjectsNullableOptionalBody genericHandlerBuilder[
-		*ObjectsObjectsNullableOptionalBodyParams,
+		*ObjectsNullableOptionalBodyParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsNullableOptionalBodyParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsNullableOptionalBodyParams, void],
+		handlerActionFuncNoResponse[*ObjectsNullableOptionalBodyParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsNullableOptionalBodyParams, void],
 	]
 
 	// POST /objects/nullable-body
 	//
-	// Request type: ObjectsObjectsNullableRequiredBodyParams,
+	// Request type: ObjectsNullableRequiredBodyParams,
 	//
 	// Response type: none
 	ObjectsNullableRequiredBody genericHandlerBuilder[
-		*ObjectsObjectsNullableRequiredBodyParams,
+		*ObjectsNullableRequiredBodyParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsNullableRequiredBodyParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsNullableRequiredBodyParams, void],
+		handlerActionFuncNoResponse[*ObjectsNullableRequiredBodyParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsNullableRequiredBodyParams, void],
 	]
 
 	// PUT /objects/required-body
 	//
-	// Request type: ObjectsObjectsOptionalBodyParams,
+	// Request type: ObjectsOptionalBodyParams,
 	//
 	// Response type: none
 	ObjectsOptionalBody genericHandlerBuilder[
-		*ObjectsObjectsOptionalBodyParams,
+		*ObjectsOptionalBodyParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsOptionalBodyParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsOptionalBodyParams, void],
+		handlerActionFuncNoResponse[*ObjectsOptionalBodyParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsOptionalBodyParams, void],
 	]
 
 	// POST /objects/required-body
 	//
-	// Request type: ObjectsObjectsRequiredBodyParams,
+	// Request type: ObjectsRequiredBodyParams,
 	//
 	// Response type: none
 	ObjectsRequiredBody genericHandlerBuilder[
-		*ObjectsObjectsRequiredBodyParams,
+		*ObjectsRequiredBodyParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsRequiredBodyParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsRequiredBodyParams, void],
+		handlerActionFuncNoResponse[*ObjectsRequiredBodyParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsRequiredBodyParams, void],
 	]
 
 	// POST /objects/required-nested-objects
 	//
-	// Request type: ObjectsObjectsRequiredNestedObjectsParams,
+	// Request type: ObjectsRequiredNestedObjectsParams,
 	//
 	// Response type: none
 	ObjectsRequiredNestedObjects genericHandlerBuilder[
-		*ObjectsObjectsRequiredNestedObjectsParams,
+		*ObjectsRequiredNestedObjectsParams,
 		void,
-		handlerActionFuncNoResponse[*ObjectsObjectsRequiredNestedObjectsParams, void],
-		httpHandlerActionFuncNoResponse[*ObjectsObjectsRequiredNestedObjectsParams, void],
+		handlerActionFuncNoResponse[*ObjectsRequiredNestedObjectsParams, void],
+		httpHandlerActionFuncNoResponse[*ObjectsRequiredNestedObjectsParams, void],
 	]
 }
 
@@ -314,15 +314,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsArrayBodyDirect: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsArrayBodyDirectParams,
+				*ObjectsArrayBodyDirectParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsArrayBodyDirectParams,
+				*ObjectsArrayBodyDirectParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsArrayBodyDirectParams,
+				*ObjectsArrayBodyDirectParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -335,15 +335,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsArrayBodyNested: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsArrayBodyNestedParams,
+				*ObjectsArrayBodyNestedParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsArrayBodyNestedParams,
+				*ObjectsArrayBodyNestedParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsArrayBodyNestedParams,
+				*ObjectsArrayBodyNestedParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -356,15 +356,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsDeeplyNested: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsDeeplyNestedParams,
+				*ObjectsDeeplyNestedParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsDeeplyNestedParams,
+				*ObjectsDeeplyNestedParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsDeeplyNestedParams,
+				*ObjectsDeeplyNestedParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -377,15 +377,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsNullableOptionalBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsNullableOptionalBodyParams,
+				*ObjectsNullableOptionalBodyParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsNullableOptionalBodyParams,
+				*ObjectsNullableOptionalBodyParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsNullableOptionalBodyParams,
+				*ObjectsNullableOptionalBodyParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -398,15 +398,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsNullableRequiredBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsNullableRequiredBodyParams,
+				*ObjectsNullableRequiredBodyParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsNullableRequiredBodyParams,
+				*ObjectsNullableRequiredBodyParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsNullableRequiredBodyParams,
+				*ObjectsNullableRequiredBodyParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -419,15 +419,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsOptionalBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsOptionalBodyParams,
+				*ObjectsOptionalBodyParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsOptionalBodyParams,
+				*ObjectsOptionalBodyParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsOptionalBodyParams,
+				*ObjectsOptionalBodyParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -440,15 +440,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsRequiredBody: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsRequiredBodyParams,
+				*ObjectsRequiredBodyParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsRequiredBodyParams,
+				*ObjectsRequiredBodyParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsRequiredBodyParams,
+				*ObjectsRequiredBodyParams,
 				void,
 			]{
 				defaultStatus: 204,
@@ -461,15 +461,15 @@ func newObjectsControllerBuilder(app *RootHandler) *objectsControllerBuilder {
 		ObjectsRequiredNestedObjects: newGenericHandlerBuilder(
 			app,
 			newHandlerAdapterNoResponse[
-				*ObjectsObjectsRequiredNestedObjectsParams,
+				*ObjectsRequiredNestedObjectsParams,
 				void,
 			](),
 			newHTTPHandlerAdapterNoResponse[
-				*ObjectsObjectsRequiredNestedObjectsParams,
+				*ObjectsRequiredNestedObjectsParams,
 				void,
 			](),
 			makeActionBuilderParams[
-				*ObjectsObjectsRequiredNestedObjectsParams,
+				*ObjectsRequiredNestedObjectsParams,
 				void,
 			]{
 				defaultStatus: 204,
