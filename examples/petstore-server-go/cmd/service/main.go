@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/controllers"
 	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/router"
-	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1controllers"
 )
 
 // Start it using command below:
@@ -30,7 +30,7 @@ func main() {
 	readHeaderTimeoutSec := 2
 
 	// Generated routes need a controller implementation to process requests
-	petsController := v1controllers.NewPetsController()
+	petsController := controllers.NewPetsController()
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),

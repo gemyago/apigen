@@ -37,7 +37,7 @@ func TestBehaviorIdNames(t *testing.T) {
 				EndsWithID:       fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle: fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),
 			}
-			wantParams := &handlers.BehaviorIDNamesBehaviorNamesWithIDRequest{
+			wantParams := &models.BehaviorNamesWithIDParams{
 				ID:                    fmt.Sprintf("id-%s", fake.Lorem().Word()),
 				EndsWithID:            fmt.Sprintf("ends-with-id-%s", fake.Lorem().Word()),
 				TheIDInTheMiddle:      fmt.Sprintf("the-id-in-the-middle-%s", fake.Lorem().Word()),

@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/gemyago/apigen/tests/golang/routes/handlers"
 	"github.com/gemyago/apigen/tests/golang/routes/models"
 	"github.com/jaswdr/faker"
 	"github.com/samber/lo"
@@ -158,67 +157,67 @@ func TestStringTypesEnums(t *testing.T) {
 			},
 			parserFn: models.ParseNullableStringEnum,
 		}))
-	t.Run("handlers.StringTypesStringTypesEnumsInlineEnumParam",
-		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsInlineEnumParam]{
-			allowableValues: handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues,
+	t.Run("models.StringTypesStringTypesEnumsInlineEnumParam",
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsInlineEnumParam]{
+			allowableValues: models.AllowableStringTypesStringTypesEnumsInlineEnumParamValues,
 			asFn: func(
-				val handlers.StringTypesStringTypesEnumsInlineEnumParam,
-			) handlers.StringTypesStringTypesEnumsInlineEnumParam {
-				return handlers.AsStringTypesStringTypesEnumsInlineEnumParam(val)
+				val models.StringTypesStringTypesEnumsInlineEnumParam,
+			) models.StringTypesStringTypesEnumsInlineEnumParam {
+				return models.AsStringTypesStringTypesEnumsInlineEnumParam(val)
 			},
-			parserFn: handlers.ParseStringTypesStringTypesEnumsInlineEnumParam,
+			parserFn: models.ParseStringTypesStringTypesEnumsInlineEnumParam,
 		}))
 	t.Run("StringTypesStringTypesEnumsNullableInlineEnumParam",
-		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsNullableInlineEnumParam]{
-			allowableValues: handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues,
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsNullableInlineEnumParam]{
+			allowableValues: models.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues,
 			asFn: func(
-				val handlers.StringTypesStringTypesEnumsNullableInlineEnumParam,
-			) handlers.StringTypesStringTypesEnumsNullableInlineEnumParam {
-				return handlers.AsStringTypesStringTypesEnumsNullableInlineEnumParam(val)
+				val models.StringTypesStringTypesEnumsNullableInlineEnumParam,
+			) models.StringTypesStringTypesEnumsNullableInlineEnumParam {
+				return models.AsStringTypesStringTypesEnumsNullableInlineEnumParam(val)
 			},
-			parserFn: handlers.ParseStringTypesStringTypesEnumsNullableInlineEnumParam,
+			parserFn: models.ParseStringTypesStringTypesEnumsNullableInlineEnumParam,
 		}))
 	t.Run("StringTypesStringTypesEnumsInlineEnumParamInQuery",
-		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery]{
-			allowableValues: handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues,
+		newBasicStringEnumTestCase(basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsInlineEnumParamInQuery]{
+			allowableValues: models.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues,
 			asFn: func(
-				val handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery,
-			) handlers.StringTypesStringTypesEnumsInlineEnumParamInQuery {
-				return handlers.AsStringTypesStringTypesEnumsInlineEnumParamInQuery(val)
+				val models.StringTypesStringTypesEnumsInlineEnumParamInQuery,
+			) models.StringTypesStringTypesEnumsInlineEnumParamInQuery {
+				return models.AsStringTypesStringTypesEnumsInlineEnumParamInQuery(val)
 			},
-			parserFn: handlers.ParseStringTypesStringTypesEnumsInlineEnumParamInQuery,
+			parserFn: models.ParseStringTypesStringTypesEnumsInlineEnumParamInQuery,
 		}))
 	t.Run("StringTypesStringTypesEnumsNullableInlineEnumParamInQuery",
 		newBasicStringEnumTestCase(
-			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]{
-				allowableValues: handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues,
+			basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery]{
+				allowableValues: models.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues,
 				asFn: func(
-					val handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
-				) handlers.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery {
-					return handlers.AsStringTypesStringTypesEnumsNullableInlineEnumParamInQuery(val)
+					val models.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
+				) models.StringTypesStringTypesEnumsNullableInlineEnumParamInQuery {
+					return models.AsStringTypesStringTypesEnumsNullableInlineEnumParamInQuery(val)
 				},
-				parserFn: handlers.ParseStringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
+				parserFn: models.ParseStringTypesStringTypesEnumsNullableInlineEnumParamInQuery,
 			}))
 	t.Run("StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery",
 		newBasicStringEnumTestCase(
-			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]{
-				allowableValues: handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
+			basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery]{
+				allowableValues: models.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues,
 				asFn: func(
-					val handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
-				) handlers.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery {
-					return handlers.AsStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery(val)
+					val models.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
+				) models.StringTypesStringTypesEnumsOptionalInlineEnumParamInQuery {
+					return models.AsStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery(val)
 				},
-				parserFn: handlers.ParseStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
+				parserFn: models.ParseStringTypesStringTypesEnumsOptionalInlineEnumParamInQuery,
 			}))
 	t.Run("StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery",
 		newBasicStringEnumTestCase(
-			basicStringEnumTestCaseParams[handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]{
-				allowableValues: handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues,
+			basicStringEnumTestCaseParams[models.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery]{
+				allowableValues: models.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues,
 				asFn: func(
-					val handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
-				) handlers.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery {
-					return handlers.AsStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery(val)
+					val models.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
+				) models.StringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery {
+					return models.AsStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery(val)
 				},
-				parserFn: handlers.ParseStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
+				parserFn: models.ParseStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQuery,
 			}))
 }

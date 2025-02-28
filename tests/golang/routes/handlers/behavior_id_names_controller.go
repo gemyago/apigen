@@ -1,85 +1,22 @@
 package handlers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
-// Below is to workaround unused imports.
-var _ = http.MethodGet
-var _ = time.Time{}
-var _ = json.Unmarshal
-var _ = fmt.Sprint
+// Below is to workaround unused imports if that happens.
 type _ func() BehaviorNamesWithIDData
-
-// BehaviorIDNamesBehaviorNamesWithIDRequest represents params for behaviorNamesWithId operation
-//
-// Request: POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}.
-type BehaviorIDNamesBehaviorNamesWithIDRequest struct {
-	// ID is parsed from request path and declared as id.
-	ID string
-	// EndsWithID is parsed from request path and declared as endsWithId.
-	EndsWithID string
-	// TheIDInTheMiddle is parsed from request path and declared as theIdInTheMiddle.
-	TheIDInTheMiddle string
-	// QueryEndsWithID is parsed from request query and declared as queryEndsWithId.
-	QueryEndsWithID string
-	// QueryTheIDInTheMiddle is parsed from request query and declared as queryTheIdInTheMiddle.
-	QueryTheIDInTheMiddle string
-	// Payload is parsed from request body and declared as payload.
-	Payload *BehaviorNamesWithIDData
-}
-
-type behaviorIDNamesControllerBuilder struct {
-	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
-	//
-	// Request type: BehaviorIDNamesBehaviorNamesWithIDRequest,
-	//
-	// Response type: BehaviorNamesWithIDData
-	BehaviorNamesWithID genericHandlerBuilder[
-		*BehaviorIDNamesBehaviorNamesWithIDRequest,
-		*BehaviorNamesWithIDData,
-		handlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDRequest, *BehaviorNamesWithIDData],
-		httpHandlerActionFunc[*BehaviorIDNamesBehaviorNamesWithIDRequest, *BehaviorNamesWithIDData],
-	]
-}
-
-func newBehaviorIDNamesControllerBuilder(app *RootHandler) *behaviorIDNamesControllerBuilder {
-	return &behaviorIDNamesControllerBuilder{
-		// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
-		BehaviorNamesWithID: newGenericHandlerBuilder(
-			app,
-			newHandlerAdapter[
-				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIDData,
-			](),
-			newHTTPHandlerAdapter[
-				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIDData,
-			](),
-			makeActionBuilderParams[
-				*BehaviorIDNamesBehaviorNamesWithIDRequest,
-				*BehaviorNamesWithIDData,
-			]{
-				defaultStatus: 200,
-				paramsParser:  newParamsParserBehaviorIDNamesBehaviorNamesWithID(app),
-			},
-		),
-	}
-}
 
 type BehaviorIDNamesController interface {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//
-	// Request type: BehaviorIDNamesBehaviorNamesWithIDRequest,
+	// Request type: BehaviorNamesWithIDParams,
 	//
 	// Response type: BehaviorNamesWithIDData
 	BehaviorNamesWithID(HandlerBuilder[
-		*BehaviorIDNamesBehaviorNamesWithIDRequest,
+		*BehaviorNamesWithIDParams,
 		*BehaviorNamesWithIDData,
 	]) http.Handler
 }

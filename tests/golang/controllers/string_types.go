@@ -4,19 +4,20 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/tests/golang/routes/handlers"
+	"github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
 type stringTypesControllerTestActions struct {
-	stringTypesParsing                    mockAction[*handlers.StringTypesStringTypesParsingRequest]
-	stringTypesArraysParsing              mockAction[*handlers.StringTypesStringTypesArraysParsingRequest]
-	stringTypesNullableParsing            mockAction[*handlers.StringTypesStringTypesNullableParsingRequest]
-	stringTypesNullableArrayItems         mockAction[*handlers.StringTypesStringTypesNullableArrayItemsRequest]
-	stringTypesRangeValidation            mockAction[*handlers.StringTypesStringTypesRangeValidationRequest]
-	stringTypesArrayItemsRangeValidation  mockAction[*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest]
-	stringTypesPatternValidation          mockAction[*handlers.StringTypesStringTypesPatternValidationRequest]
-	stringTypesRequiredValidation         mockAction[*handlers.StringTypesStringTypesRequiredValidationRequest]
-	stringTypesNullableRequiredValidation mockAction[*handlers.StringTypesStringTypesNullableRequiredValidationRequest]
-	stringTypesEnums                      mockAction[*handlers.StringTypesStringTypesEnumsRequest]
+	stringTypesParsing                    mockAction[*models.StringTypesParsingParams]
+	stringTypesArraysParsing              mockAction[*models.StringTypesArraysParsingParams]
+	stringTypesNullableParsing            mockAction[*models.StringTypesNullableParsingParams]
+	stringTypesNullableArrayItems         mockAction[*models.StringTypesNullableArrayItemsParams]
+	stringTypesRangeValidation            mockAction[*models.StringTypesRangeValidationParams]
+	stringTypesArrayItemsRangeValidation  mockAction[*models.StringTypesArrayItemsRangeValidationParams]
+	stringTypesPatternValidation          mockAction[*models.StringTypesPatternValidationParams]
+	stringTypesRequiredValidation         mockAction[*models.StringTypesRequiredValidationParams]
+	stringTypesNullableRequiredValidation mockAction[*models.StringTypesNullableRequiredValidationParams]
+	stringTypesEnums                      mockAction[*models.StringTypesEnumsParams]
 }
 
 type stringTypesController struct {
@@ -24,7 +25,7 @@ type stringTypesController struct {
 }
 
 func (c *stringTypesController) StringTypesArrayItemsRangeValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesArrayItemsRangeValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.stringTypesArrayItemsRangeValidation.action,
@@ -32,31 +33,31 @@ func (c *stringTypesController) StringTypesArrayItemsRangeValidation(
 }
 
 func (c *stringTypesController) StringTypesArraysParsing(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesArraysParsingRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesArraysParsingParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesArraysParsing.action)
 }
 
 func (c *stringTypesController) StringTypesEnums(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesEnumsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesEnumsParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesEnums.action)
 }
 
 func (c *stringTypesController) StringTypesNullableArrayItems(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableArrayItemsRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesNullableArrayItemsParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesNullableArrayItems.action)
 }
 
 func (c *stringTypesController) StringTypesNullableParsing(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableParsingRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesNullableParsingParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesNullableParsing.action)
 }
 
 func (c *stringTypesController) StringTypesNullableRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesNullableRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesNullableRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(
 		c.testActions.stringTypesNullableRequiredValidation.action,
@@ -64,25 +65,25 @@ func (c *stringTypesController) StringTypesNullableRequiredValidation(
 }
 
 func (c *stringTypesController) StringTypesParsing(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesParsingRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesParsingParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesParsing.action)
 }
 
 func (c *stringTypesController) StringTypesPatternValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesPatternValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesPatternValidationParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesPatternValidation.action)
 }
 
 func (c *stringTypesController) StringTypesRangeValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesRangeValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesRangeValidationParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesRangeValidation.action)
 }
 
 func (c *stringTypesController) StringTypesRequiredValidation(
-	builder handlers.NoResponseHandlerBuilder[*handlers.StringTypesStringTypesRequiredValidationRequest],
+	builder handlers.NoResponseHandlerBuilder[*models.StringTypesRequiredValidationParams],
 ) http.Handler {
 	return builder.HandleWith(c.testActions.stringTypesRequiredValidation.action)
 }

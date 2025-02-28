@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/models"
+	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/handlers"
+	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/models"
 )
 
 // Start it using command below:
@@ -17,8 +17,8 @@ import (
 // - curl localhost:8080/ping
 // - curl localhost:8080/ping?message=hello
 
-func pingHandler(_ context.Context, req *handlers.PingPingRequest) (*models.Ping200Response, error) {
-	message := req.Message
+func pingHandler(_ context.Context, params *models.PingParams) (*models.Ping200Response, error) {
+	message := params.Message
 	if message == "" {
 		message = "pong"
 	}
@@ -28,7 +28,7 @@ func pingHandler(_ context.Context, req *handlers.PingPingRequest) (*models.Ping
 type pingController struct{}
 
 func (c *pingController) Ping(b handlers.HandlerBuilder[
-	*handlers.PingPingRequest,
+	*models.PingParams,
 	*models.Ping200Response,
 ]) http.Handler {
 	return b.HandleWith(pingHandler)

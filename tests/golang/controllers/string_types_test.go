@@ -79,9 +79,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("parsing", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesParsingRequest),
-		) *handlers.StringTypesStringTypesParsingRequest {
-			req := &handlers.StringTypesStringTypesParsingRequest{
+			opts ...func(*models.StringTypesParsingParams),
+		) *models.StringTypesParsingParams {
+			req := &models.StringTypesParsingParams{
 				// path
 				UnformattedStr:  fake.Lorem().Word(),
 				CustomFormatStr: fake.Lorem().Word(),
@@ -111,7 +111,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesParsingRequest) url.Values {
+		buildQuery := func(req *models.StringTypesParsingParams) url.Values {
 			query := url.Values{}
 			query.Add("unformattedStrInQuery", req.UnformattedStrInQuery)
 			query.Add("customFormatStrInQuery", req.CustomFormatStrInQuery)
@@ -148,7 +148,7 @@ func TestStringTypes(t *testing.T) {
 		})
 		runRouteTestCase(t, "should parse time with locale", setupRouter, func() testCase {
 			location := time.FixedZone("", int((time.Duration(fake.IntBetween(2, 30)) * time.Minute).Seconds()))
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesParsingRequest) {
+			originalReq := randomReq(func(req *models.StringTypesParsingParams) {
 				req.DateTimeStr = req.DateTimeStr.In(location)
 				req.DateTimeStrInQuery = req.DateTimeStrInQuery.In(location)
 				req.Payload.DateTimeStr = req.Payload.DateTimeStr.In(location)
@@ -247,9 +247,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("nullable-parsing", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesNullableParsingRequest),
-		) *handlers.StringTypesStringTypesNullableParsingRequest {
-			req := &handlers.StringTypesStringTypesNullableParsingRequest{
+			opts ...func(*models.StringTypesNullableParsingParams),
+		) *models.StringTypesNullableParsingParams {
+			req := &models.StringTypesNullableParsingParams{
 				// path
 				UnformattedStr:  lo.ToPtr(fake.Lorem().Word()),
 				CustomFormatStr: lo.ToPtr(fake.Lorem().Word()),
@@ -279,7 +279,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesNullableParsingRequest) url.Values {
+		buildQuery := func(req *models.StringTypesNullableParsingParams) url.Values {
 			query := url.Values{}
 			query.Add("unformattedStrInQuery", lo.FromPtrOr(req.UnformattedStrInQuery, "null"))
 			query.Add("customFormatStrInQuery", lo.FromPtrOr(req.CustomFormatStrInQuery, "null"))
@@ -319,7 +319,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should parse and bind null values", setupRouter, func() testCase {
-			originalReq := &handlers.StringTypesStringTypesNullableParsingRequest{
+			originalReq := &models.StringTypesNullableParsingParams{
 				Payload: &models.StringTypesNullableParsingRequest{},
 			}
 			query := url.Values{}
@@ -350,7 +350,7 @@ func TestStringTypes(t *testing.T) {
 		})
 		runRouteTestCase(t, "should parse time with locale", setupRouter, func() testCase {
 			location := time.FixedZone("", int((time.Duration(fake.IntBetween(2, 30)) * time.Minute).Seconds()))
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableParsingRequest) {
+			originalReq := randomReq(func(req *models.StringTypesNullableParsingParams) {
 				req.DateTimeStr = lo.ToPtr(lo.FromPtr(req.DateTimeStr).In(location))
 				req.DateTimeStrInQuery = lo.ToPtr(lo.FromPtr(req.DateTimeStrInQuery).In(location))
 				req.Payload.DateTimeStr = lo.ToPtr(lo.FromPtr(req.Payload.DateTimeStr).In(location))
@@ -452,9 +452,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("arrays-parsing", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesArraysParsingRequest),
-		) *handlers.StringTypesStringTypesArraysParsingRequest {
-			req := &handlers.StringTypesStringTypesArraysParsingRequest{
+			opts ...func(*models.StringTypesArraysParsingParams),
+		) *models.StringTypesArraysParsingParams {
+			req := &models.StringTypesArraysParsingParams{
 				// path
 				UnformattedStr:  randomStrings(3, 10, 20),
 				CustomFormatStr: randomStrings(3, 10, 20),
@@ -486,7 +486,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesArraysParsingRequest) url.Values {
+		buildQuery := func(req *models.StringTypesArraysParsingParams) url.Values {
 			query := url.Values{}
 			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
 			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
@@ -571,9 +571,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("range-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesRangeValidationRequest),
-		) *handlers.StringTypesStringTypesRangeValidationRequest {
-			req := &handlers.StringTypesStringTypesRangeValidationRequest{
+			opts ...func(*models.StringTypesRangeValidationParams),
+		) *models.StringTypesRangeValidationParams {
+			req := &models.StringTypesRangeValidationParams{
 				// path
 				UnformattedStr:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
 				CustomFormatStr: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
@@ -603,7 +603,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(wantReq *handlers.StringTypesStringTypesRangeValidationRequest) url.Values {
+		buildQuery := func(wantReq *models.StringTypesRangeValidationParams) url.Values {
 			query := url.Values{}
 			query.Add("unformattedStrInQuery", wantReq.UnformattedStrInQuery)
 			query.Add("customFormatStrInQuery", wantReq.CustomFormatStrInQuery)
@@ -638,7 +638,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRangeValidationParams) {
 				req.UnformattedStr = fake.BinaryString().BinaryString(9)
 				req.CustomFormatStr = fake.BinaryString().BinaryString(19)
 				req.ByteStr = fake.BinaryString().BinaryString(29)
@@ -682,7 +682,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow inclusive min length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRangeValidationParams) {
 				req.UnformattedStr = fake.BinaryString().BinaryString(10)
 				req.CustomFormatStr = fake.BinaryString().BinaryString(20)
 				req.ByteStr = fake.BinaryString().BinaryString(30)
@@ -718,7 +718,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should validate max length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRangeValidationParams) {
 				req.UnformattedStr = fake.Lorem().Text(21)
 				req.CustomFormatStr = fake.Lorem().Text(31)
 				req.ByteStr = fake.Lorem().Text(41)
@@ -762,7 +762,7 @@ func TestStringTypes(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should allow inclusive max length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRangeValidationParams) {
 				req.UnformattedStr = fake.BinaryString().BinaryString(20)
 				req.CustomFormatStr = fake.BinaryString().BinaryString(30)
 				req.ByteStr = fake.BinaryString().BinaryString(40)
@@ -801,9 +801,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("array-items-range-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesArrayItemsRangeValidationRequest),
-		) *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest {
-			req := &handlers.StringTypesStringTypesArrayItemsRangeValidationRequest{
+			opts ...func(*models.StringTypesArrayItemsRangeValidationParams),
+		) *models.StringTypesArrayItemsRangeValidationParams {
+			req := &models.StringTypesArrayItemsRangeValidationParams{
 				// path
 				UnformattedStr:  randomStrings(3, 10, 20),
 				CustomFormatStr: randomStrings(3, 20, 30),
@@ -833,7 +833,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) url.Values {
+		buildQuery := func(req *models.StringTypesArrayItemsRangeValidationParams) url.Values {
 			query := url.Values{}
 			query["unformattedStrInQuery"] = req.UnformattedStrInQuery
 			query["customFormatStrInQuery"] = req.CustomFormatStrInQuery
@@ -843,7 +843,7 @@ func TestStringTypes(t *testing.T) {
 			return query
 		}
 
-		buildPath := func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) string {
+		buildPath := func(req *models.StringTypesArrayItemsRangeValidationParams) string {
 			return fmt.Sprintf(
 				"/string-types/array-items-range-validation/%v/%v/%v/%v/%v",
 				strings.Join(req.UnformattedStr, ","),
@@ -878,7 +878,7 @@ func TestStringTypes(t *testing.T) {
 
 		runRouteTestCase(t, "should validate min length", setupRouter, func() testCase {
 			badIndices := make([]int, 9)
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesArrayItemsRangeValidationParams) {
 				badIndices[0], req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
 				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
 				badIndices[2], req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
@@ -932,7 +932,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should allow inclusive min length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesArrayItemsRangeValidationParams) {
 				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(10))
 				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(20))
 				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(30))
@@ -979,7 +979,7 @@ func TestStringTypes(t *testing.T) {
 
 		runRouteTestCase(t, "should validate max length", setupRouter, func() testCase {
 			badIndices := make([]int, 9)
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesArrayItemsRangeValidationParams) {
 				badIndices[0], req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(9))
 				badIndices[1], req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(19))
 				badIndices[2], req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(29))
@@ -1033,7 +1033,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should allow inclusive max length", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesArrayItemsRangeValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesArrayItemsRangeValidationParams) {
 				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, fake.RandomStringWithLength(10))
 				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, fake.RandomStringWithLength(20))
 				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, fake.RandomStringWithLength(30))
@@ -1081,9 +1081,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("nullable-array-items", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesNullableArrayItemsRequest),
-		) *handlers.StringTypesStringTypesNullableArrayItemsRequest {
-			req := &handlers.StringTypesStringTypesNullableArrayItemsRequest{
+			opts ...func(*models.StringTypesNullableArrayItemsParams),
+		) *models.StringTypesNullableArrayItemsParams {
+			req := &models.StringTypesNullableArrayItemsParams{
 				// path
 				UnformattedStr:  lo.ToSlicePtr(randomStrings(3, 10, 20)),
 				CustomFormatStr: lo.ToSlicePtr(randomStrings(3, 20, 30)),
@@ -1113,7 +1113,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) url.Values {
+		buildQuery := func(req *models.StringTypesNullableArrayItemsParams) url.Values {
 			query := url.Values{}
 			query["unformattedStrInQuery"] = fromNullableItems(req.UnformattedStrInQuery)
 			query["customFormatStrInQuery"] = fromNullableItems(req.CustomFormatStrInQuery)
@@ -1123,7 +1123,7 @@ func TestStringTypes(t *testing.T) {
 			return query
 		}
 
-		buildPath := func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) string {
+		buildPath := func(req *models.StringTypesNullableArrayItemsParams) string {
 			return fmt.Sprintf(
 				"/string-types/nullable-array-items/%v/%v/%v/%v/%v",
 				strings.Join(fromNullableItems(req.UnformattedStr), ","),
@@ -1157,7 +1157,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should parse and bind valid null values", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+			originalReq := randomReq(func(req *models.StringTypesNullableArrayItemsParams) {
 				_, req.UnformattedStr = injectValueRandomly(fake, req.UnformattedStr, nil)
 				_, req.CustomFormatStr = injectValueRandomly(fake, req.CustomFormatStr, nil)
 				_, req.ByteStr = injectValueRandomly(fake, req.ByteStr, nil)
@@ -1204,7 +1204,7 @@ func TestStringTypes(t *testing.T) {
 
 		runRouteTestCase(t, "should validate bad values", setupRouter, func() testCase {
 			badIndices := make([]int, 9)
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesNullableArrayItemsRequest) {
+			originalReq := randomReq(func(req *models.StringTypesNullableArrayItemsParams) {
 				badIndices[0], req.UnformattedStr = injectValueRandomly(
 					fake, req.UnformattedStr, lo.ToPtr(fake.RandomStringWithLength(9)),
 				)
@@ -1266,9 +1266,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("required-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesRequiredValidationRequest),
-		) *handlers.StringTypesStringTypesRequiredValidationRequest {
-			req := &handlers.StringTypesStringTypesRequiredValidationRequest{
+			opts ...func(*models.StringTypesRequiredValidationParams),
+		) *models.StringTypesRequiredValidationParams {
+			req := &models.StringTypesRequiredValidationParams{
 				// query
 				UnformattedStrInQuery:  fake.BinaryString().BinaryString(fake.IntBetween(10, 20)),
 				CustomFormatStrInQuery: fake.BinaryString().BinaryString(fake.IntBetween(20, 30)),
@@ -1307,7 +1307,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(wantReq *handlers.StringTypesStringTypesRequiredValidationRequest) url.Values {
+		buildQuery := func(wantReq *models.StringTypesRequiredValidationParams) url.Values {
 			query := url.Values{}
 			query.Add("unformattedStrInQuery", wantReq.UnformattedStrInQuery)
 			query.Add("customFormatStrInQuery", wantReq.CustomFormatStrInQuery)
@@ -1347,7 +1347,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should ignore missing optional params", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRequiredValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRequiredValidationParams) {
 				req.OptionalUnformattedStrInQuery = ""
 				req.OptionalCustomFormatStrInQuery = ""
 				req.OptionalDateStrInQuery = time.Time{}
@@ -1386,7 +1386,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate empty params", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRequiredValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRequiredValidationParams) {
 				req.Payload.OptionalUnformattedStr = ""
 				req.Payload.OptionalCustomFormatStr = ""
 				req.Payload.OptionalByteStr = ""
@@ -1439,7 +1439,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should ensure required params", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesRequiredValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesRequiredValidationParams) {
 				req.Payload.UnformattedStr = ""
 				req.Payload.CustomFormatStr = ""
 				req.Payload.DateStr = time.Time{}
@@ -1475,7 +1475,7 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("nullable-required-validation", func(t *testing.T) {
 		runRouteTestCase(t, "should allow null values", setupRouter, func() testCase {
-			originalReq := &handlers.StringTypesStringTypesNullableRequiredValidationRequest{
+			originalReq := &models.StringTypesNullableRequiredValidationParams{
 				Payload: &models.StringTypesNullableRequiredValidationRequest{},
 			}
 			query := url.Values{}
@@ -1539,9 +1539,9 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("pattern-validation", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesPatternValidationRequest),
-		) *handlers.StringTypesStringTypesPatternValidationRequest {
-			req := &handlers.StringTypesStringTypesPatternValidationRequest{
+			opts ...func(*models.StringTypesPatternValidationParams),
+		) *models.StringTypesPatternValidationParams {
+			req := &models.StringTypesPatternValidationParams{
 				// path
 				UnformattedStr:  strings.Repeat(strconv.Itoa(fake.RandomDigit()), 10),
 				CustomFormatStr: strings.Repeat(strconv.Itoa(fake.RandomDigit()), 20),
@@ -1568,7 +1568,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildQuery := func(wantReq *handlers.StringTypesStringTypesPatternValidationRequest) url.Values {
+		buildQuery := func(wantReq *models.StringTypesPatternValidationParams) url.Values {
 			query := url.Values{}
 			query.Add("unformattedStrInQuery", wantReq.UnformattedStrInQuery)
 			query.Add("customFormatStrInQuery", wantReq.CustomFormatStrInQuery)
@@ -1602,7 +1602,7 @@ func TestStringTypes(t *testing.T) {
 		})
 
 		runRouteTestCase(t, "should validate pattern", setupRouter, func() testCase {
-			originalReq := randomReq(func(req *handlers.StringTypesStringTypesPatternValidationRequest) {
+			originalReq := randomReq(func(req *models.StringTypesPatternValidationParams) {
 				// path
 				req.UnformattedStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 11)
 				req.CustomFormatStr = strings.Repeat(strconv.Itoa(fake.RandomDigit()), 21)
@@ -1642,34 +1642,34 @@ func TestStringTypes(t *testing.T) {
 
 	t.Run("enums", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.StringTypesStringTypesEnumsRequest),
-		) *handlers.StringTypesStringTypesEnumsRequest {
-			req := &handlers.StringTypesStringTypesEnumsRequest{
+			opts ...func(*models.StringTypesEnumsParams),
+		) *models.StringTypesEnumsParams {
+			req := &models.StringTypesEnumsParams{
 				// path
-				InlineEnumParam: lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamValues))[0],
+				InlineEnumParam: lo.Shuffle(slices.Clone(models.AllowableStringTypesStringTypesEnumsInlineEnumParamValues))[0],
 				NullableInlineEnumParam: lo.ToPtr(
-					lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues))[0],
+					lo.Shuffle(slices.Clone(models.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamValues))[0],
 				),
 				RefEnumParam:         lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
 				NullableRefEnumParam: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 
 				// query
 				InlineEnumParamInQuery: lo.Shuffle(
-					slices.Clone(handlers.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues),
+					slices.Clone(models.AllowableStringTypesStringTypesEnumsInlineEnumParamInQueryValues),
 				)[0],
 				NullableInlineEnumParamInQuery: lo.ToPtr(
-					lo.Shuffle(slices.Clone(handlers.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues))[0],
+					lo.Shuffle(slices.Clone(models.AllowableStringTypesStringTypesEnumsNullableInlineEnumParamInQueryValues))[0],
 				),
 				RefEnumParamInQuery: lo.Shuffle(
 					slices.Clone(models.AllowableBasicStringEnumValues),
 				)[0],
 				NullableRefEnumParamInQuery: lo.ToPtr(lo.Shuffle(slices.Clone(models.AllowableNullableStringEnumValues))[0]),
 				OptionalInlineEnumParamInQuery: lo.Shuffle(
-					slices.Clone(handlers.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues),
+					slices.Clone(models.AllowableStringTypesStringTypesEnumsOptionalInlineEnumParamInQueryValues),
 				)[0],
 				OptionalNullableInlineEnumParamInQuery: lo.ToPtr(
 					lo.Shuffle(
-						slices.Clone(handlers.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues),
+						slices.Clone(models.AllowableStringTypesStringTypesEnumsOptionalNullableInlineEnumParamInQueryValues),
 					)[0],
 				),
 				OptionalRefEnumParamInQuery: lo.Shuffle(slices.Clone(models.AllowableBasicStringEnumValues))[0],
@@ -1698,7 +1698,7 @@ func TestStringTypes(t *testing.T) {
 			return req
 		}
 
-		buildPath := func(originalReq *handlers.StringTypesStringTypesEnumsRequest) string {
+		buildPath := func(originalReq *models.StringTypesEnumsParams) string {
 			return fmt.Sprintf(
 				"/string-types/enums/%v/%v/%v/%v",
 				originalReq.InlineEnumParam,
@@ -1708,7 +1708,7 @@ func TestStringTypes(t *testing.T) {
 			)
 		}
 
-		buildQuery := func(req *handlers.StringTypesStringTypesEnumsRequest) url.Values {
+		buildQuery := func(req *models.StringTypesEnumsParams) url.Values {
 			query := url.Values{}
 			query.Add("inlineEnumParamInQuery", req.InlineEnumParamInQuery.String())
 			query.Add("nullableInlineEnumParamInQuery", req.NullableInlineEnumParamInQuery.String())

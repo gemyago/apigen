@@ -3,84 +3,16 @@
 {{/generatedCodeComment}}package {{ package }}
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 	{{#hasImportedModel}}
 
-	. "{{invokerPackage}}/models"
+	. "{{invokerPackage}}/{{ modelPackage }}"
 {{/hasImportedModel}}
 )
 
-// Below is to workaround unused imports.
-var _ = http.MethodGet
-var _ = time.Time{}
-var _ = json.Unmarshal
-var _ = fmt.Sprint{{#hasImportedModel}}
+{{#hasImportedModel}}
+// Below is to workaround unused imports if that happens.
 type _ func() {{importedModels.0}}{{/hasImportedModel}}
-{{#operations}}{{#operation}}{{#allParams}}{{#isEnum}}
-{{>enums/type}}{{/isEnum}}{{/allParams}}{{/operation}}{{/operations}}{{#operations}}
-{{#operation}}
-{{#allParams.0}}// {{>request-type}} represents params for {{operationIdOriginal}} operation
-//
-// Request: {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}.
-type {{>request-type}} struct {
-	{{#allParams}}
-	// {{nameInPascalCase}} is parsed from request {{vendorExtensions.x-apigen-param-location}} and declared as {{baseName}}.
-	{{nameInPascalCase}} {{>fields/type}}
-	{{/allParams}}
-}{{/allParams.0}}{{^-last}}
-
-{{/-last}}
-{{/operation}}
-
-{{/operations}}
-
-type {{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder struct {
-{{#operations}}
-{{#operation}}
-	{{#lambda.tab_indented_2}}{{>operation-doc}}{{/lambda.tab_indented_2}}
-	{{operationId}} genericHandlerBuilder[
-		{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-		{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-		handlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
-		httpHandlerActionFunc{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}}, {{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}}],
-	]{{^-last}}
-
-{{/-last}}{{/operation}}
-{{/operations}}
-}
-
-func new{{classname}}ControllerBuilder(app *RootHandler) *{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder {
-	return &{{#lambda.camelcase}}{{classname}}{{/lambda.camelcase}}ControllerBuilder{
-		{{#operations}}
-		{{#operation}}
-		// {{#lambda.uppercase}}{{httpMethod}}{{/lambda.uppercase}} {{{path}}}
-		{{operationId}}: newGenericHandlerBuilder(
-			app,
-			newHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			](),
-			newHTTPHandlerAdapter{{^hasParams}}NoParams{{/hasParams}}{{^returnType}}NoResponse{{/returnType}}[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			](),
-			makeActionBuilderParams[
-				{{^hasParams}}void{{/hasParams}}{{#hasParams}}*{{>request-type}}{{/hasParams}},
-				{{^returnType}}void{{/returnType}}{{#returnType}}*{{.}}{{/returnType}},
-			]{
-				defaultStatus: {{#responses.0}}{{ code }}{{/responses.0}}{{^responses.0}}200{{/responses.0}},{{^returnType}}
-				voidResult:    true,{{/returnType}}
-				paramsParser:  {{#hasParams}}newParamsParser{{classname}}{{operationId}}{{/hasParams}}{{^hasParams}}makeVoidParamsParser{{/hasParams}}(app),
-			},
-		),{{^-last}}
-
-{{/-last}}{{/operation}}
-		{{/operations}}
-	}
-}
 
 type {{classname}}Controller interface {
 {{#operations}}

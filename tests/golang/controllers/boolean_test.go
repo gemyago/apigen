@@ -47,8 +47,8 @@ func TestBoolean(t *testing.T) {
 	}
 
 	t.Run("parsing", func(t *testing.T) {
-		randomReq := func() *handlers.BooleanBooleanParsingRequest {
-			return &handlers.BooleanBooleanParsingRequest{
+		randomReq := func() *models.BooleanParsingParams {
+			return &models.BooleanParsingParams{
 				// path
 				BoolParam1: fake.Bool(),
 				BoolParam2: fake.Bool(),
@@ -65,7 +65,7 @@ func TestBoolean(t *testing.T) {
 			}
 		}
 
-		buildQuery := func(wantReq *handlers.BooleanBooleanParsingRequest) url.Values {
+		buildQuery := func(wantReq *models.BooleanParsingParams) url.Values {
 			query := url.Values{}
 			query.Add("boolParam1InQuery", strconv.FormatBool(wantReq.BoolParam1InQuery))
 			query.Add("boolParam2InQuery", strconv.FormatBool(wantReq.BoolParam2InQuery))
@@ -131,7 +131,7 @@ func TestBoolean(t *testing.T) {
 	})
 
 	t.Run("required-validation", func(t *testing.T) {
-		buildQuery := func(wantReq *handlers.BooleanBooleanRequiredValidationRequest) url.Values {
+		buildQuery := func(wantReq *models.BooleanRequiredValidationParams) url.Values {
 			query := url.Values{}
 			query.Add("boolParam1InQuery", strconv.FormatBool(wantReq.BoolParam1InQuery))
 			query.Add("boolParam2InQuery", strconv.FormatBool(wantReq.BoolParam2InQuery))
@@ -141,7 +141,7 @@ func TestBoolean(t *testing.T) {
 		}
 
 		runRouteTestCase(t, "should ignore missing optional params", setupRouter, func() testCase {
-			wantReq := &handlers.BooleanBooleanRequiredValidationRequest{
+			wantReq := &models.BooleanRequiredValidationParams{
 				// query
 				BoolParam1InQuery: fake.Bool(),
 				BoolParam2InQuery: fake.Bool(),
@@ -167,7 +167,7 @@ func TestBoolean(t *testing.T) {
 			}
 		})
 		runRouteTestCase(t, "should parse optional params", setupRouter, func() testCase {
-			wantReq := &handlers.BooleanBooleanRequiredValidationRequest{
+			wantReq := &models.BooleanRequiredValidationParams{
 				// query
 				BoolParam1InQuery:         fake.Bool(),
 				BoolParam2InQuery:         fake.Bool(),
@@ -240,8 +240,8 @@ func TestBoolean(t *testing.T) {
 	})
 
 	t.Run("nullable", func(t *testing.T) {
-		randomReq := func() *handlers.BooleanBooleanNullableRequest {
-			return &handlers.BooleanBooleanNullableRequest{
+		randomReq := func() *models.BooleanNullableParams {
+			return &models.BooleanNullableParams{
 				// path
 				BoolParam1: lo.ToPtr(fake.Bool()),
 				BoolParam2: lo.ToPtr(fake.Bool()),
@@ -260,7 +260,7 @@ func TestBoolean(t *testing.T) {
 			}
 		}
 
-		buildQuery := func(wantReq *handlers.BooleanBooleanNullableRequest) url.Values {
+		buildQuery := func(wantReq *models.BooleanNullableParams) url.Values {
 			query := url.Values{}
 			query.Add("boolParam1InQuery", strconv.FormatBool(lo.FromPtr(wantReq.BoolParam1InQuery)))
 			query.Add("boolParam2InQuery", strconv.FormatBool(lo.FromPtr(wantReq.BoolParam2InQuery)))
@@ -290,7 +290,7 @@ func TestBoolean(t *testing.T) {
 
 		runRouteTestCase(t, "should accept null values", setupRouter,
 			func() routeTestCase[*booleanControllerTestActions] {
-				wantReq := &handlers.BooleanBooleanNullableRequest{
+				wantReq := &models.BooleanNullableParams{
 					Payload: &models.BooleanNullableRequest{},
 				}
 				query := url.Values{}
@@ -317,8 +317,8 @@ func TestBoolean(t *testing.T) {
 	})
 
 	t.Run("array-items", func(t *testing.T) {
-		randomReq := func() *handlers.BooleanBooleanArrayItemsRequest {
-			return &handlers.BooleanBooleanArrayItemsRequest{
+		randomReq := func() *models.BooleanArrayItemsParams {
+			return &models.BooleanArrayItemsParams{
 				// path
 				BoolParam1: randomBooleans(5),
 				BoolParam2: randomBooleans(5),
@@ -335,14 +335,14 @@ func TestBoolean(t *testing.T) {
 			}
 		}
 
-		buildQuery := func(wantReq *handlers.BooleanBooleanArrayItemsRequest) url.Values {
+		buildQuery := func(wantReq *models.BooleanArrayItemsParams) url.Values {
 			query := url.Values{}
 			query["boolParam1InQuery"] = booleansToString(wantReq.BoolParam1InQuery)
 			query["boolParam2InQuery"] = booleansToString(wantReq.BoolParam2InQuery)
 			return query
 		}
 
-		buildPath := func(wantReq *handlers.BooleanBooleanArrayItemsRequest) string {
+		buildPath := func(wantReq *models.BooleanArrayItemsParams) string {
 			return fmt.Sprintf("/boolean/array-items/%v/%v",
 				strings.Join(booleansToString(wantReq.BoolParam1), ","),
 				strings.Join(booleansToString(wantReq.BoolParam2), ","),
@@ -404,9 +404,9 @@ func TestBoolean(t *testing.T) {
 
 	t.Run("nullable-array-items", func(t *testing.T) {
 		randomReq := func(
-			opts ...func(*handlers.BooleanBooleanNullableArrayItemsRequest),
-		) *handlers.BooleanBooleanNullableArrayItemsRequest {
-			res := &handlers.BooleanBooleanNullableArrayItemsRequest{
+			opts ...func(*models.BooleanNullableArrayItemsParams),
+		) *models.BooleanNullableArrayItemsParams {
+			res := &models.BooleanNullableArrayItemsParams{
 				// path
 				BoolParam1: lo.ToSlicePtr(randomBooleans(5)),
 				BoolParam2: lo.ToSlicePtr(randomBooleans(5)),
@@ -427,14 +427,14 @@ func TestBoolean(t *testing.T) {
 			return res
 		}
 
-		buildQuery := func(wantReq *handlers.BooleanBooleanNullableArrayItemsRequest) url.Values {
+		buildQuery := func(wantReq *models.BooleanNullableArrayItemsParams) url.Values {
 			query := url.Values{}
 			query["boolParam1InQuery"] = fromNullableItems(wantReq.BoolParam1InQuery, strconv.FormatBool)
 			query["boolParam2InQuery"] = fromNullableItems(wantReq.BoolParam2InQuery, strconv.FormatBool)
 			return query
 		}
 
-		buildPath := func(wantReq *handlers.BooleanBooleanNullableArrayItemsRequest) string {
+		buildPath := func(wantReq *models.BooleanNullableArrayItemsParams) string {
 			return fmt.Sprintf("/boolean/nullable-array-items/%v/%v",
 				strings.Join(fromNullableItems(wantReq.BoolParam1, strconv.FormatBool), ","),
 				strings.Join(fromNullableItems(wantReq.BoolParam2, strconv.FormatBool), ","),
@@ -461,7 +461,7 @@ func TestBoolean(t *testing.T) {
 
 		runRouteTestCase(t, "should parse and bind valid null values", setupRouter,
 			func() routeTestCase[*booleanControllerTestActions] {
-				wantReq := randomReq(func(req *handlers.BooleanBooleanNullableArrayItemsRequest) {
+				wantReq := randomReq(func(req *models.BooleanNullableArrayItemsParams) {
 					_, req.BoolParam1 = injectValueRandomly(fake, req.BoolParam1, nil)
 					_, req.BoolParam2 = injectValueRandomly(fake, req.BoolParam2, nil)
 					_, req.BoolParam1InQuery = injectValueRandomly(fake, req.BoolParam1InQuery, nil)

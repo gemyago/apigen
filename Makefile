@@ -88,7 +88,7 @@ $(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
 	mvn -B -q -f generators/go-apigen-server/pom.xml package
 	touch $@
 
-examples/%-server-go/internal/api/http/v1routes: $(golang_server_jar) examples/%.yaml
+examples/%-server-go/internal/api/http/routes: $(golang_server_jar) examples/%.yaml
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
@@ -97,7 +97,7 @@ examples/%-server-go/internal/api/http/v1routes: $(golang_server_jar) examples/%
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
 
-examples/%-server-go: examples/%-server-go/internal/api/http/v1routes
+examples/%-server-go: examples/%-server-go/internal/api/http/routes
 	@echo "Target completed: $@"
 
 # generatedCodeComment set to empty to allow linter to lint generated code.

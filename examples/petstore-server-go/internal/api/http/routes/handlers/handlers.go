@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/internal"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/internal"
 	"golang.org/x/exp/constraints"
 )
 
