@@ -6,7 +6,7 @@ import (
 	"net/http"
 	{{#hasImportedModel}}
 
-	. "{{invokerPackage}}/models"
+	. "{{invokerPackage}}/{{ modelPackage }}"
 {{/hasImportedModel}}
 )
 

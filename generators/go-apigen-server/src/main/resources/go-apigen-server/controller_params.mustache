@@ -7,7 +7,7 @@ import (
 	"time"
 	{{#hasImportedModel}}
 
-	. "{{invokerPackage}}/models"
+	. "{{invokerPackage}}/{{ modelPackage }}"
 {{/hasImportedModel}}
 	. "{{invokerPackage}}/internal"
 )
