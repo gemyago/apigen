@@ -6,6 +6,9 @@ import (
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() Error
+
 type BehaviorNoParamsNoResponseIsolatedController interface {
 	// GET /behavior/no-params-no-response-isolated
 	//

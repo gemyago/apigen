@@ -6,6 +6,9 @@ import (
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() ArraysNullableRequiredValidationRequest
+
 type ArraysController interface {
 	// POST /arrays/nullable-required-validation/{simpleItems1}/{simpleItems2}
 	//

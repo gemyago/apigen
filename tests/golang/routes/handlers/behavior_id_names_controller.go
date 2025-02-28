@@ -6,6 +6,9 @@ import (
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() BehaviorNamesWithIDData
+
 type BehaviorIDNamesController interface {
 	// POST /behavior/id-names/{id}/{endsWithId}/{theIdInTheMiddle}
 	//

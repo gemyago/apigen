@@ -6,6 +6,9 @@ import (
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() NumericTypesArrayItemsRequest
+
 type NumericTypesController interface {
 	// POST /numeric-types/array-items/{numberAny}/{numberFloat}/{numberDouble}/{numberInt}/{numberInt32}/{numberInt64}
 	//

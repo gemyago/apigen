@@ -10,6 +10,10 @@ import (
 {{/hasImportedModel}}
 )
 
+{{#hasImportedModel}}
+// Below is to workaround unused imports if that happens.
+type _ func() {{importedModels.0}}{{/hasImportedModel}}
+
 type {{classname}}Controller interface {
 {{#operations}}
 {{#operation}}

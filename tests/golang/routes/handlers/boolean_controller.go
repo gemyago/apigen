@@ -6,6 +6,9 @@ import (
 	. "github.com/gemyago/apigen/tests/golang/routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() BooleanArrayItemsRequest
+
 type BooleanController interface {
 	// POST /boolean/array-items/{boolParam1}/{boolParam2}
 	//

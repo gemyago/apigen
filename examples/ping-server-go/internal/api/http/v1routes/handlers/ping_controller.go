@@ -8,6 +8,9 @@ import (
 	. "github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() Ping200Response
+
 type PingController interface {
 	// GET /ping
 	//

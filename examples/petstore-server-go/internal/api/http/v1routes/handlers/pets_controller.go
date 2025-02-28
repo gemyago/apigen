@@ -8,6 +8,9 @@ import (
 	. "github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/models"
 )
 
+// Below is to workaround unused imports if that happens.
+type _ func() Error
+
 type PetsController interface {
 	// POST /pets
 	//
