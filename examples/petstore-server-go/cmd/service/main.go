@@ -11,7 +11,7 @@ import (
 )
 
 // Start it using command below:
-// go run ./examples/go-apigen-server/cmd/service/
+// go run ./examples/petstore-server-go/cmd/service/
 //
 // Send requests with curl:
 // Create few pets:

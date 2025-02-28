@@ -1,17 +1,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/controllers"
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/router"
+	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app"
 )
 
 // Start it using command below:
-// go run ./examples/go-apigen-server/cmd/service/
+// go run ./examples/petstore-server-app-layer-go/cmd/service/
 //
 // Send requests with curl:
 // Create few pets:
@@ -29,17 +32,33 @@ func main() {
 	port := 8080
 	readHeaderTimeoutSec := 2
 
-	// Generated routes need a controller implementation to process requests
-	petsController := controllers.NewPetsController()
+	rootCtx := context.Background()
+	rootLogger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}))
+
+	// application layer wireup
+	petsService := app.NewPetsService(app.PetsServiceDeps{
+		RootLogger: rootLogger,
+	})
+
+	// controllers wireup
+	petsController := controllers.NewPetsController(controllers.PetsControllerDeps{
+		PetsService: petsService,
+	})
+
+	// root handler wireup
+	rootHandler := router.NewHandler(router.HandlerDeps{
+		RootLogger:     rootLogger,
+		PetsController: petsController,
+	})
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf("[::]:%d", port),
 		ReadHeaderTimeout: time.Duration(readHeaderTimeoutSec) * time.Second,
-		Handler: router.NewHandler(router.HandlerDeps{
-			PetsController: petsController,
-		}),
+		Handler:           rootHandler,
 	}
-	log.Println("Starting server on port:", port)
+	rootLogger.InfoContext(rootCtx, "Starting server", slog.Int("port", port))
 	if err := srv.ListenAndServe(); err != nil {
 		panic(err)
 	}
