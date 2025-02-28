@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/models"
+	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/handlers"
+	"github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/models"
 )
 
 // Start it using command below:

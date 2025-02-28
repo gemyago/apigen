@@ -4,7 +4,7 @@ package internal
 
 import (
 	"time"
-	. "github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/v1routes/models"
+	. "github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/models"
 )
 
 // Below is to workaround unused imports.

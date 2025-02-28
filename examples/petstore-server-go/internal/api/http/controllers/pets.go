@@ -1,4 +1,4 @@
-package v1controllers
+package controllers
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/handlers"
-	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/v1routes/models"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/handlers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/models"
 )
 
 var (
