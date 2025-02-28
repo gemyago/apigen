@@ -26,13 +26,13 @@ type PetsController struct {
 func (c *PetsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.CreatePetParams) error {
-		if _, ok := c.petsByID[req.Payload.ID]; ok {
-			return fmt.Errorf("pet %d already exists: %w", req.Payload.ID, ErrConflict)
+	return b.HandleWith(func(_ context.Context, params *models.CreatePetParams) error {
+		if _, ok := c.petsByID[params.Payload.ID]; ok {
+			return fmt.Errorf("pet %d already exists: %w", params.Payload.ID, ErrConflict)
 		}
 
-		c.allPets = append(c.allPets, req.Payload)
-		c.petsByID[req.Payload.ID] = req.Payload
+		c.allPets = append(c.allPets, params.Payload)
+		c.petsByID[params.Payload.ID] = params.Payload
 
 		return nil
 	})
@@ -41,10 +41,10 @@ func (c *PetsController) CreatePet(
 func (c *PetsController) GetPetByID(
 	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.GetPetByIDParams) (*models.PetResponse, error) {
-		pet, ok := c.petsByID[req.PetID]
+	return b.HandleWith(func(_ context.Context, params *models.GetPetByIDParams) (*models.PetResponse, error) {
+		pet, ok := c.petsByID[params.PetID]
 		if !ok {
-			return nil, fmt.Errorf("pet %d not found: %w", req.PetID, ErrNotFound)
+			return nil, fmt.Errorf("pet %d not found: %w", params.PetID, ErrNotFound)
 		}
 		return &models.PetResponse{Data: pet}, nil
 	})
@@ -53,10 +53,10 @@ func (c *PetsController) GetPetByID(
 func (c *PetsController) ListPets(
 	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
 ) http.Handler {
-	return b.HandleWith(func(_ context.Context, req *models.ListPetsParams) (*models.PetsResponse, error) {
+	return b.HandleWith(func(_ context.Context, params *models.ListPetsParams) (*models.PetsResponse, error) {
 		allPetsLen := int64(len(c.allPets))
-		limit := req.Limit
-		offset := req.Offset
+		limit := params.Limit
+		offset := params.Offset
 		if offset >= allPetsLen {
 			return &models.PetsResponse{Data: []*models.Pet{}}, nil
 		}

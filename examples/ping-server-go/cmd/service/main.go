@@ -17,8 +17,8 @@ import (
 // - curl localhost:8080/ping
 // - curl localhost:8080/ping?message=hello
 
-func pingHandler(_ context.Context, req *models.PingParams) (*models.Ping200Response, error) {
-	message := req.Message
+func pingHandler(_ context.Context, params *models.PingParams) (*models.Ping200Response, error) {
+	message := params.Message
 	if message == "" {
 		message = "pong"
 	}
