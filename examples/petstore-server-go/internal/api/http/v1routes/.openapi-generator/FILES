@@ -9,5 +9,5 @@ internal/validators.go
 models/error.go
 models/pet.go
 models/pet_response.go
-models/pets_params.go
+models/pets_controller_params.go
 models/pets_response.go

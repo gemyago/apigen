@@ -112,7 +112,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "_params.go");
     apiTemplateFiles.put(
         "controller_models.mustache",
-        "_params.go");
+        "_controller_params.go");
     templateOutputDirs.put("controller_models.mustache", "models");
 
     /**
