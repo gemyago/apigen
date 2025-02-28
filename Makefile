@@ -100,6 +100,9 @@ examples/%-server-go/internal/api/http/routes: $(golang_server_jar) examples/%.y
 examples/%-server-go: examples/%-server-go/internal/api/http/routes
 	@echo "Target completed: $@"
 
+examples/%-server-app-layer-go: examples/%-server-go/internal/api/http/routes
+	@echo "Target completed: $@"
+
 # generatedCodeComment set to empty to allow linter to lint generated code.
 tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_server_jar)
 	mkdir -p $@

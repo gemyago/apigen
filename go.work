@@ -1,5 +1,7 @@
 go 1.24
 
+use ./examples/petstore-server-app-layer-go
+
 use ./examples/petstore-server-go
 
 use ./examples/ping-server-go

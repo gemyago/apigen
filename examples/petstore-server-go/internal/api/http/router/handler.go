@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	v1controllers "github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/controllers"
+	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/controllers"
 	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/handlers"
 )
 
@@ -29,9 +29,9 @@ func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func handleActionError(w http.ResponseWriter, _ *http.Request, err error) {
 	code := 500
 	switch {
-	case errors.Is(err, v1controllers.ErrNotFound):
+	case errors.Is(err, controllers.ErrNotFound):
 		code = 404
-	case errors.Is(err, v1controllers.ErrConflict):
+	case errors.Is(err, controllers.ErrConflict):
 		code = 409
 	}
 	w.WriteHeader(code)
@@ -66,7 +66,7 @@ func accessLogMiddleware(next http.Handler) http.Handler {
 // HandlerDeps holds dependencies of the generated routes
 // usually controller implementations at least.
 type HandlerDeps struct {
-	PetsController *v1controllers.PetsController
+	PetsController *controllers.PetsController
 }
 
 // NewHandler creates an minimal example implementation of the router handler
