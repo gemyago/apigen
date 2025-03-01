@@ -179,7 +179,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
       if (operation.getRequestBody() != null) {
         RequestBody requestBody = operation.getRequestBody();
-        System.out.println("request body content");
         Schema<?> bodySchema = requestBody.getContent().values().iterator().next().getSchema();
         parametersModel.addProperty("payload", bodySchema);
       }
@@ -281,7 +280,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
 
     // fromParameter will not dereference the schema to set some properties
-    Schema schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
+    Schema<?> schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
     if (schema.getNullable() != null) {
       codegenParameter.isNullable = schema.getNullable();
     }
