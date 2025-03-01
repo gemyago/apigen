@@ -13,5 +13,5 @@ var _ = fmt.Sprint
 
 // ObjectsDeeplyNestedParams - Parameters for the objectsDeeplyNested operation.
 type ObjectsDeeplyNestedParams struct { 
-	Payload *ObjectsDeeplyNestedRequest `json:"payload,omitempty"`
+	Payload *ObjectsDeeplyNestedRequest `json:"payload"`
 }

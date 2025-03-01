@@ -13,5 +13,5 @@ var _ = fmt.Sprint
 
 // ObjectsNullableRequiredBodyParams - Parameters for the objectsNullableRequiredBody operation.
 type ObjectsNullableRequiredBodyParams struct { 
-	Payload *SimpleNullableObject `json:"payload,omitempty"`
+	Payload *SimpleNullableObject `json:"payload"`
 }

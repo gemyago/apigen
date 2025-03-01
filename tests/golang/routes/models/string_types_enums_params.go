@@ -397,17 +397,17 @@ var AllowableStringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryValues 
 
 // StringTypesEnumsParams - Parameters for the stringTypesEnums operation.
 type StringTypesEnumsParams struct { 
-	InlineEnumParam StringTypesEnumsParamsInlineEnumParam `json:"inlineEnumParam,omitempty"`
-	NullableInlineEnumParam *StringTypesEnumsParamsNullableInlineEnumParam `json:"nullableInlineEnumParam,omitempty"`
-	RefEnumParam BasicStringEnum `json:"refEnumParam,omitempty"`
-	NullableRefEnumParam *NullableStringEnum `json:"nullableRefEnumParam,omitempty"`
-	InlineEnumParamInQuery StringTypesEnumsParamsInlineEnumParamInQuery `json:"inlineEnumParamInQuery,omitempty"`
+	InlineEnumParam StringTypesEnumsParamsInlineEnumParam `json:"inlineEnumParam"`
+	NullableInlineEnumParam *StringTypesEnumsParamsNullableInlineEnumParam `json:"nullableInlineEnumParam"`
+	RefEnumParam BasicStringEnum `json:"refEnumParam"`
+	NullableRefEnumParam *NullableStringEnum `json:"nullableRefEnumParam"`
+	InlineEnumParamInQuery StringTypesEnumsParamsInlineEnumParamInQuery `json:"inlineEnumParamInQuery"`
 	OptionalInlineEnumParamInQuery StringTypesEnumsParamsOptionalInlineEnumParamInQuery `json:"optionalInlineEnumParamInQuery,omitempty"`
-	NullableInlineEnumParamInQuery *StringTypesEnumsParamsNullableInlineEnumParamInQuery `json:"nullableInlineEnumParamInQuery,omitempty"`
+	NullableInlineEnumParamInQuery *StringTypesEnumsParamsNullableInlineEnumParamInQuery `json:"nullableInlineEnumParamInQuery"`
 	OptionalNullableInlineEnumParamInQuery *StringTypesEnumsParamsOptionalNullableInlineEnumParamInQuery `json:"optionalNullableInlineEnumParamInQuery,omitempty"`
-	RefEnumParamInQuery BasicStringEnum `json:"refEnumParamInQuery,omitempty"`
-	NullableRefEnumParamInQuery *NullableStringEnum `json:"nullableRefEnumParamInQuery,omitempty"`
+	RefEnumParamInQuery BasicStringEnum `json:"refEnumParamInQuery"`
+	NullableRefEnumParamInQuery *NullableStringEnum `json:"nullableRefEnumParamInQuery"`
 	OptionalRefEnumParamInQuery BasicStringEnum `json:"optionalRefEnumParamInQuery,omitempty"`
 	OptionalNullableRefEnumParamInQuery *NullableStringEnum `json:"optionalNullableRefEnumParamInQuery,omitempty"`
-	Payload *StringTypesEnumsRequest `json:"payload,omitempty"`
+	Payload *StringTypesEnumsRequest `json:"payload"`
 }

@@ -15,5 +15,5 @@ var _ = fmt.Sprint
 type BehaviorWithParamsAndResponseParams struct { 
 	QueryParam1 string `json:"queryParam1,omitempty"`
 	QueryParam2 int32 `json:"queryParam2,omitempty"`
-	Payload *BehaviorWithParamsAndResponseRequestBody `json:"payload,omitempty"`
+	Payload *BehaviorWithParamsAndResponseRequestBody `json:"payload"`
 }

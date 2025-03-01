@@ -13,7 +13,7 @@ var _ = fmt.Sprint
 
 // StringTypesNullableRequiredValidationParams - Parameters for the stringTypesNullableRequiredValidation operation.
 type StringTypesNullableRequiredValidationParams struct { 
-	UnformattedStrInQuery *string `json:"unformattedStrInQuery,omitempty"`
+	UnformattedStrInQuery *string `json:"unformattedStrInQuery"`
 	OptionalUnformattedStrInQuery *string `json:"optionalUnformattedStrInQuery,omitempty"`
-	Payload *StringTypesNullableRequiredValidationRequest `json:"payload,omitempty"`
+	Payload *StringTypesNullableRequiredValidationRequest `json:"payload"`
 }

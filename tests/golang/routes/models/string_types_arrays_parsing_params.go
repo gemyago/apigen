@@ -13,15 +13,15 @@ var _ = fmt.Sprint
 
 // StringTypesArraysParsingParams - Parameters for the stringTypesArraysParsing operation.
 type StringTypesArraysParsingParams struct { 
-	UnformattedStr []string `json:"unformattedStr,omitempty"`
-	CustomFormatStr []string `json:"customFormatStr,omitempty"`
-	DateStr []time.Time `json:"dateStr,omitempty"`
-	DateTimeStr []time.Time `json:"dateTimeStr,omitempty"`
-	ByteStr []string `json:"byteStr,omitempty"`
-	UnformattedStrInQuery []string `json:"unformattedStrInQuery,omitempty"`
-	CustomFormatStrInQuery []string `json:"customFormatStrInQuery,omitempty"`
-	DateStrInQuery []time.Time `json:"dateStrInQuery,omitempty"`
-	DateTimeStrInQuery []time.Time `json:"dateTimeStrInQuery,omitempty"`
-	ByteStrInQuery []string `json:"byteStrInQuery,omitempty"`
-	Payload *StringTypesArraysParsingRequest `json:"payload,omitempty"`
+	UnformattedStr []string `json:"unformattedStr"`
+	CustomFormatStr []string `json:"customFormatStr"`
+	DateStr []time.Time `json:"dateStr"`
+	DateTimeStr []time.Time `json:"dateTimeStr"`
+	ByteStr []string `json:"byteStr"`
+	UnformattedStrInQuery []string `json:"unformattedStrInQuery"`
+	CustomFormatStrInQuery []string `json:"customFormatStrInQuery"`
+	DateStrInQuery []time.Time `json:"dateStrInQuery"`
+	DateTimeStrInQuery []time.Time `json:"dateTimeStrInQuery"`
+	ByteStrInQuery []string `json:"byteStrInQuery"`
+	Payload *StringTypesArraysParsingRequest `json:"payload"`
 }

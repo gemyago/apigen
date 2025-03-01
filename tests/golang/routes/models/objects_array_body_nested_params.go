@@ -13,5 +13,5 @@ var _ = fmt.Sprint
 
 // ObjectsArrayBodyNestedParams - Parameters for the objectsArrayBodyNested operation.
 type ObjectsArrayBodyNestedParams struct { 
-	Payload *ObjectsArrayBodyNestedRequest `json:"payload,omitempty"`
+	Payload *ObjectsArrayBodyNestedRequest `json:"payload"`
 }

@@ -174,6 +174,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       if (operation.getParameters() != null) {
         for (Parameter parameter : operation.getParameters()) {
           parametersModel.addProperty(parameter.getName(), parameter.getSchema());
+          if(parameter.getRequired() != null && parameter.getRequired()) {
+            parametersModel.addRequiredItem(parameter.getName());
+          }
         }
       }
 
@@ -181,6 +184,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         RequestBody requestBody = operation.getRequestBody();
         Schema<?> bodySchema = requestBody.getContent().values().iterator().next().getSchema();
         parametersModel.addProperty("payload", bodySchema);
+        if(requestBody.getRequired() != null) {
+          parametersModel.addRequiredItem("payload");
+        }
       }
 
       if(parametersModel.getProperties() == null || parametersModel.getProperties().isEmpty()) {

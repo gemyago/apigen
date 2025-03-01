@@ -13,10 +13,10 @@ var _ = fmt.Sprint
 
 // BehaviorNamesWithIDParams - Parameters for the behaviorNamesWithId operation.
 type BehaviorNamesWithIDParams struct { 
-	ID string `json:"id,omitempty"`
-	EndsWithID string `json:"endsWithId,omitempty"`
-	TheIDInTheMiddle string `json:"theIdInTheMiddle,omitempty"`
-	QueryEndsWithID string `json:"queryEndsWithId,omitempty"`
-	QueryTheIDInTheMiddle string `json:"queryTheIdInTheMiddle,omitempty"`
-	Payload *BehaviorNamesWithIDData `json:"payload,omitempty"`
+	ID string `json:"id"`
+	EndsWithID string `json:"endsWithId"`
+	TheIDInTheMiddle string `json:"theIdInTheMiddle"`
+	QueryEndsWithID string `json:"queryEndsWithId"`
+	QueryTheIDInTheMiddle string `json:"queryTheIdInTheMiddle"`
+	Payload *BehaviorNamesWithIDData `json:"payload"`
 }

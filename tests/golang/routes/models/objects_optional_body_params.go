@@ -13,5 +13,5 @@ var _ = fmt.Sprint
 
 // ObjectsOptionalBodyParams - Parameters for the objectsOptionalBody operation.
 type ObjectsOptionalBodyParams struct { 
-	Payload *SimpleObject `json:"payload,omitempty"`
+	Payload *SimpleObject `json:"payload"`
 }

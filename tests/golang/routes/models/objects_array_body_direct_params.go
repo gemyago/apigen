@@ -13,5 +13,5 @@ var _ = fmt.Sprint
 
 // ObjectsArrayBodyDirectParams - Parameters for the objectsArrayBodyDirect operation.
 type ObjectsArrayBodyDirectParams struct { 
-	Payload []*ObjectArraysSimpleObject `json:"payload,omitempty"`
+	Payload []*ObjectArraysSimpleObject `json:"payload"`
 }

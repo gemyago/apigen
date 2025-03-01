@@ -13,9 +13,9 @@ var _ = fmt.Sprint
 
 // BooleanArrayItemsParams - Parameters for the booleanArrayItems operation.
 type BooleanArrayItemsParams struct { 
-	BoolParam1 []bool `json:"boolParam1,omitempty"`
-	BoolParam2 []bool `json:"boolParam2,omitempty"`
-	BoolParam1InQuery []bool `json:"boolParam1InQuery,omitempty"`
-	BoolParam2InQuery []bool `json:"boolParam2InQuery,omitempty"`
-	Payload *BooleanArrayItemsRequest `json:"payload,omitempty"`
+	BoolParam1 []bool `json:"boolParam1"`
+	BoolParam2 []bool `json:"boolParam2"`
+	BoolParam1InQuery []bool `json:"boolParam1InQuery"`
+	BoolParam2InQuery []bool `json:"boolParam2InQuery"`
+	Payload *BooleanArrayItemsRequest `json:"payload"`
 }
