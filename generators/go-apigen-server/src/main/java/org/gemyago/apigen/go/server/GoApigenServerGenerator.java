@@ -172,8 +172,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
       if (operation.getParameters() != null) {
         for (Parameter parameter : operation.getParameters()) {
-          Schema<?> schema = ModelUtils.getReferencedSchema(openAPI, parameter.getSchema());
-          parametersModel.addProperty(parameter.getName(), schema);
+          parametersModel.addProperty(parameter.getName(), parameter.getSchema());
         }
       }
 
