@@ -21,12 +21,14 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
+import org.openapitools.codegen.utils.CamelizeOption;
 import org.openapitools.codegen.utils.ModelUtils;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -156,6 +158,31 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         "validators.go"));
 
     typeMapping.put("date", "time.Time");
+  }
+
+  @Override
+  public void preprocessOpenAPI(OpenAPI openAPI) {
+    super.preprocessOpenAPI(openAPI);
+
+    // We are generating request parameters as model with all parameters as fields
+    // so we need to "simulate" and inject them to schemas
+    List<Operation> allOperations = openAPI.getPaths().values().stream()
+        .flatMap(path -> path.readOperations().stream()).toList();
+
+    for (Operation operation : allOperations) {
+      if (operation.getParameters() != null) {
+        Schema<?> parametersModel = new Schema<>()
+            .type("object")
+            .description("Parameters for the " + operation.getOperationId() + " operation");
+        for (Parameter parameter : operation.getParameters()) {
+          Schema<?> schema = ModelUtils.getReferencedSchema(openAPI, parameter.getSchema());
+          parametersModel.addProperty(parameter.getName(), schema);
+        }
+        String modelName = camelize(operation.getOperationId(), CamelizeOption.UPPERCASE_FIRST_CHAR) + "Params";
+        openAPI.getComponents().getSchemas().put(modelName, parametersModel);
+        operation.addExtension("x-apigen-params-model", modelName);
+      }
+    }
   }
 
   @Override
