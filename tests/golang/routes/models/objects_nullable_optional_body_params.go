@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ObjectsNullableOptionalBodyParams - Parameters for the objectsNullableOptionalBody operation
+// ObjectsNullableOptionalBodyParams - Parameters for the objectsNullableOptionalBody operation.
 type ObjectsNullableOptionalBodyParams struct { 
 	Payload *SimpleNullableObject `json:"payload,omitempty"`
 }

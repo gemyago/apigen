@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ArraysNullableRequiredValidationParams - Parameters for the arraysNullableRequiredValidation operation
+// ArraysNullableRequiredValidationParams - Parameters for the arraysNullableRequiredValidation operation.
 type ArraysNullableRequiredValidationParams struct { 
 	SimpleItems1 []string `json:"simpleItems1,omitempty"`
 	SimpleItems2 []string `json:"simpleItems2,omitempty"`

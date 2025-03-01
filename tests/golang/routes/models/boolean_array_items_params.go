@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BooleanArrayItemsParams - Parameters for the booleanArrayItems operation
+// BooleanArrayItemsParams - Parameters for the booleanArrayItems operation.
 type BooleanArrayItemsParams struct { 
 	BoolParam1 []bool `json:"boolParam1,omitempty"`
 	BoolParam2 []bool `json:"boolParam2,omitempty"`

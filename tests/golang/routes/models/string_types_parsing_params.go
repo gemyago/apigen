@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// StringTypesParsingParams - Parameters for the stringTypesParsing operation
+// StringTypesParsingParams - Parameters for the stringTypesParsing operation.
 type StringTypesParsingParams struct { 
 	UnformattedStr string `json:"unformattedStr,omitempty"`
 	CustomFormatStr string `json:"customFormatStr,omitempty"`

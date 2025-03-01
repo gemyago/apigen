@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// NumericTypesRequiredValidationParams - Parameters for the numericTypesRequiredValidation operation
+// NumericTypesRequiredValidationParams - Parameters for the numericTypesRequiredValidation operation.
 type NumericTypesRequiredValidationParams struct { 
 	NumberAnyInQuery float32 `json:"numberAnyInQuery,omitempty"`
 	NumberFloatInQuery float32 `json:"numberFloatInQuery,omitempty"`

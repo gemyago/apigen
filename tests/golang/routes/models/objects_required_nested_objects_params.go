@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ObjectsRequiredNestedObjectsParams - Parameters for the objectsRequiredNestedObjects operation
+// ObjectsRequiredNestedObjectsParams - Parameters for the objectsRequiredNestedObjects operation.
 type ObjectsRequiredNestedObjectsParams struct { 
 	Payload *SimpleObjectsContainer `json:"payload,omitempty"`
 }

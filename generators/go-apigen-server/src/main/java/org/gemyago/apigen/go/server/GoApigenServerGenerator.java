@@ -168,7 +168,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     for (Operation operation : allOperations) {
       Schema<?> parametersModel = new Schema<>()
           .type("object")
-          .description("Parameters for the " + operation.getOperationId() + " operation");
+          .description("Parameters for the " + operation.getOperationId() + " operation.");
+      parametersModel.addExtension("x-apigen-operation-params-model", true);
 
       if (operation.getParameters() != null) {
         for (Parameter parameter : operation.getParameters()) {

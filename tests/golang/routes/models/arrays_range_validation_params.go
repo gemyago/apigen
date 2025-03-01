@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ArraysRangeValidationParams - Parameters for the arraysRangeValidation operation
+// ArraysRangeValidationParams - Parameters for the arraysRangeValidation operation.
 type ArraysRangeValidationParams struct { 
 	SimpleItems1 []string `json:"simpleItems1,omitempty"`
 	SimpleItems2 []string `json:"simpleItems2,omitempty"`

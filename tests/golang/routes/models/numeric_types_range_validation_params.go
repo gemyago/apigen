@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// NumericTypesRangeValidationParams - Parameters for the numericTypesRangeValidation operation
+// NumericTypesRangeValidationParams - Parameters for the numericTypesRangeValidation operation.
 type NumericTypesRangeValidationParams struct { 
 	NumberAny float32 `json:"numberAny,omitempty"`
 	NumberFloat float32 `json:"numberFloat,omitempty"`

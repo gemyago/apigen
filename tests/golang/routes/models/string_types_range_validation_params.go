@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// StringTypesRangeValidationParams - Parameters for the stringTypesRangeValidation operation
+// StringTypesRangeValidationParams - Parameters for the stringTypesRangeValidation operation.
 type StringTypesRangeValidationParams struct { 
 	UnformattedStr string `json:"unformattedStr,omitempty"`
 	CustomFormatStr string `json:"customFormatStr,omitempty"`

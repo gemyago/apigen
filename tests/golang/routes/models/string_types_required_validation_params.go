@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// StringTypesRequiredValidationParams - Parameters for the stringTypesRequiredValidation operation
+// StringTypesRequiredValidationParams - Parameters for the stringTypesRequiredValidation operation.
 type StringTypesRequiredValidationParams struct { 
 	UnformattedStrInQuery string `json:"unformattedStrInQuery,omitempty"`
 	CustomFormatStrInQuery string `json:"customFormatStrInQuery,omitempty"`

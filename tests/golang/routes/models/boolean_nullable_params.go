@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BooleanNullableParams - Parameters for the booleanNullable operation
+// BooleanNullableParams - Parameters for the booleanNullable operation.
 type BooleanNullableParams struct { 
 	BoolParam1 *bool `json:"boolParam1,omitempty"`
 	BoolParam2 *bool `json:"boolParam2,omitempty"`

@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// StringTypesPatternValidationParams - Parameters for the stringTypesPatternValidation operation
+// StringTypesPatternValidationParams - Parameters for the stringTypesPatternValidation operation.
 type StringTypesPatternValidationParams struct { 
 	UnformattedStr string `json:"unformattedStr,omitempty"`
 	CustomFormatStr string `json:"customFormatStr,omitempty"`

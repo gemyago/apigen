@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BooleanRequiredValidationParams - Parameters for the booleanRequiredValidation operation
+// BooleanRequiredValidationParams - Parameters for the booleanRequiredValidation operation.
 type BooleanRequiredValidationParams struct { 
 	BoolParam1InQuery bool `json:"boolParam1InQuery,omitempty"`
 	BoolParam2InQuery bool `json:"boolParam2InQuery,omitempty"`

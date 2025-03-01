@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// NumericTypesArrayItemsParams - Parameters for the numericTypesArrayItems operation
+// NumericTypesArrayItemsParams - Parameters for the numericTypesArrayItems operation.
 type NumericTypesArrayItemsParams struct { 
 	NumberAny []float32 `json:"numberAny,omitempty"`
 	NumberFloat []float32 `json:"numberFloat,omitempty"`

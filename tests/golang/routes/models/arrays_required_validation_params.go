@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// ArraysRequiredValidationParams - Parameters for the arraysRequiredValidation operation
+// ArraysRequiredValidationParams - Parameters for the arraysRequiredValidation operation.
 type ArraysRequiredValidationParams struct { 
 	SimpleItems1 []string `json:"simpleItems1,omitempty"`
 	SimpleItems2 []string `json:"simpleItems2,omitempty"`

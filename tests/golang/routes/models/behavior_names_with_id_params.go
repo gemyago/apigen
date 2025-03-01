@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// BehaviorNamesWithIDParams - Parameters for the behaviorNamesWithId operation
+// BehaviorNamesWithIDParams - Parameters for the behaviorNamesWithId operation.
 type BehaviorNamesWithIDParams struct { 
 	ID string `json:"id,omitempty"`
 	EndsWithID string `json:"endsWithId,omitempty"`

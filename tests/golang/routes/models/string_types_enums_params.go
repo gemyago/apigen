@@ -395,7 +395,7 @@ var AllowableStringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryValues 
 	StringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryVALUE3,
 }
 
-// StringTypesEnumsParams - Parameters for the stringTypesEnums operation
+// StringTypesEnumsParams - Parameters for the stringTypesEnums operation.
 type StringTypesEnumsParams struct { 
 	InlineEnumParam StringTypesEnumsParamsInlineEnumParam `json:"inlineEnumParam,omitempty"`
 	NullableInlineEnumParam *StringTypesEnumsParamsNullableInlineEnumParam `json:"nullableInlineEnumParam,omitempty"`

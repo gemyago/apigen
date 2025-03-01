@@ -11,7 +11,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// StringTypesNullableArrayItemsParams - Parameters for the stringTypesNullableArrayItems operation
+// StringTypesNullableArrayItemsParams - Parameters for the stringTypesNullableArrayItems operation.
 type StringTypesNullableArrayItemsParams struct { 
 	UnformattedStr []*string `json:"unformattedStr,omitempty"`
 	CustomFormatStr []*string `json:"customFormatStr,omitempty"`
