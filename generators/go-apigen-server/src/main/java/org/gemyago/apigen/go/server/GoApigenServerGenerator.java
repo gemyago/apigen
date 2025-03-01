@@ -332,7 +332,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     for (CodegenOperation op : operations.getOperation()) {
       for (CodegenParameter param : op.allParams) {
         if (param.isEnum) {
-          param.datatypeWithEnum = operations.getClassname() + op.operationId
+          param.datatypeWithEnum = op.operationId + "Params"
               + camelize(param.datatypeWithEnum.replace("_", "-").toLowerCase());
         }
       }
