@@ -13,7 +13,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// PingParams - Parameters for the ping operation
+// PingParams - Parameters for the ping operation.
 type PingParams struct { 
 	Message string `json:"message,omitempty"`
 }

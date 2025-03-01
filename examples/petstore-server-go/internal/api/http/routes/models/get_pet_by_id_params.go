@@ -13,7 +13,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// GetPetByIDParams - Parameters for the getPetById operation
+// GetPetByIDParams - Parameters for the getPetById operation.
 type GetPetByIDParams struct { 
-	PetID int64 `json:"petId,omitempty"`
+	PetID int64 `json:"petId"`
 }

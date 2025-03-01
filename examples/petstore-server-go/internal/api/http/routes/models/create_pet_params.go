@@ -13,7 +13,7 @@ var _ = time.Time{}
 var _ = json.Unmarshal
 var _ = fmt.Sprint
 
-// CreatePetParams - Parameters for the createPet operation
+// CreatePetParams - Parameters for the createPet operation.
 type CreatePetParams struct { 
-	Payload *Pet `json:"payload,omitempty"`
+	Payload *Pet `json:"payload"`
 }

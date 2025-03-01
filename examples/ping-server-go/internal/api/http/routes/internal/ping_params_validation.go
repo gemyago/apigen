@@ -2,19 +2,5 @@
 
 package internal
 
-import (
-	"time"
-	. "github.com/gemyago/apigen/examples/ping-server-go/internal/api/http/routes/models"
-)
-
-// Below is to workaround unused imports.
-var _ = time.Time{}
-
-func NewPingParamsValidator() FieldValidator[*PingParams] {
-	validateMessage := NewSimpleFieldValidator[string](
-	)
-	
-	return func(bindingCtx *BindingContext, value *PingParams) {
-		validateMessage(bindingCtx.Fork("message"), value.Message)
-	}
-}
+// PingParams is request parameters model. The validation for 
+// parameters model is performed at parsing stage.

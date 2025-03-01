@@ -2,19 +2,5 @@
 
 package internal
 
-import (
-	"time"
-	. "github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/models"
-)
-
-// Below is to workaround unused imports.
-var _ = time.Time{}
-
-func NewGetPetByIDParamsValidator() FieldValidator[*GetPetByIDParams] {
-	validatePetID := NewSimpleFieldValidator[int64](
-	)
-	
-	return func(bindingCtx *BindingContext, value *GetPetByIDParams) {
-		validatePetID(bindingCtx.Fork("petId"), value.PetID)
-	}
-}
+// GetPetByIDParams is request parameters model. The validation for 
+// parameters model is performed at parsing stage.
