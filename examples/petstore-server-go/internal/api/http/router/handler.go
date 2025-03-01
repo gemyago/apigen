@@ -51,7 +51,7 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 // Minimalistic access log middleware just to have some logs when running the example.
 func accessLogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent())
+		log.Printf("%v %v %v %v\n", r.Method, r.URL.String(), r.Proto, r.UserAgent())
 		defer func() {
 			if r := recover(); r != nil {
 				log.Println("Request panic", r)
