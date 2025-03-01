@@ -112,10 +112,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     apiTemplateFiles.put(
         "controller_params.mustache",
         "_params.go");
-    apiTemplateFiles.put(
-        "controller_models.mustache",
-        "_controller_params.go");
-    templateOutputDirs.put("controller_models.mustache", "models");
 
     /**
      * Template Location. This is the location which templates will be read from.
@@ -170,18 +166,31 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         .flatMap(path -> path.readOperations().stream()).toList();
 
     for (Operation operation : allOperations) {
+      Schema<?> parametersModel = new Schema<>()
+          .type("object")
+          .description("Parameters for the " + operation.getOperationId() + " operation");
+
       if (operation.getParameters() != null) {
-        Schema<?> parametersModel = new Schema<>()
-            .type("object")
-            .description("Parameters for the " + operation.getOperationId() + " operation");
         for (Parameter parameter : operation.getParameters()) {
           Schema<?> schema = ModelUtils.getReferencedSchema(openAPI, parameter.getSchema());
           parametersModel.addProperty(parameter.getName(), schema);
         }
-        String modelName = camelize(operation.getOperationId(), CamelizeOption.UPPERCASE_FIRST_CHAR) + "Params";
-        openAPI.getComponents().getSchemas().put(modelName, parametersModel);
-        operation.addExtension("x-apigen-params-model", modelName);
       }
+
+      if (operation.getRequestBody() != null) {
+        RequestBody requestBody = operation.getRequestBody();
+        System.out.println("request body content");
+        Schema<?> bodySchema = requestBody.getContent().values().iterator().next().getSchema();
+        parametersModel.addProperty("payload", bodySchema);
+      }
+
+      if(parametersModel.getProperties() == null || parametersModel.getProperties().isEmpty()) {
+        continue;
+      }
+
+      String modelName = camelize(operation.getOperationId(), CamelizeOption.UPPERCASE_FIRST_CHAR) + "Params";
+      openAPI.getComponents().getSchemas().put(modelName, parametersModel);
+      operation.addExtension("x-apigen-params-model", modelName);
     }
   }
 
