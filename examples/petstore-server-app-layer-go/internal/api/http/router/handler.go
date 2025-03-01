@@ -57,7 +57,7 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 func accessLogMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		logger.InfoContext(ctx, fmt.Sprintf("GET %v %v %v\n", r.URL.String(), r.Proto, r.UserAgent()))
+		logger.InfoContext(ctx, fmt.Sprintf("%v %v %v %v", r.Method, r.URL.String(), r.Proto, r.UserAgent()))
 		defer func() {
 			if r := recover(); r != nil {
 				logger.ErrorContext(ctx, "Request panic", slog.Any("panic", r))
@@ -65,7 +65,7 @@ func accessLogMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 		}()
 		wrapper := &responseWriterWrapper{ResponseWriter: w, statusCode: http.StatusOK}
 		next.ServeHTTP(wrapper, r)
-		slog.InfoContext(ctx, fmt.Sprintf("%d %v %v\n", wrapper.statusCode, r.Method, r.URL.String()))
+		logger.InfoContext(ctx, fmt.Sprintf("%d %v %v", wrapper.statusCode, r.Method, r.URL.String()))
 	})
 }
 

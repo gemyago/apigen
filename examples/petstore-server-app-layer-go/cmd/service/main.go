@@ -57,6 +57,7 @@ func main() {
 		Addr:              fmt.Sprintf("[::]:%d", port),
 		ReadHeaderTimeout: time.Duration(readHeaderTimeoutSec) * time.Second,
 		Handler:           rootHandler,
+		ErrorLog:          slog.NewLogLogger(rootLogger.Handler(), slog.LevelDebug),
 	}
 	rootLogger.InfoContext(rootCtx, "Starting server", slog.Int("port", port))
 	if err := srv.ListenAndServe(); err != nil {
