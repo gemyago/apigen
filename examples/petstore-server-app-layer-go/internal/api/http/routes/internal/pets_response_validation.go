@@ -5,7 +5,6 @@ package internal
 import (
 	"time"
 	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models"
-
 )
 
 // Below is to workaround unused imports.

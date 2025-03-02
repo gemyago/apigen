@@ -101,17 +101,26 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     // supporting files must always be enable
     modelsOnly = generateModels && generateSupportingFiles && !generateApis;
+    boolean apisOnly = generateApis && generateSupportingFiles && !generateModels;
 
-    /**
-     * Models. You can write model files using the modelTemplateFiles map.
-     * if you want to create one template for file, you can do so here.
-     * for multiple files for model, just put another entry in the
-     * `modelTemplateFiles` with
-     * a different extension
-     */
-    modelTemplateFiles.put(
-        "model.mustache", // the template to use
-        ".go"); // the extension for each file to write
+    // We have to generate validators for models in APIs only mode so we have to trick generator to do that
+    // and below is the way to do it for now.
+    if (apisOnly) {
+      GlobalSettings.setProperty(CodegenConstants.MODELS, "");
+    }
+
+    if (generateModels) {
+      /**
+       * Models. You can write model files using the modelTemplateFiles map.
+       * if you want to create one template for file, you can do so here.
+       * for multiple files for model, just put another entry in the
+       * `modelTemplateFiles` with
+       * a different extension
+       */
+      modelTemplateFiles.put(
+          "model.mustache", // the template to use
+          ".go"); // the extension for each file to write
+    }
 
     // We only generate models validation if we're generating apis
     if (generateApis) {
@@ -184,7 +193,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public String modelFileFolder() {
     // In modelsOnly mode we're generating to the root folder to keep it flat
-    if(modelsOnly) {
+    if (modelsOnly) {
       return outputFolder;
     }
     return super.modelFileFolder();

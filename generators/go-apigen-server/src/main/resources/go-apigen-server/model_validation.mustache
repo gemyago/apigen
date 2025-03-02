@@ -4,7 +4,7 @@
 {{#models}}{{#model}}{{^vendorExtensions.x-apigen-operation-params-model}}
 import (
 	"time"
-	. "{{invokerPackage}}/{{ package }}"
+	. "{{modelFullPackage}}"
 )
 
 // Below is to workaround unused imports.
