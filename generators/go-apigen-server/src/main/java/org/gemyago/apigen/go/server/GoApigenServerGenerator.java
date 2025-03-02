@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
+import org.openapitools.codegen.config.GlobalSettings;
 import org.openapitools.codegen.languages.*;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.OperationMap;
@@ -84,6 +85,23 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // set the output folder here
     outputFolder = "generated-code/go-apigen-server";
 
+    boolean generateModels = GlobalSettings.getProperty(CodegenConstants.MODELS) != null;
+    boolean generateApis = GlobalSettings.getProperty(CodegenConstants.APIS) != null;
+    boolean generateSupportingFiles = GlobalSettings.getProperty(CodegenConstants.SUPPORTING_FILES) != null;
+
+    // if all are false, this means no options are provided (or all three), so we
+    // consider all as true
+    if (!generateModels && !generateApis && !generateSupportingFiles) {
+      generateModels = true;
+      generateApis = true;
+      generateSupportingFiles = true;
+    }
+
+    // supporting files must always be enable
+    boolean modelsOnly = generateModels && generateSupportingFiles && !generateApis;
+    // boolean apisOnly = !generateModels && generateApis &&
+    // !generateSupportingFiles;
+
     /**
      * Models. You can write model files using the modelTemplateFiles map.
      * if you want to create one template for file, you can do so here.
@@ -94,10 +112,14 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     modelTemplateFiles.put(
         "model.mustache", // the template to use
         ".go"); // the extension for each file to write
-    modelTemplateFiles.put(
-        "model_validation.mustache", // the template to use
-        "_validation.go"); // the extension for each file to write
-    templateOutputDirs.put("model_validation.mustache", "internal");
+
+    // We only generate models validation if we're generating apis
+    if (generateApis) {
+      modelTemplateFiles.put(
+          "model_validation.mustache", // the template to use
+          "_validation.go"); // the extension for each file to write
+      templateOutputDirs.put("model_validation.mustache", "internal");
+    }
 
     /**
      * Api classes. You can write classes for each Api file with the
@@ -126,9 +148,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     apiPackage = "handlers";
 
     /**
-     * Model Package. Optional, if needed, this can be used in templates
+     * Model Package. Optional, if needed, this can be used in templates.
+     * In "models only" mode we're generating in the output directly. No extra
+     * nesting is needed.
      */
-    modelPackage = "models";
+    modelPackage = modelsOnly ? "" : "models";
 
     /**
      * Additional Properties. These values can be passed to the templates and
@@ -138,20 +162,23 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
-    /**
-     * Supporting Files. You can write single files for the generator with the
-     * entire object tree available. If the input file has a suffix of `.mustache
-     * it will be processed by the template engine. Otherwise, it will be copied
-     */
-    supportingFiles.add(new SupportingFile(
-        "handlers.mustache",
-        apiPackage,
-        "handlers.go"));
+    // Common handlers related stuff is only generated if apis are generated
+    if (generateApis) {
+      /**
+       * Supporting Files. You can write single files for the generator with the
+       * entire object tree available. If the input file has a suffix of `.mustache
+       * it will be processed by the template engine. Otherwise, it will be copied
+       */
+      supportingFiles.add(new SupportingFile(
+          "handlers.mustache",
+          apiPackage,
+          "handlers.go"));
 
-    supportingFiles.add(new SupportingFile(
-        "validators.mustache",
-        "internal",
-        "validators.go"));
+      supportingFiles.add(new SupportingFile(
+          "validators.mustache",
+          "internal",
+          "validators.go"));
+    }
 
     typeMapping.put("date", "time.Time");
   }
@@ -174,7 +201,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       if (operation.getParameters() != null) {
         for (Parameter parameter : operation.getParameters()) {
           parametersModel.addProperty(parameter.getName(), parameter.getSchema());
-          if(parameter.getRequired() != null && parameter.getRequired()) {
+          if (parameter.getRequired() != null && parameter.getRequired()) {
             parametersModel.addRequiredItem(parameter.getName());
           }
         }
@@ -184,12 +211,12 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         RequestBody requestBody = operation.getRequestBody();
         Schema<?> bodySchema = requestBody.getContent().values().iterator().next().getSchema();
         parametersModel.addProperty("payload", bodySchema);
-        if(requestBody.getRequired() != null) {
+        if (requestBody.getRequired() != null) {
           parametersModel.addRequiredItem("payload");
         }
       }
 
-      if(parametersModel.getProperties() == null || parametersModel.getProperties().isEmpty()) {
+      if (parametersModel.getProperties() == null || parametersModel.getProperties().isEmpty()) {
         continue;
       }
 
