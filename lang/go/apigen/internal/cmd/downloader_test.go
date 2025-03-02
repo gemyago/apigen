@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -27,7 +26,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), srv.URL, outputFile)
+		err := downloader(t.Context(), srv.URL, outputFile)
 		require.NoError(t, err)
 
 		content, err := os.ReadFile(outputFile)
@@ -41,7 +40,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), "http://"+faker.Word(), outputFile)
+		err := downloader(t.Context(), "http://"+faker.Word(), outputFile)
 		require.Error(t, err)
 	})
 
@@ -55,7 +54,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), sourceFile, outputFile)
+		err := downloader(t.Context(), sourceFile, outputFile)
 		require.NoError(t, err)
 
 		content, err := os.ReadFile(outputFile)
@@ -69,7 +68,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), "file://"+faker.Word(), outputFile)
+		err := downloader(t.Context(), "file://"+faker.Word(), outputFile)
 		require.Error(t, err)
 	})
 
@@ -83,7 +82,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), "file://"+sourceFile, outputFile)
+		err := downloader(t.Context(), "file://"+sourceFile, outputFile)
 		require.NoError(t, err)
 
 		content, err := os.ReadFile(outputFile)
@@ -101,7 +100,7 @@ func TestResourceDownloader(t *testing.T) {
 
 		downloader := NewResourceDownloader()
 
-		err := downloader(context.Background(), sourceFile, outputFile)
+		err := downloader(t.Context(), sourceFile, outputFile)
 		require.Error(t, err)
 		require.ErrorIs(t, err, os.ErrNotExist)
 	})

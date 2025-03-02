@@ -72,7 +72,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -118,7 +118,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, []int{1, 2, 3}, invocationOrder)
 	})
@@ -175,7 +175,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -222,7 +222,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -264,7 +264,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -286,7 +286,7 @@ func TestGenerator(t *testing.T) {
 			MetadataReader: &mockMetadataReader,
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -306,7 +306,7 @@ func TestGenerator(t *testing.T) {
 			MetadataReader: &mockMetadataReader,
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -326,7 +326,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -349,7 +349,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 }

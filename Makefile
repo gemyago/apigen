@@ -143,6 +143,7 @@ bin/golangci-lint: ./.golangci-version
 
 .PHONY: lint/golang
 lint/golang: bin/golangci-lint
+	cd ./lang/go/apigen && ../../../bin/golangci-lint run --config ../../../.golangci.yml
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml
 	cd ./examples/petstore-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
 	cd ./examples/petstore-server-app-layer-go && ../../bin/golangci-lint run --config ../../.golangci.yml

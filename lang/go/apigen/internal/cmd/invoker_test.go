@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"io"
 	"strings"
 	"testing"
@@ -76,7 +75,7 @@ func TestGeneratorInvoker(t *testing.T) {
 			},
 		})
 
-		err := invoker(context.Background(), GeneratorInvokerParams{
+		err := invoker(t.Context(), GeneratorInvokerParams{
 			Input:             inputLocation,
 			Output:            outputLocation,
 			OagCliLocation:    oagCliLocation,

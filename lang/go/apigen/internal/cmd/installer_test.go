@@ -62,7 +62,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             oagCliFile,
@@ -81,7 +81,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 
 		supportDirStat, err := os.Stat(params.SupportDir)
@@ -135,7 +135,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -175,7 +175,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -208,7 +208,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return nil
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 
@@ -222,7 +222,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return wantErr
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 
@@ -239,7 +239,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return wantErr
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 }
