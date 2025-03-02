@@ -293,9 +293,13 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
     Path goModFilePath = goModFile.toPath();
     String moduleName = extractModule(goModFilePath);
+    String invokerPackage = moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString();
     additionalProperties.put(
         CodegenConstants.INVOKER_PACKAGE,
-        moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString());
+        invokerPackage);
+    additionalProperties.put(
+        "modelFullPackage",
+        modelsOnly ? invokerPackage + "/" + modelPackage() : modelPackage());
 
     if (additionalProperties.containsKey("generatedCodeComment")) {
       if (StringUtils.isEmpty(additionalProperties.get("generatedCodeComment").toString())) {
