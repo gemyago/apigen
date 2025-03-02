@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/models"
+	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models"
 )
 
 var (
