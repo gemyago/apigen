@@ -21,7 +21,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		// Can not use t.TempDir() because MapFS does not support absolute paths
 		// so provisioning temp dir manually
 		require.NoError(t, os.MkdirAll("tmp", 0o755))
-		tmpDir, err := os.MkdirTemp("tmp", "TestSupportFilesInstaller-root-")
+		tmpDir, err := os.MkdirTemp("tmp", "TestSupportFilesInstaller-root-") //nolint:usetesting // we need to parametrize it
 		require.NoError(t, err)
 		t.Cleanup(func() {
 			assert.NoError(t, os.RemoveAll(tmpDir))
