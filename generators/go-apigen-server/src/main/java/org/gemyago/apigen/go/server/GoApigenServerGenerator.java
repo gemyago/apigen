@@ -221,7 +221,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       }
     });
 
-    if (files.length == 1) {
+    if (files != null && files.length == 1) {
       return files[0];
     }
 
