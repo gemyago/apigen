@@ -45,6 +45,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   protected String sourceFolder = "src";
   protected String apiVersion = "1.0.0";
 
+  private Boolean modelsOnly = false;
+
   /**
    * Configures the type of generator.
    *
@@ -98,9 +100,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
 
     // supporting files must always be enable
-    boolean modelsOnly = generateModels && generateSupportingFiles && !generateApis;
-    // boolean apisOnly = !generateModels && generateApis &&
-    // !generateSupportingFiles;
+    modelsOnly = generateModels && generateSupportingFiles && !generateApis;
 
     /**
      * Models. You can write model files using the modelTemplateFiles map.
@@ -149,10 +149,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     /**
      * Model Package. Optional, if needed, this can be used in templates.
-     * In "models only" mode we're generating in the output directly. No extra
-     * nesting is needed.
      */
-    modelPackage = modelsOnly ? "" : "models";
+    modelPackage = "models";
 
     /**
      * Additional Properties. These values can be passed to the templates and
@@ -181,6 +179,15 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
 
     typeMapping.put("date", "time.Time");
+  }
+
+  @Override
+  public String modelFileFolder() {
+    // In modelsOnly mode we're generating to the root folder to keep it flat
+    if(modelsOnly) {
+      return outputFolder;
+    }
+    return super.modelFileFolder();
   }
 
   @Override
