@@ -5,7 +5,7 @@ package handlers
 import (
 	"net/http"
 
-	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/models"
+	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models"
 )
 
 // Below is to workaround unused imports if that happens.

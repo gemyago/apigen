@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/models"
+	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models"
 	. "github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/internal"
 )
 

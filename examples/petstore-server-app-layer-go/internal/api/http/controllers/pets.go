@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/handlers"
-	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/models"
+	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models"
 )
 
 // You may use the app.PetsService struct directly in the controller, or you may abstract it away
