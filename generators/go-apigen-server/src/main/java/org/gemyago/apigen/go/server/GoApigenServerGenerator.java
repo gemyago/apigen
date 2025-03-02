@@ -46,6 +46,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   protected String apiVersion = "1.0.0";
 
   private Boolean modelsOnly = false;
+  private Boolean apisOnly = false;
 
   /**
    * Configures the type of generator.
@@ -101,7 +102,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     // supporting files must always be enable
     modelsOnly = generateModels && generateSupportingFiles && !generateApis;
-    boolean apisOnly = generateApis && generateSupportingFiles && !generateModels;
+    apisOnly = generateApis && generateSupportingFiles && !generateModels;
 
     // We have to generate validators for models in APIs only mode so we have to trick generator to do that
     // and below is the way to do it for now.
@@ -306,9 +307,11 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     additionalProperties.put(
         CodegenConstants.INVOKER_PACKAGE,
         invokerPackage);
+
+    // In apisOnly it is expected that the caller provides model package in a full form
     additionalProperties.put(
         "modelFullPackage",
-        modelsOnly ? invokerPackage + "/" + modelPackage() : modelPackage());
+        apisOnly ? modelPackage() : invokerPackage + "/" + modelPackage());
 
     if (additionalProperties.containsKey("generatedCodeComment")) {
       if (StringUtils.isEmpty(additionalProperties.get("generatedCodeComment").toString())) {
