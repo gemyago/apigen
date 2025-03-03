@@ -228,7 +228,7 @@ func TestGenerator(t *testing.T) {
 		assert.True(t, generatorInvoked)
 	})
 
-	t.Run("should use output relative support path if not provided", func(t *testing.T) {
+	t.Run("should use default support path if not provided", func(t *testing.T) {
 		params := GeneratorParams{
 			input:      faker.URL(),
 			output:     faker.URL(),
@@ -246,16 +246,21 @@ func TestGenerator(t *testing.T) {
 			ServerGeneratorLocation: faker.URL(),
 		}
 
+		wantDefaultSupportDir := faker.URL()
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
 			RootLogger: TestRootLogger,
+			defaultSupportDirLocator: func(output string) (string, error) {
+				assert.Equal(t, params.output, output)
+				return wantDefaultSupportDir, nil
+			},
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
 			) (SupportingFilesInstallResult, error) {
 				installerInvoked = true
-				assert.Equal(t, params.output+"/.apigen", installerParams.SupportDir)
+				assert.Equal(t, wantDefaultSupportDir, installerParams.SupportDir)
 				return installResult, nil
 			},
 			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
