@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path"
 	"testing"
 
 	"github.com/go-faker/faker/v4"
@@ -228,7 +230,7 @@ func TestGenerator(t *testing.T) {
 		assert.True(t, generatorInvoked)
 	})
 
-	t.Run("should use default support path if not provided", func(t *testing.T) {
+	t.Run("should use project dir as support path if not provided", func(t *testing.T) {
 		params := GeneratorParams{
 			input:      faker.URL(),
 			output:     faker.URL(),
@@ -246,21 +248,21 @@ func TestGenerator(t *testing.T) {
 			ServerGeneratorLocation: faker.URL(),
 		}
 
-		wantDefaultSupportDir := faker.URL()
+		wantProjectDir := faker.URL()
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
 			RootLogger: TestRootLogger,
-			defaultSupportDirLocator: func(output string) (string, error) {
+			projectDirLocator: func(output string) (string, error) {
 				assert.Equal(t, params.output, output)
-				return wantDefaultSupportDir, nil
+				return wantProjectDir, nil
 			},
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
 			) (SupportingFilesInstallResult, error) {
 				installerInvoked = true
-				assert.Equal(t, wantDefaultSupportDir, installerParams.SupportDir)
+				assert.Equal(t, path.Join(wantProjectDir, ".apigen"), installerParams.SupportDir)
 				return installResult, nil
 			},
 			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
@@ -356,5 +358,58 @@ func TestGenerator(t *testing.T) {
 
 		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
+	})
+}
+
+func Test_locateDefaultSupportDir(t *testing.T) {
+	createGoMod := func(dir string) error {
+		return os.WriteFile(path.Join(dir, "go.mod"), []byte("module test\n"), 0600)
+	}
+
+	t.Run("should return output dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		defaultSupportDir, err := locateProjectDir(projectDir)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should return parent dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		subDir := path.Join(projectDir, faker.Word())
+		require.NoError(t, os.Mkdir(subDir, 0755))
+
+		defaultSupportDir, err := locateProjectDir(subDir)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should return nearest parent dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		lvl1 := path.Join(projectDir, faker.Word())
+		require.NoError(t, os.Mkdir(lvl1, 0755))
+
+		lvl2 := path.Join(lvl1, faker.Word())
+		require.NoError(t, os.Mkdir(lvl2, 0755))
+
+		lvl3 := path.Join(lvl2, faker.Word())
+		require.NoError(t, os.Mkdir(lvl3, 0755))
+
+		defaultSupportDir, err := locateProjectDir(lvl3)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should fail if no parent dir has go.mod", func(t *testing.T) {
+		dir := t.TempDir()
+
+		defaultSupportDir, err := locateProjectDir(dir)
+		require.Error(t, err)
+		assert.Empty(t, defaultSupportDir)
 	})
 }

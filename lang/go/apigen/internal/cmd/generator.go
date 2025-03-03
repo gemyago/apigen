@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"path"
 	"regexp"
 )
 
@@ -40,30 +41,39 @@ type GeneratorDeps struct {
 	SupportFilesInstaller
 	MetadataReader metadataReader
 	GeneratorInvoker
-	OsChdirFunc              func(dir string) error
-	defaultSupportDirLocator func(output string) (string, error)
+	OsChdirFunc       func(dir string) error
+	projectDirLocator func(output string) (string, error)
 }
 
-// The default support directory will be the one that has the nearest go.mod file, which is
-// the root of the project.
-func locateDefaultSupportDir(output string) (string, error) {
-	return output + "/.apigen", nil
+// Traverse the output directory and it's parents and find the first one that has go.mod.
+func locateProjectDir(output string) (string, error) {
+	dir := output
+	for {
+		if _, err := os.Stat(path.Join(dir, "go.mod")); err == nil {
+			return dir, nil
+		}
+		parent := path.Dir(dir)
+		if parent == dir {
+			return "", errors.New("failed to locate project directory (go.mod file)")
+		}
+		dir = parent
+	}
 }
 
 type generator struct {
-	deps                     GeneratorDeps
-	logger                   *slog.Logger
-	defaultSupportDirLocator func(output string) (string, error)
-	semverPattern            *regexp.Regexp
+	deps             GeneratorDeps
+	logger           *slog.Logger
+	locateProjectDir func(output string) (string, error)
+	semverPattern    *regexp.Regexp
 }
 
 func (g generator) ensureSupportDir(ctx context.Context, output string, supportDir *string) error {
 	if *supportDir == "" {
-		val, err := g.defaultSupportDirLocator(output)
+		projectDir, err := g.locateProjectDir(output)
 		if err != nil {
 			return fmt.Errorf("failed to locate default support directory: %w", err)
 		}
-		*supportDir = val
+		*supportDir = path.Join(projectDir, ".apigen")
 		pwd, _ := os.Getwd() // we don't care here if it fails, need it for logging purposes
 		g.logger.InfoContext(ctx,
 			"Using default support directory",
@@ -173,18 +183,18 @@ func (g generator) invoke(ctx context.Context, params GeneratorParams) error {
 }
 
 func NewGenerator(deps GeneratorDeps) Generator {
-	if deps.defaultSupportDirLocator == nil {
-		deps.defaultSupportDirLocator = locateDefaultSupportDir
+	if deps.projectDirLocator == nil {
+		deps.projectDirLocator = locateProjectDir
 	}
 
 	g := generator{
-		deps:                     deps,
-		logger:                   deps.RootLogger.WithGroup("generator"),
-		defaultSupportDirLocator: deps.defaultSupportDirLocator,
-		semverPattern:            regexp.MustCompile(`^(\d+\.\d+\.\d+)(.*)$`),
+		deps:             deps,
+		logger:           deps.RootLogger.WithGroup("generator"),
+		locateProjectDir: deps.projectDirLocator,
+		semverPattern:    regexp.MustCompile(`^(\d+\.\d+\.\d+)(.*)$`),
 	}
-	if g.defaultSupportDirLocator == nil {
-		deps.defaultSupportDirLocator = g.defaultSupportDirLocator
+	if g.locateProjectDir == nil {
+		g.locateProjectDir = locateProjectDir
 	}
 	return g.invoke
 }
