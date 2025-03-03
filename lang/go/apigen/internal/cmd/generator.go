@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 )
 
@@ -47,9 +48,12 @@ type GeneratorDeps struct {
 
 // Traverse the output directory and it's parents and find the first one that has go.mod.
 func locateProjectDir(output string) (string, error) {
-	dir := output
+	dir, err := filepath.Abs(output)
+	if err != nil {
+		return "", fmt.Errorf("failed to get absolute path: %w", err)
+	}
 	for {
-		if _, err := os.Stat(path.Join(dir, "go.mod")); err == nil {
+		if _, err = os.Stat(path.Join(dir, "go.mod")); err == nil {
 			return dir, nil
 		}
 		parent := path.Dir(dir)

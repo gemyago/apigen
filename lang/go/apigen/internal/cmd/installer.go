@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"log/slog"
 	"os"
 	"path"
@@ -40,19 +39,15 @@ type SupportFilesInstaller func(
 type SupportFilesInstallerDeps struct {
 	RootLogger *slog.Logger
 	Downloader ResourceDownloader
-
-	// FS instance relative to the current working directory
-	CwdFS fs.ReadFileFS
 }
 
 func readSupportFilesMetadata(
 	ctx context.Context,
 	logger *slog.Logger,
-	rootFS fs.ReadFileFS,
 	metadataFile string,
 ) (SupportFilesMetadata, error) {
 	var metadata SupportFilesMetadata
-	data, err := rootFS.ReadFile(metadataFile)
+	data, err := os.ReadFile(metadataFile)
 	if err == nil {
 		if err = json.Unmarshal(data, &metadata); err != nil {
 			return SupportFilesMetadata{}, fmt.Errorf("failed to unmarshal metadata: %w", err)
@@ -83,7 +78,7 @@ func downloadSupportFileIfRequired(
 	params downloadSupportFileIfRequiredParams,
 ) error {
 	fileExists := true
-	file, err := deps.CwdFS.Open(params.destinationPath)
+	file, err := os.Open(params.destinationPath)
 	if err != nil {
 		fileExists = false
 	} else {
@@ -114,6 +109,14 @@ func downloadSupportFileIfRequired(
 	return nil
 }
 
+const supportDirGitIgnoreContents = `# Contents of this directory are produced by apigen tool and used to 
+# hold tool related supporting files. Generally you don't need to
+# commit these files to your repository. They are required at dev time only (to run the generator). 
+# However if for some reason you want to keep them in git, you are free to do so. You can also remove
+# this file in order to have a git track on this directory.
+*
+`
+
 func ensureSupportDir(logger *slog.Logger, dirName string) error {
 	_, err := os.Stat(dirName)
 	if err == nil {
@@ -130,7 +133,7 @@ func ensureSupportDir(logger *slog.Logger, dirName string) error {
 
 	gitIgnorePath := path.Join(dirName, ".gitignore")
 	logger.Info("Creating .gitignore file", slog.String("path", gitIgnorePath))
-	if err = os.WriteFile(gitIgnorePath, []byte("*\n"), 0600); err != nil {
+	if err = os.WriteFile(gitIgnorePath, []byte(supportDirGitIgnoreContents), 0600); err != nil {
 		return fmt.Errorf("failed to create .gitignore file: %w", err)
 	}
 
@@ -147,7 +150,7 @@ func NewSupportFilesInstaller(deps SupportFilesInstallerDeps) SupportFilesInstal
 		}
 
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		metadata, err := readSupportFilesMetadata(ctx, logger, deps.CwdFS, metadataFile)
+		metadata, err := readSupportFilesMetadata(ctx, logger, metadataFile)
 		if err != nil {
 			return emptyResult, err
 		}

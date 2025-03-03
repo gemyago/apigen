@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"errors"
 	"io/fs"
 	"log/slog"
 	"os"
@@ -73,11 +72,6 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 
 			rootLogger := slog.New(logHandler)
 
-			cwdFS, ok := os.DirFS(".").(fs.ReadFileFS)
-			if !ok {
-				return errors.New("failed to get current working directory filesystem")
-			}
-
 			generator = NewGenerator(GeneratorDeps{
 				RootLogger:  rootLogger,
 				OsChdirFunc: os.Chdir,
@@ -87,7 +81,6 @@ func NewRootCmd(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 					NewSupportFilesInstaller(SupportFilesInstallerDeps{
 						RootLogger: rootLogger,
 						Downloader: NewResourceDownloader(),
-						CwdFS:      cwdFS,
 					}),
 				),
 				MetadataReader: resources.NewMetadataReader(embeddedRootFS),
