@@ -40,6 +40,8 @@ func TestGenerator(t *testing.T) {
 
 			appVersion:              "4.5.6-" + faker.Word(),
 			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -64,11 +66,12 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
 				assert.Equal(t, params.input, invokerParams.Input)
 				assert.Equal(t, params.output, invokerParams.Output)
 				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
 				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
+				assert.Equal(t, params.generatorName, invokerParams.GeneratorName)
 				generatorInvoked = true
 				return nil
 			},
@@ -92,6 +95,8 @@ func TestGenerator(t *testing.T) {
 
 			appVersion:              "4.5.6-" + faker.Word(),
 			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -114,7 +119,7 @@ func TestGenerator(t *testing.T) {
 				invocationOrder[1] = 2
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				invocationOrder[2] = 3
 				return nil
 			},
@@ -167,7 +172,7 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
 				generatorInvoked = true
 				assert.Equal(t, params.input, invokerParams.Input)
 				assert.Equal(t, params.output, invokerParams.Output)
@@ -218,7 +223,7 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				generatorInvoked = true
 				return nil
 			},
@@ -265,7 +270,7 @@ func TestGenerator(t *testing.T) {
 				assert.Equal(t, path.Join(wantProjectDir, ".apigen"), installerParams.SupportDir)
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				generatorInvoked = true
 				return nil
 			},
@@ -351,7 +356,7 @@ func TestGenerator(t *testing.T) {
 			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 				return SupportingFilesInstallResult{}, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				return wantErr
 			},
 		})

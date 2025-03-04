@@ -21,6 +21,9 @@ type GeneratorInvokerParams struct {
 
 	// GeneratorLocation is a path to the source generator plugin jar file
 	GeneratorLocation string
+
+	// GeneratorName is a name of the generator to use
+	GeneratorName string
 }
 
 type OsExecutableCmd interface {
@@ -51,7 +54,7 @@ func NewGeneratorInvoker(
 			"org.openapitools.codegen.OpenAPIGenerator",
 			"generate",
 			"-g",
-			"go-apigen-server",
+			params.GeneratorName,
 			"-i",
 			params.Input,
 			"-o",

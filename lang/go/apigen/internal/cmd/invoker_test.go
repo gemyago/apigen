@@ -45,6 +45,7 @@ func TestGeneratorInvoker(t *testing.T) {
 		generatorLocation := faker.URL()
 		inputLocation := faker.URL()
 		outputLocation := faker.URL()
+		generatorName := faker.DomainName()
 
 		mockStdOut := &strings.Builder{}
 		mockStdErr := &strings.Builder{}
@@ -65,7 +66,7 @@ func TestGeneratorInvoker(t *testing.T) {
 					"org.openapitools.codegen.OpenAPIGenerator",
 					"generate",
 					"-g",
-					"go-apigen-server",
+					generatorName,
 					"-i",
 					inputLocation,
 					"-o",
@@ -80,6 +81,7 @@ func TestGeneratorInvoker(t *testing.T) {
 			Output:            outputLocation,
 			OagCliLocation:    oagCliLocation,
 			GeneratorLocation: generatorLocation,
+			GeneratorName:     generatorName,
 		})
 		require.NoError(t, err)
 

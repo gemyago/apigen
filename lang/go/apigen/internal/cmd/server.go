@@ -35,6 +35,7 @@ func newGenerateServerCmd(
 			oagCliLocation:          commonParams.oagCliLocation,
 			appVersion:              commonParams.appVersion,
 			serverGeneratorLocation: commonParams.serverGeneratorLocation,
+			generatorName:           "go-apigen-server",
 		})
 	}
 	return cmd

@@ -28,6 +28,9 @@ type GeneratorParams struct {
 
 	// serverGeneratorLocation is a path to the source generator plugin jar file
 	serverGeneratorLocation string
+
+	// generatorName
+	generatorName string
 }
 
 type Generator func(ctx context.Context, params GeneratorParams) error
@@ -40,8 +43,8 @@ type metadataReader interface {
 type GeneratorDeps struct {
 	RootLogger *slog.Logger
 	SupportFilesInstaller
-	MetadataReader metadataReader
-	GeneratorInvoker
+	MetadataReader    metadataReader
+	InvokeGenerator   GeneratorInvoker
 	OsChdirFunc       func(dir string) error
 	projectDirLocator func(output string) (string, error)
 }
@@ -174,11 +177,12 @@ func (g generator) invoke(ctx context.Context, params GeneratorParams) error {
 		return fmt.Errorf("failed to install support files: %w", err)
 	}
 
-	if err = g.deps.GeneratorInvoker(ctx, GeneratorInvokerParams{
+	if err = g.deps.InvokeGenerator(ctx, GeneratorInvokerParams{
 		Input:             params.input,
 		Output:            params.output,
 		OagCliLocation:    installResult.OagLocation,
 		GeneratorLocation: installResult.ServerGeneratorLocation,
+		GeneratorName:     params.generatorName,
 	}); err != nil {
 		return fmt.Errorf("generator failed: %w", err)
 	}

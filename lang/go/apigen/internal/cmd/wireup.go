@@ -47,7 +47,7 @@ func wireUpGenerator(params wireUpGeneratorParams) Generator {
 			}),
 		),
 		MetadataReader: resources.NewMetadataReader(params.embeddedRootFS),
-		GeneratorInvoker: newNoopableGeneratorInvoker(
+		InvokeGenerator: newNoopableGeneratorInvoker(
 			rootLogger,
 			params.noop,
 			NewGeneratorInvoker(GeneratorInvokerDeps{
