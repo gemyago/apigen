@@ -9,7 +9,7 @@ import (
 const generateServerExpectedArgsCount = 2
 
 func newGenerateServerCmd(
-	commonParams commandsCommonParams,
+	commonParams *commandsCommonParams,
 	embeddedRootFS fs.ReadFileFS,
 ) *cobra.Command {
 	cmd := &cobra.Command{

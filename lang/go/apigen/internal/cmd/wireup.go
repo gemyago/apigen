@@ -66,7 +66,7 @@ func WireUpCommands(embeddedRootFS fs.ReadFileFS) *cobra.Command {
 	commonParams := commandsCommonParams{}
 	rootCmd := newRootCmd(&commonParams)
 	rootCmd.AddCommand(
-		newGenerateServerCmd(commonParams, embeddedRootFS),
+		newGenerateServerCmd(&commonParams, embeddedRootFS),
 	)
 	return rootCmd
 }

@@ -8,14 +8,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRootCmd(t *testing.T) {
-	t.Run("should run root command in noop mode", func(t *testing.T) {
-		rootCmd := NewRootCmd(fstest.MapFS{
+func TestCommands(t *testing.T) {
+	t.Run("should run server command in noop mode", func(t *testing.T) {
+		rootCmd := WireUpCommands(fstest.MapFS{
 			".versions": &fstest.MapFile{
 				Data: []byte("OPENAPI_GENERATOR_CLI: " + faker.Word() + "\nAPP_VERSION: " + faker.Word()),
 			},
 		})
-		rootCmd.SetArgs([]string{faker.URL(), faker.URL(), "--noop"})
+		rootCmd.SetArgs([]string{"server", faker.URL(), faker.URL(), "--noop"})
+
 		err := rootCmd.Execute()
 		require.NoError(t, err)
 	})
