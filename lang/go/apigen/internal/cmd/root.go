@@ -23,7 +23,7 @@ func newNoopableSupportFilesInstaller(
 	return installer
 }
 
-type CommandsCommonParams struct {
+type commandsCommonParams struct {
 	jsonLogs                bool
 	verbose                 bool
 	noop                    bool
@@ -49,7 +49,7 @@ func newNoopableGeneratorInvoker(
 	return invoker
 }
 
-func NewRootCmd(params *CommandsCommonParams) *cobra.Command {
+func newRootCmd(params *commandsCommonParams) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "apigen",
 		Short: "Generate HTTP layer from OpenAPI spec",

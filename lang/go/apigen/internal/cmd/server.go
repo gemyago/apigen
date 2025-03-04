@@ -8,8 +8,8 @@ import (
 
 const generateServerExpectedArgsCount = 2
 
-func NewGenerateServerCmd(
-	commonParams CommandsCommonParams,
+func newGenerateServerCmd(
+	commonParams commandsCommonParams,
 	embeddedRootFS fs.ReadFileFS,
 ) *cobra.Command {
 	cmd := &cobra.Command{
@@ -20,7 +20,7 @@ func NewGenerateServerCmd(
 		if err := cobra.ExactArgs(generateServerExpectedArgsCount)(cmd, args); err != nil {
 			return err
 		}
-		generator := wireUpCommands(wireUpCommandsParams{
+		generator := wireUpGenerator(wireUpGeneratorParams{
 			jsonLogs:       commonParams.jsonLogs,
 			verbose:        commonParams.verbose,
 			noop:           commonParams.noop,

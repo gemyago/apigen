@@ -7,6 +7,7 @@ import (
 	"os/exec"
 
 	"github.com/gemyago/apigen/lang/go/apigen/internal/cmd/resources"
+	"github.com/spf13/cobra"
 )
 
 type wireUpGeneratorParams struct {
@@ -59,4 +60,13 @@ func wireUpGenerator(params wireUpGeneratorParams) Generator {
 			}),
 		),
 	})
+}
+
+func WireUpCommands(embeddedRootFS fs.ReadFileFS) *cobra.Command {
+	commonParams := commandsCommonParams{}
+	rootCmd := newRootCmd(&commonParams)
+	rootCmd.AddCommand(
+		newGenerateServerCmd(commonParams, embeddedRootFS),
+	)
+	return rootCmd
 }
