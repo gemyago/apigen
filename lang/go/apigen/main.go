@@ -8,7 +8,11 @@ import (
 )
 
 func Execute(embeddedRootFS fs.ReadFileFS) { // coverage-ignore
-	rootCmd := cmd.NewRootCmd(embeddedRootFS)
+	commonParams := cmd.CommandsCommonParams{}
+	rootCmd := cmd.NewRootCmd(&commonParams)
+	rootCmd.AddCommand(
+		cmd.NewGenerateServerCmd(commonParams, embeddedRootFS),
+	)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
