@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/go-faker/faker/v4"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -42,7 +43,6 @@ func TestGenerator(t *testing.T) {
 			serverGeneratorLocation: faker.URL(),
 
 			generatorName: faker.DomainName(),
-			extraArgs:     []string{faker.Word(), faker.Word()},
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -73,7 +73,7 @@ func TestGenerator(t *testing.T) {
 				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
 				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
 				assert.Equal(t, params.generatorName, invokerParams.GeneratorName)
-				assert.Equal(t, params.extraArgs, invokerParams.ExtraArgs)
+				assert.Empty(t, invokerParams.ExtraArgs)
 				generatorInvoked = true
 				return nil
 			},
@@ -82,6 +82,58 @@ func TestGenerator(t *testing.T) {
 		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should pass optional params as extra args", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+
+			oagCliVersion:  "1.2.3-" + faker.Word(),
+			oagCliLocation: faker.URL(),
+
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
+
+			modelPackage:     faker.DomainName(),
+			globalProperties: []string{faker.Word(), faker.Word()},
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		generatorInvoked := false
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger: TestRootLogger,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				_ SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				return installResult, nil
+			},
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+				generatorInvoked = true
+				assert.Equal(t, append(
+					[]string{
+						"--model-package",
+						params.modelPackage,
+					},
+					lo.FlatMap(params.globalProperties, func(p string, _ int) []string {
+						return []string{"--global-property", p}
+					})...,
+				), invokerParams.ExtraArgs)
+				return nil
+			},
+		})
+
+		err := generator(t.Context(), params)
+		require.NoError(t, err)
 		assert.True(t, generatorInvoked)
 	})
 

@@ -53,6 +53,8 @@ func newGenerateServerCmd(
 			appVersion:              commonParams.appVersion,
 			serverGeneratorLocation: commonParams.serverGeneratorLocation,
 			generatorName:           "go-apigen-server",
+			modelPackage:            modelPackage,
+			globalProperties:        additionalProperties,
 		})
 	}
 	return cmd

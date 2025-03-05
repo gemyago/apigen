@@ -32,8 +32,8 @@ type GeneratorParams struct {
 	// generatorName
 	generatorName string
 
-	// extraArgs is a list of additional arguments to pass to the generator
-	extraArgs []string
+	modelPackage     string
+	globalProperties []string
 }
 
 type Generator func(ctx context.Context, params GeneratorParams) error
@@ -180,13 +180,21 @@ func (g generator) invoke(ctx context.Context, params GeneratorParams) error {
 		return fmt.Errorf("failed to install support files: %w", err)
 	}
 
+	var extraArgs []string
+	if params.modelPackage != "" {
+		extraArgs = append(extraArgs, "--model-package", params.modelPackage)
+	}
+	for _, prop := range params.globalProperties {
+		extraArgs = append(extraArgs, "--global-property", prop)
+	}
+
 	if err = g.deps.InvokeGenerator(ctx, GeneratorInvokerParams{
 		Input:             params.input,
 		Output:            params.output,
 		OagCliLocation:    installResult.OagLocation,
 		GeneratorLocation: installResult.ServerGeneratorLocation,
 		GeneratorName:     params.generatorName,
-		ExtraArgs:         params.extraArgs,
+		ExtraArgs:         extraArgs,
 	}); err != nil {
 		return fmt.Errorf("generator failed: %w", err)
 	}
