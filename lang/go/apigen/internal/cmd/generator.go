@@ -31,6 +31,9 @@ type GeneratorParams struct {
 
 	// generatorName
 	generatorName string
+
+	// extraArgs is a list of additional arguments to pass to the generator
+	extraArgs []string
 }
 
 type Generator func(ctx context.Context, params GeneratorParams) error
@@ -183,6 +186,7 @@ func (g generator) invoke(ctx context.Context, params GeneratorParams) error {
 		OagCliLocation:    installResult.OagLocation,
 		GeneratorLocation: installResult.ServerGeneratorLocation,
 		GeneratorName:     params.generatorName,
+		ExtraArgs:         params.extraArgs,
 	}); err != nil {
 		return fmt.Errorf("generator failed: %w", err)
 	}

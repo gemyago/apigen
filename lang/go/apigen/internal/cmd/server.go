@@ -16,6 +16,23 @@ func newGenerateServerCmd(
 		Use:   "server [input] [output]",
 		Short: "Generate server code (e.g handlers, models) from OpenAPI spec",
 	}
+
+	var additionalProperties []string
+	cmd.Flags().StringArrayVar(
+		&additionalProperties,
+		"global-property", nil,
+		"Global properties to pass to the generator.\n"+
+			"See github.com/gemyago/apigen readme for more details.",
+	)
+
+	var modelPackage string
+	cmd.Flags().StringVar(
+		&modelPackage,
+		"model-package", "",
+		"Allows specifying model package. Must be used with apis global property.\n"+
+			"See github.com/gemyago/apigen readme for more details.",
+	)
+
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		if err := cobra.ExactArgs(generateServerExpectedArgsCount)(cmd, args); err != nil {
 			return err

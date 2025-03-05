@@ -42,6 +42,7 @@ func TestGenerator(t *testing.T) {
 			serverGeneratorLocation: faker.URL(),
 
 			generatorName: faker.DomainName(),
+			extraArgs:     []string{faker.Word(), faker.Word()},
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -72,6 +73,7 @@ func TestGenerator(t *testing.T) {
 				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
 				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
 				assert.Equal(t, params.generatorName, invokerParams.GeneratorName)
+				assert.Equal(t, params.extraArgs, invokerParams.ExtraArgs)
 				generatorInvoked = true
 				return nil
 			},
