@@ -1,4 +1,4 @@
-# apigen - Frictionless API generator
+# apigen - HTTP API Layer Generator
 
 [![Test](https://github.com/gemyago/apigen/actions/workflows/test.yml/badge.svg)](https://github.com/gemyago/apigen/actions/workflows/test.yml)
 [![Golang Coverage](https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.svg)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.html)
@@ -34,7 +34,7 @@ To get started, install `apigen` cli tool:
 go install github.com/gemyago/apigen
 ```
 
-Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/v1routes.yaml`. You can use below as a starting point:
+Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/routes.yaml`. You can use below as a starting point:
 ```yaml
 openapi: "3.0.0"
 info:
@@ -64,16 +64,16 @@ paths:
                     type: string
 ```
 
-Add a golang file with generation instructions. For example: `internal/api/http/v1routes.go`:
+Add a golang file with generation instructions. For example: `internal/api/http/routes.go`:
 ```go
-//go:generate go run github.com/gemyago/apigen ./v1routes.yaml ./v1routes
+//go:generate go run github.com/gemyago/apigen ./routes.yaml ./routes
 ```
 
 Run the generation:
 ```bash
 go generate ./internal/api/http
 ```
-The above will generate the code in the `internal/api/http/v1routes` folder. Commit the generated code to the repository.
+The above will generate the code in the `internal/api/http/routes` folder. Commit the generated code to the repository.
 
 Declare controller that implements the generated interface, for example:
 ```go
@@ -129,7 +129,9 @@ if err := srv.ListenAndServe(); err != nil {
 }
 ```
 
-Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced example can be found [here](./examples/petstore-server-go).
+Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced examples: 
+* [petstore-server](./examples/petstore-server-go) - example with more routes
+* [petstore-server-app-layer](./examples/petstore-server-app-layer-go) - same routes as `petstore-server` but with separate application layer with models and controllers generated in a separate packages.
 
 ## Basic Concepts
 
@@ -142,6 +144,8 @@ The generated code also includes so called `RootHandler`. The root handler is a 
 Typically you will need to import generated code from the following packages:
 * `handlers` contains controller interfaces, root handler and other components handle requests.
 * `models` contains data structures corresponding to schemas defined in the OpenAPI spec.
+
+It is possible to generate models and controllers in separate packages. This is useful when you want to keep your application layer separate from the HTTP API layer. Please see the [Separate packages for models and controllers](#separate-packages-for-models-and-controllers) section for more details.
 
 ## Controllers in depth
 
@@ -243,6 +247,8 @@ NewRootHandler(routerAdapter,
   WithErrorHandler(errorHandler),
 )
 ```
+
+## Separate packages for models and controllers
 
 ## Supported OpenAPI features
 
