@@ -85,7 +85,7 @@ func SetupRoutes(deps RoutesDeps) http.Handler {
 	)
 
 	// Register generated Pets routes.
-	rootHandler.RegisterPetsRoutes(&petsController{})
+	rootHandler.RegisterPetsRoutes(newPetsController())
 
 	// Root handler is a standard http.Handler so can be used in any
 	// context that expects http.Handler interface.

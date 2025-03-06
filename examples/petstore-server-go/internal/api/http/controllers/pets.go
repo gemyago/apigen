@@ -71,3 +71,10 @@ func (c *petsController) ListPets(
 
 // Make sure it implements the interface properly.
 var _ handlers.PetsController = (*petsController)(nil)
+
+func newPetsController() *petsController {
+	return &petsController{
+		allPets:  []*models.Pet{},
+		petsByID: map[int64]*models.Pet{},
+	}
+}
