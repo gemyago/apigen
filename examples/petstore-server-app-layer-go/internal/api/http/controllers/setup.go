@@ -1,4 +1,4 @@
-package router
+package controllers
 
 import (
 	"errors"
@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/controllers"
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/routes/handlers"
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app"
 )
@@ -69,17 +68,18 @@ func accessLogMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 	})
 }
 
-// HandlerDeps holds dependencies of the generated routes
-// usually controller implementations at least.
-type HandlerDeps struct {
+// RoutesDeps is a set of dependencies required to setup routes.
+// Usually that would include application layer services and other components
+// required to handle requests.
+type RoutesDeps struct {
 	RootLogger *slog.Logger
 
-	PetsController *controllers.PetsController
+	PetsService petsService
 }
 
-// NewHandler creates an minimal example implementation of the router handler
+// SetupRoutes creates an minimal example implementation of the router handler
 // based on the standard http.ServeMux.
-func NewHandler(deps HandlerDeps) http.Handler {
+func SetupRoutes(deps RoutesDeps) http.Handler {
 	httpLogger := deps.RootLogger.WithGroup("http")
 
 	// Root handler instance is a central place to register all routes
@@ -89,7 +89,9 @@ func NewHandler(deps HandlerDeps) http.Handler {
 	)
 
 	// Register generated Pets routes.
-	rootHandler.RegisterPetsRoutes(deps.PetsController)
+	rootHandler.RegisterPetsRoutes(NewPetsController(PetsControllerDeps{
+		PetsService: deps.PetsService,
+	}))
 
 	// Root handler is a standard http.Handler so can be used in any
 	// context that expects http.Handler interface.
