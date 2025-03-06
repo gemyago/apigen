@@ -101,7 +101,7 @@ examples/%-server-app-layer-go/internal/api/http/routes: $(golang_server_jar) ex
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
-		--global-property=apis,supportingFiles \
+		--global-property=apis \
 		--model-package=github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models \
 		-i examples/$*.yaml \
 		-o $@
@@ -112,7 +112,7 @@ examples/%-server-app-layer-go/internal/app/models: $(golang_server_jar) example
 	java -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
-		--global-property=models,supportingFiles \
+		--global-property=models \
 		-i examples/$*.yaml \
 		-o $@
 	$(current_make) $@/.openapi-generator/REMOVED_FILES

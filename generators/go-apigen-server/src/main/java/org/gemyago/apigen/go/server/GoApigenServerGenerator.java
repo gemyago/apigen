@@ -90,21 +90,22 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     boolean generateModels = GlobalSettings.getProperty(CodegenConstants.MODELS) != null;
     boolean generateApis = GlobalSettings.getProperty(CodegenConstants.APIS) != null;
-    boolean generateSupportingFiles = GlobalSettings.getProperty(CodegenConstants.SUPPORTING_FILES) != null;
+
+    // We are always generating supporting files, so forcing this property
+    GlobalSettings.setProperty(CodegenConstants.SUPPORTING_FILES, "");
 
     // if all are false, this means no options are provided (or all three), so we
     // consider all as true
-    if (!generateModels && !generateApis && !generateSupportingFiles) {
+    if (!generateModels && !generateApis) {
       generateModels = true;
       generateApis = true;
-      generateSupportingFiles = true;
     }
 
-    // supporting files must always be enable
-    modelsOnly = generateModels && generateSupportingFiles && !generateApis;
-    apisOnly = generateApis && generateSupportingFiles && !generateModels;
+    modelsOnly = generateModels && !generateApis;
+    apisOnly = generateApis && !generateModels;
 
-    // We have to generate validators for models in APIs only mode so we have to trick generator to do that
+    // We have to generate validators for models in APIs only mode so we have to
+    // trick generator to do that
     // and below is the way to do it for now.
     if (apisOnly) {
       GlobalSettings.setProperty(CodegenConstants.MODELS, "");
@@ -308,7 +309,8 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
         CodegenConstants.INVOKER_PACKAGE,
         invokerPackage);
 
-    // In apisOnly it is expected that the caller provides model package in a full form
+    // In apisOnly it is expected that the caller provides model package in a full
+    // form
     additionalProperties.put(
         "modelFullPackage",
         apisOnly ? modelPackage() : invokerPackage + "/" + modelPackage());
