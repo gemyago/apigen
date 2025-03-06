@@ -66,7 +66,7 @@ paths:
 
 Add a golang file with generation instructions. For example: `internal/api/http/routes.go`:
 ```go
-//go:generate go run github.com/gemyago/apigen ./routes.yaml ./routes
+//go:generate go run github.com/gemyago/apigen server ./routes.yaml ./routes
 ```
 
 Run the generation:
@@ -249,6 +249,21 @@ NewRootHandler(routerAdapter,
 ```
 
 ## Separate packages for models and controllers
+
+For applications with separate HTTP API and business logic layers, you can generate models and routes into different packages. This allows the business logic layer to use the generated models directly, eliminating redundant mapping between generated and application models.
+
+To generate models in a separate package, you need to specify the `--global-property models` option as well as relevant location for the generated models. For example:
+```bash
+apigen ./routes.yaml internal/app/models --global-property=models
+```
+
+To generate controllers in a separate package, you need to specify the `--global-property handlers` option as well as relevant location for the generated controllers and full models package. For example:
+```bash
+apigen ./routes.yaml internal/api/http/controllers --global-property=apis --model-package=internal/app/models
+```
+**Note**: Please make sure the `model-package` corresponds to a fully qualified package name of the generated models.
+
+Fully functional example based on the above steps can be found [here](./examples/petstore-server-app-layer-go).
 
 ## Supported OpenAPI features
 
