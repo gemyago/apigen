@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/controllers"
-	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/api/http/router"
 	"github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app"
 )
 
@@ -42,15 +41,10 @@ func main() {
 		RootLogger: rootLogger,
 	})
 
-	// controllers wireup
-	petsController := controllers.NewPetsController(controllers.PetsControllerDeps{
+	// routes wireup
+	rootHandler := controllers.SetupRoutes(controllers.RoutesDeps{
+		RootLogger:  rootLogger,
 		PetsService: petsService,
-	})
-
-	// root handler wireup
-	rootHandler := router.NewHandler(router.HandlerDeps{
-		RootLogger:     rootLogger,
-		PetsController: petsController,
 	})
 
 	srv := &http.Server{

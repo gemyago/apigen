@@ -17,37 +17,25 @@ type petsService interface {
 	ListPets(ctx context.Context, params *models.ListPetsParams) (*models.PetsResponse, error)
 }
 
-type PetsController struct {
-	petsService
-}
+type petsController struct{ petsService }
 
-func (c *PetsController) CreatePet(
+func (c *petsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
 ) http.Handler {
 	return b.HandleWith(c.petsService.CreatePet)
 }
 
-func (c *PetsController) GetPetByID(
+func (c *petsController) GetPetByID(
 	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
 ) http.Handler {
 	return b.HandleWith(c.petsService.GetPetByID)
 }
 
-func (c *PetsController) ListPets(
+func (c *petsController) ListPets(
 	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
 ) http.Handler {
 	return b.HandleWith(c.petsService.ListPets)
 }
 
 // Make sure it implements the interface properly.
-var _ handlers.PetsController = (*PetsController)(nil)
-
-type PetsControllerDeps struct {
-	PetsService petsService
-}
-
-func NewPetsController(deps PetsControllerDeps) *PetsController {
-	return &PetsController{
-		petsService: deps.PetsService,
-	}
-}
+var _ handlers.PetsController = (*petsController)(nil)

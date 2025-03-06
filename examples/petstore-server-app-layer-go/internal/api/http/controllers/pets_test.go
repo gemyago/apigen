@@ -46,7 +46,8 @@ func TestTestPets(t *testing.T) {
 		t.Run("process create pet request", func(t *testing.T) {
 			deps := newDeps()
 			handler := SetupRoutes(deps)
-			req := httptest.NewRequest(http.MethodPost, "/pets", bytes.NewBufferString(`{"id":1,"name":"Bingo"}`))
+			petData := bytes.NewBufferString(`{"id":1,"name":"Bingo"}`)
+			req := httptest.NewRequest(http.MethodPost, "/pets", petData)
 			res := httptest.NewRecorder()
 			handler.ServeHTTP(res, req)
 			assert.Equal(t, 201, res.Code)
@@ -57,6 +58,49 @@ func TestTestPets(t *testing.T) {
 				&models.CreatePetParams{Payload: &models.Pet{ID: 1, Name: "Bingo"}},
 				service.createPetCalls[0],
 			)
+		})
+	})
+
+	t.Run("GET /pets/{id}", func(t *testing.T) {
+		t.Run("process get pet by id request", func(t *testing.T) {
+			deps := newDeps()
+			handler := SetupRoutes(deps)
+
+			wantNextPet := &models.PetResponse{Data: &models.Pet{ID: 1, Name: "Bingo"}}
+
+			service, _ := deps.PetsService.(*mockPetsService)
+			service.nextGetPetByID = wantNextPet
+
+			req := httptest.NewRequest(http.MethodGet, "/pets/1", nil)
+			res := httptest.NewRecorder()
+			handler.ServeHTTP(res, req)
+			assert.Equal(t, 200, res.Code)
+
+			assert.JSONEq(t, `{"data":{"id":1,"name":"Bingo"}}`, res.Body.String())
+		})
+	})
+
+	t.Run("GET /pets", func(t *testing.T) {
+		t.Run("process list pets request", func(t *testing.T) {
+			deps := newDeps()
+			handler := SetupRoutes(deps)
+
+			wantNextPets := &models.PetsResponse{
+				Data: []*models.Pet{
+					{ID: 1, Name: "Bingo"},
+					{ID: 2, Name: "Bongo"},
+				},
+			}
+
+			service, _ := deps.PetsService.(*mockPetsService)
+			service.nextListPets = wantNextPets
+
+			req := httptest.NewRequest(http.MethodGet, "/pets?limit=10", nil)
+			res := httptest.NewRecorder()
+			handler.ServeHTTP(res, req)
+			assert.Equal(t, 200, res.Code)
+
+			assert.JSONEq(t, `{"data":[{"id":1,"name":"Bingo"},{"id":2,"name":"Bongo"}]}`, res.Body.String())
 		})
 	})
 }
