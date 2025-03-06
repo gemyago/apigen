@@ -15,7 +15,7 @@ var (
 	ErrConflict = errors.New("CONFLICT")
 )
 
-type PetsController struct {
+type petsController struct {
 	// In practice (depending on the project structure) controllers should
 	// interact with a application layer and have application layer components as dependencies.
 	// For this example, we are keeping it simple and storing data in memory.
@@ -23,7 +23,7 @@ type PetsController struct {
 	petsByID map[int64]*models.Pet
 }
 
-func (c *PetsController) CreatePet(
+func (c *petsController) CreatePet(
 	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, params *models.CreatePetParams) error {
@@ -38,7 +38,7 @@ func (c *PetsController) CreatePet(
 	})
 }
 
-func (c *PetsController) GetPetByID(
+func (c *petsController) GetPetByID(
 	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, params *models.GetPetByIDParams) (*models.PetResponse, error) {
@@ -50,7 +50,7 @@ func (c *PetsController) GetPetByID(
 	})
 }
 
-func (c *PetsController) ListPets(
+func (c *petsController) ListPets(
 	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
 ) http.Handler {
 	return b.HandleWith(func(_ context.Context, params *models.ListPetsParams) (*models.PetsResponse, error) {
@@ -70,11 +70,4 @@ func (c *PetsController) ListPets(
 }
 
 // Make sure it implements the interface properly.
-var _ handlers.PetsController = (*PetsController)(nil)
-
-func NewPetsController() *PetsController {
-	return &PetsController{
-		allPets:  []*models.Pet{},
-		petsByID: map[int64]*models.Pet{},
-	}
-}
+var _ handlers.PetsController = (*petsController)(nil)

@@ -77,8 +77,7 @@ type RoutesDeps struct {
 	PetsService petsService
 }
 
-// SetupRoutes creates an minimal example implementation of the router handler
-// based on the standard http.ServeMux.
+// SetupRoutes is an example setup of generated routes.
 func SetupRoutes(deps RoutesDeps) http.Handler {
 	httpLogger := deps.RootLogger.WithGroup("http")
 

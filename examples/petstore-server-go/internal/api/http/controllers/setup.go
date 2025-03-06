@@ -1,11 +1,11 @@
-package router
+package controllers
 
 import (
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"net/http"
 
-	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/controllers"
 	"github.com/gemyago/apigen/examples/petstore-server-go/internal/api/http/routes/handlers"
 )
 
@@ -26,16 +26,19 @@ func (router *httpRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // handleActionError is a custom error handler to process action errors.
 // It's a good place to map errors returned by controller actions to HTTP status codes.
-func handleActionError(w http.ResponseWriter, _ *http.Request, err error) {
-	code := 500
-	switch {
-	case errors.Is(err, controllers.ErrNotFound):
-		code = 404
-	case errors.Is(err, controllers.ErrConflict):
-		code = 409
+func newActionErrorHandler(logger *slog.Logger) func(w http.ResponseWriter, _ *http.Request, err error) {
+	return func(w http.ResponseWriter, req *http.Request, err error) {
+		ctx := req.Context()
+		code := 500
+		switch {
+		case errors.Is(err, ErrNotFound):
+			code = 404
+		case errors.Is(err, ErrConflict):
+			code = 409
+		}
+		w.WriteHeader(code)
+		logger.InfoContext(ctx, "Failed to process request", slog.Any("error", err))
 	}
-	w.WriteHeader(code)
-	log.Printf("Failed to process request: %v\n", err)
 }
 
 type responseWriterWrapper struct {
@@ -49,39 +52,42 @@ func (lrw *responseWriterWrapper) WriteHeader(code int) {
 }
 
 // Minimalistic access log middleware just to have some logs when running the example.
-func accessLogMiddleware(next http.Handler) http.Handler {
+func accessLogMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%v %v %v %v\n", r.Method, r.URL.String(), r.Proto, r.UserAgent())
+		ctx := r.Context()
+		logger.InfoContext(ctx, fmt.Sprintf("%v %v %v %v", r.Method, r.URL.String(), r.Proto, r.UserAgent()))
 		defer func() {
 			if r := recover(); r != nil {
-				log.Println("Request panic", r)
+				logger.ErrorContext(ctx, "Request panic", slog.Any("panic", r))
 			}
 		}()
 		wrapper := &responseWriterWrapper{ResponseWriter: w, statusCode: http.StatusOK}
 		next.ServeHTTP(wrapper, r)
-		log.Printf("%d %v %v\n", wrapper.statusCode, r.Method, r.URL.String())
+		logger.InfoContext(ctx, fmt.Sprintf("%d %v %v", wrapper.statusCode, r.Method, r.URL.String()))
 	})
 }
 
-// HandlerDeps holds dependencies of the generated routes
-// usually controller implementations at least.
-type HandlerDeps struct {
-	PetsController *controllers.PetsController
+// RoutesDeps is a set of dependencies required to setup routes.
+// Usually that would include application layer services and other components
+// required to handle requests.
+type RoutesDeps struct {
+	RootLogger *slog.Logger
 }
 
-// NewHandler creates an minimal example implementation of the router handler
-// based on the standard http.ServeMux.
-func NewHandler(deps HandlerDeps) http.Handler {
+// SetupRoutes is an example setup of generated routes.
+func SetupRoutes(deps RoutesDeps) http.Handler {
+	httpLogger := deps.RootLogger.WithGroup("http")
+
 	// Root handler instance is a central place to register all routes
 	rootHandler := handlers.NewRootHandler(
 		(*httpRouter)(http.NewServeMux()),
-		handlers.WithActionErrorHandler(handleActionError),
+		handlers.WithActionErrorHandler(newActionErrorHandler(httpLogger)),
 	)
 
 	// Register generated Pets routes.
-	rootHandler.RegisterPetsRoutes(deps.PetsController)
+	rootHandler.RegisterPetsRoutes(&petsController{})
 
 	// Root handler is a standard http.Handler so can be used in any
 	// context that expects http.Handler interface.
-	return accessLogMiddleware(rootHandler)
+	return accessLogMiddleware(httpLogger, rootHandler)
 }
