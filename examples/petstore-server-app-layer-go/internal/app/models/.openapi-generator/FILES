@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 create_pet_params.go
 error.go
 get_pet_by_id_params.go
