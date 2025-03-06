@@ -23,6 +23,7 @@ Project status:
 - [Root Handler](#root-handler)
   - [Router adapter](#router-adapter)
   - [Handling errors](#handling-errors)
+- [Separate packages for models and controllers](#separate-packages-for-models-and-controllers)
 - [Supported OpenAPI features](#supported-openapi-features)
 
 ## Getting Started
