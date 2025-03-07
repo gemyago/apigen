@@ -266,6 +266,86 @@ apigen ./routes.yaml internal/api/http/controllers --global-property=apis --mode
 
 Fully functional example based on the above steps can be found [here](./examples/petstore-server-app-layer-go).
 
+## Unit Testing
+
+You can use standard Go testing tools to test your controllers and routes. It makes sense to test http routes in an integration test manner where controllers are not mocked. However if your controllers are using external services or have complex logic, you may want to mock them in your tests. 
+
+Example [petstore](./examples/petstore.yaml) controller that is using external service may look similar to below:
+```go
+type petsService interface {
+	CreatePet(ctx context.Context, params *models.CreatePetParams) error
+	GetPetByID(ctx context.Context, params *models.GetPetByIDParams) (*models.PetResponse, error)
+	ListPets(ctx context.Context, params *models.ListPetsParams) (*models.PetsResponse, error)
+}
+
+type petsController struct{ petsService }
+
+func (c *petsController) CreatePet(
+	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
+) http.Handler {
+	return b.HandleWith(c.petsService.CreatePet)
+}
+
+func (c *petsController) GetPetByID(
+	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
+) http.Handler {
+	return b.HandleWith(c.petsService.GetPetByID)
+}
+
+func (c *petsController) ListPets(
+	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
+) http.Handler {
+	return b.HandleWith(c.petsService.ListPets)
+}
+```
+
+You may then define a mock implementation of the `petsService` interface and use it in your tests. Example:
+```go
+type mockPetsService struct {
+	createPetCalls []*models.CreatePetParams
+	nextGetPetByID *models.PetResponse
+	nextListPets   *models.PetsResponse
+}
+
+func (m *mockPetsService) CreatePet(_ context.Context, params *models.CreatePetParams) error {
+	m.createPetCalls = append(m.createPetCalls, params)
+	return nil
+}
+
+func (m *mockPetsService) GetPetByID(_ context.Context, _ *models.GetPetByIDParams) (*models.PetResponse, error) {
+	return m.nextGetPetByID, nil
+}
+
+func (m *mockPetsService) ListPets(_ context.Context, _ *models.ListPetsParams) (*models.PetsResponse, error) {
+	return m.nextListPets, nil
+}
+```
+You can use more advanced mocking techniques such as [mockery](https://github.com/mockery/mockery) to generate mocks for your interfaces.
+
+Once you have your mocks defined, you can use them in your tests. Example:
+```go
+	t.Run("POST /pets", func(t *testing.T) {
+		t.Run("process create pet request", func(t *testing.T) {
+			petsService := &mockPetsService{}
+			handler := SetupRoutes(RoutesDeps{
+				RootLogger:  discardLogger,
+				PetsService: petsService,
+			})
+			petData := bytes.NewBufferString(`{"id":1,"name":"Bingo"}`)
+			req := httptest.NewRequest(http.MethodPost, "/pets", petData)
+			res := httptest.NewRecorder()
+			handler.ServeHTTP(res, req)
+			assert.Equal(t, 201, res.Code)
+
+			assert.Len(t, petsService.createPetCalls, 1)
+			assert.Equal(t,
+				&models.CreatePetParams{Payload: &models.Pet{ID: 1, Name: "Bingo"}},
+				petsService.createPetCalls[0],
+			)
+		})
+	})
+```
+
 ## Supported OpenAPI features
 
 Some language specific features may be challenging (if possible) to implement correctly. The [Language specific caveats](#language-specific-caveats) summarises various implementation details.
