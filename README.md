@@ -132,7 +132,7 @@ if err := srv.ListenAndServe(); err != nil {
 
 Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced examples: 
 * [petstore-server](./examples/petstore-server-go) - example with more routes
-* [petstore-server-app-layer](./examples/petstore-server-app-layer-go) - same routes as `petstore-server` but with separate application layer with models and controllers generated in a separate packages.
+* [petstore-server-app-layer](./examples/petstore-server-app-layer-go) - models and controllers generated in a separate packages.
 
 ## Basic Concepts
 
