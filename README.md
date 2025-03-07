@@ -268,7 +268,7 @@ Fully functional example based on the above steps can be found [here](./examples
 
 ## Unit Testing
 
-You can use standard Go testing tools to test your controllers and routes. It makes sense to test http routes in an integration test manner where controllers are not mocked. However if your controllers are using external services or have complex logic, you may want to mock them in your tests. 
+You can use standard Go testing tools to test your controllers and routes. It makes sense to test http routes in an integration test manner where actual (not mocked) controllers are used. However if your controllers are using external dependencies, you may want to mock them in your tests.
 
 Example [petstore](./examples/petstore.yaml) controller that is using external service may look similar to below:
 ```go
@@ -327,10 +327,10 @@ Once you have your mocks defined, you can use them in your tests. Example:
 	t.Run("POST /pets", func(t *testing.T) {
 		t.Run("process create pet request", func(t *testing.T) {
 			petsService := &mockPetsService{}
-			handler := SetupRoutes(RoutesDeps{
-				RootLogger:  discardLogger,
-				PetsService: petsService,
-			})
+			handler := handlers.
+				NewRootHandler((*httpRouter)(http.NewServeMux())).
+				RegisterPetsRoutes(&petsController{petsService: petsService})
+
 			petData := bytes.NewBufferString(`{"id":1,"name":"Bingo"}`)
 			req := httptest.NewRequest(http.MethodPost, "/pets", petData)
 			res := httptest.NewRecorder()
@@ -345,6 +345,8 @@ Once you have your mocks defined, you can use them in your tests. Example:
 		})
 	})
 ```
+
+Fully functional example based on the above steps can be found [here](./examples/petstore-server-app-layer-go/internal/api/http/controllers/pets_test.go).
 
 ## Supported OpenAPI features
 
