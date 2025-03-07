@@ -24,7 +24,10 @@ Project status:
   - [Router adapter](#router-adapter)
   - [Handling errors](#handling-errors)
 - [Separate packages for models and controllers](#separate-packages-for-models-and-controllers)
+- [Unit Testing](#unit-testing)
 - [Supported OpenAPI features](#supported-openapi-features)
+- [Contributing](#contributing)
+- [Releasing](#releasing)
 
 ## Getting Started
 

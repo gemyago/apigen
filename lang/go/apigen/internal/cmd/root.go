@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"log/slog"
+	"runtime/debug"
 
 	"github.com/spf13/cobra"
 )
@@ -54,6 +55,12 @@ func newRootCmd(params *commandsCommonParams) *cobra.Command {
 		Use:   "apigen",
 		Short: "Generate HTTP layer from OpenAPI spec",
 		Args:  cobra.ExactArgs(expectedArgsCount),
+	}
+
+	buildInfo, ok := debug.ReadBuildInfo()
+	if ok {
+		cmd.Version = buildInfo.Main.Version
+		cmd.SetVersionTemplate(`{{printf "%s" .Version}}` + "\n")
 	}
 
 	pFlags := cmd.PersistentFlags()
