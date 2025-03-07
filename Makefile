@@ -97,7 +97,31 @@ examples/%-server-go/internal/api/http/routes: $(golang_server_jar) examples/%.y
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
 
+examples/%-server-app-layer-go/internal/api/http/routes: $(golang_server_jar) examples/%.yaml
+	java -cp $(cli_jar):$(golang_server_jar) \
+		org.openapitools.codegen.OpenAPIGenerator generate \
+		-g go-apigen-server \
+		--global-property=apis \
+		--model-package=github.com/gemyago/apigen/examples/petstore-server-app-layer-go/internal/app/models \
+		-i examples/$*.yaml \
+		-o $@
+	$(current_make) $@/.openapi-generator/REMOVED_FILES
+	touch $@
+
+examples/%-server-app-layer-go/internal/app/models: $(golang_server_jar) examples/%.yaml
+	java -cp $(cli_jar):$(golang_server_jar) \
+		org.openapitools.codegen.OpenAPIGenerator generate \
+		-g go-apigen-server \
+		--global-property=models \
+		-i examples/$*.yaml \
+		-o $@
+	$(current_make) $@/.openapi-generator/REMOVED_FILES
+	touch $@
+
 examples/%-server-go: examples/%-server-go/internal/api/http/routes
+	@echo "Target completed: $@"
+
+examples/%-server-app-layer-go: examples/%-server-app-layer-go/internal/api/http/routes examples/%-server-app-layer-go/internal/app/models
 	@echo "Target completed: $@"
 
 # generatedCodeComment set to empty to allow linter to lint generated code.
@@ -112,15 +136,17 @@ tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_
 	$(current_make) $@/.openapi-generator/REMOVED_FILES
 	touch $@
 
-generate/golang: examples/petstore-server-go examples/ping-server-go tests/golang/routes
+generate/golang: examples/petstore-server-go examples/petstore-server-app-layer-go examples/ping-server-go tests/golang/routes
 
 bin/golangci-lint: ./.golangci-version
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s $(shell cat $^)
 
 .PHONY: lint/golang
 lint/golang: bin/golangci-lint
+	cd ./lang/go/apigen && ../../../bin/golangci-lint run --config ../../../.golangci.yml
 	cd ./tests/golang && ../../bin/golangci-lint run --config ../../.golangci.yml
 	cd ./examples/petstore-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
+	cd ./examples/petstore-server-app-layer-go && ../../bin/golangci-lint run --config ../../.golangci.yml
 	cd ./examples/ping-server-go && ../../bin/golangci-lint run --config ../../.golangci.yml
 
 .PHONY: lint

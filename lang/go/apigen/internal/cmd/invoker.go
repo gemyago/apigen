@@ -21,6 +21,12 @@ type GeneratorInvokerParams struct {
 
 	// GeneratorLocation is a path to the source generator plugin jar file
 	GeneratorLocation string
+
+	// GeneratorName is a name of the generator to use
+	GeneratorName string
+
+	// ExtraArgs is a list of additional arguments to pass to the generator
+	ExtraArgs []string
 }
 
 type OsExecutableCmd interface {
@@ -51,12 +57,13 @@ func NewGeneratorInvoker(
 			"org.openapitools.codegen.OpenAPIGenerator",
 			"generate",
 			"-g",
-			"go-apigen-server",
+			params.GeneratorName,
 			"-i",
 			params.Input,
 			"-o",
 			params.Output,
 		}
+		args = append(args, params.ExtraArgs...)
 		logger.Info("Invoking java program", slog.String("args", fmt.Sprintf("%v", args)))
 		cmd := deps.OsExecutableCmdFactoryFunc(
 			"java",

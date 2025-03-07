@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"io"
 	"strings"
 	"testing"
@@ -46,6 +45,7 @@ func TestGeneratorInvoker(t *testing.T) {
 		generatorLocation := faker.URL()
 		inputLocation := faker.URL()
 		outputLocation := faker.URL()
+		generatorName := faker.DomainName()
 
 		mockStdOut := &strings.Builder{}
 		mockStdErr := &strings.Builder{}
@@ -66,7 +66,7 @@ func TestGeneratorInvoker(t *testing.T) {
 					"org.openapitools.codegen.OpenAPIGenerator",
 					"generate",
 					"-g",
-					"go-apigen-server",
+					generatorName,
 					"-i",
 					inputLocation,
 					"-o",
@@ -76,11 +76,67 @@ func TestGeneratorInvoker(t *testing.T) {
 			},
 		})
 
-		err := invoker(context.Background(), GeneratorInvokerParams{
+		err := invoker(t.Context(), GeneratorInvokerParams{
 			Input:             inputLocation,
 			Output:            outputLocation,
 			OagCliLocation:    oagCliLocation,
 			GeneratorLocation: generatorLocation,
+			GeneratorName:     generatorName,
+		})
+		require.NoError(t, err)
+
+		assert.Equal(t, wantStdOut, mockStdOut.String())
+		assert.Equal(t, wantStdErr, mockStdErr.String())
+		assert.Equal(t, 1, wantCmd.runCallsCount)
+	})
+
+	t.Run("should invoke the generator with extra args", func(t *testing.T) {
+		wantStdOut := faker.Sentence()
+		wantStdErr := faker.Sentence()
+
+		oagCliLocation := faker.URL()
+		generatorLocation := faker.URL()
+		inputLocation := faker.URL()
+		outputLocation := faker.URL()
+		generatorName := faker.DomainName()
+		extraArgs := []string{faker.Word(), faker.Word()}
+
+		mockStdOut := &strings.Builder{}
+		mockStdErr := &strings.Builder{}
+		wantCmd := &mockOsExecutableCmd{
+			stdOut: wantStdOut,
+			stdErr: wantStdErr,
+		}
+
+		invoker := NewGeneratorInvoker(GeneratorInvokerDeps{
+			RootLogger: TestRootLogger,
+			StdOut:     mockStdOut,
+			StdErr:     mockStdErr,
+			OsExecutableCmdFactoryFunc: func(name string, arg ...string) OsExecutableCmd {
+				assert.Equal(t, "java", name)
+				assert.Equal(t, append([]string{
+					"-cp",
+					oagCliLocation + ":" + generatorLocation,
+					"org.openapitools.codegen.OpenAPIGenerator",
+					"generate",
+					"-g",
+					generatorName,
+					"-i",
+					inputLocation,
+					"-o",
+					outputLocation,
+				}, extraArgs...), arg)
+				return wantCmd
+			},
+		})
+
+		err := invoker(t.Context(), GeneratorInvokerParams{
+			Input:             inputLocation,
+			Output:            outputLocation,
+			OagCliLocation:    oagCliLocation,
+			GeneratorLocation: generatorLocation,
+			GeneratorName:     generatorName,
+			ExtraArgs:         extraArgs,
 		})
 		require.NoError(t, err)
 

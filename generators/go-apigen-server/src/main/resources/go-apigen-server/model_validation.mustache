@@ -1,17 +1,16 @@
 {{ #generatedCodeComment }}// {{.}}.
 
 {{/generatedCodeComment}}package internal
-
-{{#models}}
+{{#models}}{{#model}}{{^vendorExtensions.x-apigen-operation-params-model}}
 import (
 	"time"
-	. "{{invokerPackage}}/{{ package }}"
+	. "{{modelFullPackage}}"
 )
 
 // Below is to workaround unused imports.
 var _ = time.Time{}
 
-{{#model}}{{^isEnum}}func New{{classname}}Validator() FieldValidator[*{{classname}}] {
+{{^isEnum}}func New{{classname}}Validator() FieldValidator[*{{classname}}] {
 	{{#vars}}{{#isArray}}validate{{name}} := NewArrayValidator[{{>models/array-item-type}}](
 		NewSimpleFieldValidator[[]{{>models/array-item-type}}]({{#required}}
 			EnsureArrayFieldRequired,{{/required}}{{#minItems}}
@@ -33,4 +32,6 @@ var _ = time.Time{}
 	}
 }{{/isEnum}}{{#isEnum}}// We don't need to validate enums. This file is just a placeholder.
 // Below is to workaround unused imports.
-var _ {{classname}}{{/isEnum}}{{/model}}{{/models}}
+var _ {{classname}}{{/isEnum}}{{/vendorExtensions.x-apigen-operation-params-model}}{{#vendorExtensions.x-apigen-operation-params-model}}
+// {{classname}} is request parameters model. The validation for 
+// parameters model is performed at parsing stage.{{/vendorExtensions.x-apigen-operation-params-model}}{{/model}}{{/models}}

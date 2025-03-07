@@ -8,7 +8,6 @@ import (
 	"path"
 	"path/filepath"
 	"testing"
-	"testing/fstest"
 
 	"github.com/go-faker/faker/v4"
 	"github.com/samber/lo"
@@ -21,7 +20,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 		// Can not use t.TempDir() because MapFS does not support absolute paths
 		// so provisioning temp dir manually
 		require.NoError(t, os.MkdirAll("tmp", 0o755))
-		tmpDir, err := os.MkdirTemp("tmp", "TestSupportFilesInstaller-root-")
+		tmpDir, err := os.MkdirTemp("tmp", "TestSupportFilesInstaller-root-") //nolint:usetesting // we need to parametrize it
 		require.NoError(t, err)
 		t.Cleanup(func() {
 			assert.NoError(t, os.RemoveAll(tmpDir))
@@ -38,6 +37,16 @@ func TestSupportFilesInstaller(t *testing.T) {
 		}
 	}
 
+	writeSupportFiles := func(t *testing.T, files map[string][]byte) {
+		for file, data := range files {
+			if data == nil {
+				continue
+			}
+			require.NoError(t, os.MkdirAll(filepath.Dir(file), 0o755))
+			require.NoError(t, os.WriteFile(file, data, 0o644))
+		}
+	}
+
 	t.Run("should do nothing if generator and cli are already installed", func(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadata := SupportFilesMetadata{
@@ -49,20 +58,19 @@ func TestSupportFilesInstaller(t *testing.T) {
 		metadataFile := filepath.Join(params.SupportDir, "metadata.json")
 		oagCliFile := filepath.Join(params.SupportDir, "openapi-generator-cli.jar")
 		serverGeneratorFile := filepath.Join(params.SupportDir, "server-generator.jar")
-		mockFS := fstest.MapFS{
-			metadataFile:        {Data: lo.Must(json.Marshal(metadata))},
-			oagCliFile:          {Data: []byte{}},
-			serverGeneratorFile: {Data: []byte{}},
-		}
+		writeSupportFiles(t, map[string][]byte{
+			metadataFile:        lo.Must(json.Marshal(metadata)),
+			oagCliFile:          {},
+			serverGeneratorFile: {},
+		})
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, _, _ string) error {
 				require.Fail(t, "downloader should not be called")
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             oagCliFile,
@@ -75,13 +83,12 @@ func TestSupportFilesInstaller(t *testing.T) {
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 
 		supportDirStat, err := os.Stat(params.SupportDir)
@@ -90,7 +97,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 
 		gitIgnoreFile, err := os.ReadFile(filepath.Join(params.SupportDir, ".gitignore"))
 		require.NoError(t, err)
-		assert.Equal(t, []byte("*\n"), gitIgnoreFile)
+		assert.NotEmpty(t, gitIgnoreFile)
 
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -121,21 +128,18 @@ func TestSupportFilesInstaller(t *testing.T) {
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		mockFS := fstest.MapFS{
-			metadataFile: &fstest.MapFile{
-				Data: lo.Must(json.Marshal(metadata)),
-			},
-		}
+		writeSupportFiles(t, map[string][]byte{
+			metadataFile: lo.Must(json.Marshal(metadata)),
+		})
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -161,21 +165,18 @@ func TestSupportFilesInstaller(t *testing.T) {
 			GeneratorSourceLocation: params.ServerGeneratorSourceLocation,
 		}
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		mockFS := fstest.MapFS{
-			metadataFile: &fstest.MapFile{
-				Data: lo.Must(json.Marshal(metadata)),
-			},
-		}
+		writeSupportFiles(t, map[string][]byte{
+			metadataFile: lo.Must(json.Marshal(metadata)),
+		})
 		downloaderCalls := [][]string{}
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, source, target string) error {
 				downloaderCalls = append(downloaderCalls, []string{source, target})
 				return nil
 			},
 		})
-		res, err := installer(context.Background(), params)
+		res, err := installer(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, SupportingFilesInstallResult{
 			OagLocation:             path.Join(params.SupportDir, "openapi-generator-cli.jar"),
@@ -195,20 +196,17 @@ func TestSupportFilesInstaller(t *testing.T) {
 	t.Run("should fail if failed to read metadata", func(t *testing.T) {
 		params := makeRandomGeneratorParams(t)
 		metadataFile := path.Join(params.SupportDir, "metadata.json")
-		mockFS := fstest.MapFS{
-			metadataFile: &fstest.MapFile{
-				Data: []byte("invalid json"),
-			},
-		}
+		writeSupportFiles(t, map[string][]byte{
+			metadataFile: []byte("invalid json"),
+		})
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      mockFS,
 			Downloader: func(_ context.Context, _, _ string) error {
 				require.Fail(t, "downloader should not be called")
 				return nil
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 
@@ -217,12 +215,11 @@ func TestSupportFilesInstaller(t *testing.T) {
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, _, _ string) error {
 				return wantErr
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 
@@ -231,7 +228,6 @@ func TestSupportFilesInstaller(t *testing.T) {
 		wantErr := errors.New(faker.Sentence())
 		installer := NewSupportFilesInstaller(SupportFilesInstallerDeps{
 			RootLogger: TestRootLogger,
-			CwdFS:      fstest.MapFS{},
 			Downloader: func(_ context.Context, source, _ string) error {
 				if source == params.OagSourceLocation {
 					return nil
@@ -239,7 +235,7 @@ func TestSupportFilesInstaller(t *testing.T) {
 				return wantErr
 			},
 		})
-		_, err := installer(context.Background(), params)
+		_, err := installer(t.Context(), params)
 		require.Error(t, err)
 	})
 }

@@ -4,9 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path"
 	"testing"
 
 	"github.com/go-faker/faker/v4"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -38,6 +41,8 @@ func TestGenerator(t *testing.T) {
 
 			appVersion:              "4.5.6-" + faker.Word(),
 			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -62,19 +67,73 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
 				assert.Equal(t, params.input, invokerParams.Input)
 				assert.Equal(t, params.output, invokerParams.Output)
 				assert.Equal(t, installResult.OagLocation, invokerParams.OagCliLocation)
 				assert.Equal(t, installResult.ServerGeneratorLocation, invokerParams.GeneratorLocation)
+				assert.Equal(t, params.generatorName, invokerParams.GeneratorName)
+				assert.Empty(t, invokerParams.ExtraArgs)
 				generatorInvoked = true
 				return nil
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
+		assert.True(t, generatorInvoked)
+	})
+
+	t.Run("should pass optional params as extra args", func(t *testing.T) {
+		params := GeneratorParams{
+			input:      faker.URL(),
+			output:     faker.URL(),
+			supportDir: faker.URL(),
+
+			oagCliVersion:  "1.2.3-" + faker.Word(),
+			oagCliLocation: faker.URL(),
+
+			appVersion:              "4.5.6-" + faker.Word(),
+			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
+
+			modelPackage:     faker.DomainName(),
+			globalProperties: []string{faker.Word(), faker.Word()},
+		}
+
+		installResult := SupportingFilesInstallResult{
+			OagLocation:             faker.URL(),
+			ServerGeneratorLocation: faker.URL(),
+		}
+
+		generatorInvoked := false
+		generator := NewGenerator(GeneratorDeps{
+			RootLogger: TestRootLogger,
+			SupportFilesInstaller: func(
+				_ context.Context,
+				_ SupportFilesInstallerParams,
+			) (SupportingFilesInstallResult, error) {
+				return installResult, nil
+			},
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+				generatorInvoked = true
+				assert.Equal(t, append(
+					[]string{
+						"--model-package",
+						params.modelPackage,
+					},
+					lo.FlatMap(params.globalProperties, func(p string, _ int) []string {
+						return []string{"--global-property", p}
+					})...,
+				), invokerParams.ExtraArgs)
+				return nil
+			},
+		})
+
+		err := generator(t.Context(), params)
+		require.NoError(t, err)
 		assert.True(t, generatorInvoked)
 	})
 
@@ -90,6 +149,8 @@ func TestGenerator(t *testing.T) {
 
 			appVersion:              "4.5.6-" + faker.Word(),
 			serverGeneratorLocation: faker.URL(),
+
+			generatorName: faker.DomainName(),
 		}
 
 		installResult := SupportingFilesInstallResult{
@@ -112,13 +173,13 @@ func TestGenerator(t *testing.T) {
 				invocationOrder[1] = 2
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				invocationOrder[2] = 3
 				return nil
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.Equal(t, []int{1, 2, 3}, invocationOrder)
 	})
@@ -165,7 +226,7 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, invokerParams GeneratorInvokerParams) error {
 				generatorInvoked = true
 				assert.Equal(t, params.input, invokerParams.Input)
 				assert.Equal(t, params.output, invokerParams.Output)
@@ -175,7 +236,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -216,19 +277,19 @@ func TestGenerator(t *testing.T) {
 
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				generatorInvoked = true
 				return nil
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
 	})
 
-	t.Run("should use output relative support path if not provided", func(t *testing.T) {
+	t.Run("should use project dir as support path if not provided", func(t *testing.T) {
 		params := GeneratorParams{
 			input:      faker.URL(),
 			output:     faker.URL(),
@@ -246,25 +307,30 @@ func TestGenerator(t *testing.T) {
 			ServerGeneratorLocation: faker.URL(),
 		}
 
+		wantProjectDir := faker.URL()
 		installerInvoked := false
 		generatorInvoked := false
 		generator := NewGenerator(GeneratorDeps{
 			RootLogger: TestRootLogger,
+			projectDirLocator: func(output string) (string, error) {
+				assert.Equal(t, params.output, output)
+				return wantProjectDir, nil
+			},
 			SupportFilesInstaller: func(
 				_ context.Context,
 				installerParams SupportFilesInstallerParams,
 			) (SupportingFilesInstallResult, error) {
 				installerInvoked = true
-				assert.Equal(t, params.output+"/.apigen", installerParams.SupportDir)
+				assert.Equal(t, path.Join(wantProjectDir, ".apigen"), installerParams.SupportDir)
 				return installResult, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				generatorInvoked = true
 				return nil
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.NoError(t, err)
 		assert.True(t, installerInvoked)
 		assert.True(t, generatorInvoked)
@@ -286,7 +352,7 @@ func TestGenerator(t *testing.T) {
 			MetadataReader: &mockMetadataReader,
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -306,7 +372,7 @@ func TestGenerator(t *testing.T) {
 			MetadataReader: &mockMetadataReader,
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -326,7 +392,7 @@ func TestGenerator(t *testing.T) {
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
 	})
 
@@ -344,12 +410,65 @@ func TestGenerator(t *testing.T) {
 			SupportFilesInstaller: func(_ context.Context, _ SupportFilesInstallerParams) (SupportingFilesInstallResult, error) {
 				return SupportingFilesInstallResult{}, nil
 			},
-			GeneratorInvoker: func(_ context.Context, _ GeneratorInvokerParams) error {
+			InvokeGenerator: func(_ context.Context, _ GeneratorInvokerParams) error {
 				return wantErr
 			},
 		})
 
-		err := generator(context.Background(), params)
+		err := generator(t.Context(), params)
 		require.ErrorIs(t, err, wantErr)
+	})
+}
+
+func Test_locateDefaultSupportDir(t *testing.T) {
+	createGoMod := func(dir string) error {
+		return os.WriteFile(path.Join(dir, "go.mod"), []byte("module test\n"), 0600)
+	}
+
+	t.Run("should return output dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		defaultSupportDir, err := locateProjectDir(projectDir)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should return parent dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		subDir := path.Join(projectDir, faker.Word())
+		require.NoError(t, os.Mkdir(subDir, 0755))
+
+		defaultSupportDir, err := locateProjectDir(subDir)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should return nearest parent dir if it has go.mod", func(t *testing.T) {
+		projectDir := t.TempDir()
+		require.NoError(t, createGoMod(projectDir))
+
+		lvl1 := path.Join(projectDir, faker.Word())
+		require.NoError(t, os.Mkdir(lvl1, 0755))
+
+		lvl2 := path.Join(lvl1, faker.Word())
+		require.NoError(t, os.Mkdir(lvl2, 0755))
+
+		lvl3 := path.Join(lvl2, faker.Word())
+		require.NoError(t, os.Mkdir(lvl3, 0755))
+
+		defaultSupportDir, err := locateProjectDir(lvl3)
+		require.NoError(t, err)
+		assert.Equal(t, projectDir, defaultSupportDir)
+	})
+
+	t.Run("should fail if no parent dir has go.mod", func(t *testing.T) {
+		dir := t.TempDir()
+
+		defaultSupportDir, err := locateProjectDir(dir)
+		require.Error(t, err)
+		assert.Empty(t, defaultSupportDir)
 	})
 }

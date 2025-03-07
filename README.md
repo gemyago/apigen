@@ -1,4 +1,4 @@
-# apigen - Frictionless API generator
+# apigen - HTTP API Layer Generator
 
 [![Test](https://github.com/gemyago/apigen/actions/workflows/test.yml/badge.svg)](https://github.com/gemyago/apigen/actions/workflows/test.yml)
 [![Golang Coverage](https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.svg)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/gemyago/apigen/test-artifacts/coverage/golang-coverage.html)
@@ -23,6 +23,7 @@ Project status:
 - [Root Handler](#root-handler)
   - [Router adapter](#router-adapter)
   - [Handling errors](#handling-errors)
+- [Separate packages for models and controllers](#separate-packages-for-models-and-controllers)
 - [Supported OpenAPI features](#supported-openapi-features)
 
 ## Getting Started
@@ -34,7 +35,7 @@ To get started, install `apigen` cli tool:
 go install github.com/gemyago/apigen
 ```
 
-Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/v1routes.yaml`. You can use below as a starting point:
+Define the OpenAPI spec somewhere in your project. For example: `internal/api/http/routes.yaml`. You can use below as a starting point:
 ```yaml
 openapi: "3.0.0"
 info:
@@ -64,16 +65,16 @@ paths:
                     type: string
 ```
 
-Add a golang file with generation instructions. For example: `internal/api/http/v1routes.go`:
+Add a golang file with generation instructions. For example: `internal/api/http/routes.go`:
 ```go
-//go:generate go run github.com/gemyago/apigen ./v1routes.yaml ./v1routes
+//go:generate go run github.com/gemyago/apigen server ./routes.yaml ./routes
 ```
 
 Run the generation:
 ```bash
 go generate ./internal/api/http
 ```
-The above will generate the code in the `internal/api/http/v1routes` folder. Commit the generated code to the repository.
+The above will generate the code in the `internal/api/http/routes` folder. Commit the generated code to the repository.
 
 Declare controller that implements the generated interface, for example:
 ```go
@@ -129,7 +130,9 @@ if err := srv.ListenAndServe(); err != nil {
 }
 ```
 
-Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced example can be found [here](./examples/petstore-server-go).
+Fully functional example based on the above steps can be found [here](./examples/ping-server-go). More advanced examples: 
+* [petstore-server](./examples/petstore-server-go) - example with more routes
+* [petstore-server-app-layer](./examples/petstore-server-app-layer-go) - models and controllers generated in a separate packages.
 
 ## Basic Concepts
 
@@ -142,6 +145,8 @@ The generated code also includes so called `RootHandler`. The root handler is a 
 Typically you will need to import generated code from the following packages:
 * `handlers` contains controller interfaces, root handler and other components handle requests.
 * `models` contains data structures corresponding to schemas defined in the OpenAPI spec.
+
+It is possible to generate models and controllers in separate packages. This is useful when you want to keep your application layer separate from the HTTP API layer. Please see the [Separate packages for models and controllers](#separate-packages-for-models-and-controllers) section for more details.
 
 ## Controllers in depth
 
@@ -243,6 +248,105 @@ NewRootHandler(routerAdapter,
   WithErrorHandler(errorHandler),
 )
 ```
+
+## Separate packages for models and controllers
+
+For applications with separate HTTP API and business logic layers, you can generate models and routes into different packages. This allows the business logic layer to use the generated models directly, eliminating redundant mapping between generated and application models.
+
+To generate models in a separate package, you need to specify the `--global-property models` option as well as relevant location for the generated models. For example:
+```bash
+apigen ./routes.yaml internal/app/models --global-property=models
+```
+
+To generate controllers in a separate package, you need to specify the `--global-property handlers` option as well as relevant location for the generated controllers and full models package. For example:
+```bash
+apigen ./routes.yaml internal/api/http/controllers --global-property=apis --model-package=internal/app/models
+```
+**Note**: Please make sure the `model-package` corresponds to a fully qualified package name of the generated models.
+
+Fully functional example based on the above steps can be found [here](./examples/petstore-server-app-layer-go).
+
+## Unit Testing
+
+You can use standard Go testing tools to test your controllers and routes. It makes sense to test http routes in an integration test manner where actual (not mocked) controllers are used. However if your controllers are using external dependencies, you may want to mock them in your tests.
+
+Example [petstore](./examples/petstore.yaml) controller that is using external service may look similar to below:
+```go
+type petsService interface {
+	CreatePet(ctx context.Context, params *models.CreatePetParams) error
+	GetPetByID(ctx context.Context, params *models.GetPetByIDParams) (*models.PetResponse, error)
+	ListPets(ctx context.Context, params *models.ListPetsParams) (*models.PetsResponse, error)
+}
+
+type petsController struct{ petsService }
+
+func (c *petsController) CreatePet(
+	b handlers.NoResponseHandlerBuilder[*models.CreatePetParams],
+) http.Handler {
+	return b.HandleWith(c.petsService.CreatePet)
+}
+
+func (c *petsController) GetPetByID(
+	b handlers.HandlerBuilder[*models.GetPetByIDParams, *models.PetResponse],
+) http.Handler {
+	return b.HandleWith(c.petsService.GetPetByID)
+}
+
+func (c *petsController) ListPets(
+	b handlers.HandlerBuilder[*models.ListPetsParams, *models.PetsResponse],
+) http.Handler {
+	return b.HandleWith(c.petsService.ListPets)
+}
+```
+
+You may then define a mock implementation of the `petsService` interface and use it in your tests. Example:
+```go
+type mockPetsService struct {
+	createPetCalls []*models.CreatePetParams
+	nextGetPetByID *models.PetResponse
+	nextListPets   *models.PetsResponse
+}
+
+func (m *mockPetsService) CreatePet(_ context.Context, params *models.CreatePetParams) error {
+	m.createPetCalls = append(m.createPetCalls, params)
+	return nil
+}
+
+func (m *mockPetsService) GetPetByID(_ context.Context, _ *models.GetPetByIDParams) (*models.PetResponse, error) {
+	return m.nextGetPetByID, nil
+}
+
+func (m *mockPetsService) ListPets(_ context.Context, _ *models.ListPetsParams) (*models.PetsResponse, error) {
+	return m.nextListPets, nil
+}
+```
+You can use more advanced mocking techniques such as [mockery](https://github.com/mockery/mockery) to generate mocks for your interfaces.
+
+Once you have your mocks defined, you can use them in your tests. Example:
+```go
+	t.Run("POST /pets", func(t *testing.T) {
+		t.Run("process create pet request", func(t *testing.T) {
+			petsService := &mockPetsService{}
+			handler := handlers.
+				NewRootHandler((*httpRouter)(http.NewServeMux())).
+				RegisterPetsRoutes(&petsController{petsService: petsService})
+
+			petData := bytes.NewBufferString(`{"id":1,"name":"Bingo"}`)
+			req := httptest.NewRequest(http.MethodPost, "/pets", petData)
+			res := httptest.NewRecorder()
+			handler.ServeHTTP(res, req)
+			assert.Equal(t, 201, res.Code)
+
+			assert.Len(t, petsService.createPetCalls, 1)
+			assert.Equal(t,
+				&models.CreatePetParams{Payload: &models.Pet{ID: 1, Name: "Bingo"}},
+				petsService.createPetCalls[0],
+			)
+		})
+	})
+```
+
+Fully functional example based on the above steps can be found [here](./examples/petstore-server-app-layer-go/internal/api/http/controllers/pets_test.go).
 
 ## Supported OpenAPI features
 

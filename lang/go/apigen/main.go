@@ -8,7 +8,7 @@ import (
 )
 
 func Execute(embeddedRootFS fs.ReadFileFS) { // coverage-ignore
-	rootCmd := cmd.NewRootCmd(embeddedRootFS)
+	rootCmd := cmd.WireUpCommands(embeddedRootFS)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}

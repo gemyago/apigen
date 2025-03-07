@@ -16,17 +16,20 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.*;
+import org.openapitools.codegen.config.GlobalSettings;
 import org.openapitools.codegen.languages.*;
 import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.templating.mustache.IndentedLambda;
+import org.openapitools.codegen.utils.CamelizeOption;
 import org.openapitools.codegen.utils.ModelUtils;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -41,6 +44,9 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   // source folder where to write the files
   protected String sourceFolder = "src";
   protected String apiVersion = "1.0.0";
+
+  private Boolean modelsOnly = false;
+  private Boolean apisOnly = false;
 
   /**
    * Configures the type of generator.
@@ -82,20 +88,49 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // set the output folder here
     outputFolder = "generated-code/go-apigen-server";
 
-    /**
-     * Models. You can write model files using the modelTemplateFiles map.
-     * if you want to create one template for file, you can do so here.
-     * for multiple files for model, just put another entry in the
-     * `modelTemplateFiles` with
-     * a different extension
-     */
-    modelTemplateFiles.put(
-        "model.mustache", // the template to use
-        ".go"); // the extension for each file to write
-    modelTemplateFiles.put(
-        "model_validation.mustache", // the template to use
-        "_validation.go"); // the extension for each file to write
-    templateOutputDirs.put("model_validation.mustache", "internal");
+    boolean generateModels = GlobalSettings.getProperty(CodegenConstants.MODELS) != null;
+    boolean generateApis = GlobalSettings.getProperty(CodegenConstants.APIS) != null;
+
+    // We are always generating supporting files, so forcing this property
+    GlobalSettings.setProperty(CodegenConstants.SUPPORTING_FILES, "");
+
+    // if all are false, this means no options are provided (or all three), so we
+    // consider all as true
+    if (!generateModels && !generateApis) {
+      generateModels = true;
+      generateApis = true;
+    }
+
+    modelsOnly = generateModels && !generateApis;
+    apisOnly = generateApis && !generateModels;
+
+    // We have to generate validators for models in APIs only mode so we have to
+    // trick generator to do that
+    // and below is the way to do it for now.
+    if (apisOnly) {
+      GlobalSettings.setProperty(CodegenConstants.MODELS, "");
+    }
+
+    if (generateModels) {
+      /**
+       * Models. You can write model files using the modelTemplateFiles map.
+       * if you want to create one template for file, you can do so here.
+       * for multiple files for model, just put another entry in the
+       * `modelTemplateFiles` with
+       * a different extension
+       */
+      modelTemplateFiles.put(
+          "model.mustache", // the template to use
+          ".go"); // the extension for each file to write
+    }
+
+    // We only generate models validation if we're generating apis
+    if (generateApis) {
+      modelTemplateFiles.put(
+          "model_validation.mustache", // the template to use
+          "_validation.go"); // the extension for each file to write
+      templateOutputDirs.put("model_validation.mustache", "internal");
+    }
 
     /**
      * Api classes. You can write classes for each Api file with the
@@ -110,10 +145,6 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     apiTemplateFiles.put(
         "controller_params.mustache",
         "_params.go");
-    apiTemplateFiles.put(
-        "controller_models.mustache",
-        "_controller_params.go");
-    templateOutputDirs.put("controller_models.mustache", "models");
 
     /**
      * Template Location. This is the location which templates will be read from.
@@ -128,7 +159,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     apiPackage = "handlers";
 
     /**
-     * Model Package. Optional, if needed, this can be used in templates
+     * Model Package. Optional, if needed, this can be used in templates.
      */
     modelPackage = "models";
 
@@ -140,22 +171,77 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
 
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
-    /**
-     * Supporting Files. You can write single files for the generator with the
-     * entire object tree available. If the input file has a suffix of `.mustache
-     * it will be processed by the template engine. Otherwise, it will be copied
-     */
-    supportingFiles.add(new SupportingFile(
-        "handlers.mustache",
-        apiPackage,
-        "handlers.go"));
+    // Common handlers related stuff is only generated if apis are generated
+    if (generateApis) {
+      /**
+       * Supporting Files. You can write single files for the generator with the
+       * entire object tree available. If the input file has a suffix of `.mustache
+       * it will be processed by the template engine. Otherwise, it will be copied
+       */
+      supportingFiles.add(new SupportingFile(
+          "handlers.mustache",
+          apiPackage,
+          "handlers.go"));
 
-    supportingFiles.add(new SupportingFile(
-        "validators.mustache",
-        "internal",
-        "validators.go"));
+      supportingFiles.add(new SupportingFile(
+          "validators.mustache",
+          "internal",
+          "validators.go"));
+    }
 
     typeMapping.put("date", "time.Time");
+  }
+
+  @Override
+  public String modelFileFolder() {
+    // In modelsOnly mode we're generating to the root folder to keep it flat
+    if (modelsOnly) {
+      return outputFolder;
+    }
+    return super.modelFileFolder();
+  }
+
+  @Override
+  public void preprocessOpenAPI(OpenAPI openAPI) {
+    super.preprocessOpenAPI(openAPI);
+
+    // We are generating request parameters as model with all parameters as fields
+    // so we need to "simulate" and inject them to schemas
+    List<Operation> allOperations = openAPI.getPaths().values().stream()
+        .flatMap(path -> path.readOperations().stream()).toList();
+
+    for (Operation operation : allOperations) {
+      Schema<?> parametersModel = new Schema<>()
+          .type("object")
+          .description("Parameters for the " + operation.getOperationId() + " operation.");
+      parametersModel.addExtension("x-apigen-operation-params-model", true);
+
+      if (operation.getParameters() != null) {
+        for (Parameter parameter : operation.getParameters()) {
+          parametersModel.addProperty(parameter.getName(), parameter.getSchema());
+          if (parameter.getRequired() != null && parameter.getRequired()) {
+            parametersModel.addRequiredItem(parameter.getName());
+          }
+        }
+      }
+
+      if (operation.getRequestBody() != null) {
+        RequestBody requestBody = operation.getRequestBody();
+        Schema<?> bodySchema = requestBody.getContent().values().iterator().next().getSchema();
+        parametersModel.addProperty("payload", bodySchema);
+        if (requestBody.getRequired() != null) {
+          parametersModel.addRequiredItem("payload");
+        }
+      }
+
+      if (parametersModel.getProperties() == null || parametersModel.getProperties().isEmpty()) {
+        continue;
+      }
+
+      String modelName = camelize(operation.getOperationId(), CamelizeOption.UPPERCASE_FIRST_CHAR) + "Params";
+      openAPI.getComponents().getSchemas().put(modelName, parametersModel);
+      operation.addExtension("x-apigen-params-model", modelName);
+    }
   }
 
   @Override
@@ -180,7 +266,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       }
     });
 
-    if (files.length == 1) {
+    if (files != null && files.length == 1) {
       return files[0];
     }
 
@@ -218,9 +304,16 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
     Path goModFilePath = goModFile.toPath();
     String moduleName = extractModule(goModFilePath);
+    String invokerPackage = moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString();
     additionalProperties.put(
         CodegenConstants.INVOKER_PACKAGE,
-        moduleName + "/" + goModFilePath.getParent().relativize(outputFolderFilePath).toString());
+        invokerPackage);
+
+    // In apisOnly it is expected that the caller provides model package in a full
+    // form
+    additionalProperties.put(
+        "modelFullPackage",
+        apisOnly ? modelPackage() : invokerPackage + "/" + modelPackage());
 
     if (additionalProperties.containsKey("generatedCodeComment")) {
       if (StringUtils.isEmpty(additionalProperties.get("generatedCodeComment").toString())) {
@@ -245,7 +338,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     CodegenParameter codegenParameter = super.fromParameter(parameter, imports);
 
     // fromParameter will not dereference the schema to set some properties
-    Schema schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
+    Schema<?> schema = ModelUtils.getReferencedSchema(this.openAPI, parameter.getSchema());
     if (schema.getNullable() != null) {
       codegenParameter.isNullable = schema.getNullable();
     }
@@ -298,7 +391,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     for (CodegenOperation op : operations.getOperation()) {
       for (CodegenParameter param : op.allParams) {
         if (param.isEnum) {
-          param.datatypeWithEnum = operations.getClassname() + op.operationId
+          param.datatypeWithEnum = op.operationId + "Params"
               + camelize(param.datatypeWithEnum.replace("_", "-").toLowerCase());
         }
       }
