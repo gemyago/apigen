@@ -51,15 +51,25 @@
         <version>${maven-jar-plugin.version}</version>
         <executions>
           <execution>
+            <id>default-jar</id>
             <goals>
               <goal>jar</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}</finalName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>test-jar</id>
+            <goals>
               <goal>test-jar</goal>
             </goals>
+            <configuration>
+              <classifier>tests</classifier>
+              <finalName>${project.artifactId}</finalName>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <finalName>${project.artifactId}</finalName>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -101,7 +111,7 @@
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.source}</target>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
     </plugins>
