@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -208,7 +209,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // We are generating request parameters as model with all parameters as fields
     // so we need to "simulate" and inject them to schemas
     List<Operation> allOperations = openAPI.getPaths().values().stream()
-        .flatMap(path -> path.readOperations().stream()).toList();
+        .flatMap(path -> path.readOperations().stream()).collect(Collectors.toList());
 
     for (Operation operation : allOperations) {
       Schema<?> parametersModel = new Schema<>()
@@ -420,7 +421,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
     CodegenOperation op = super.fromOperation(path, httpMethod, operation, servers);
-    if (op.hasParams || !StringUtils.isEmpty(op.returnType)) {
+    if (op.getHasParams() || !StringUtils.isEmpty(op.returnType)) {
       op.vendorExtensions.put("x-apigen-has-params-or-return", true);
     }
     return op;
