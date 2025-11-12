@@ -431,6 +431,7 @@ Golang:
 Please have the following tools installed:
 * [direnv](https://github.com/direnv/direnv)
 * [gobrew](https://github.com/kevincobain2000/gobrew#install-or-update)
+* [sdkman](https://sdkman.io) - for managing Java versions
 * make
 * Java 11 runtime at a minimum
 
