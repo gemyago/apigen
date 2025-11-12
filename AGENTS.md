@@ -18,11 +18,7 @@ Install required dependencies and tools:
 make deps
 ```
 
-This installs:
-- OpenAPI Generator CLI JAR
-- Apache Maven
-- golangci-lint
-- go-test-coverage tool
+This installs all the necessary dependencies required to work locally.
 
 ## Build Commands
 
@@ -61,8 +57,6 @@ Run tests for a specific package:
 ```bash
 cd tests/golang && go test -v ./controllers/...
 ```
-
-Tests use timezone `TZ=US/Alaska` and run with `-shuffle=on -failfast` flags.
 
 ## Linting
 
@@ -179,3 +173,30 @@ Update generator version:
 - No code execution during repository analysis
 - All dependencies are pinned in `go.mod` and `.versions`
 - Coverage reports published to separate `test-artifacts` branch
+
+### Non coding task completion protocol
+
+Examples of non coding tasks are:
+- Investigation of a problem
+- Documentation updates
+- Script updates
+
+Generally anything that is not related to code changes.
+
+The completion protocol for non coding task is established by the user.
+
+## Coding Task Completion Protocol
+
+This protocol is used to complete a coding task (e.g the one that resulted in changing any code files). For non coding tasks, use the non coding task completion protocol.
+
+If you changed any code then **always** perform the completion protocol below:
+1. Lint status: Run `make lint` and confirm no errors
+2. Test status: Run `make test` and confirm no failures; coverage: XX.XX% (meets threshold)
+3. Make sure AGENTS.md are in sync if updated commands, workflows, or architecture.
+
+Report the result to the user. The **only** acceptable result is "All tests pass and no lint errors". Failing tests or linting errors means the task **is not complete**. Any failure in the above steps MUST be resolved prior to task completion.
+
+Report task completion:
+- Lint: no errors / fixed all errors
+- Tests: all passing, coverage XX.XX%
+- AGENTS.md: updated to reflect changes (if any) / no changes needed
