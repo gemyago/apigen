@@ -343,15 +343,15 @@ func locateProjectDir(output string) (string, error) <span class="cov5" title="5
         if err != nil </span><span class="cov0" title="0">{
                 return "", fmt.Errorf("failed to get absolute path: %w", err)
         }</span>
-        <span class="cov5" title="5">for </span><span class="cov10" title="19">{
+        <span class="cov5" title="5">for </span><span class="cov10" title="20">{
                 if _, err = os.Stat(path.Join(dir, "go.mod")); err == nil </span><span class="cov5" title="4">{
                         return dir, nil
                 }</span>
-                <span class="cov9" title="15">parent := path.Dir(dir)
+                <span class="cov9" title="16">parent := path.Dir(dir)
                 if parent == dir </span><span class="cov1" title="1">{
                         return "", errors.New("failed to locate project directory (go.mod file)")
                 }</span>
-                <span class="cov9" title="14">dir = parent</span>
+                <span class="cov9" title="15">dir = parent</span>
         }
 }
 
@@ -387,7 +387,7 @@ func (g generator) ensureOagCliVersion(oagCliVersion *string) error <span class=
                 }</span>
                 <span class="cov6" title="6">*oagCliVersion = ver</span>
         }
-        <span class="cov8" title="10">return nil</span>
+        <span class="cov7" title="10">return nil</span>
 }
 
 func (g generator) ensureOagCliLocation(ctx context.Context, oagCliVersion string, oagCliLocation *string) <span class="cov7" title="9">{
@@ -416,7 +416,7 @@ func (g generator) ensureAppVersion(appVersion *string) error <span class="cov8"
                 }</span>
                 <span class="cov6" title="6">*appVersion = ver</span>
         }
-        <span class="cov8" title="10">return nil</span>
+        <span class="cov7" title="10">return nil</span>
 }
 
 func (g generator) ensureServerGeneratorLocation(
@@ -488,7 +488,7 @@ func (g generator) invoke(ctx context.Context, params GeneratorParams) error <sp
 }
 
 func NewGenerator(deps GeneratorDeps) Generator <span class="cov8" title="11">{
-        if deps.projectDirLocator == nil </span><span class="cov8" title="10">{
+        if deps.projectDirLocator == nil </span><span class="cov7" title="10">{
                 deps.projectDirLocator = locateProjectDir
         }</span>
 
@@ -4216,12 +4216,12 @@ var _ rawValueParser[*http.Request, string] = parseJSONPayload
 func newStringToNumberParser[TTargetVal constraints.Integer | constraints.Float](
         bitSize int, parseFn func(string, int) (TTargetVal, error),
 ) rawValueParser[string, TTargetVal] <span class="cov7" title="540">{
-        return func(ov string, target *TTargetVal) error </span><span class="cov7" title="544">{
+        return func(ov string, target *TTargetVal) error </span><span class="cov7" title="549">{
                 val, err := parseFn(ov, bitSize)
                 if err != nil </span><span class="cov4" title="38">{
                         return err
                 }</span>
-                <span class="cov7" title="506">*target = val
+                <span class="cov7" title="511">*target = val
                 return nil</span>
         }
 }
@@ -4246,7 +4246,7 @@ func parseDecInt[TInt constraints.Integer](str string, bitSize int) (TInt, error
         return (TInt)(res), err
 }</span>
 
-func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) <span class="cov6" title="181">{
+func parseFloat[TFloat constraints.Float](str string, bitSize int) (TFloat, error) <span class="cov6" title="185">{
         res, err := strconv.ParseFloat(str, bitSize)
         return (TFloat)(res), err
 }</span>
@@ -4273,12 +4273,12 @@ func parseSoloValueParamAsSlice[TTargetVal any](
         return func(s string, tv *[]TTargetVal) error </span><span class="cov5" title="110">{
                 items := strings.Split(s, ",")
                 resultingSlice := make([]TTargetVal, 0, len(items))
-                for i, item := range items </span><span class="cov7" title="501">{
+                for i, item := range items </span><span class="cov7" title="510">{
                         var val TTargetVal
                         if err := targetParser(item, &amp;val); err != nil </span><span class="cov3" title="10">{
                                 return fmt.Errorf("failed to parse value at index %d: %w", i, err)
                         }</span>
-                        <span class="cov7" title="491">resultingSlice = append(resultingSlice, val)</span>
+                        <span class="cov7" title="500">resultingSlice = append(resultingSlice, val)</span>
                 }
                 <span class="cov5" title="100">*tv = resultingSlice
                 return nil</span>
@@ -4291,12 +4291,12 @@ func parseMultiValueParamAsSlice[TTargetVal any](
 ) rawValueParser[[]string, []TTargetVal] <span class="cov8" title="918">{
         return func(s []string, tv *[]TTargetVal) error </span><span class="cov5" title="118">{
                 resultingSlice := make([]TTargetVal, 0, len(s))
-                for i, item := range s </span><span class="cov7" title="621">{
+                for i, item := range s </span><span class="cov7" title="611">{
                         var val TTargetVal
                         if err := targetParser(item, &amp;val); err != nil </span><span class="cov3" title="10">{
                                 return fmt.Errorf("failed to parse value at index %d: %w", i, err)
                         }</span>
-                        <span class="cov7" title="611">resultingSlice = append(resultingSlice, val)</span>
+                        <span class="cov7" title="601">resultingSlice = append(resultingSlice, val)</span>
                 }
                 <span class="cov5" title="108">*tv = resultingSlice
                 return nil</span>
@@ -4331,7 +4331,7 @@ const bitSize64 = 64
 
 func newKnownParsers() *knownParsersDef <span class="cov6" title="135">{
         return &amp;knownParsersDef{
-                stringParser: func(ov string, s *string) error </span><span class="cov7" title="641">{
+                stringParser: func(ov string, s *string) error </span><span class="cov7" title="642">{
                         *s = ov
                         return nil
                 }</span>,
@@ -4341,16 +4341,16 @@ func newKnownParsers() *knownParsersDef <span class="cov6" title="135">{
                 int64Parser:   newStringToNumberParser[int64](bitSize64, parseDecInt),
                 float32Parser: newStringToNumberParser[float32](bitSize32, parseFloat),
                 float64Parser: newStringToNumberParser(bitSize64, strconv.ParseFloat),
-                boolParser: func(ov string, s *bool) error <span class="cov5" title="104">{
+                boolParser: func(ov string, s *bool) error <span class="cov5" title="97">{
                         switch ov </span>{
-                        case "true":<span class="cov4" title="48">
+                        case "true":<span class="cov4" title="27">
                                 *s = true</span>
-                        case "false":<span class="cov4" title="44">
+                        case "false":<span class="cov5" title="58">
                                 *s = false</span>
                         default:<span class="cov3" title="12">
                                 return fmt.Errorf("unexpected boolean format %v", ov)</span>
                         }
-                        <span class="cov5" title="92">return nil</span>
+                        <span class="cov5" title="85">return nil</span>
                 },
         }
 }
@@ -10545,7 +10545,7 @@ type BindingContext struct {
         errors       []FieldBindingError
 }
 
-func (c *BindingContext) Fork(field string) *BindingContext <span class="cov8" title="3265">{
+func (c *BindingContext) Fork(field string) *BindingContext <span class="cov8" title="3267">{
         return &amp;BindingContext{
                 parent: c,
                 field:  field,
@@ -10709,7 +10709,7 @@ func NewSimpleFieldValidator[
         return func(
                 bindingCtx *BindingContext,
                 value TValue,
-        ) </span><span class="cov8" title="2698">{
+        ) </span><span class="cov8" title="2700">{
                 for _, v := range validators </span><span class="cov8" title="2554">{
                         if err := v(value); err != nil </span><span class="cov6" title="231">{
                                 errCode := ErrInvalidValue
@@ -10760,7 +10760,7 @@ func NewArrayValidator[
                 value []TValue,
         ) </span><span class="cov6" title="343">{
                 validateField(bindingCtx, value)
-                for i, v := range value </span><span class="cov8" title="1654">{
+                for i, v := range value </span><span class="cov8" title="1656">{
                         // TODO: Consider fmt.Stringer approach, defer conversion and benchmark if makes noticeable difference.
                         validateItems(bindingCtx.Fork(strconv.Itoa(i)), v)
                 }</span>
@@ -10818,9 +10818,9 @@ func AsBasicStringEnum(v assignableBasicStringEnum) (BasicStringEnum) <span clas
 
 func ParseBasicStringEnum(str string, target *BasicStringEnum) error <span class="cov10" title="13">{
         switch str </span>{
-        case "VALUE1":<span class="cov4" title="3">
+        case "VALUE1":<span class="cov5" title="4">
                 *target = BasicStringEnumVALUE1</span>
-        case "VALUE2":<span class="cov5" title="4">
+        case "VALUE2":<span class="cov4" title="3">
                 *target = BasicStringEnumVALUE2</span>
         case "VALUE3":<span class="cov5" title="4">
                 *target = BasicStringEnumVALUE3</span>
@@ -10899,9 +10899,9 @@ func ParseNullableStringEnum(str string, target *NullableStringEnum) error <span
         switch str </span>{
         case "VALUE1":<span class="cov3" title="2">
                 *target = NullableStringEnumVALUE1</span>
-        case "VALUE2":<span class="cov5" title="4">
+        case "VALUE2":<span class="cov4" title="3">
                 *target = NullableStringEnumVALUE2</span>
-        case "VALUE3":<span class="cov6" title="5">
+        case "VALUE3":<span class="cov7" title="6">
                 *target = NullableStringEnumVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected NullableStringEnum value: %s", str)</span>
@@ -10976,11 +10976,11 @@ func AsStringTypesEnumsParamsInlineEnumParam(v assignableStringTypesEnumsParamsI
 
 func ParseStringTypesEnumsParamsInlineEnumParam(str string, target *StringTypesEnumsParamsInlineEnumParam) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="2">
+        case "VALUE1":<span class="cov5" title="3">
                 *target = StringTypesEnumsParamsInlineEnumParamVALUE1</span>
         case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsInlineEnumParamVALUE2</span>
-        case "VALUE3":<span class="cov5" title="3">
+        case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsInlineEnumParamVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected StringTypesEnumsParamsInlineEnumParam value: %s", str)</span>
@@ -11104,11 +11104,11 @@ func AsStringTypesEnumsParamsInlineEnumParamInQuery(v assignableStringTypesEnums
 
 func ParseStringTypesEnumsParamsInlineEnumParamInQuery(str string, target *StringTypesEnumsParamsInlineEnumParamInQuery) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov5" title="3">
+        case "VALUE1":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsInlineEnumParamInQueryVALUE1</span>
         case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsInlineEnumParamInQueryVALUE2</span>
-        case "VALUE3":<span class="cov3" title="2">
+        case "VALUE3":<span class="cov5" title="3">
                 *target = StringTypesEnumsParamsInlineEnumParamInQueryVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected StringTypesEnumsParamsInlineEnumParamInQuery value: %s", str)</span>
@@ -11168,11 +11168,11 @@ func AsStringTypesEnumsParamsOptionalInlineEnumParamInQuery(v assignableStringTy
 
 func ParseStringTypesEnumsParamsOptionalInlineEnumParamInQuery(str string, target *StringTypesEnumsParamsOptionalInlineEnumParamInQuery) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="2">
+        case "VALUE1":<span class="cov5" title="3">
                 *target = StringTypesEnumsParamsOptionalInlineEnumParamInQueryVALUE1</span>
         case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsOptionalInlineEnumParamInQueryVALUE2</span>
-        case "VALUE3":<span class="cov5" title="3">
+        case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsOptionalInlineEnumParamInQueryVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected StringTypesEnumsParamsOptionalInlineEnumParamInQuery value: %s", str)</span>
@@ -11232,11 +11232,11 @@ func AsStringTypesEnumsParamsNullableInlineEnumParamInQuery(v assignableStringTy
 
 func ParseStringTypesEnumsParamsNullableInlineEnumParamInQuery(str string, target *StringTypesEnumsParamsNullableInlineEnumParamInQuery) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov5" title="3">
+        case "VALUE1":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsNullableInlineEnumParamInQueryVALUE1</span>
         case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsNullableInlineEnumParamInQueryVALUE2</span>
-        case "VALUE3":<span class="cov3" title="2">
+        case "VALUE3":<span class="cov5" title="3">
                 *target = StringTypesEnumsParamsNullableInlineEnumParamInQueryVALUE3</span>
         default:<span class="cov3" title="2">
                 return fmt.Errorf("unexpected StringTypesEnumsParamsNullableInlineEnumParamInQuery value: %s", str)</span>
@@ -11296,9 +11296,9 @@ func AsStringTypesEnumsParamsOptionalNullableInlineEnumParamInQuery(v assignable
 
 func ParseStringTypesEnumsParamsOptionalNullableInlineEnumParamInQuery(str string, target *StringTypesEnumsParamsOptionalNullableInlineEnumParamInQuery) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="2">
+        case "VALUE1":<span class="cov5" title="3">
                 *target = StringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryVALUE1</span>
-        case "VALUE2":<span class="cov5" title="3">
+        case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryVALUE2</span>
         case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsParamsOptionalNullableInlineEnumParamInQueryVALUE3</span>
@@ -11583,9 +11583,9 @@ func AsStringTypesEnumsRequestOptionalNullableInlineEnumProp(v assignableStringT
 
 func ParseStringTypesEnumsRequestOptionalNullableInlineEnumProp(str string, target *StringTypesEnumsRequestOptionalNullableInlineEnumProp) error <span class="cov10" title="9">{
         switch str </span>{
-        case "VALUE1":<span class="cov3" title="2">
+        case "VALUE1":<span class="cov5" title="3">
                 *target = StringTypesEnumsRequestOptionalNullableInlineEnumPropVALUE1</span>
-        case "VALUE2":<span class="cov5" title="3">
+        case "VALUE2":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestOptionalNullableInlineEnumPropVALUE2</span>
         case "VALUE3":<span class="cov3" title="2">
                 *target = StringTypesEnumsRequestOptionalNullableInlineEnumPropVALUE3</span>
