@@ -5,7 +5,7 @@
   <artifactId>server</artifactId>
   <packaging>jar</packaging>
   <name>Golang Server API Generator</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <build>
     <plugins>
       <plugin>
