@@ -33,6 +33,10 @@ golang_tests_cover_html=${golang_tests_cover_dir}/coverage.html
 
 golang_server_jar=generators/go-apigen-server/target/server.jar
 
+# For example:
+#  * enable debugging: -Dlog.level=debug
+JAVA=java ${JAVA_OPTS}
+
 $(bin):
 	mkdir -p $@
 
@@ -89,7 +93,7 @@ $(golang_server_jar): $(shell find generators/go-apigen-server/src/main -type f)
 	touch $@
 
 examples/%-server-go/internal/api/http/routes: $(golang_server_jar) examples/%.yaml
-	java -cp $(cli_jar):$(golang_server_jar) \
+	$(JAVA) -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		-i examples/$*.yaml \
@@ -98,7 +102,7 @@ examples/%-server-go/internal/api/http/routes: $(golang_server_jar) examples/%.y
 	touch $@
 
 examples/%-server-app-layer-go/internal/api/http/routes: $(golang_server_jar) examples/%.yaml
-	java -cp $(cli_jar):$(golang_server_jar) \
+	$(JAVA) -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		--global-property=apis \
@@ -109,7 +113,7 @@ examples/%-server-app-layer-go/internal/api/http/routes: $(golang_server_jar) ex
 	touch $@
 
 examples/%-server-app-layer-go/internal/app/models: $(golang_server_jar) examples/%.yaml
-	java -cp $(cli_jar):$(golang_server_jar) \
+	$(JAVA) -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		--global-property=models \
@@ -127,7 +131,7 @@ examples/%-server-app-layer-go: examples/%-server-app-layer-go/internal/api/http
 # generatedCodeComment set to empty to allow linter to lint generated code.
 tests/golang/routes: tests/openapi/openapi.yaml tests/openapi/*/*.yaml $(golang_server_jar)
 	mkdir -p $@
-	java -cp $(cli_jar):$(golang_server_jar) \
+	$(JAVA) -cp $(cli_jar):$(golang_server_jar) \
 		org.openapitools.codegen.OpenAPIGenerator generate \
 		-g go-apigen-server \
 		--additional-properties generatedCodeComment="" \
