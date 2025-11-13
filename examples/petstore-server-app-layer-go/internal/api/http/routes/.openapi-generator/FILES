@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 handlers/handlers.go
 handlers/pets_controller.go
 handlers/pets_params.go

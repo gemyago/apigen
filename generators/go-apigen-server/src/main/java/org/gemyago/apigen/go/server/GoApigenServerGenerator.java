@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -88,21 +89,24 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // set the output folder here
     outputFolder = "generated-code/go-apigen-server";
 
-    boolean generateModels = GlobalSettings.getProperty(CodegenConstants.MODELS) != null;
-    boolean generateApis = GlobalSettings.getProperty(CodegenConstants.APIS) != null;
+    boolean generateModelsProvided = GlobalSettings.getProperty(CodegenConstants.MODELS) != null;
+    boolean generateApisProvided = GlobalSettings.getProperty(CodegenConstants.APIS) != null;
 
-    // We are always generating supporting files, so forcing this property
-    GlobalSettings.setProperty(CodegenConstants.SUPPORTING_FILES, "");
+    if (generateApisProvided || generateModelsProvided) {
+      // We are always generating supporting files, so forcing this property if other properties explicitly set
+      // If nothing is set, leaving this empty since setting just this will mean only supporting files are generated
+      GlobalSettings.setProperty(CodegenConstants.SUPPORTING_FILES, "");
+    }
 
     // if all are false, this means no options are provided (or all three), so we
     // consider all as true
-    if (!generateModels && !generateApis) {
-      generateModels = true;
-      generateApis = true;
+    if (!generateModelsProvided && !generateApisProvided) {
+      generateModelsProvided = true;
+      generateApisProvided = true;
     }
 
-    modelsOnly = generateModels && !generateApis;
-    apisOnly = generateApis && !generateModels;
+    modelsOnly = generateModelsProvided && !generateApisProvided;
+    apisOnly = generateApisProvided && !generateModelsProvided;
 
     // We have to generate validators for models in APIs only mode so we have to
     // trick generator to do that
@@ -111,7 +115,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
       GlobalSettings.setProperty(CodegenConstants.MODELS, "");
     }
 
-    if (generateModels) {
+    if (generateModelsProvided) {
       /**
        * Models. You can write model files using the modelTemplateFiles map.
        * if you want to create one template for file, you can do so here.
@@ -125,7 +129,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     }
 
     // We only generate models validation if we're generating apis
-    if (generateApis) {
+    if (generateApisProvided) {
       modelTemplateFiles.put(
           "model_validation.mustache", // the template to use
           "_validation.go"); // the extension for each file to write
@@ -172,7 +176,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // additionalProperties.put(CodegenConstants.GENERATE_ALIAS_AS_MODEL, "true");
 
     // Common handlers related stuff is only generated if apis are generated
-    if (generateApis) {
+    if (generateApisProvided) {
       /**
        * Supporting Files. You can write single files for the generator with the
        * entire object tree available. If the input file has a suffix of `.mustache
@@ -208,7 +212,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
     // We are generating request parameters as model with all parameters as fields
     // so we need to "simulate" and inject them to schemas
     List<Operation> allOperations = openAPI.getPaths().values().stream()
-        .flatMap(path -> path.readOperations().stream()).toList();
+        .flatMap(path -> path.readOperations().stream()).collect(Collectors.toList());
 
     for (Operation operation : allOperations) {
       Schema<?> parametersModel = new Schema<>()
@@ -420,7 +424,7 @@ public class GoApigenServerGenerator extends AbstractGoCodegen {
   @Override
   public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, List<Server> servers) {
     CodegenOperation op = super.fromOperation(path, httpMethod, operation, servers);
-    if (op.hasParams || !StringUtils.isEmpty(op.returnType)) {
+    if (op.getHasParams() || !StringUtils.isEmpty(op.returnType)) {
       op.vendorExtensions.put("x-apigen-has-params-or-return", true);
     }
     return op;
