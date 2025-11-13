@@ -110,11 +110,7 @@ CI runs on all PRs to `main` and executes `make lint` and `make tests`.
 
 ## Release Process
 
-1. Create release branch: `release/X.Y.Z`
-2. Update version in `.versions` file
-3. Commit and create PR
-4. Merge PR to trigger automated release via GitHub Actions
-5. CI creates draft release with generator JAR attached
+Release process is detailed in `.ai/instructions/create-release.md`. Follow this instruction if user requests to create a new release.
 
 ## Architecture Notes
 
